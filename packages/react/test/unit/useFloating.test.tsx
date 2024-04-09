@@ -1,5 +1,5 @@
 import {isElement} from '@floating-ui/utils/dom';
-import {act, render, screen} from '@testing-library/react';
+import {act, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useCallback, useLayoutEffect, useState} from 'react';
 import {vi} from 'vitest';
@@ -235,4 +235,32 @@ test('onOpenChange is passed an event as second param', async () => {
 
   expect(onOpenChange.mock.calls[1][0]).toBe(false);
   expect(onOpenChange.mock.calls[1][1]).toBeInstanceOf(MouseEvent);
+});
+
+test('refs.domReference.current is synchronized with external reference', async () => {
+  let testEl: HTMLButtonElement | null = null;
+
+  function App() {
+    const [referenceEl, setReferenceEl] = useState<Element | null>(null);
+    const {refs} = useFloating<HTMLButtonElement>({
+      elements: {
+        reference: referenceEl,
+      },
+    });
+
+    return (
+      <button
+        ref={setReferenceEl}
+        onClick={() => {
+          testEl = refs.domReference.current;
+        }}
+      />
+    );
+  }
+
+  render(<App />);
+
+  fireEvent.click(screen.getByRole('button'));
+
+  expect((testEl as HTMLButtonElement | null)?.nodeName).toBe('BUTTON');
 });

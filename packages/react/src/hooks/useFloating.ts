@@ -35,8 +35,17 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 ): UseFloatingReturn<RT> {
   const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
 
+  const [_domReference, setDomReference] =
+    React.useState<NarrowedElement<RT> | null>(null);
+  const [positionReference, _setPositionReference] =
+    React.useState<ReferenceType | null>(null);
+
+  const optionDomReference = options.elements?.reference;
+  const domReference = (optionDomReference ||
+    _domReference) as NarrowedElement<RT>;
+
   if (__DEV__) {
-    if (options.elements?.reference && !isElement(options.elements.reference)) {
+    if (optionDomReference && !isElement(optionDomReference)) {
       error(
         'Cannot pass a virtual element to the `elements.reference` option,',
         'as it must be a real DOM element. Use `refs.setPositionReference()`',
@@ -45,13 +54,19 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     }
   }
 
-  const [_domReference, setDomReference] =
-    React.useState<NarrowedElement<RT> | null>(null);
+  useModernLayoutEffect(() => {
+    if (domReference) {
+      domReferenceRef.current = domReference;
+    }
+  }, [domReference]);
 
-  const domReference = (options.elements?.reference ||
-    _domReference) as NarrowedElement<RT>;
-
-  const position = usePosition<RT>(options);
+  const position = usePosition({
+    ...options,
+    elements: {
+      ...options.elements,
+      ...(positionReference && {reference: positionReference}),
+    },
+  });
   const tree = useFloatingTree<RT>();
   const nested = useFloatingParentNodeId() != null;
 
@@ -79,9 +94,14 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
             contextElement: node,
           }
         : node;
+      // Store the positionReference in state if the DOM reference is specified externally via the
+      // `elements.reference` option. This ensures that it won't be overridden on future renders.
+      if (optionDomReference) {
+        _setPositionReference(positionReference);
+      }
       position.refs.setReference(positionReference as RT | null);
     },
-    [position.refs],
+    [position.refs, optionDomReference],
   );
 
   const setReference = React.useCallback(
