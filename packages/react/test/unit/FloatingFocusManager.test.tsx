@@ -134,7 +134,6 @@ describe('initialFocus', () => {
   test('respects autoFocus', async () => {
     render(
       <App>
-        {/* biome-ignore lint/a11y/noAutofocus: <explanation> */}
         <input autoFocus data-testid="input" />
       </App>,
     );

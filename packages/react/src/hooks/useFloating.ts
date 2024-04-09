@@ -21,11 +21,6 @@ import {useId} from './useId';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {error} from '../utils/log';
 
-let devMessageSet: Set<string> | undefined;
-if (__DEV__) {
-  devMessageSet = new Set();
-}
-
 /**
  * Provides data to position a floating element and context to add interactions.
  * @see https://floating-ui.com/docs/useFloating
