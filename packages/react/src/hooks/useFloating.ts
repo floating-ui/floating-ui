@@ -67,9 +67,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
   const onOpenChange = useEffectEvent(
     (open: boolean, event?: Event, reason?: OpenChangeReason) => {
-      if (open) {
-        dataRef.current.openEvent = event;
-      }
+      dataRef.current.openEvent = open ? event : undefined;
       events.emit('openchange', {open, event, reason, nested});
       unstable_onOpenChange?.(open, event, reason);
     },
