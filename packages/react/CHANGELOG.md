@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.26.12
+
+### Patch Changes
+
+- fix(useFloating): external element synchronization with domReference and positionReference
+- fix(useFloating): set `dataRef` `openEvent` property to `undefined` on close. Fixes a minor issue when `useHover` `restMs` is combined with `useClientPoint` and focus modality was used before hover modality.
+- fix(useId): avoid import error in new bundlers when using React <18, and also ensure id collisions don't occur when multiple independent versions of Floating UI are used with React <18.
+
 ## 0.26.11
 
 ### Patch Changes
