@@ -4,4 +4,4 @@
 "@floating-ui/react-native": patch
 ---
 
-Manually replaces `React_2` for `React` in generated .d.ts files
+fix(types): replace `React_2` with `React` in generated .d.ts files
