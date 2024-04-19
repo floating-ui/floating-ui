@@ -47,7 +47,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@changesets/cli": "^2.27.1",
     "@changesets/types": "^6.0.0",
-    "@microsoft/api-extractor": "^7.39.1",
+    "@microsoft/api-extractor": "^7.43.1",
     "@playwright/test": "^1.40.1",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-babel": "^6.0.4",

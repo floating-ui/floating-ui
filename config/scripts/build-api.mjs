@@ -40,6 +40,7 @@ echo(
 echo('');
 
 echo(chalk.cyan(`Running tsc (${chalk.greenBright(tscPaths.join(', '))})`));
+
 await Promise.all(tscPaths.map((tscPath) => $`npx tsc -b ${tscPath}`));
 
 echo(
@@ -47,6 +48,7 @@ echo(
     `Running API Extractor (${chalk.greenBright(aecPaths.join(', '))})`,
   ),
 );
+
 await Promise.all(
   aecPaths.map(async (aecPath) => {
     await $`npx api-extractor run --local --verbose -c ${aecPath}`;
@@ -56,6 +58,14 @@ await Promise.all(
         '<projectFolder>',
         configFile.projectFolder ?? '.',
       );
+      echo(
+        chalk.cyan(
+          `Replacing "React_2" for "React" from ${chalk.greenBright(path)}`,
+        ),
+      );
+      const dtsFile = await fs.readFile(path, 'utf-8');
+      await fs.writeFile(path, dtsFile.replace(/React_2/g, 'React'));
+
       const mdtsPath = path.replace(/\.d\.ts$/, '.d.mts');
       echo(
         chalk.cyan(
