@@ -51,7 +51,7 @@ export function useFloatingNodeId(customParentId?: string): string {
 export function FloatingNode(props: {
   children?: React.ReactNode;
   id: string;
-}): React.JSX.Element {
+}): JSX.Element {
   const {children, id} = props;
 
   const parentId = useFloatingParentNodeId();
@@ -75,9 +75,7 @@ export function FloatingNode(props: {
  * - Custom communication between parent and child floating elements
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export function FloatingTree(props: {
-  children?: React.ReactNode;
-}): React.JSX.Element {
+export function FloatingTree(props: {children?: React.ReactNode}): JSX.Element {
   const {children} = props;
 
   const nodesRef = React.useRef<Array<FloatingNodeType>>([]);

@@ -63,9 +63,9 @@ interface FloatingDelayGroupProps {
  * `delay`.
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
-export const FloatingDelayGroup = (
+export function FloatingDelayGroup(
   props: FloatingDelayGroupProps,
-): React.JSX.Element => {
+): JSX.Element {
   const {children, delay, timeoutMs = 0} = props;
 
   const [state, setState] = React.useReducer(
@@ -111,7 +111,7 @@ export const FloatingDelayGroup = (
       {children}
     </FloatingDelayGroupContext.Provider>
   );
-};
+}
 
 interface UseGroupOptions {
   id?: any;

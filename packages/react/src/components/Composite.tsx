@@ -42,8 +42,8 @@ const CompositeContext = React.createContext<{
 });
 
 type RenderProp =
-  | React.JSX.Element
-  | ((props: React.HTMLAttributes<HTMLElement>) => React.JSX.Element);
+  | JSX.Element
+  | ((props: React.HTMLAttributes<HTMLElement>) => JSX.Element);
 
 interface CompositeProps {
   /**
