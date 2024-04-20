@@ -2,7 +2,6 @@ import type {
   Coords,
   InlineOptions,
   LimitShiftOptions,
-  OffsetOptions,
   SideObject,
 } from '@floating-ui/core';
 import {
@@ -31,6 +30,14 @@ import type {
   SizeOptions,
 } from './types';
 
+// `OffsetOptions` in the core library were originally already `Derivable`. For
+// backwards-compatibility, re-define it here to use the DOM Derivable type.
+type OffsetOptions = {
+  mainAxis?: number;
+  crossAxis?: number;
+  alignmentAxis?: number | null;
+};
+
 /**
  * Resolves with an object of overflow side offsets that determine how much the
  * element is overflowing a given clipping boundary on each side.
@@ -51,7 +58,9 @@ export const detectOverflow: (
  * object may be passed.
  * @see https://floating-ui.com/docs/offset
  */
-export const offset: (options?: OffsetOptions) => Middleware = offsetCore;
+export const offset: (
+  options?: OffsetOptions | Derivable<OffsetOptions>,
+) => Middleware = offsetCore;
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement
