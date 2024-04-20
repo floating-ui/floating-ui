@@ -1,16 +1,18 @@
 import type {
   Coords,
-  Derivable,
   InlineOptions,
   LimitShiftOptions,
+  SideObject,
 } from '@floating-ui/core';
 import {
   arrow as arrowCore,
   autoPlacement as autoPlacementCore,
+  detectOverflow as detectOverflowCore,
   flip as flipCore,
   hide as hideCore,
   inline as inlineCore,
   limitShift as limitShiftCore,
+  offset as offsetCore,
   shift as shiftCore,
   size as sizeCore,
 } from '@floating-ui/core';
@@ -18,6 +20,8 @@ import {
 import type {
   ArrowOptions,
   AutoPlacementOptions,
+  Derivable,
+  DetectOverflowOptions,
   FlipOptions,
   HideOptions,
   Middleware,
@@ -26,7 +30,60 @@ import type {
   SizeOptions,
 } from './types';
 
-export {detectOverflow, offset} from '@floating-ui/core';
+// `OffsetOptions` in the core library were originally already `Derivable`. For
+// backwards-compatibility, re-define it here to use the DOM Derivable type.
+type OffsetOptions =
+  | number
+  | Partial<{
+      /**
+       * The axis that runs along the side of the floating element. Represents
+       * the distance (gutter or margin) between the reference and floating
+       * element.
+       * @default 0
+       */
+      mainAxis: number;
+      /**
+       * The axis that runs along the alignment of the floating element.
+       * Represents the skidding between the reference and floating element.
+       * @default 0
+       */
+      crossAxis: number;
+      /**
+       * The same axis as `crossAxis` but applies only to aligned placements
+       * and inverts the `end` alignment. When set to a number, it overrides the
+       * `crossAxis` value.
+       *
+       * A positive number will move the floating element in the direction of
+       * the opposite edge to the one that is aligned, while a negative number
+       * the reverse.
+       * @default null
+       */
+      alignmentAxis: number | null;
+    }>;
+
+/**
+ * Resolves with an object of overflow side offsets that determine how much the
+ * element is overflowing a given clipping boundary on each side.
+ * - positive = overflowing the boundary by that number of pixels
+ * - negative = how many pixels left before it will overflow
+ * - 0 = lies flush with the boundary
+ * @see https://floating-ui.com/docs/detectOverflow
+ */
+export const detectOverflow: (
+  state: MiddlewareState,
+  options?: DetectOverflowOptions | Derivable<DetectOverflowOptions>,
+) => Promise<SideObject> = detectOverflowCore;
+
+/**
+ * Modifies the placement by translating the floating element along the
+ * specified axes.
+ * A number (shorthand for `mainAxis` or distance), or an axes configuration
+ * object may be passed.
+ * @see https://floating-ui.com/docs/offset
+ */
+export const offset: (
+  options?: OffsetOptions | Derivable<OffsetOptions>,
+) => Middleware = offsetCore;
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement
