@@ -52,7 +52,7 @@ export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
 export const FloatingArrow = React.forwardRef(function FloatingArrow(
   props: FloatingArrowProps,
   ref: React.ForwardedRef<SVGSVGElement>,
-): React.JSX.Element | null {
+): JSX.Element | null {
   const {
     context: {
       placement,
