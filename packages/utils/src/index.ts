@@ -187,11 +187,15 @@ export function getPaddingObject(padding: Padding): SideObject {
 }
 
 export function rectToClientRect(rect: Rect): ClientRectObject {
+  const {x, y, width, height} = rect;
   return {
-    ...rect,
-    top: rect.y,
-    left: rect.x,
-    right: rect.x + rect.width,
-    bottom: rect.y + rect.height,
+    width,
+    height,
+    top: y,
+    left: x,
+    right: x + width,
+    bottom: y + height,
+    x,
+    y,
   };
 }

@@ -82,7 +82,9 @@ export async function detectOverflow(
   );
 
   const rect =
-    elementContext === 'floating' ? {...rects.floating, x, y} : rects.reference;
+    elementContext === 'floating'
+      ? {x, y, width: rects.floating.width, height: rects.floating.height}
+      : rects.reference;
 
   const offsetParent = await platform.getOffsetParent?.(elements.floating);
   const offsetScale = (await platform.isElement?.(offsetParent))
