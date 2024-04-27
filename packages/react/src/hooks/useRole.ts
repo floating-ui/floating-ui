@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {useFloatingParentNodeId} from '../components/FloatingTree';
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import type {ElementProps, FloatingContext} from '../types';
 import {useId} from './useId';
 
 type AriaRole =
@@ -42,8 +42,8 @@ const componentRoleToAriaRoleMap = new Map<
  * given floating element `role`.
  * @see https://floating-ui.com/docs/useRole
  */
-export function useRole<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
+export function useRole(
+  context: FloatingContext,
   props: UseRoleProps = {},
 ): ElementProps {
   const {open, floatingId} = context;

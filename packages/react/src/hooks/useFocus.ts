@@ -11,12 +11,7 @@ import {
 import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 
-import type {
-  ElementProps,
-  FloatingContext,
-  OpenChangeReason,
-  ReferenceType,
-} from '../types';
+import type {ElementProps, FloatingContext, OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 
 export interface UseFocusProps {
@@ -39,8 +34,8 @@ export interface UseFocusProps {
  * `:focus`.
  * @see https://floating-ui.com/docs/useFocus
  */
-export function useFocus<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
+export function useFocus(
+  context: FloatingContext,
   props: UseFocusProps = {},
 ): ElementProps {
   const {

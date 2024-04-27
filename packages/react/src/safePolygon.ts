@@ -3,7 +3,6 @@ import {contains, getTarget} from '@floating-ui/react/utils';
 import {isElement} from '@floating-ui/utils/dom';
 
 import type {HandleCloseFn} from './hooks/useHover';
-import type {ReferenceType} from './types';
 import {getChildren} from './utils/getChildren';
 
 type Point = [number, number];
@@ -35,9 +34,9 @@ function isInside(point: Point, rect: Rect) {
 }
 
 interface SafePolygonOptions {
-  buffer: number;
-  blockPointerEvents: boolean;
-  requireIntent: boolean;
+  buffer?: number;
+  blockPointerEvents?: boolean;
+  requireIntent?: boolean;
 }
 
 /**
@@ -45,9 +44,7 @@ interface SafePolygonOptions {
  * floating element once leaving the reference element.
  * @see https://floating-ui.com/docs/useHover#safepolygon
  */
-export function safePolygon<RT extends ReferenceType = ReferenceType>(
-  options: Partial<SafePolygonOptions> = {},
-) {
+export function safePolygon(options: SafePolygonOptions = {}) {
   const {
     buffer = 0.5,
     blockPointerEvents = false,
@@ -83,7 +80,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
     return speed;
   }
 
-  const fn: HandleCloseFn<RT> = ({
+  const fn: HandleCloseFn = ({
     x,
     y,
     placement,

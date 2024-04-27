@@ -24,6 +24,7 @@ export type {
 } from './hooks/useTransition';
 export type {UseTypeaheadProps} from './hooks/useTypeahead';
 export type {InnerProps, UseInnerOffsetProps} from './inner';
+export type {UseInteractionsReturn} from './hooks/useInteractions';
 export type {
   AlignedPlacement,
   Alignment,
