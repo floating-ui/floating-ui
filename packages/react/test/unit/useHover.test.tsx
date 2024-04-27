@@ -132,6 +132,20 @@ describe('delay', () => {
 
     cleanup();
   });
+
+  test('restMs + nullish open delay should respect restMs', async () => {
+    render(<App restMs={100} delay={{close: 100}} />);
+
+    fireEvent.mouseEnter(screen.getByRole('button'));
+
+    await act(async () => {
+      vi.advanceTimersByTime(99);
+    });
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+    cleanup();
+  });
 });
 
 test('restMs', async () => {
