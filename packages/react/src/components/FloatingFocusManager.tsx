@@ -42,8 +42,9 @@ function addPreviouslyFocusedElement(element: Element | null) {
   if (!tabbableEl || getNodeName(tabbableEl) === 'body') return;
   if (!isTabbable(tabbableEl, getTabbableOptions())) {
     const tabbableChild = tabbable(tabbableEl, getTabbableOptions())[0];
-    if (!tabbableChild) return;
-    tabbableEl = tabbableChild;
+    if (tabbableChild) {
+      tabbableEl = tabbableChild;
+    }
   }
   previouslyFocusedElements.push(tabbableEl);
   if (previouslyFocusedElements.length > LIST_LIMIT) {
@@ -428,20 +429,27 @@ export function FloatingFocusManager(
     const doc = getDocument(floating);
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
+    let openEvent = contextData.openEvent;
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
     function onOpenChange({
+      open,
       reason,
       event,
       nested,
     }: {
+      open: boolean;
       reason: OpenChangeReason;
       event: Event;
       nested: boolean;
     }) {
+      if (open) {
+        openEvent = event;
+      }
+
       if (reason === 'escape-key' && refs.domReference.current) {
         addPreviouslyFocusedElement(refs.domReference.current);
       }
@@ -477,8 +485,7 @@ export function FloatingFocusManager(
           ));
       const shouldFocusReference =
         isFocusInsideFloatingTree ||
-        (contextData.openEvent &&
-          ['click', 'mousedown'].includes(contextData.openEvent.type));
+        (openEvent && ['click', 'mousedown'].includes(openEvent.type));
 
       if (shouldFocusReference && refs.domReference.current) {
         addPreviouslyFocusedElement(refs.domReference.current);
