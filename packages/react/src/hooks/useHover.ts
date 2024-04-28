@@ -234,7 +234,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
       if (
         (mouseOnly && !isMouseLikePointerType(pointerTypeRef.current)) ||
-        (restMs > 0 && getDelay(delayRef.current, 'open') === 0)
+        (restMs > 0 && !getDelay(delayRef.current, 'open'))
       ) {
         return;
       }
