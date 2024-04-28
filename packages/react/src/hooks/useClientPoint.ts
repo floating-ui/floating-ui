@@ -7,12 +7,7 @@ import {getWindow} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {
-  ContextData,
-  ElementProps,
-  FloatingContext,
-  ReferenceType,
-} from '../types';
+import type {ContextData, ElementProps, FloatingContext} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 function createVirtualElement(
@@ -125,8 +120,8 @@ export interface UseClientPointProps {
  * such as the mouse position. By default, it follows the mouse cursor.
  * @see https://floating-ui.com/docs/useClientPoint
  */
-export function useClientPoint<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
+export function useClientPoint(
+  context: FloatingContext,
   props: UseClientPointProps = {},
 ): ElementProps {
   const {

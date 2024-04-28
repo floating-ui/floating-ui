@@ -24,6 +24,7 @@ export type {
 } from './hooks/useTransition';
 export type {UseTypeaheadProps} from './hooks/useTypeahead';
 export type {InnerProps, UseInnerOffsetProps} from './inner';
+export type {UseInteractionsReturn} from './hooks/useInteractions';
 export type {
   AlignedPlacement,
   Alignment,
@@ -170,6 +171,9 @@ export type UseFloatingData = Prettify<UseFloatingReturn>;
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   Prettify<
     UsePositionFloatingReturn & {
+      /**
+       * `FloatingContext`
+       */
       context: Prettify<FloatingContext<RT>>;
       /**
        * Object containing the reference and floating refs and reactive setters.

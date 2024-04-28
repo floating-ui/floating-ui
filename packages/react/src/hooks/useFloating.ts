@@ -26,7 +26,7 @@ import {error} from '../utils/log';
  * @see https://floating-ui.com/docs/useFloating
  */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
-  options: Partial<UseFloatingOptions> = {},
+  options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
   const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
 

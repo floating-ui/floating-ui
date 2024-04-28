@@ -51,8 +51,8 @@ type Status = 'unmounted' | 'initial' | 'open' | 'close';
  * correctly handling placement-aware transitions.
  * @see https://floating-ui.com/docs/useTransition#usetransitionstatus
  */
-export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
+export function useTransitionStatus(
+  context: FloatingContext,
   props: UseTransitionStatusProps = {},
 ): {
   isMounted: boolean;

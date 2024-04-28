@@ -17,7 +17,7 @@ import {
 import * as React from 'react';
 
 import {useFloatingTree} from '../components/FloatingTree';
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import type {ElementProps, FloatingContext} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
@@ -120,8 +120,8 @@ export interface UseDismissProps {
  * the user presses the `escape` key or outside of the floating element.
  * @see https://floating-ui.com/docs/useDismiss
  */
-export function useDismiss<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
+export function useDismiss(
+  context: FloatingContext,
   props: UseDismissProps = {},
 ): ElementProps {
   const {

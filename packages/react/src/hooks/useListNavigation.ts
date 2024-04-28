@@ -17,12 +17,7 @@ import {
   useFloatingParentNodeId,
   useFloatingTree,
 } from '../components/FloatingTree';
-import type {
-  Dimensions,
-  ElementProps,
-  FloatingContext,
-  ReferenceType,
-} from '../types';
+import type {Dimensions, ElementProps, FloatingContext} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
@@ -244,8 +239,8 @@ export interface UseListNavigationProps {
  * focus or virtual focus.
  * @see https://floating-ui.com/docs/useListNavigation
  */
-export function useListNavigation<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
+export function useListNavigation(
+  context: FloatingContext,
   props: UseListNavigationProps,
 ): ElementProps {
   const {

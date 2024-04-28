@@ -23,11 +23,11 @@ import {useLatestRef} from './utils/useLatestRef';
 
 const safePolygonIdentifier = createAttribute('safe-polygon');
 
-export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
+export interface HandleCloseFn {
   (
-    context: FloatingContext<RT> & {
+    context: FloatingContext & {
       onClose: () => void;
-      tree?: FloatingTreeType<RT> | null;
+      tree?: FloatingTreeType | null;
       leave?: boolean;
     },
   ): (event: MouseEvent) => void;
@@ -52,7 +52,7 @@ export function getDelay(
   return value?.[prop];
 }
 
-export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
+export interface UseHoverProps {
   /**
    * Whether the Hook is enabled, including all internal Effects and event
    * handlers.
@@ -65,7 +65,7 @@ export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
    * e.g. to let them traverse into the floating element.
    * @default null
    */
-  handleClose?: HandleCloseFn<RT> | null;
+  handleClose?: HandleCloseFn | null;
   /**
    * Waits until the user’s cursor is at “rest” over the reference element
    *  before changing the `open` state.
@@ -97,9 +97,9 @@ export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
  * CSS `:hover`.
  * @see https://floating-ui.com/docs/useHover
  */
-export function useHover<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseHoverProps<RT> = {},
+export function useHover(
+  context: FloatingContext,
+  props: UseHoverProps = {},
 ): ElementProps {
   const {
     open,
@@ -118,15 +118,15 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     move = true,
   } = props;
 
-  const tree = useFloatingTree<RT>();
+  const tree = useFloatingTree();
   const parentId = useFloatingParentNodeId();
   const handleCloseRef = useLatestRef(handleClose);
   const delayRef = useLatestRef(delay);
 
   const pointerTypeRef = React.useRef<string>();
-  const timeoutRef = React.useRef<any>();
+  const timeoutRef = React.useRef(-1);
   const handlerRef = React.useRef<(event: MouseEvent) => void>();
-  const restTimeoutRef = React.useRef<any>();
+  const restTimeoutRef = React.useRef(-1);
   const blockMouseMoveRef = React.useRef(true);
   const performedPointerEventsMutationRef = React.useRef(false);
   const unbindMouseMoveRef = React.useRef(() => {});
@@ -188,7 +188,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       );
       if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(
+        timeoutRef.current = window.setTimeout(
           () => onOpenChange(false, event, reason),
           closeDelay,
         );
@@ -246,7 +246,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       );
 
       if (openDelay) {
-        timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = window.setTimeout(() => {
           onOpenChange(true, event, 'hover');
         }, openDelay);
       } else {
@@ -459,7 +459,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           if (pointerTypeRef.current === 'touch') {
             handleMouseMove();
           } else {
-            restTimeoutRef.current = setTimeout(handleMouseMove, restMs);
+            restTimeoutRef.current = window.setTimeout(handleMouseMove, restMs);
           }
         },
       },

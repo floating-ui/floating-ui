@@ -5,7 +5,7 @@ import {
 import {isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import type {ElementProps, FloatingContext} from '../types';
 
 function isButtonTarget(event: React.KeyboardEvent<Element>) {
   return isHTMLElement(event.target) && event.target.tagName === 'BUTTON';
@@ -55,8 +55,8 @@ export interface UseClickProps {
  * Opens or closes the floating element when clicking the reference element.
  * @see https://floating-ui.com/docs/useClick
  */
-export function useClick<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
+export function useClick(
+  context: FloatingContext,
   props: UseClickProps = {},
 ): ElementProps {
   const {

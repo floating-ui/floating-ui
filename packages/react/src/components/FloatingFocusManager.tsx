@@ -15,7 +15,7 @@ import {tabbable, isTabbable} from 'tabbable';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
-import type {FloatingContext, OpenChangeReason, ReferenceType} from '../types';
+import type {FloatingContext, OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
@@ -73,14 +73,12 @@ const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   );
 });
 
-export interface FloatingFocusManagerProps<
-  RT extends ReferenceType = ReferenceType,
-> {
+export interface FloatingFocusManagerProps {
   children: JSX.Element;
   /**
    * The floating context returned from `useFloating`.
    */
-  context: FloatingContext<RT>;
+  context: FloatingContext;
   /**
    * Whether or not the focus manager should be disabled. Useful to delay focus
    * management until after a transition completes or some other conditional
@@ -143,8 +141,8 @@ export interface FloatingFocusManagerProps<
  * Provides focus management for the floating element.
  * @see https://floating-ui.com/docs/FloatingFocusManager
  */
-export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
-  props: FloatingFocusManagerProps<RT>,
+export function FloatingFocusManager(
+  props: FloatingFocusManagerProps,
 ): JSX.Element {
   const {
     context,
