@@ -1,5 +1,11 @@
 # @floating-ui/core
 
+## 1.6.1
+
+### Patch Changes
+
+- fix: avoid spreading rects to support `DOMRect` types
+
 ## 1.6.0
 
 ### Minor Changes

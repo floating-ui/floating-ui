@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react-native",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "Floating UI for React Native",
   "publishConfig": {
     "access": "public"

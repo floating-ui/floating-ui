@@ -1,5 +1,13 @@
 # @floating-ui/dom
 
+## 1.6.4
+
+### Patch Changes
+
+- fix: avoid spreading rects to support `DOMRect` types
+- fix(types): use DOM Derivable type
+- perf(autoUpdate): reduce layoutShift update checks while reference is clipped from view
+
 ## 1.6.3
 
 ### Patch Changes

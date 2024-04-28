@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.2.2
+
+### Patch Changes
+
+- fix: avoid spreading rects to support `DOMRect` types
+
 ## 0.2.1
 
 ### Patch Changes
