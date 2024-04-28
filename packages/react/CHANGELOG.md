@@ -1,5 +1,15 @@
 # @floating-ui/react
 
+## 0.26.13
+
+### Patch Changes
+
+- fix(FloatingFocusManager): return focus to reference when applicable even if not focused on open
+- fix(types): simplify React types
+- fix(types): replace `React_2` with `React` in generated .d.ts files
+- fix(types): revert `React.JSX.Element` back to `JSX.Element`
+- fix(useHover): `restMs` + nullish open delay should respect `restMs`
+
 ## 0.26.12
 
 ### Patch Changes

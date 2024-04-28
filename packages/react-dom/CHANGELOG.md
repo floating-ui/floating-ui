@@ -1,5 +1,11 @@
 # @floating-ui/react-dom
 
+## 2.0.9
+
+### Patch Changes
+
+- fix(types): replace `React_2` with `React` in generated .d.ts files
+
 ## 2.0.8
 
 ### Patch Changes
