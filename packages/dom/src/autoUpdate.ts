@@ -89,9 +89,11 @@ function observeMove(element: Element, onMove: () => void) {
         }
 
         if (!ratio) {
+          // If the reference is clipped, the ratio is 0. Throttle the refresh
+          // to prevent an infinite loop of updates.
           timeoutId = setTimeout(() => {
             refresh(false, 1e-7);
-          }, 100);
+          }, 1000);
         } else {
           refresh(false, ratio);
         }
