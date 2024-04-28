@@ -171,6 +171,9 @@ export type UseFloatingData = Prettify<UseFloatingReturn>;
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   Prettify<
     UsePositionFloatingReturn & {
+      /**
+       * `FloatingContext`
+       */
       context: Prettify<FloatingContext<RT>>;
       /**
        * Object containing the reference and floating refs and reactive setters.
