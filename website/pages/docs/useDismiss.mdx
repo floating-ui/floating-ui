@@ -280,3 +280,35 @@ useDismiss(context, {
   },
 });
 ```
+
+## Reacting to dismissal
+
+To react to the dismissal event, you can check for the
+`reason{:.param}` string in the `onOpenChange{:.function}`
+callback:
+
+```js /reason/
+useFloating({
+  open: isOpen,
+  onOpenChange(nextOpen, event, reason) {
+    setIsOpen(nextOpen);
+
+    // Other ones include 'reference-press' and 'ancestor-scroll'
+    // if enabled.
+    if (reason === 'escape-key' || reason === 'outside-press') {
+      console.log('Dismissed');
+    }
+  },
+});
+```
+
+## Troubleshooting
+
+### Does not close when clicking in an iframe
+
+You can use the
+[`FloatingOverlay` component](/docs/FloatingOverlay) which will
+"cover" iframes to ensure clicks are captured in the same
+document as the floating element, as the click occurs on the
+overlay backdrop. This guarantees "outside press" detection will
+work.

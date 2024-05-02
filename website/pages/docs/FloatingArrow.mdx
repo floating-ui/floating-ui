@@ -245,3 +245,44 @@ floating element's `transform-origin` is at the tip of the arrow.
 The `arrow` middleware provides data to achieve this.
 
 [View on CodeSandbox](https://codesandbox.io/s/floating-ui-react-scale-transform-origin-qv0t1c?file=/src/App.tsx)
+
+## Troubleshooting
+
+### Stroke is not visible
+
+Ensure you've specified at least a `strokeWidth{:.keyword}` of
+`1{:js}`.
+
+### A gap is present
+
+- Styling the top-level `<svg>{:js}` using native CSS properties
+  like `fill` and `stroke` directly won't work correctly. This
+  can happen if you're styling using `styled(FloatingArrow){:js}`
+  for example. Instead, use the `fill{:.keyword}` and
+  `stroke{:.keyword}` props, or target the child path elements as
+  shown in
+  [Tailwind and utility CSS styling](/docs/FloatingArrow#tailwind-and-utility-css-styling).
+- If a border is applied to an inner element of the floating
+  element, make sure arrow is inside the inner element and that
+  the inner element has `position: relative{:sass}` CSS. This
+  ensures the arrow will align with the border correctly.
+- Ensure the `strokeWidth{:.keyword}` of the arrow is the same as
+  the floating element's border width.
+- The gap may be related to zoom levels in some browsers or the
+  OS. To support transparency and prevent overlapping of colors
+  of the floating and arrow element, this problem cannot be
+  avoided. If your floating element and arrow are not partially
+  transparent and are instead solid colors, you can use the
+  following workaround:
+
+```js
+<FloatingArrow style={{ transform: 'translateY(-1px)' }}>
+```
+
+### Arrow does not avoid rounded corners
+
+The arrow doesn't automatically avoid rounded corners of the
+floating element when it's shifted. To ensure it doesn't overflow
+the corners, you can use the `padding{:.key}` prop in the
+`arrow(){:js}` middleware when calling `useFloating(){:js}` to
+account for this.

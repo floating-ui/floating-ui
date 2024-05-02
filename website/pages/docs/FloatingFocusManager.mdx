@@ -177,7 +177,9 @@ accessed. This includes screen reader virtual cursors.
 #### Non-modal behavior
 
 The floating element should be rendered after the reference
-element in the React tree. It can be portalled however.
+element in the React tree. It can be portaled using
+`<FloatingPortal>{:js}`. Other portal solutions are not supported
+or accessible when using Floating UI's focus manager.
 
 #### Modal behavior
 
@@ -197,11 +199,11 @@ When the reference element has a `combobox{:.string}`
 `role{:.keyword}` present, the focus manager behavior changes.
 
 The listbox part (floating element) of a combobox (input +
-listbox popup) can be portalled and accessible to touch screen
+listbox popup) can be portaled and accessible to touch screen
 readers when using modal focus management, but DOM focus does not
 become modal. Screen reader virtual cursors do become modal,
-allowing a touch screen reader to immediately access the
-portalled listbox items.
+allowing a touch screen reader to immediately access the portaled
+listbox items.
 
 ### `visuallyHiddenDismiss{:.keyword}`
 
@@ -286,3 +288,9 @@ waits for the position to be ready first.
 
 Ensure the focus manager is rendered as a child (can be a nested
 descendant) of `<FloatingPortal>{:js}`.
+
+If you're using non-modal focus management, you must use
+`<FloatingPortal>{:js}` and not another portal solution. This is
+because it tightly integrates with the focus manager to ensure
+that focus is moved correctly when tabbing, including the
+VoiceOver virtual cursor.
