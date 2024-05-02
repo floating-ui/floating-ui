@@ -438,11 +438,17 @@ export function PackageSelect() {
               className="w-[24rem] overflow-y-auto rounded-md bg-white/75 p-2 shadow-md outline-none backdrop-blur-xl dark:bg-gray-600/70 z-50"
               {...getFloatingProps()}
             >
-              <p className="mb-2 py-1 px-3 font-semibold">
+              <p
+                className="mb-2 py-1 px-3 font-semibold"
+                aria-hidden
+              >
                 By selecting the package you are using, the
                 documentation will be tailored to it.
               </p>
-              <p className="mb-2 py-1 px-3 text-sm opacity-75">
+              <p
+                className="mb-2 py-1 px-3 text-sm opacity-75"
+                aria-hidden
+              >
                 This documentation refers to the latest version
                 of each package.
               </p>
