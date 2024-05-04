@@ -1,13 +1,16 @@
 import {
   getComputedStyle,
   getContainingBlock,
-  getNodeName,
+  getParentNode,
   getWindow,
   isContainingBlock,
+  isElement,
   isHTMLElement,
+  isLastTraversableNode,
   isTableElement,
 } from '@floating-ui/utils/dom';
 import {isTopLayer} from '../utils/isTopLayer';
+import {isStaticPositioned} from '../utils/isStaticPositioned';
 
 type Polyfill = (element: HTMLElement) => Element | null;
 
@@ -35,10 +38,21 @@ export function getOffsetParent(
   element: Element,
   polyfill?: Polyfill,
 ): Element | Window {
-  const window = getWindow(element);
+  const win = getWindow(element);
 
-  if (!isHTMLElement(element) || isTopLayer(element)) {
-    return window;
+  if (isTopLayer(element)) {
+    return win;
+  }
+
+  if (!isHTMLElement(element)) {
+    let svgOffsetParent = getParentNode(element);
+    while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
+      if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
+        return svgOffsetParent;
+      }
+      svgOffsetParent = getParentNode(svgOffsetParent);
+    }
+    return win;
   }
 
   let offsetParent = getTrueOffsetParent(element, polyfill);
@@ -46,20 +60,19 @@ export function getOffsetParent(
   while (
     offsetParent &&
     isTableElement(offsetParent) &&
-    getComputedStyle(offsetParent).position === 'static'
+    isStaticPositioned(offsetParent)
   ) {
     offsetParent = getTrueOffsetParent(offsetParent, polyfill);
   }
 
   if (
     offsetParent &&
-    (getNodeName(offsetParent) === 'html' ||
-      (getNodeName(offsetParent) === 'body' &&
-        getComputedStyle(offsetParent).position === 'static' &&
-        !isContainingBlock(offsetParent)))
+    isLastTraversableNode(offsetParent) &&
+    isStaticPositioned(offsetParent) &&
+    !isContainingBlock(offsetParent)
   ) {
-    return window;
+    return win;
   }
 
-  return offsetParent || getContainingBlock(element) || window;
+  return offsetParent || getContainingBlock(element) || win;
 }

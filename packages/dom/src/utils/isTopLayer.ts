@@ -1,9 +1,9 @@
 const topLayerSelectors = [':popover-open', ':modal'] as const;
 
-export function isTopLayer(floating: HTMLElement) {
+export function isTopLayer(element: Element): boolean {
   return topLayerSelectors.some((selector) => {
     try {
-      return floating.matches(selector);
+      return element.matches(selector);
     } catch (e) {
       return false;
     }
