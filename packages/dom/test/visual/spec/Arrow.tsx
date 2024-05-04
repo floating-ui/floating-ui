@@ -11,6 +11,7 @@ import {useRef, useState} from 'react';
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
+import {flushSync} from 'react-dom';
 
 export function Arrow() {
   const [placement, setPlacement] = useState<Placement>('bottom');
@@ -222,7 +223,10 @@ export function Arrow() {
           <button
             key={String(bool)}
             data-testid={`svg-${bool}`}
-            onClick={() => setSvg(bool)}
+            onClick={() => {
+              flushSync(() => setSvg(bool));
+              update();
+            }}
             style={{
               backgroundColor: bool === svg ? 'black' : '',
             }}
@@ -238,7 +242,10 @@ export function Arrow() {
           <button
             key={String(bool)}
             data-testid={`nested-${bool}`}
-            onClick={() => setNested(bool)}
+            onClick={() => {
+              flushSync(() => setNested(bool));
+              update();
+            }}
             style={{
               backgroundColor: bool === nested ? 'black' : '',
             }}
