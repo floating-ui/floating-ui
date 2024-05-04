@@ -38,13 +38,13 @@ export function getOffsetParent(
   element: Element,
   polyfill?: Polyfill,
 ): Element | Window {
-  const window = getWindow(element);
+  const win = getWindow(element);
 
-  if (isHTMLElement(element)) {
-    if (isTopLayer(element)) {
-      return window;
-    }
-  } else {
+  if (isTopLayer(element)) {
+    return win;
+  }
+
+  if (!isHTMLElement(element)) {
     let svgOffsetParent = getParentNode(element);
     while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
       if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
@@ -52,7 +52,7 @@ export function getOffsetParent(
       }
       svgOffsetParent = getParentNode(svgOffsetParent);
     }
-    return window;
+    return win;
   }
 
   let offsetParent = getTrueOffsetParent(element, polyfill);
@@ -71,8 +71,8 @@ export function getOffsetParent(
     isStaticPositioned(offsetParent) &&
     !isContainingBlock(offsetParent)
   ) {
-    return window;
+    return win;
   }
 
-  return offsetParent || getContainingBlock(element) || window;
+  return offsetParent || getContainingBlock(element) || win;
 }
