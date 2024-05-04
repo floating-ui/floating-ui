@@ -101,6 +101,10 @@ export function isLastTraversableNode(node: Node): boolean {
   return ['html', 'body', '#document'].includes(getNodeName(node));
 }
 
+export function isStaticPositioned(element: Element): boolean {
+  return getComputedStyle(element).position === 'static';
+}
+
 export function getComputedStyle(element: Element): CSSStyleDeclaration {
   return getWindow(element).getComputedStyle(element);
 }

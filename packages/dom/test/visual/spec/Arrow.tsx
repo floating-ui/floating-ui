@@ -21,17 +21,16 @@ export function Arrow() {
   const [svg, setSvg] = useState(false);
   const [centerOffset, setCenterOffset] = useState(false);
   const [addOffset, setAddOffset] = useState(false);
+  const [nested, setNested] = useState(false);
 
   const {
-    x,
-    y,
-    strategy,
     update,
     placement: resultantPlacement,
     middlewareData: {
       arrow: {x: arrowX, y: arrowY, centerOffset: centerOffsetValue} = {},
     },
     refs,
+    floatingStyles,
   } = useFloating({
     placement,
     whileElementsMounted: autoUpdate,
@@ -54,6 +53,60 @@ export function Arrow() {
   const {scrollRef} = useScroll({refs, update});
 
   const ArrowTag = svg ? 'svg' : 'div';
+
+  const jsx = nested ? (
+    <div
+      ref={refs.setFloating}
+      style={{
+        ...floatingStyles,
+        width: floatingSize,
+        height: floatingSize,
+      }}
+    >
+      <div
+        className="floating"
+        style={{position: 'relative', border: '5px solid black'}}
+      >
+        {centerOffset ? centerOffsetValue : 'Floating'}
+        <ArrowTag
+          ref={arrowRef}
+          className="arrow"
+          style={{
+            position: 'absolute',
+            top: arrowY != null ? arrowY : '',
+            left: arrowX != null ? arrowX : '',
+            right: '',
+            bottom: '',
+            [staticSide]: -15,
+          }}
+        />
+      </div>
+    </div>
+  ) : (
+    <div
+      ref={refs.setFloating}
+      className="floating"
+      style={{
+        ...floatingStyles,
+        width: floatingSize,
+        height: floatingSize,
+      }}
+    >
+      {centerOffset ? centerOffsetValue : 'Floating'}
+      <ArrowTag
+        ref={arrowRef}
+        className="arrow"
+        style={{
+          position: 'absolute',
+          top: arrowY != null ? arrowY : '',
+          left: arrowX != null ? arrowX : '',
+          right: '',
+          bottom: '',
+          [staticSide]: -15,
+        }}
+      />
+    </div>
+  );
 
   return (
     <>
@@ -79,31 +132,7 @@ export function Arrow() {
           >
             Reference
           </div>
-          <div
-            ref={refs.setFloating}
-            className="floating"
-            style={{
-              position: strategy,
-              top: y ?? 0,
-              left: x ?? 0,
-              width: floatingSize,
-              height: floatingSize,
-            }}
-          >
-            {centerOffset ? centerOffsetValue : 'Floating'}
-            <ArrowTag
-              ref={arrowRef}
-              className="arrow"
-              style={{
-                position: 'absolute',
-                top: arrowY != null ? arrowY : '',
-                left: arrowX != null ? arrowX : '',
-                right: '',
-                bottom: '',
-                [staticSide]: -15,
-              }}
-            />
-          </div>
+          {jsx}
         </div>
       </div>
 
@@ -196,6 +225,22 @@ export function Arrow() {
             onClick={() => setSvg(bool)}
             style={{
               backgroundColor: bool === svg ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Nested</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`nested-${bool}`}
+            onClick={() => setNested(bool)}
+            style={{
+              backgroundColor: bool === nested ? 'black' : '',
             }}
           >
             {String(bool)}

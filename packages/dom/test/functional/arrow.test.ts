@@ -129,3 +129,19 @@ test('internal shifting does not double up offset', async ({page}) => {
     `arrow-offset-no-doubling.png`,
   );
 });
+
+[true, false].forEach((nested) => {
+  [true, false].forEach((svg) => {
+    test(`arrow should be positioned correctly within nested: ${nested} wrapper with border (${
+      svg ? 'SVGElement' : 'HTMLElement'
+    })`, async ({page}) => {
+      await page.goto('http://localhost:1234/arrow');
+      await click(page, `[data-testid="svg-${svg}"]`);
+      await click(page, `[data-testid="nested-${nested}"]`);
+
+      expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+        `nested-${nested}-${svg ? 'svg-element' : 'html-element'}.png`,
+      );
+    });
+  });
+});
