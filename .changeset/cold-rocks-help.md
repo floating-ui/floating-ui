@@ -1,5 +1,4 @@
 ---
-'@floating-ui/utils': patch
 '@floating-ui/dom': patch
 ---
 
