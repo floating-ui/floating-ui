@@ -26,8 +26,6 @@ type Promisable<T> = T | Promise<T>;
 
 export type Derivable<T> = (state: MiddlewareState) => T;
 
-// `OffsetOptions` in the core library were originally already `Derivable`. For
-// backwards-compatibility, re-define it here to use the DOM Derivable type.
 export type OffsetValue =
   | number
   | {
@@ -56,6 +54,8 @@ export type OffsetValue =
        */
       alignmentAxis?: number | null;
     };
+// `OffsetOptions` in the core library were originally already `Derivable`. For
+// backwards-compatibility, re-define it here to use the DOM Derivable type.
 export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
 export interface Platform {
