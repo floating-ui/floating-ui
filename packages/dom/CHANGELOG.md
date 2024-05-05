@@ -1,5 +1,13 @@
 # @floating-ui/dom
 
+## 1.6.5
+
+### Patch Changes
+
+- fix: correctly calculate `<svg>` arrow element `offsetParent`. Fixes arrow positioning when styling an inner element of the floating element with a border.
+- fix: ignore `clippingAncestors` collision boundary for top layer elements
+- fix(types): correct `OffsetOptions` alias
+
 ## 1.6.4
 
 ### Patch Changes

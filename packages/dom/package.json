@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/dom",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Floating UI for the web",
   "publishConfig": {
     "access": "public"
