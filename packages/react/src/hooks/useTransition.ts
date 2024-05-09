@@ -22,9 +22,11 @@ function execWithArgsOrReturn<Value extends object | undefined, SidePlacement>(
 function useDelayUnmount(open: boolean, durationMs: number): boolean {
   const [isMounted, setIsMounted] = React.useState(open);
 
-  if (open && !isMounted) {
-    setIsMounted(true);
-  }
+  useModernLayoutEffect(() => {
+    if (open) {
+      setIsMounted(true);
+    }
+  }, [open]);
 
   React.useEffect(() => {
     if (!open) {
