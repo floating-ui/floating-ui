@@ -2,6 +2,7 @@ import type {
   UseFloatingOptions as UsePositionOptions,
   UseFloatingReturn as UsePositionFloatingReturn,
   VirtualElement,
+  useFloating,
 } from '@floating-ui/react-dom';
 import type * as React from 'react';
 
@@ -23,6 +24,7 @@ export type {
   UseTransitionStylesProps,
 } from './hooks/useTransition';
 export type {UseTypeaheadProps} from './hooks/useTypeahead';
+export type {UseFloatingRootProps} from './hooks/useFloatingRoot';
 export type {InnerProps, UseInnerOffsetProps} from './inner';
 export type {UseInteractionsReturn} from './hooks/useInteractions';
 export type {
@@ -124,6 +126,7 @@ export interface FloatingEvents {
 
 export interface ContextData {
   openEvent?: Event;
+  position?: ReturnType<typeof useFloating>;
   /** @deprecated use `onTypingChange` prop in `useTypeahead` */
   typing?: boolean;
   [key: string]: any;
@@ -138,8 +141,8 @@ export interface FloatingRootContext<RT extends ReferenceType = ReferenceType> {
     reason?: OpenChangeReason,
   ) => void;
   elements: {
-    reference: RT | null;
     domReference: Element | null;
+    reference: RT | null;
     floating: HTMLElement | null;
   };
   events: FloatingEvents;
@@ -210,11 +213,15 @@ export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
     /**
      * Externally passed reference element. Store in state.
      */
-    reference?: Element | null;
+    reference?: RT | null;
     /**
      * Externally passed floating element. Store in state.
      */
     floating?: HTMLElement | null;
+    /**
+     * Externally passed DOM reference element. Store in state.
+     */
+    domReference?: Element | null;
   };
   /**
    * An event callback that is invoked when the floating element is opened or

@@ -1,11 +1,6 @@
 import * as React from 'react';
-import type {FloatingRootContext} from '../types';
-import {
-  useClick,
-  useFocus,
-  type ContextData,
-  type OpenChangeReason,
-} from '../types';
+import type {FloatingRootContext, ReferenceElement} from '../types';
+import type {ContextData, OpenChangeReason} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {createPubSub} from '../utils/createPubSub';
 import {useId} from './useId';
@@ -19,13 +14,16 @@ export interface UseFloatingRootProps {
     reason?: OpenChangeReason,
   ) => void;
   elements?: {
-    reference?: Element | null;
+    domReference?: Element | null;
+    reference?: ReferenceElement | null;
     floating?: HTMLElement | null;
   };
   nodeId?: string;
 }
 
-export function useFloatingRoot(props: UseFloatingRootProps) {
+export function useFloatingRoot(
+  props: UseFloatingRootProps = {},
+): FloatingRootContext {
   const {
     open = false,
     onOpenChange: onOpenChangeProp,
@@ -38,21 +36,24 @@ export function useFloatingRoot(props: UseFloatingRootProps) {
   const [events] = React.useState(() => createPubSub());
   const nested = useFloatingParentNodeId() != null;
 
-  const elements = React.useMemo(
-    () => ({
-      reference: elementsProp.reference || null,
-      domReference: elementsProp.reference || null,
-      floating: elementsProp.floating || null,
-    }),
-    [elementsProp.floating, elementsProp.reference],
-  );
-
   const onOpenChange = useEffectEvent(
     (open: boolean, event?: Event, reason?: OpenChangeReason) => {
       dataRef.current.openEvent = open ? event : undefined;
       events.emit('openchange', {open, event, reason, nested});
       onOpenChangeProp?.(open, event, reason);
     },
+  );
+
+  const elements = React.useMemo(
+    () => ({
+      reference: elementsProp.reference || null,
+      floating: elementsProp.floating || null,
+      domReference:
+        elementsProp.domReference ||
+        (elementsProp.reference as Element | null) ||
+        null,
+    }),
+    [elementsProp.reference, elementsProp.floating, elementsProp.domReference],
   );
 
   const context = React.useMemo<FloatingRootContext>(
@@ -69,15 +70,4 @@ export function useFloatingRoot(props: UseFloatingRootProps) {
   );
 
   return context;
-}
-
-function Root() {
-  const [open, setOpen] = React.useState(false);
-  const context = useFloatingRoot({
-    open,
-    onOpenChange: setOpen,
-    elements: {},
-  });
-  const click = useClick(context);
-  const focus = useFocus(context);
 }

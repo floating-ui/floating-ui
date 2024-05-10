@@ -3,22 +3,15 @@ import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {
-  useFloatingParentNodeId,
-  useFloatingTree,
-} from '../components/FloatingTree';
+import {useFloatingTree} from '../components/FloatingTree';
 import type {
-  ContextData,
   FloatingContext,
   NarrowedElement,
   ReferenceType,
   UseFloatingOptions,
   UseFloatingReturn,
 } from '../types';
-import {createPubSub} from '../utils/createPubSub';
-import {useId} from './useId';
-import {error} from '../utils/log';
-import {useFloatingRoot} from './useFloatingContext';
+import {useFloatingRoot} from './useFloatingRoot';
 
 /**
  * Provides data to position a floating element and context to add interactions.
@@ -27,28 +20,18 @@ import {useFloatingRoot} from './useFloatingContext';
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
-  const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
-
   const rootContext = useFloatingRoot(options);
 
   const [_domReference, setDomReference] =
     React.useState<NarrowedElement<RT> | null>(null);
-  const [positionReference, _setPositionReference] =
+  const [_positionReference, _setPositionReference] =
     React.useState<ReferenceType | null>(null);
 
-  const optionDomReference = options.elements?.reference;
+  const optionDomReference = options.elements?.domReference;
+  const optionPositionReference = options.elements?.reference;
   const domReference = (optionDomReference ||
     _domReference) as NarrowedElement<RT>;
-
-  if (__DEV__) {
-    if (optionDomReference && !isElement(optionDomReference)) {
-      error(
-        'Cannot pass a virtual element to the `elements.reference` option,',
-        'as it must be a real DOM element. Use `refs.setPositionReference()`',
-        'instead.',
-      );
-    }
-  }
+  const positionReference = optionPositionReference || _positionReference;
 
   useModernLayoutEffect(() => {
     if (domReference) {
@@ -63,14 +46,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       ...(positionReference && {reference: positionReference}),
     },
   });
-  const tree = useFloatingTree<RT>();
-  const nested = useFloatingParentNodeId() != null;
+  const tree = useFloatingTree();
 
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
-  const dataRef = React.useRef<ContextData>({});
-  const [events] = React.useState(() => createPubSub());
-
-  const floatingId = useId();
 
   const setPositionReference = React.useCallback(
     (node: ReferenceType | null) => {
@@ -141,7 +119,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   );
 
   useModernLayoutEffect(() => {
-    const node = tree?.nodesRef.current.find((node) => node.id === nodeId);
+    const node = tree?.nodesRef.current.find(
+      (node) => node.id === rootContext.nodeId,
+    );
     if (node) {
       node.context = context;
     }

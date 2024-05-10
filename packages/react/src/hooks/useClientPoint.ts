@@ -7,11 +7,17 @@ import {getWindow} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {ContextData, ElementProps, FloatingRootContext} from '../types';
+import type {
+  ContextData,
+  ElementProps,
+  FloatingRootContext,
+  ReferenceElement,
+  VirtualElement,
+} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 function createVirtualElement(
-  domRef: React.MutableRefObject<Element | null>,
+  domElement: Element | null | undefined,
   data: {
     axis: 'x' | 'y' | 'both';
     dataRef: React.MutableRefObject<ContextData>;
@@ -25,9 +31,9 @@ function createVirtualElement(
   let isAutoUpdateEvent = false;
 
   return {
-    contextElement: domRef.current || undefined,
+    contextElement: domElement || undefined,
     getBoundingClientRect() {
-      const domRect = domRef.current?.getBoundingClientRect() || {
+      const domRect = domElement?.getBoundingClientRect() || {
         width: 0,
         height: 0,
         x: 0,
@@ -113,6 +119,10 @@ export interface UseClientPointProps {
    * @default null
    */
   y?: number | null;
+  /**
+   * Callback when the virtual reference changes.
+   */
+  onReferenceChange(reference: ReferenceElement | null): void;
 }
 
 /**
@@ -122,15 +132,22 @@ export interface UseClientPointProps {
  */
 export function useClientPoint(
   context: FloatingRootContext,
-  props: UseClientPointProps = {},
+  props: UseClientPointProps,
 ): ElementProps {
   const {
     open,
-    refs,
     dataRef,
-    elements: {floating},
+    elements: {floating, domReference},
   } = context;
-  const {enabled = true, axis = 'both', x = null, y = null} = props;
+  const {
+    enabled = true,
+    axis = 'both',
+    x = null,
+    y = null,
+    onReferenceChange: onReferenceChangeProp,
+  } = props;
+
+  const onReferenceChange = useEffectEvent(onReferenceChangeProp);
 
   const initialRef = React.useRef(false);
   const cleanupListenerRef = React.useRef<null | (() => void)>(null);
@@ -151,8 +168,8 @@ export function useClientPoint(
       return;
     }
 
-    refs.setPositionReference(
-      createVirtualElement(refs.domReference, {
+    onReferenceChange(
+      createVirtualElement(domReference, {
         x,
         y,
         axis,
@@ -187,12 +204,12 @@ export function useClientPoint(
     // Explicitly specified `x`/`y` coordinates shouldn't add a listener.
     if (!openCheck || !enabled || x != null || y != null) return;
 
-    const win = getWindow(refs.floating.current);
+    const win = getWindow(floating);
 
     function handleMouseMove(event: MouseEvent) {
       const target = getTarget(event) as Element | null;
 
-      if (!contains(refs.floating.current, target)) {
+      if (!contains(floating, target)) {
         setReference(event.clientX, event.clientY);
       } else {
         win.removeEventListener('mousemove', handleMouseMove);
@@ -213,8 +230,20 @@ export function useClientPoint(
       return cleanup;
     }
 
-    refs.setPositionReference(refs.domReference.current);
-  }, [dataRef, enabled, openCheck, refs, setReference, x, y]);
+    if (domReference !== undefined) {
+      onReferenceChange(domReference);
+    }
+  }, [
+    openCheck,
+    enabled,
+    x,
+    y,
+    floating,
+    dataRef,
+    onReferenceChange,
+    domReference,
+    setReference,
+  ]);
 
   React.useEffect(() => {
     return addListener();
