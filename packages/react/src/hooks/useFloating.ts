@@ -20,22 +20,24 @@ import {useFloatingRoot} from './useFloatingRoot';
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
-  const rootContext = useFloatingRoot({
+  const internalRootContext = useFloatingRoot({
     ...options,
     elements: {
       reference: null,
       floating: null,
-      domReference: null,
       ...options.elements,
     },
   });
+
+  const rootContext = options.root || internalRootContext;
+  const computedElements = rootContext.elements;
 
   const [_domReference, setDomReference] =
     React.useState<NarrowedElement<RT> | null>(null);
   const [positionReference, _setPositionReference] =
     React.useState<ReferenceType | null>(null);
 
-  const optionDomReference = options.elements?.reference;
+  const optionDomReference = computedElements?.reference;
   const domReference = (optionDomReference ||
     _domReference) as NarrowedElement<RT>;
 
@@ -48,7 +50,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const position = usePosition({
     ...options,
     elements: {
-      ...options.elements,
+      ...computedElements,
       ...(positionReference && {reference: positionReference}),
     },
   });

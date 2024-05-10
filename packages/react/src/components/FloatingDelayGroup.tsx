@@ -2,7 +2,7 @@ import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {getDelay} from '../hooks/useHover';
-import type {FloatingContext} from '../types';
+import type {FloatingRootContext} from '../types';
 
 type Delay = number | Partial<{open: number; close: number}>;
 
@@ -123,7 +123,7 @@ interface UseGroupOptions {
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
 export function useDelayGroup(
-  context: FloatingContext,
+  context: FloatingRootContext,
   options: UseGroupOptions = {},
 ): GroupContext {
   const {open, onOpenChange, floatingId} = context;

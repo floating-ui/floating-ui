@@ -256,14 +256,13 @@ export function useHover(
 
     function onMouseLeave(event: MouseEvent) {
       if (isClickLikeOpenEvent()) return;
-      if (!dataRef.current.floatingContext) return;
 
       unbindMouseMoveRef.current();
 
       const doc = getDocument(floating);
       clearTimeout(restTimeoutRef.current);
 
-      if (handleCloseRef.current) {
+      if (handleCloseRef.current && dataRef.current.floatingContext) {
         // Prevent clearing `onScrollMouseLeave` timeout.
         if (!open) {
           clearTimeout(timeoutRef.current);

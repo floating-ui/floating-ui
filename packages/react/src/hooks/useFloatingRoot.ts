@@ -16,7 +16,6 @@ export interface UseFloatingRootOptions {
   elements: {
     reference: ReferenceElement | null;
     floating: HTMLElement | null;
-    domReference?: Element | null;
   };
   nodeId?: string;
 }
@@ -48,12 +47,9 @@ export function useFloatingRoot(
     () => ({
       reference: elementsProp.reference || null,
       floating: elementsProp.floating || null,
-      domReference:
-        elementsProp.domReference ||
-        (elementsProp.reference as Element | null) ||
-        null,
+      domReference: (elementsProp.reference as Element | null) || null,
     }),
-    [elementsProp.reference, elementsProp.floating, elementsProp.domReference],
+    [elementsProp.reference, elementsProp.floating],
   );
 
   const context = React.useMemo<FloatingRootContext>(

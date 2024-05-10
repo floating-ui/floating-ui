@@ -206,6 +206,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
 
 export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
   extends Omit<UsePositionOptions<RT>, 'elements'> {
+  root?: FloatingRootContext<RT>;
   /**
    * Object of external elements as an alternative to the `refs` object setters.
    */
