@@ -6,7 +6,7 @@ import {createPubSub} from '../utils/createPubSub';
 import {useId} from './useId';
 import {useFloatingParentNodeId} from '../components/FloatingTree';
 
-export interface UseFloatingRootOptions {
+export interface UseFloatingRootContextOptions {
   open?: boolean;
   onOpenChange?: (
     open: boolean,
@@ -20,8 +20,8 @@ export interface UseFloatingRootOptions {
   nodeId?: string;
 }
 
-export function useFloatingRoot(
-  options: UseFloatingRootOptions,
+export function useFloatingRootContext(
+  options: UseFloatingRootContextOptions,
 ): FloatingRootContext {
   const {
     open = false,

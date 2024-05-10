@@ -1,5 +1,5 @@
 ---
-"@floating-ui/react": minor
+'@floating-ui/react': minor
 ---
 
-feat: add `useFloatingRoot` hook
+feat: add `useFloatingRootContext` hook

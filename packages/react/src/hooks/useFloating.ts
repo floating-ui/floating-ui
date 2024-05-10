@@ -11,7 +11,7 @@ import type {
   UseFloatingOptions,
   UseFloatingReturn,
 } from '../types';
-import {useFloatingRoot} from './useFloatingRoot';
+import {useFloatingRootContext} from './useFloatingRootContext';
 
 /**
  * Provides data to position a floating element and context to add interactions.
@@ -20,7 +20,7 @@ import {useFloatingRoot} from './useFloatingRoot';
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
-  const internalRootContext = useFloatingRoot({
+  const internalRootContext = useFloatingRootContext({
     ...options,
     elements: {
       reference: null,
@@ -29,7 +29,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     },
   });
 
-  const rootContext = options.root || internalRootContext;
+  const rootContext = options.rootContext || internalRootContext;
   const computedElements = rootContext.elements;
 
   const [_domReference, setDomReference] =
