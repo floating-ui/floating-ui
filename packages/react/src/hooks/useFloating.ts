@@ -20,18 +20,24 @@ import {useFloatingRoot} from './useFloatingRoot';
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
-  const rootContext = useFloatingRoot(options);
+  const rootContext = useFloatingRoot({
+    ...options,
+    elements: {
+      reference: null,
+      floating: null,
+      domReference: null,
+      ...options.elements,
+    },
+  });
 
   const [_domReference, setDomReference] =
     React.useState<NarrowedElement<RT> | null>(null);
-  const [_positionReference, _setPositionReference] =
+  const [positionReference, _setPositionReference] =
     React.useState<ReferenceType | null>(null);
 
-  const optionDomReference = options.elements?.domReference;
-  const optionPositionReference = options.elements?.reference;
+  const optionDomReference = options.elements?.reference;
   const domReference = (optionDomReference ||
     _domReference) as NarrowedElement<RT>;
-  const positionReference = optionPositionReference || _positionReference;
 
   useModernLayoutEffect(() => {
     if (domReference) {
