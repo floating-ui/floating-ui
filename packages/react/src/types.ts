@@ -24,7 +24,7 @@ export type {
   UseTransitionStylesProps,
 } from './hooks/useTransition';
 export type {UseTypeaheadProps} from './hooks/useTypeahead';
-export type {UseFloatingRootProps} from './hooks/useFloatingRoot';
+export type {UseFloatingRootOptions} from './hooks/useFloatingRoot';
 export type {InnerProps, UseInnerOffsetProps} from './inner';
 export type {UseInteractionsReturn} from './hooks/useInteractions';
 export type {

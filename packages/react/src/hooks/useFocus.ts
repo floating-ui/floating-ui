@@ -46,7 +46,8 @@ export function useFocus(
     open,
     onOpenChange,
     events,
-    elements: {domReference, floating},
+    dataRef,
+    elements: {domReference},
   } = context;
   const {enabled = true, visibleOnly = true} = props;
 
@@ -173,7 +174,10 @@ export function useFocus(
             // and not the element that actually has received focus if it is located
             // inside a shadow root.
             if (
-              contains(floating, activeEl) ||
+              contains(
+                dataRef.current.floatingContext?.refs.floating.current,
+                activeEl,
+              ) ||
               contains(domReference, activeEl) ||
               movedToFocusGuard
             ) {
@@ -185,5 +189,5 @@ export function useFocus(
         },
       },
     };
-  }, [enabled, visibleOnly, domReference, floating, onOpenChange]);
+  }, [enabled, visibleOnly, dataRef, domReference, onOpenChange]);
 }

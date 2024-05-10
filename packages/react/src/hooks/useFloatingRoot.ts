@@ -6,30 +6,30 @@ import {createPubSub} from '../utils/createPubSub';
 import {useId} from './useId';
 import {useFloatingParentNodeId} from '../components/FloatingTree';
 
-export interface UseFloatingRootProps {
+export interface UseFloatingRootOptions {
   open?: boolean;
   onOpenChange?: (
     open: boolean,
     event?: Event,
     reason?: OpenChangeReason,
   ) => void;
-  elements?: {
+  elements: {
+    reference: ReferenceElement | null;
+    floating: HTMLElement | null;
     domReference?: Element | null;
-    reference?: ReferenceElement | null;
-    floating?: HTMLElement | null;
   };
   nodeId?: string;
 }
 
 export function useFloatingRoot(
-  props: UseFloatingRootProps = {},
+  options: UseFloatingRootOptions,
 ): FloatingRootContext {
   const {
     open = false,
     onOpenChange: onOpenChangeProp,
-    elements: elementsProp = {},
+    elements: elementsProp,
     nodeId,
-  } = props;
+  } = options;
 
   const floatingId = useId();
   const dataRef = React.useRef<ContextData>({});
