@@ -2,7 +2,6 @@ import type {
   UseFloatingOptions as UsePositionOptions,
   UseFloatingReturn as UsePositionFloatingReturn,
   VirtualElement,
-  useFloating,
 } from '@floating-ui/react-dom';
 import type * as React from 'react';
 
@@ -146,8 +145,10 @@ export interface FloatingRootContext<RT extends ReferenceType = ReferenceType> {
     floating: HTMLElement | null;
   };
   events: FloatingEvents;
-  nodeId: string | undefined;
   floatingId: string;
+  refs: {
+    setPositionReference(node: ReferenceType | null): void;
+  };
 }
 
 export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<

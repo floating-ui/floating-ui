@@ -127,7 +127,6 @@ export function useDismiss(
   const {
     open,
     onOpenChange,
-    nodeId,
     elements: {reference, domReference, floating},
     dataRef,
   } = context;
@@ -165,6 +164,8 @@ export function useDismiss(
       if (!open || !enabled || !escapeKey || event.key !== 'Escape') {
         return;
       }
+
+      const nodeId = dataRef.current.floatingContext?.nodeId;
 
       const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
 
@@ -289,6 +290,8 @@ export function useDismiss(
         return;
       }
     }
+
+    const nodeId = dataRef.current.floatingContext?.nodeId;
 
     const targetIsInsideChildren =
       tree &&

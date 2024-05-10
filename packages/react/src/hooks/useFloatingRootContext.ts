@@ -14,10 +14,9 @@ export interface UseFloatingRootContextOptions {
     reason?: OpenChangeReason,
   ) => void;
   elements: {
-    reference: ReferenceElement | null;
+    reference: Element | null;
     floating: HTMLElement | null;
   };
-  nodeId?: string;
 }
 
 export function useFloatingRootContext(
@@ -27,13 +26,15 @@ export function useFloatingRootContext(
     open = false,
     onOpenChange: onOpenChangeProp,
     elements: elementsProp,
-    nodeId,
   } = options;
 
   const floatingId = useId();
   const dataRef = React.useRef<ContextData>({});
   const [events] = React.useState(() => createPubSub());
   const nested = useFloatingParentNodeId() != null;
+
+  const [positionReference, setPositionReference] =
+    React.useState<ReferenceElement | null>(elementsProp.reference);
 
   const onOpenChange = useEffectEvent(
     (open: boolean, event?: Event, reason?: OpenChangeReason) => {
@@ -43,13 +44,20 @@ export function useFloatingRootContext(
     },
   );
 
+  const refs = React.useMemo(
+    () => ({
+      setPositionReference,
+    }),
+    [],
+  );
+
   const elements = React.useMemo(
     () => ({
-      reference: elementsProp.reference || null,
+      reference: positionReference || elementsProp.reference || null,
       floating: elementsProp.floating || null,
-      domReference: (elementsProp.reference as Element | null) || null,
+      domReference: elementsProp.reference as Element | null,
     }),
-    [elementsProp.reference, elementsProp.floating],
+    [positionReference, elementsProp.reference, elementsProp.floating],
   );
 
   const context = React.useMemo<FloatingRootContext>(
@@ -59,10 +67,10 @@ export function useFloatingRootContext(
       onOpenChange,
       elements,
       events,
-      nodeId,
       floatingId,
+      refs,
     }),
-    [open, onOpenChange, elements, events, nodeId, floatingId],
+    [open, onOpenChange, elements, events, floatingId, refs],
   );
 
   return context;

@@ -126,10 +126,6 @@ function NarrowRefType() {
           };
         },
       },
-      domReference: {
-        // @ts-expect-error
-        getBoundingClientRect() {},
-      },
     },
   });
   useInteractions([

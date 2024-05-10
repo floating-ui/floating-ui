@@ -122,12 +122,13 @@ export interface UseClientPointProps {
  */
 export function useClientPoint(
   context: FloatingRootContext,
-  props: UseClientPointProps,
+  props: UseClientPointProps = {},
 ): ElementProps {
   const {
     open,
     dataRef,
     elements: {floating, domReference},
+    refs,
   } = context;
   const {enabled = true, axis = 'both', x = null, y = null} = props;
 
@@ -150,7 +151,7 @@ export function useClientPoint(
       return;
     }
 
-    dataRef.current.floatingContext?.refs.setPositionReference(
+    refs.setPositionReference(
       createVirtualElement(domReference, {
         x,
         y,
@@ -212,8 +213,18 @@ export function useClientPoint(
       return cleanup;
     }
 
-    dataRef.current.floatingContext?.refs.setPositionReference(domReference);
-  }, [openCheck, enabled, x, y, floating, dataRef, domReference, setReference]);
+    refs.setPositionReference(domReference);
+  }, [
+    openCheck,
+    enabled,
+    x,
+    y,
+    floating,
+    dataRef,
+    refs,
+    domReference,
+    setReference,
+  ]);
 
   React.useEffect(() => {
     return addListener();

@@ -20,12 +20,14 @@ import {useFloatingRootContext} from './useFloatingRootContext';
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
+  const {nodeId} = options;
+
   const internalRootContext = useFloatingRootContext({
     ...options,
     elements: {
       reference: null,
       floating: null,
-      ...options.elements,
+      ...(options.elements as any),
     },
   });
 
@@ -122,16 +124,15 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       ...rootContext,
       refs,
       elements,
+      nodeId,
     }),
-    [position, refs, elements, rootContext],
+    [position, refs, elements, nodeId, rootContext],
   );
 
   useModernLayoutEffect(() => {
     rootContext.dataRef.current.floatingContext = context;
 
-    const node = tree?.nodesRef.current.find(
-      (node) => node.id === rootContext.nodeId,
-    );
+    const node = tree?.nodesRef.current.find((node) => node.id === nodeId);
     if (node) {
       node.context = context;
     }
