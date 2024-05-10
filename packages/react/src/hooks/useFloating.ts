@@ -119,6 +119,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   );
 
   useModernLayoutEffect(() => {
+    rootContext.dataRef.current.floatingContext = context;
+
     const node = tree?.nodesRef.current.find(
       (node) => node.id === rootContext.nodeId,
     );

@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 import {useFloatingParentNodeId} from '../components/FloatingTree';
-import type {ElementProps} from '../types';
+import type {ElementProps, FloatingRootContext} from '../types';
 import {useId} from './useId';
-import type {FloatingRootContext} from './useFloatingRoot';
 
 type AriaRole =
   | 'tooltip'

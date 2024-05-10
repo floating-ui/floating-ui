@@ -112,8 +112,7 @@ function NarrowRefType() {
   const floating3 = useFloating<HTMLAnchorElement>({
     elements: {
       reference: {
-        contextElement: null,
-        // @ts-expect-error
+        contextElement: document.body,
         getBoundingClientRect() {
           return {
             x: 0,
@@ -126,6 +125,10 @@ function NarrowRefType() {
             height: 0,
           };
         },
+      },
+      domReference: {
+        // @ts-expect-error
+        getBoundingClientRect() {},
       },
     },
   });

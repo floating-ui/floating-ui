@@ -119,10 +119,6 @@ export interface UseClientPointProps {
    * @default null
    */
   y?: number | null;
-  /**
-   * Callback when the virtual reference changes.
-   */
-  onReferenceChange(reference: ReferenceElement | null): void;
 }
 
 /**
@@ -139,15 +135,7 @@ export function useClientPoint(
     dataRef,
     elements: {floating, domReference},
   } = context;
-  const {
-    enabled = true,
-    axis = 'both',
-    x = null,
-    y = null,
-    onReferenceChange: onReferenceChangeProp,
-  } = props;
-
-  const onReferenceChange = useEffectEvent(onReferenceChangeProp);
+  const {enabled = true, axis = 'both', x = null, y = null} = props;
 
   const initialRef = React.useRef(false);
   const cleanupListenerRef = React.useRef<null | (() => void)>(null);
@@ -168,7 +156,7 @@ export function useClientPoint(
       return;
     }
 
-    onReferenceChange(
+    dataRef.current.floatingContext?.refs.setPositionReference(
       createVirtualElement(domReference, {
         x,
         y,
@@ -230,20 +218,8 @@ export function useClientPoint(
       return cleanup;
     }
 
-    if (domReference !== undefined) {
-      onReferenceChange(domReference);
-    }
-  }, [
-    openCheck,
-    enabled,
-    x,
-    y,
-    floating,
-    dataRef,
-    onReferenceChange,
-    domReference,
-    setReference,
-  ]);
+    dataRef.current.floatingContext?.refs.setPositionReference(domReference);
+  }, [openCheck, enabled, x, y, floating, dataRef, domReference, setReference]);
 
   React.useEffect(() => {
     return addListener();

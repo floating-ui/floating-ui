@@ -3,7 +3,6 @@ import {
   getDocument,
   isMouseLikePointerType,
 } from '@floating-ui/react/utils';
-import type {useFloating} from '@floating-ui/react-dom';
 import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
@@ -14,6 +13,7 @@ import {
 } from '../components/FloatingTree';
 import type {
   ElementProps,
+  FloatingContext,
   FloatingRootContext,
   FloatingTreeType,
   OpenChangeReason,
@@ -26,7 +26,7 @@ const safePolygonIdentifier = createAttribute('safe-polygon');
 
 export interface HandleCloseFn {
   (
-    context: ReturnType<typeof useFloating> & {
+    context: FloatingContext & {
       onClose: () => void;
       tree?: FloatingTreeType | null;
       leave?: boolean;
@@ -256,7 +256,7 @@ export function useHover(
 
     function onMouseLeave(event: MouseEvent) {
       if (isClickLikeOpenEvent()) return;
-      if (!dataRef.current.position) return;
+      if (!dataRef.current.floatingContext) return;
 
       unbindMouseMoveRef.current();
 
@@ -270,7 +270,7 @@ export function useHover(
         }
 
         handlerRef.current = handleCloseRef.current({
-          ...dataRef.current.position,
+          ...dataRef.current.floatingContext,
           tree,
           x: event.clientX,
           y: event.clientY,
@@ -308,10 +308,10 @@ export function useHover(
     // https://github.com/floating-ui/floating-ui/discussions/1692
     function onScrollMouseLeave(event: MouseEvent) {
       if (isClickLikeOpenEvent()) return;
-      if (!dataRef.current.position) return;
+      if (!dataRef.current.floatingContext) return;
 
       handleCloseRef.current?.({
-        ...dataRef.current.position,
+        ...dataRef.current.floatingContext,
         tree,
         x: event.clientX,
         y: event.clientY,

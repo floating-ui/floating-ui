@@ -126,7 +126,7 @@ export interface FloatingEvents {
 
 export interface ContextData {
   openEvent?: Event;
-  position?: ReturnType<typeof useFloating>;
+  floatingContext?: FloatingContext;
   /** @deprecated use `onTypingChange` prop in `useTypeahead` */
   typing?: boolean;
   [key: string]: any;
