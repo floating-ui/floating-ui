@@ -7,13 +7,7 @@ import {getWindow} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {
-  ContextData,
-  ElementProps,
-  FloatingRootContext,
-  ReferenceElement,
-  VirtualElement,
-} from '../types';
+import type {ContextData, ElementProps, FloatingRootContext} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 function createVirtualElement(
