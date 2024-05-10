@@ -24,7 +24,7 @@ export type {
   UseTransitionStylesProps,
 } from './hooks/useTransition';
 export type {UseTypeaheadProps} from './hooks/useTypeahead';
-export type {UseFloatingRootOptions} from './hooks/useFloatingRoot';
+export type {UseFloatingRootContextOptions} from './hooks/useFloatingRootContext';
 export type {InnerProps, UseInnerOffsetProps} from './inner';
 export type {UseInteractionsReturn} from './hooks/useInteractions';
 export type {
@@ -206,7 +206,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
 
 export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
   extends Omit<UsePositionOptions<RT>, 'elements'> {
-  root?: FloatingRootContext<RT>;
+  rootContext?: FloatingRootContext<RT>;
   /**
    * Object of external elements as an alternative to the `refs` object setters.
    */
