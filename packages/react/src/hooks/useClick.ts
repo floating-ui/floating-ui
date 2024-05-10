@@ -5,7 +5,7 @@ import {
 import {isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingRootContext} from '../types';
 
 function isButtonTarget(event: React.KeyboardEvent<Element>) {
   return isHTMLElement(event.target) && event.target.tagName === 'BUTTON';
@@ -56,7 +56,7 @@ export interface UseClickProps {
  * @see https://floating-ui.com/docs/useClick
  */
 export function useClick(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseClickProps = {},
 ): ElementProps {
   const {

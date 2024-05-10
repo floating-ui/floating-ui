@@ -129,6 +129,24 @@ export interface ContextData {
   [key: string]: any;
 }
 
+export interface FloatingRootContext<RT extends ReferenceType = ReferenceType> {
+  dataRef: React.MutableRefObject<ContextData>;
+  open: boolean;
+  onOpenChange: (
+    open: boolean,
+    event?: Event,
+    reason?: OpenChangeReason,
+  ) => void;
+  elements: {
+    reference: RT | null;
+    domReference: Element | null;
+    floating: HTMLElement | null;
+  };
+  events: FloatingEvents;
+  nodeId: string | undefined;
+  floatingId: string;
+}
+
 export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
   UsePositionFloatingReturn<RT>,
   'refs' | 'elements'

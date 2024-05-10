@@ -17,7 +17,7 @@ import {
 import * as React from 'react';
 
 import {useFloatingTree} from '../components/FloatingTree';
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingRootContext} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
@@ -121,7 +121,7 @@ export interface UseDismissProps {
  * @see https://floating-ui.com/docs/useDismiss
  */
 export function useDismiss(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseDismissProps = {},
 ): ElementProps {
   const {

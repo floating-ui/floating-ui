@@ -14,12 +14,13 @@ import {
 import type {
   ElementProps,
   FloatingContext,
+  FloatingRootContext,
   FloatingTreeType,
   OpenChangeReason,
-  ReferenceType,
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {useLatestRef} from './utils/useLatestRef';
+import {useEffectEvent} from './utils/useEffectEvent';
 
 const safePolygonIdentifier = createAttribute('safe-polygon');
 
@@ -98,7 +99,7 @@ export interface UseHoverProps {
  * @see https://floating-ui.com/docs/useHover
  */
 export function useHover(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseHoverProps = {},
 ): ElementProps {
   const {
@@ -107,7 +108,6 @@ export function useHover(
     dataRef,
     events,
     elements: {domReference, floating},
-    refs,
   } = context;
   const {
     enabled = true,
@@ -200,19 +200,19 @@ export function useHover(
     [delayRef, onOpenChange],
   );
 
-  const cleanupMouseMoveHandler = React.useCallback(() => {
+  const cleanupMouseMoveHandler = useEffectEvent(() => {
     unbindMouseMoveRef.current();
     handlerRef.current = undefined;
-  }, []);
+  });
 
-  const clearPointerEvents = React.useCallback(() => {
+  const clearPointerEvents = useEffectEvent(() => {
     if (performedPointerEventsMutationRef.current) {
-      const body = getDocument(refs.floating.current).body;
+      const body = getDocument(floating).body;
       body.style.pointerEvents = '';
       body.removeAttribute(safePolygonIdentifier);
       performedPointerEventsMutationRef.current = false;
     }
-  }, [refs]);
+  });
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered

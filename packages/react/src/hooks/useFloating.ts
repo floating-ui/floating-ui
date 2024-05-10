@@ -11,15 +11,14 @@ import type {
   ContextData,
   FloatingContext,
   NarrowedElement,
-  OpenChangeReason,
   ReferenceType,
   UseFloatingOptions,
   UseFloatingReturn,
 } from '../types';
 import {createPubSub} from '../utils/createPubSub';
 import {useId} from './useId';
-import {useEffectEvent} from './utils/useEffectEvent';
 import {error} from '../utils/log';
+import {useFloatingRoot} from './useFloatingContext';
 
 /**
  * Provides data to position a floating element and context to add interactions.
@@ -29,6 +28,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
   const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
+
+  const rootContext = useFloatingRoot(options);
 
   const [_domReference, setDomReference] =
     React.useState<NarrowedElement<RT> | null>(null);
@@ -65,17 +66,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const tree = useFloatingTree<RT>();
   const nested = useFloatingParentNodeId() != null;
 
-  const onOpenChange = useEffectEvent(
-    (open: boolean, event?: Event, reason?: OpenChangeReason) => {
-      dataRef.current.openEvent = open ? event : undefined;
-      events.emit('openchange', {open, event, reason, nested});
-      unstable_onOpenChange?.(open, event, reason);
-    },
-  );
-
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
   const dataRef = React.useRef<ContextData>({});
-  const events = React.useState(() => createPubSub())[0];
+  const [events] = React.useState(() => createPubSub());
 
   const floatingId = useId();
 
@@ -140,16 +133,11 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const context = React.useMemo<FloatingContext<RT>>(
     () => ({
       ...position,
+      ...rootContext,
       refs,
       elements,
-      dataRef,
-      nodeId,
-      floatingId,
-      events,
-      open,
-      onOpenChange,
     }),
-    [position, nodeId, floatingId, events, open, onOpenChange, refs, elements],
+    [position, refs, elements, rootContext],
   );
 
   useModernLayoutEffect(() => {
