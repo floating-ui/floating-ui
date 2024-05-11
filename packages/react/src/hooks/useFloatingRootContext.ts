@@ -1,10 +1,12 @@
 import * as React from 'react';
+import {isElement} from '@floating-ui/utils/dom';
 import type {FloatingRootContext, ReferenceElement} from '../types';
 import type {ContextData, OpenChangeReason} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {createPubSub} from '../utils/createPubSub';
 import {useId} from './useId';
 import {useFloatingParentNodeId} from '../components/FloatingTree';
+import {error} from '../utils/log';
 
 export interface UseFloatingRootContextOptions {
   open?: boolean;
@@ -33,6 +35,17 @@ export function useFloatingRootContext(
   const [events] = React.useState(() => createPubSub());
   const nested = useFloatingParentNodeId() != null;
 
+  if (__DEV__) {
+    const optionDomReference = elementsProp.reference;
+    if (optionDomReference && !isElement(optionDomReference)) {
+      error(
+        'Cannot pass a virtual element to the `elements.reference` option,',
+        'as it must be a real DOM element. Use `refs.setPositionReference()`',
+        'instead.',
+      );
+    }
+  }
+
   const [positionReference, setPositionReference] =
     React.useState<ReferenceElement | null>(elementsProp.reference);
 
@@ -60,7 +73,7 @@ export function useFloatingRootContext(
     [positionReference, elementsProp.reference, elementsProp.floating],
   );
 
-  const context = React.useMemo<FloatingRootContext>(
+  return React.useMemo<FloatingRootContext>(
     () => ({
       dataRef,
       open,
@@ -72,6 +85,4 @@ export function useFloatingRootContext(
     }),
     [open, onOpenChange, elements, events, floatingId, refs],
   );
-
-  return context;
 }

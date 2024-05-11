@@ -27,7 +27,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     elements: {
       reference: null,
       floating: null,
-      ...(options.elements as any),
+      ...options.elements,
     },
   });
 
@@ -42,6 +42,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const optionDomReference = computedElements?.reference;
   const domReference = (optionDomReference ||
     _domReference) as NarrowedElement<RT>;
+  const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
+
+  const tree = useFloatingTree();
 
   useModernLayoutEffect(() => {
     if (domReference) {
@@ -56,9 +59,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       ...(positionReference && {reference: positionReference}),
     },
   });
-  const tree = useFloatingTree();
-
-  const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
 
   const setPositionReference = React.useCallback(
     (node: ReferenceType | null) => {

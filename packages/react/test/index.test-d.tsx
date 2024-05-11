@@ -7,10 +7,13 @@ import {
   safePolygon,
   shift,
   useClick,
+  useClientPoint,
   useDismiss,
   useFloating,
+  useFloatingRootContext,
   useFocus,
   useHover,
+  useInnerOffset,
   useInteractions,
   useListNavigation,
   useMergeRefs,
@@ -112,7 +115,8 @@ function NarrowRefType() {
   const floating3 = useFloating<HTMLAnchorElement>({
     elements: {
       reference: {
-        contextElement: document.body,
+        contextElement: null,
+        // @ts-expect-error
         getBoundingClientRect() {
           return {
             x: 0,
@@ -193,4 +197,32 @@ function NarrowRefType() {
       <button ref={floating1.refs.setPositionReference} />
     </>
   );
+}
+
+function Root() {
+  const context = useFloatingRootContext({
+    elements: {
+      floating: null,
+      reference: null,
+    },
+  });
+
+  useClick(context);
+  useDismiss(context);
+  useFocus(context);
+  useHover(context);
+  useListNavigation(context, {
+    listRef: {current: []},
+    activeIndex: null,
+  });
+  useRole(context);
+  useTypeahead(context, {
+    listRef: {current: []},
+    activeIndex: null,
+  });
+  useClientPoint(context);
+  useInnerOffset(context, {
+    onChange: () => {},
+    overflowRef: {current: null},
+  });
 }

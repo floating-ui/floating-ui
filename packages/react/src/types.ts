@@ -215,15 +215,11 @@ export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
     /**
      * Externally passed reference element. Store in state.
      */
-    reference?: RT | null;
+    reference?: Element | null;
     /**
      * Externally passed floating element. Store in state.
      */
     floating?: HTMLElement | null;
-    /**
-     * Externally passed DOM reference element. Store in state.
-     */
-    domReference?: Element | null;
   };
   /**
    * An event callback that is invoked when the floating element is opened or
