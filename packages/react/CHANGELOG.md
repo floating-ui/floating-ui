@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.26.14
+
+### Patch Changes
+
+- feat: add `useFloatingRootContext` Hook, which enables calling interaction hooks in a component higher in the tree than `useFloating` is called in. This supports spreading reference props onto an "external" reference element.
+
 ## 0.26.13
 
 ### Patch Changes
