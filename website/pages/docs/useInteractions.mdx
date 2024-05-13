@@ -18,9 +18,9 @@ import {useInteractions} from '@floating-ui/react';
 </PageCard>
 
 Interaction Hooks like `useHover(){:js}` and `useFocus(){:js}` do
-two things: they set up Effects inside the Hook that work on
-their own, and return event handlers intended to be passed to the
-elements to add their functionality.
+two things: they create Effects inside themselves that work
+independently, and also return event handlers intended to be
+passed to the elements to add their functionality.
 
 ## Usage
 
@@ -50,15 +50,99 @@ function App() {
 ```
 
 <Notice title="Conditional interactions">
-  Don't conditionally pass values into the interactions array if you don't
-  want one of the interactions to be enabled. This is because each Hook also has Effects that
-  register independent event handlers globally, among other side effects.
+  
+Don't conditionally pass values into the interactions array if you don't want 
+one of the interactions to be enabled. This is because each Hook also has 
+Effects that register independent event handlers globally, among other side 
+effects.
 
 Instead, use the `enabled{:.key}` option that each Hook has -- it
 simultaneously disables all Effects _and_ event handler props so
 the Hook is fully inert.
 
 </Notice>
+
+## External reference
+
+In your component API, the reference element may be external to
+the component that `useFloating(){:js}` is called in (where the
+positioning data is passed). In such a tree structure, the
+interactions are shared between the reference element and
+floating element in a "root" component higher than them -- an
+ancestor common to both.
+
+An example would be:
+
+{/* prettier-ignore */}
+```js
+<TooltipRoot> {/* useInteractions() called in this component */}
+  <TooltipTrigger />
+  <TooltipPopup /> {/* useFloating() called in this component */}
+</TooltipRoot>
+```
+
+To share the interactions between the reference and floating
+elements, you can use the `useFloatingRootContext(){:js}` Hook:
+
+```js
+import {useFloatingRootContext} from '@floating-ui/react';
+```
+
+It returns a <WordHighlight id="a">context object</WordHighlight>
+that is accepted by all interaction Hooks, similar to the one
+returned by `useFloating(){:js}` -- only without the positioning
+data.
+
+Pass the open state and elements to the Hook:
+
+```js {8-15,28} /context/#a
+function TooltipRoot() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [anchor, setAnchor] = useState(null);
+  const [tooltip, setTooltip] = useState(null);
+
+  const context = useFloatingRootContext({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    // Required: both elements must be passed externally.
+    // Store them in state.
+    elements: {
+      reference: anchor,
+      floating: tooltip,
+    },
+  });
+
+  const click = useClick(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    click,
+  ]);
+
+  return (
+    <>
+      <Anchor setAnchor={setAnchor} {...getReferenceProps()} />
+      <Tooltip
+        rootContext={context}
+        setTooltip={setTooltip}
+        {...getFloatingProps()}
+      />;
+    </>
+  );
+}
+```
+
+The root context must be available to `useFloating(){:js}` by
+passing it as the `rootContext` option:
+
+```js {3}
+function Tooltip({rootContext, setTooltip, ...props}) {
+  const {floatingStyles} = useFloating({
+    rootContext,
+  });
+  return <div ref={setTooltip} {...props} />;
+}
+```
 
 ## Return value
 
