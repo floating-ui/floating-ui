@@ -7,7 +7,7 @@ import {useEffectEvent} from './hooks/utils/useEffectEvent';
 import type {
   DetectOverflowOptions,
   ElementProps,
-  FloatingContext,
+  FloatingRootContext,
   Middleware,
   MiddlewareState,
   SideObject,
@@ -211,7 +211,7 @@ export interface UseInnerOffsetProps {
  * @see https://floating-ui.com/docs/inner
  */
 export function useInnerOffset(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseInnerOffsetProps,
 ): ElementProps {
   const {open, elements} = context;

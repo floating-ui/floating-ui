@@ -11,7 +11,11 @@ import {
 import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 
-import type {ElementProps, FloatingContext, OpenChangeReason} from '../types';
+import type {
+  ElementProps,
+  FloatingRootContext,
+  OpenChangeReason,
+} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 
 export interface UseFocusProps {
@@ -35,14 +39,14 @@ export interface UseFocusProps {
  * @see https://floating-ui.com/docs/useFocus
  */
 export function useFocus(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseFocusProps = {},
 ): ElementProps {
   const {
     open,
     onOpenChange,
     events,
-    refs,
+    dataRef,
     elements: {domReference},
   } = context;
   const {enabled = true, visibleOnly = true} = props;
@@ -170,7 +174,10 @@ export function useFocus(
             // and not the element that actually has received focus if it is located
             // inside a shadow root.
             if (
-              contains(refs.floating.current, activeEl) ||
+              contains(
+                dataRef.current.floatingContext?.refs.floating.current,
+                activeEl,
+              ) ||
               contains(domReference, activeEl) ||
               movedToFocusGuard
             ) {
@@ -182,5 +189,5 @@ export function useFocus(
         },
       },
     };
-  }, [enabled, visibleOnly, domReference, refs, onOpenChange]);
+  }, [enabled, visibleOnly, dataRef, domReference, onOpenChange]);
 }

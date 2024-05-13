@@ -2,7 +2,7 @@ import {stopEvent} from '@floating-ui/react/utils';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingRootContext} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
@@ -65,7 +65,7 @@ export interface UseTypeaheadProps {
  * @see https://floating-ui.com/docs/useTypeahead
  */
 export function useTypeahead(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseTypeaheadProps,
 ): ElementProps {
   const {open, dataRef} = context;

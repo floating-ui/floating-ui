@@ -23,6 +23,7 @@ export type {
   UseTransitionStylesProps,
 } from './hooks/useTransition';
 export type {UseTypeaheadProps} from './hooks/useTypeahead';
+export type {UseFloatingRootContextOptions} from './hooks/useFloatingRootContext';
 export type {InnerProps, UseInnerOffsetProps} from './inner';
 export type {UseInteractionsReturn} from './hooks/useInteractions';
 export type {
@@ -124,9 +125,30 @@ export interface FloatingEvents {
 
 export interface ContextData {
   openEvent?: Event;
+  floatingContext?: FloatingContext;
   /** @deprecated use `onTypingChange` prop in `useTypeahead` */
   typing?: boolean;
   [key: string]: any;
+}
+
+export interface FloatingRootContext<RT extends ReferenceType = ReferenceType> {
+  dataRef: React.MutableRefObject<ContextData>;
+  open: boolean;
+  onOpenChange: (
+    open: boolean,
+    event?: Event,
+    reason?: OpenChangeReason,
+  ) => void;
+  elements: {
+    domReference: Element | null;
+    reference: RT | null;
+    floating: HTMLElement | null;
+  };
+  events: FloatingEvents;
+  floatingId: string;
+  refs: {
+    setPositionReference(node: ReferenceType | null): void;
+  };
 }
 
 export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
@@ -185,6 +207,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
 
 export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
   extends Omit<UsePositionOptions<RT>, 'elements'> {
+  rootContext?: FloatingRootContext<RT>;
   /**
    * Object of external elements as an alternative to the `refs` object setters.
    */

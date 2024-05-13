@@ -23,6 +23,7 @@ export {useClick} from './hooks/useClick';
 export {useClientPoint} from './hooks/useClientPoint';
 export {useDismiss} from './hooks/useDismiss';
 export {useFloating} from './hooks/useFloating';
+export {useFloatingRootContext} from './hooks/useFloatingRootContext';
 export {useFocus} from './hooks/useFocus';
 export {useHover} from './hooks/useHover';
 export {useId} from './hooks/useId';

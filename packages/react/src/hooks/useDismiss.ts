@@ -17,7 +17,7 @@ import {
 import * as React from 'react';
 
 import {useFloatingTree} from '../components/FloatingTree';
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingRootContext} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
@@ -121,13 +121,12 @@ export interface UseDismissProps {
  * @see https://floating-ui.com/docs/useDismiss
  */
 export function useDismiss(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseDismissProps = {},
 ): ElementProps {
   const {
     open,
     onOpenChange,
-    nodeId,
     elements: {reference, domReference, floating},
     dataRef,
   } = context;
@@ -165,6 +164,8 @@ export function useDismiss(
       if (!open || !enabled || !escapeKey || event.key !== 'Escape') {
         return;
       }
+
+      const nodeId = dataRef.current.floatingContext?.nodeId;
 
       const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
 
@@ -289,6 +290,8 @@ export function useDismiss(
         return;
       }
     }
+
+    const nodeId = dataRef.current.floatingContext?.nodeId;
 
     const targetIsInsideChildren =
       tree &&

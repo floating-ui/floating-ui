@@ -7,11 +7,11 @@ import {getWindow} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {ContextData, ElementProps, FloatingContext} from '../types';
+import type {ContextData, ElementProps, FloatingRootContext} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 function createVirtualElement(
-  domRef: React.MutableRefObject<Element | null>,
+  domElement: Element | null | undefined,
   data: {
     axis: 'x' | 'y' | 'both';
     dataRef: React.MutableRefObject<ContextData>;
@@ -25,9 +25,9 @@ function createVirtualElement(
   let isAutoUpdateEvent = false;
 
   return {
-    contextElement: domRef.current || undefined,
+    contextElement: domElement || undefined,
     getBoundingClientRect() {
-      const domRect = domRef.current?.getBoundingClientRect() || {
+      const domRect = domElement?.getBoundingClientRect() || {
         width: 0,
         height: 0,
         x: 0,
@@ -121,14 +121,14 @@ export interface UseClientPointProps {
  * @see https://floating-ui.com/docs/useClientPoint
  */
 export function useClientPoint(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseClientPointProps = {},
 ): ElementProps {
   const {
     open,
-    refs,
     dataRef,
-    elements: {floating},
+    elements: {floating, domReference},
+    refs,
   } = context;
   const {enabled = true, axis = 'both', x = null, y = null} = props;
 
@@ -152,7 +152,7 @@ export function useClientPoint(
     }
 
     refs.setPositionReference(
-      createVirtualElement(refs.domReference, {
+      createVirtualElement(domReference, {
         x,
         y,
         axis,
@@ -187,12 +187,12 @@ export function useClientPoint(
     // Explicitly specified `x`/`y` coordinates shouldn't add a listener.
     if (!openCheck || !enabled || x != null || y != null) return;
 
-    const win = getWindow(refs.floating.current);
+    const win = getWindow(floating);
 
     function handleMouseMove(event: MouseEvent) {
       const target = getTarget(event) as Element | null;
 
-      if (!contains(refs.floating.current, target)) {
+      if (!contains(floating, target)) {
         setReference(event.clientX, event.clientY);
       } else {
         win.removeEventListener('mousemove', handleMouseMove);
@@ -213,8 +213,18 @@ export function useClientPoint(
       return cleanup;
     }
 
-    refs.setPositionReference(refs.domReference.current);
-  }, [dataRef, enabled, openCheck, refs, setReference, x, y]);
+    refs.setPositionReference(domReference);
+  }, [
+    openCheck,
+    enabled,
+    x,
+    y,
+    floating,
+    dataRef,
+    refs,
+    domReference,
+    setReference,
+  ]);
 
   React.useEffect(() => {
     return addListener();

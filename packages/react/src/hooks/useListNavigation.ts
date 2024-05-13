@@ -17,7 +17,7 @@ import {
   useFloatingParentNodeId,
   useFloatingTree,
 } from '../components/FloatingTree';
-import type {Dimensions, ElementProps, FloatingContext} from '../types';
+import type {Dimensions, ElementProps, FloatingRootContext} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
@@ -240,13 +240,12 @@ export interface UseListNavigationProps {
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export function useListNavigation(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseListNavigationProps,
 ): ElementProps {
   const {
     open,
     onOpenChange,
-    refs,
     elements: {domReference, floating},
   } = context;
   const {
@@ -308,6 +307,7 @@ export function useListNavigation(
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
   const scrollItemIntoViewRef = useLatestRef(scrollItemIntoView);
+  const floatingRef = useLatestRef(floating);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
   const [virtualId, setVirtualId] = React.useState<string | undefined>();
@@ -558,14 +558,22 @@ export function useListNavigation(
           onNavigate(null);
 
           if (!virtual) {
-            enqueueFocus(refs.floating.current, {preventScroll: true});
+            enqueueFocus(floatingRef.current, {preventScroll: true});
           }
         },
       }),
     };
 
     return props;
-  }, [open, refs, focusItem, focusItemOnHover, listRef, onNavigate, virtual]);
+  }, [
+    open,
+    floatingRef,
+    focusItem,
+    focusItemOnHover,
+    listRef,
+    onNavigate,
+    virtual,
+  ]);
 
   return React.useMemo(() => {
     if (!enabled) {
@@ -583,7 +591,7 @@ export function useListNavigation(
       // the user ArrowDowns, the first item won't be focused.
       if (
         !latestOpenRef.current &&
-        event.currentTarget === refs.floating.current
+        event.currentTarget === floatingRef.current
       ) {
         return;
       }
@@ -922,7 +930,7 @@ export function useListNavigation(
     };
   }, [
     domReference,
-    refs,
+    floatingRef,
     activeId,
     virtualId,
     disabledIndicesRef,
