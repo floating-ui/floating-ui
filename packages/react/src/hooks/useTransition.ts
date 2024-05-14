@@ -70,6 +70,10 @@ export function useTransitionStatus(
   const [status, setStatus] = React.useState<Status>('unmounted');
   const isMounted = useDelayUnmount(open, closeDuration);
 
+  if (!isMounted && status === 'close') {
+    setStatus('unmounted');
+  }
+
   useModernLayoutEffect(() => {
     if (!floating) return;
 
