@@ -27,11 +27,11 @@ function useDelayUnmount(open: boolean, durationMs: number): boolean {
   }
 
   React.useEffect(() => {
-    if (!open) {
+    if (!open && isMounted) {
       const timeout = setTimeout(() => setIsMounted(false), durationMs);
       return () => clearTimeout(timeout);
     }
-  }, [open, durationMs]);
+  }, [open, isMounted, durationMs]);
 
   return isMounted;
 }
@@ -67,19 +67,8 @@ export function useTransitionStatus(
   const isNumberDuration = typeof duration === 'number';
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
-  const [initiated, setInitiated] = React.useState(false);
   const [status, setStatus] = React.useState<Status>('unmounted');
   const isMounted = useDelayUnmount(open, closeDuration);
-
-  // `initiated` check prevents this `setState` call from breaking
-  // <FloatingPortal />. This call is necessary to ensure subsequent opens
-  // after the initial one allows the correct side animation to play when the
-  // placement has changed.
-  useModernLayoutEffect(() => {
-    if (initiated && !isMounted) {
-      setStatus('unmounted');
-    }
-  }, [initiated, isMounted]);
 
   useModernLayoutEffect(() => {
     if (!floating) return;
@@ -96,7 +85,6 @@ export function useTransitionStatus(
       };
     }
 
-    setInitiated(true);
     setStatus('close');
   }, [open, floating]);
 
