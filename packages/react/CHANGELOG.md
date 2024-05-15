@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.26.15
+
+### Patch Changes
+
+- fix(useTransitionStatus): guard `isMounted` check and remove unneeded initiated state. Prevents an infinite loop when called in a component with an unstable callback ref.
+
 ## 0.26.14
 
 ### Patch Changes

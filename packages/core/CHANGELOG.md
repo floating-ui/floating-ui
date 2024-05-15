@@ -1,5 +1,11 @@
 # @floating-ui/core
 
+## 1.6.2
+
+### Patch Changes
+
+- fix(size): correctly constrain floating element to avoid overflowing outside viewport with `shift({crossAxis: true})`
+
 ## 1.6.1
 
 ### Patch Changes
