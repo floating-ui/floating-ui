@@ -67,8 +67,17 @@ export const size = (
       heightSide = alignment === 'end' ? 'top' : 'bottom';
     }
 
-    const overflowAvailableHeight = height - overflow[heightSide];
-    const overflowAvailableWidth = width - overflow[widthSide];
+    const maximumClippingHeight = height - overflow.top - overflow.bottom;
+    const maximumClippingWidth = width - overflow.left - overflow.right;
+
+    const overflowAvailableHeight = min(
+      height - overflow[heightSide],
+      maximumClippingHeight,
+    );
+    const overflowAvailableWidth = min(
+      width - overflow[widthSide],
+      maximumClippingWidth,
+    );
 
     const noShift = !state.middlewareData.shift;
 
@@ -76,13 +85,11 @@ export const size = (
     let availableWidth = overflowAvailableWidth;
 
     if (isYAxis) {
-      const maximumClippingWidth = width - overflow.left - overflow.right;
       availableWidth =
         alignment || noShift
           ? min(overflowAvailableWidth, maximumClippingWidth)
           : maximumClippingWidth;
     } else {
-      const maximumClippingHeight = height - overflow.top - overflow.bottom;
       availableHeight =
         alignment || noShift
           ? min(overflowAvailableHeight, maximumClippingHeight)
