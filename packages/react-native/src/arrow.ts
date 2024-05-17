@@ -1,5 +1,11 @@
-import type {Middleware, SideObject} from '@floating-ui/core';
+import type {Derivable, Middleware, Padding} from '@floating-ui/core';
 import {arrow as arrowCore} from '@floating-ui/core';
+import {evaluate} from '@floating-ui/utils';
+
+export interface ArrowOptions {
+  element: any;
+  padding?: Padding;
+}
 
 /**
  * A data provider that provides data to position an inner element of the
@@ -8,12 +14,9 @@ import {arrow as arrowCore} from '@floating-ui/core';
  * This wraps the core `arrow` middleware to allow React refs as the element.
  * @see https://floating-ui.com/docs/arrow
  */
-export const arrow = (options: {
-  element: any;
-  padding?: number | SideObject;
-}): Middleware => {
-  const {element, padding} = options;
-
+export const arrow = (
+  options: ArrowOptions | Derivable<ArrowOptions>,
+): Middleware => {
   function isRef(value: unknown) {
     return {}.hasOwnProperty.call(value, 'current');
   }
@@ -21,17 +24,19 @@ export const arrow = (options: {
   return {
     name: 'arrow',
     options,
-    fn(args) {
+    fn(state) {
+      const {element, padding} = evaluate(options, state);
+
       if (element && isRef(element)) {
         if (element.current != null) {
-          return arrowCore({element: element.current, padding}).fn(args);
+          return arrowCore({element: element.current, padding}).fn(state);
         }
 
         return {};
       }
 
       if (element) {
-        return arrowCore({element, padding}).fn(args);
+        return arrowCore({element, padding}).fn(state);
       }
 
       return {};
