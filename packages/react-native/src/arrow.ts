@@ -1,6 +1,5 @@
 import type {Derivable, Middleware, ArrowOptions} from '@floating-ui/core';
 import {arrow as arrowCore} from '@floating-ui/core';
-import {evaluate} from '@floating-ui/utils';
 
 /**
  * A data provider that provides data to position an inner element of the
@@ -20,7 +19,8 @@ export const arrow = (
     name: 'arrow',
     options,
     fn(state) {
-      const {element, padding} = evaluate(options, state);
+      const {element, padding} =
+        typeof options === 'function' ? options(state) : options;
 
       if (element && isRef(element)) {
         if (element.current != null) {
