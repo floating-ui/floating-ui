@@ -66,6 +66,10 @@ export function useFloatingPortalNode(
   }, [portalNode]);
 
   useModernLayoutEffect(() => {
+    // Wait for the uniqueId to be generated before creating the portal node in
+    // React <18 (using `useFloatingId` instead of the native `useId`).
+    // https://github.com/floating-ui/floating-ui/issues/2778
+    if (!uniqueId) return;
     if (portalNodeRef.current) return;
     const existingIdRoot = id ? document.getElementById(id) : null;
     if (!existingIdRoot) return;
@@ -79,6 +83,7 @@ export function useFloatingPortalNode(
   }, [id, uniqueId]);
 
   useModernLayoutEffect(() => {
+    if (!uniqueId) return;
     if (portalNodeRef.current) return;
 
     let container = root || portalContext?.portalNode;
