@@ -2,4 +2,4 @@
 "@floating-ui/react": patch
 ---
 
-fix(FloatingPortal): unconditional rendering id in React <18
+fix(FloatingPortal): prevent `undefined` id with unconditional rendering in React <18
