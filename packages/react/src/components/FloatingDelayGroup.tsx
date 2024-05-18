@@ -92,14 +92,16 @@ export function FloatingDelayGroup(
     if (state.currentId) {
       if (initialCurrentIdRef.current === null) {
         initialCurrentIdRef.current = state.currentId;
-      } else {
+      } else if (!state.isInstantPhase) {
         setState({isInstantPhase: true});
       }
     } else {
-      setState({isInstantPhase: false});
+      if (state.isInstantPhase) {
+        setState({isInstantPhase: false});
+      }
       initialCurrentIdRef.current = null;
     }
-  }, [state.currentId]);
+  }, [state.currentId, state.isInstantPhase]);
 
   return (
     <FloatingDelayGroupContext.Provider
