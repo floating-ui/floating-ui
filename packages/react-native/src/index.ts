@@ -1,9 +1,9 @@
-export {arrow} from './arrow';
 export type * from './types';
 export {useFloating} from './useFloating';
+export {detectOverflow} from '@floating-ui/core';
 export {
+  arrow,
   autoPlacement,
-  detectOverflow,
   flip,
   hide,
   inline,
@@ -11,4 +11,4 @@ export {
   offset,
   shift,
   size,
-} from '@floating-ui/core';
+} from './reactiveMiddleware';
