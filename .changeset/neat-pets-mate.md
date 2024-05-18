@@ -12,3 +12,13 @@ const offset1 = offset(value); // reactive
 const offset2 = offset(() => value); // NOT reactive
 const offset3 = offset(() => value, [value]); // reactive
 ```
+
+This also includes `size`'s `apply` function:
+
+```js
+size({
+  apply() {
+    value; // reactive
+  }
+}, [value]);
+```
