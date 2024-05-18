@@ -9,6 +9,7 @@ import {
   hide as baseHide,
   inline as baseInline,
   type Middleware,
+  type ArrowOptions,
   type OffsetOptions,
   type ShiftOptions,
   type FlipOptions,
@@ -21,7 +22,7 @@ import {
   type MiddlewareState,
   type Coords,
 } from '@floating-ui/core';
-import {arrow as baseArrow, type ArrowOptions} from './arrow';
+import {arrow as baseArrow} from './arrow';
 
 /**
  * Modifies the placement by translating the floating element along the

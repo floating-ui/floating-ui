@@ -8,6 +8,7 @@ import type * as React from 'react';
 export type {
   AlignedPlacement,
   Alignment,
+  ArrowOptions,
   AutoPlacementOptions,
   Axis,
   Boundary,

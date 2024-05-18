@@ -1,11 +1,6 @@
-import type {Derivable, Middleware, Padding} from '@floating-ui/core';
+import type {Derivable, Middleware, ArrowOptions} from '@floating-ui/core';
 import {arrow as arrowCore} from '@floating-ui/core';
 import {evaluate} from '@floating-ui/utils';
-
-export interface ArrowOptions {
-  element: any;
-  padding?: Padding;
-}
 
 /**
  * A data provider that provides data to position an inner element of the
