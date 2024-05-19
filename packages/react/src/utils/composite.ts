@@ -319,7 +319,6 @@ export function isDisabled(
   list: Array<HTMLElement | null>,
   index: number,
   disabledIndices?: Array<number>,
-  loose?: boolean,
 ) {
   const element = list[index];
   const baseCheck =
@@ -329,9 +328,6 @@ export function isDisabled(
 
   if (disabledIndices) {
     const hasIndex = disabledIndices.includes(index);
-    if (loose) {
-      return baseCheck || hasIndex;
-    }
     return hasIndex;
   }
 

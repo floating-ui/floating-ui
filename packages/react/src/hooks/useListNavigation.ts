@@ -638,23 +638,13 @@ export function useListNavigation(
         const minGridIndex = cellMap.findIndex(
           (index) =>
             index != null &&
-            !isDisabled(
-              listRef.current,
-              index,
-              disabledIndices,
-              disabledIndices == null,
-            ),
+            !isDisabled(listRef.current, index, disabledIndices),
         );
         // last enabled index
         const maxGridIndex = cellMap.reduce(
           (foundIndex: number, index, cellIndex) =>
             index != null &&
-            !isDisabled(
-              listRef.current,
-              index,
-              disabledIndices,
-              disabledIndices == null,
-            )
+            !isDisabled(listRef.current, index, disabledIndices)
               ? cellIndex
               : foundIndex,
           -1,
