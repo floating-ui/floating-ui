@@ -327,8 +327,7 @@ export function isDisabled(
     element.getAttribute('aria-disabled') === 'true';
 
   if (disabledIndices) {
-    const hasIndex = disabledIndices.includes(index);
-    return hasIndex;
+    return disabledIndices.includes(index);
   }
 
   return baseCheck;

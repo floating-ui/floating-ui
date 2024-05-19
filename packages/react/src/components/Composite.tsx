@@ -189,7 +189,13 @@ export const Composite = React.forwardRef<
             // treat undefined (empty grid spaces) as disabled indices so we
             // don't end up in them
             disabledIndices: getCellIndices(
-              [...(disabledIndices || []), undefined],
+              [
+                ...(disabledIndices ||
+                  elementsRef.current.map((_, index) =>
+                    isDisabled(elementsRef.current, index) ? index : undefined,
+                  )),
+                undefined,
+              ],
               cellMap,
             ),
             minIndex: minGridIndex,

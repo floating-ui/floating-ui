@@ -664,7 +664,13 @@ export function useListNavigation(
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
               disabledIndices: getCellIndices(
-                [...(disabledIndices || []), undefined],
+                [
+                  ...(disabledIndices ||
+                    listRef.current.map((_, index) =>
+                      isDisabled(listRef.current, index) ? index : undefined,
+                    )),
+                  undefined,
+                ],
                 cellMap,
               ),
               minIndex: minGridIndex,

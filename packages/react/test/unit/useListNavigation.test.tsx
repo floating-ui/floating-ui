@@ -1062,7 +1062,7 @@ test('grid navigation with changing list items', async () => {
 });
 
 test('grid navigation with disabled list items', async () => {
-  render(<EmojiPicker />);
+  const {unmount} = render(<EmojiPicker />);
 
   fireEvent.click(screen.getByRole('button'));
 
@@ -1079,4 +1079,21 @@ test('grid navigation with disabled list items', async () => {
   await userEvent.keyboard('{ArrowDown}');
 
   expect(screen.getByLabelText('watermelon')).toHaveAttribute('data-active');
+
+  unmount();
+
+  render(<EmojiPicker />);
+
+  fireEvent.click(screen.getByRole('button'));
+
+  await act(async () => {});
+
+  expect(screen.getByRole('textbox')).toHaveFocus();
+
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowRight}');
+  await userEvent.keyboard('{ArrowUp}');
+
+  expect(screen.getByLabelText('cherry')).toHaveAttribute('data-active');
 });
