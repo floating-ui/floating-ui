@@ -16,6 +16,7 @@ import {
 import type {UseListNavigationProps} from '../../src/hooks/useListNavigation';
 import {Main as ComplexGrid} from '../visual/components/ComplexGrid';
 import {Main as Grid} from '../visual/components/Grid';
+import {Main as EmojiPicker} from '../visual/components/EmojiPicker';
 
 function App(props: Omit<Partial<UseListNavigationProps>, 'listRef'>) {
   const [open, setOpen] = useState(false);
@@ -1039,4 +1040,43 @@ test('async selectedIndex', async () => {
   expect(screen.getAllByRole('option')[2]).toHaveFocus();
   await userEvent.keyboard('{ArrowDown}');
   expect(screen.getAllByRole('option')[3]).toHaveFocus();
+});
+
+test('grid navigation with changing list items', async () => {
+  render(<EmojiPicker />);
+
+  fireEvent.click(screen.getByRole('button'));
+
+  await act(async () => {});
+
+  expect(screen.getByRole('textbox')).toHaveFocus();
+
+  await userEvent.keyboard('appl');
+  await userEvent.keyboard('{ArrowDown}');
+
+  expect(screen.getByLabelText('apple')).toHaveAttribute('data-active');
+
+  await userEvent.keyboard('{ArrowDown}');
+
+  expect(screen.getByLabelText('apple')).toHaveAttribute('data-active');
+});
+
+test('grid navigation with disabled list items', async () => {
+  render(<EmojiPicker />);
+
+  fireEvent.click(screen.getByRole('button'));
+
+  await act(async () => {});
+
+  expect(screen.getByRole('textbox')).toHaveFocus();
+
+  await userEvent.keyboard('o');
+  await userEvent.keyboard('{ArrowDown}');
+
+  expect(screen.getByLabelText('orange')).not.toHaveAttribute('data-active');
+  expect(screen.getByLabelText('watermelon')).toHaveAttribute('data-active');
+
+  await userEvent.keyboard('{ArrowDown}');
+
+  expect(screen.getByLabelText('watermelon')).toHaveAttribute('data-active');
 });

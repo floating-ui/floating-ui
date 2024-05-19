@@ -677,7 +677,6 @@ export function useListNavigation(
                 [...(disabledIndices || []), undefined],
                 cellMap,
               ),
-              disabledLoose: disabledIndices == null,
               minIndex: minGridIndex,
               maxIndex: maxGridIndex,
               prevIndex: getCellIndexOfCorner(

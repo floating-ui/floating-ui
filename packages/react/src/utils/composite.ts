@@ -44,13 +44,11 @@ export function findNonDisabledIndex(
     decrement = false,
     disabledIndices,
     amount = 1,
-    loose = true,
   }: {
     startingIndex?: number;
     decrement?: boolean;
     disabledIndices?: Array<number>;
     amount?: number;
-    loose?: boolean;
   } = {},
 ): number {
   const list = listRef.current;
@@ -61,7 +59,7 @@ export function findNonDisabledIndex(
   } while (
     index >= 0 &&
     index <= list.length - 1 &&
-    isDisabled(list, index, disabledIndices, loose)
+    isDisabled(list, index, disabledIndices)
   );
 
   return index;
@@ -75,7 +73,6 @@ export function getGridNavigatedIndex(
     loop,
     cols,
     disabledIndices,
-    disabledLoose: loose,
     minIndex,
     maxIndex,
     prevIndex,
@@ -86,7 +83,6 @@ export function getGridNavigatedIndex(
     loop: boolean;
     cols: number;
     disabledIndices: Array<number> | undefined;
-    disabledLoose: boolean;
     minIndex: number;
     maxIndex: number;
     prevIndex: number;
@@ -106,7 +102,6 @@ export function getGridNavigatedIndex(
         amount: cols,
         decrement: true,
         disabledIndices,
-        loose,
       });
 
       if (loop && (prevIndex - cols < minIndex || nextIndex < 0)) {
@@ -137,7 +132,6 @@ export function getGridNavigatedIndex(
         startingIndex: prevIndex,
         amount: cols,
         disabledIndices,
-        loose,
       });
 
       if (loop && prevIndex + cols > maxIndex) {
@@ -145,7 +139,6 @@ export function getGridNavigatedIndex(
           startingIndex: (prevIndex % cols) - cols,
           amount: cols,
           disabledIndices,
-          loose,
         });
       }
     }
@@ -166,21 +159,18 @@ export function getGridNavigatedIndex(
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex,
           disabledIndices,
-          loose,
         });
 
         if (loop && isDifferentRow(nextIndex, cols, prevRow)) {
           nextIndex = findNonDisabledIndex(elementsRef, {
             startingIndex: prevIndex - (prevIndex % cols) - 1,
             disabledIndices,
-            loose,
           });
         }
       } else if (loop) {
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex - (prevIndex % cols) - 1,
           disabledIndices,
-          loose,
         });
       }
 
@@ -197,7 +187,6 @@ export function getGridNavigatedIndex(
           startingIndex: prevIndex,
           decrement: true,
           disabledIndices,
-          loose,
         });
 
         if (loop && isDifferentRow(nextIndex, cols, prevRow)) {
@@ -205,7 +194,6 @@ export function getGridNavigatedIndex(
             startingIndex: prevIndex + (cols - (prevIndex % cols)),
             decrement: true,
             disabledIndices,
-            loose,
           });
         }
       } else if (loop) {
@@ -213,7 +201,6 @@ export function getGridNavigatedIndex(
           startingIndex: prevIndex + (cols - (prevIndex % cols)),
           decrement: true,
           disabledIndices,
-          loose,
         });
       }
 
@@ -232,7 +219,6 @@ export function getGridNavigatedIndex(
             : findNonDisabledIndex(elementsRef, {
                 startingIndex: prevIndex - (prevIndex % cols) - 1,
                 disabledIndices,
-                loose,
               });
       } else {
         nextIndex = prevIndex;
