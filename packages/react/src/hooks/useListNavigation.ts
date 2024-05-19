@@ -319,35 +319,47 @@ export function useListNavigation(
       indexRef: React.MutableRefObject<number>,
       forceScrollIntoView = false,
     ) => {
-      const item = listRef.current[indexRef.current];
-
-      if (!item) return;
-
-      if (virtual) {
-        setActiveId(item.id);
-        tree?.events.emit('virtualfocus', item);
-        if (virtualItemRef) {
-          virtualItemRef.current = item;
+      function runFocus(item: HTMLElement) {
+        if (virtual) {
+          setActiveId(item.id);
+          tree?.events.emit('virtualfocus', item);
+          if (virtualItemRef) {
+            virtualItemRef.current = item;
+          }
+        } else {
+          enqueueFocus(item, {
+            preventScroll: true,
+            // Mac Safari does not move the virtual cursor unless the focus call
+            // is sync. However, for the very first focus call, we need to wait
+            // for the position to be ready in order to prevent unwanted
+            // scrolling. This means the virtual cursor will not move to the first
+            // item when first opening the floating element, but will on
+            // subsequent calls. `preventScroll` is supported in modern Safari,
+            // so we can use that instead.
+            // iOS Safari must be async or the first item will not be focused.
+            sync:
+              isMac() && isSafari()
+                ? isPreventScrollSupported || forceSyncFocus.current
+                : false,
+          });
         }
-      } else {
-        enqueueFocus(item, {
-          preventScroll: true,
-          // Mac Safari does not move the virtual cursor unless the focus call
-          // is sync. However, for the very first focus call, we need to wait
-          // for the position to be ready in order to prevent unwanted
-          // scrolling. This means the virtual cursor will not move to the first
-          // item when first opening the floating element, but will on
-          // subsequent calls. `preventScroll` is supported in modern Safari,
-          // so we can use that instead.
-          // iOS Safari must be async or the first item will not be focused.
-          sync:
-            isMac() && isSafari()
-              ? isPreventScrollSupported || forceSyncFocus.current
-              : false,
-        });
+      }
+
+      const initialItem = listRef.current[indexRef.current];
+
+      if (initialItem) {
+        runFocus(initialItem);
       }
 
       requestAnimationFrame(() => {
+        const waitedItem = listRef.current[indexRef.current] || initialItem;
+
+        if (!waitedItem) return;
+
+        if (!initialItem) {
+          runFocus(waitedItem);
+        }
+
         const scrollIntoViewOptions = scrollItemIntoViewRef.current;
         const shouldScrollIntoView =
           scrollIntoViewOptions &&
@@ -357,7 +369,7 @@ export function useListNavigation(
         if (shouldScrollIntoView) {
           // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
           // by all browsers.
-          item.scrollIntoView?.(
+          waitedItem.scrollIntoView?.(
             typeof scrollIntoViewOptions === 'boolean'
               ? {block: 'nearest', inline: 'nearest'}
               : scrollIntoViewOptions,
@@ -919,7 +931,7 @@ export function useListNavigation(
           }
         },
         onFocus() {
-          if (open) {
+          if (open && !virtual) {
             onNavigate(null);
           }
         },
