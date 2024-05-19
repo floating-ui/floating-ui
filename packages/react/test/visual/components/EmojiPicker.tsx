@@ -82,11 +82,14 @@ const Option = forwardRef<HTMLButtonElement, OptionProps>(function Option(
         {
           'bg-cyan-100': selected && !active,
           'bg-cyan-200': active,
+          'opacity-40': name === 'orange',
         },
       )}
       aria-selected={selected}
+      disabled={name === 'orange'}
       aria-label={name}
       tabIndex={-1}
+      data-active={active ? '' : undefined}
     >
       {children}
     </button>

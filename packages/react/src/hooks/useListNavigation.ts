@@ -30,6 +30,7 @@ import {
   getGridNavigatedIndex,
   getMaxIndex,
   getMinIndex,
+  isDisabled,
   isIndexOutOfBounds,
 } from '../utils/composite';
 import {enqueueFocus} from '../utils/enqueueFocus';
@@ -635,17 +636,19 @@ export function useListNavigation(
         // as if every item was 1x1, then convert back to real indices.
         const cellMap = buildCellMap(sizes, cols, dense);
         const minGridIndex = cellMap.findIndex(
-          (index) => index != null && !disabledIndices?.includes(index),
+          (index) =>
+            index != null &&
+            !isDisabled(listRef.current, index, disabledIndices),
         );
         // last enabled index
         const maxGridIndex = cellMap.reduce(
           (foundIndex: number, index, cellIndex) =>
-            index != null && !disabledIndices?.includes(index)
+            index != null &&
+            !isDisabled(listRef.current, index, disabledIndices)
               ? cellIndex
               : foundIndex,
           -1,
         );
-
         indexRef.current = cellMap[
           getGridNavigatedIndex(
             {
@@ -661,13 +664,19 @@ export function useListNavigation(
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
               disabledIndices: getCellIndices(
-                [...(disabledIndices || []), undefined],
+                [
+                  ...(disabledIndices ||
+                    listRef.current.map((_, index) =>
+                      isDisabled(listRef.current, index) ? index : undefined,
+                    )),
+                  undefined,
+                ],
                 cellMap,
               ),
               minIndex: minGridIndex,
               maxIndex: maxGridIndex,
               prevIndex: getCellIndexOfCorner(
-                indexRef.current,
+                indexRef.current > maxIndex ? minIndex : indexRef.current,
                 sizes,
                 cellMap,
                 cols,

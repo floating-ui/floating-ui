@@ -53,21 +53,14 @@ export function findNonDisabledIndex(
 ): number {
   const list = listRef.current;
 
-  const isDisabledIndex = disabledIndices
-    ? (index: number) => disabledIndices.includes(index)
-    : (index: number) => {
-        const element = list[index];
-        return (
-          element == null ||
-          element.hasAttribute('disabled') ||
-          element.getAttribute('aria-disabled') === 'true'
-        );
-      };
-
   let index = startingIndex;
   do {
     index += decrement ? -amount : amount;
-  } while (index >= 0 && index <= list.length - 1 && isDisabledIndex(index));
+  } while (
+    index >= 0 &&
+    index <= list.length - 1 &&
+    isDisabled(list, index, disabledIndices)
+  );
 
   return index;
 }
@@ -192,8 +185,8 @@ export function getGridNavigatedIndex(
       if (prevIndex % cols !== 0) {
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex,
-          disabledIndices,
           decrement: true,
+          disabledIndices,
         });
 
         if (loop && isDifferentRow(nextIndex, cols, prevRow)) {
@@ -292,14 +285,21 @@ export function getCellIndexOfCorner(
   if (index === -1) return -1;
 
   const firstCellIndex = cellMap.indexOf(index);
+  const sizeItem = sizes[index];
 
   switch (corner) {
     case 'tl':
       return firstCellIndex;
     case 'tr':
-      return firstCellIndex + sizes[index].width - 1;
+      if (!sizeItem) {
+        return firstCellIndex;
+      }
+      return firstCellIndex + sizeItem.width - 1;
     case 'bl':
-      return firstCellIndex + (sizes[index].height - 1) * cols;
+      if (!sizeItem) {
+        return firstCellIndex;
+      }
+      return firstCellIndex + (sizeItem.height - 1) * cols;
     case 'br':
       return cellMap.lastIndexOf(index);
   }
@@ -312,5 +312,22 @@ export function getCellIndices(
 ) {
   return cellMap.flatMap((index, cellIndex) =>
     indices.includes(index) ? [cellIndex] : [],
+  );
+}
+
+export function isDisabled(
+  list: Array<HTMLElement | null>,
+  index: number,
+  disabledIndices?: Array<number>,
+) {
+  if (disabledIndices) {
+    return disabledIndices.includes(index);
+  }
+
+  const element = list[index];
+  return (
+    element == null ||
+    element.hasAttribute('disabled') ||
+    element.getAttribute('aria-disabled') === 'true'
   );
 }
