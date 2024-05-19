@@ -44,31 +44,25 @@ export function findNonDisabledIndex(
     decrement = false,
     disabledIndices,
     amount = 1,
+    loose = true,
   }: {
     startingIndex?: number;
     decrement?: boolean;
     disabledIndices?: Array<number>;
     amount?: number;
+    loose?: boolean;
   } = {},
 ): number {
   const list = listRef.current;
 
-  function isDisabledIndex(index: number) {
-    const element = list[index];
-    if (disabledIndices) {
-      return element == null || disabledIndices.includes(index);
-    }
-    return (
-      element == null ||
-      element.hasAttribute('disabled') ||
-      element.getAttribute('aria-disabled') === 'true'
-    );
-  }
-
   let index = startingIndex;
   do {
     index += decrement ? -amount : amount;
-  } while (index >= 0 && index <= list.length - 1 && isDisabledIndex(index));
+  } while (
+    index >= 0 &&
+    index <= list.length - 1 &&
+    isDisabled(list, index, disabledIndices, loose)
+  );
 
   return index;
 }
@@ -81,6 +75,7 @@ export function getGridNavigatedIndex(
     loop,
     cols,
     disabledIndices,
+    disabledLoose: loose,
     minIndex,
     maxIndex,
     prevIndex,
@@ -91,6 +86,7 @@ export function getGridNavigatedIndex(
     loop: boolean;
     cols: number;
     disabledIndices: Array<number> | undefined;
+    disabledLoose: boolean;
     minIndex: number;
     maxIndex: number;
     prevIndex: number;
@@ -110,6 +106,7 @@ export function getGridNavigatedIndex(
         amount: cols,
         decrement: true,
         disabledIndices,
+        loose,
       });
 
       if (loop && (prevIndex - cols < minIndex || nextIndex < 0)) {
@@ -140,6 +137,7 @@ export function getGridNavigatedIndex(
         startingIndex: prevIndex,
         amount: cols,
         disabledIndices,
+        loose,
       });
 
       if (loop && prevIndex + cols > maxIndex) {
@@ -147,6 +145,7 @@ export function getGridNavigatedIndex(
           startingIndex: (prevIndex % cols) - cols,
           amount: cols,
           disabledIndices,
+          loose,
         });
       }
     }
@@ -167,18 +166,21 @@ export function getGridNavigatedIndex(
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex,
           disabledIndices,
+          loose,
         });
 
         if (loop && isDifferentRow(nextIndex, cols, prevRow)) {
           nextIndex = findNonDisabledIndex(elementsRef, {
             startingIndex: prevIndex - (prevIndex % cols) - 1,
             disabledIndices,
+            loose,
           });
         }
       } else if (loop) {
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex - (prevIndex % cols) - 1,
           disabledIndices,
+          loose,
         });
       }
 
@@ -193,8 +195,9 @@ export function getGridNavigatedIndex(
       if (prevIndex % cols !== 0) {
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex,
-          disabledIndices,
           decrement: true,
+          disabledIndices,
+          loose,
         });
 
         if (loop && isDifferentRow(nextIndex, cols, prevRow)) {
@@ -202,6 +205,7 @@ export function getGridNavigatedIndex(
             startingIndex: prevIndex + (cols - (prevIndex % cols)),
             decrement: true,
             disabledIndices,
+            loose,
           });
         }
       } else if (loop) {
@@ -209,6 +213,7 @@ export function getGridNavigatedIndex(
           startingIndex: prevIndex + (cols - (prevIndex % cols)),
           decrement: true,
           disabledIndices,
+          loose,
         });
       }
 
@@ -227,6 +232,7 @@ export function getGridNavigatedIndex(
             : findNonDisabledIndex(elementsRef, {
                 startingIndex: prevIndex - (prevIndex % cols) - 1,
                 disabledIndices,
+                loose,
               });
       } else {
         nextIndex = prevIndex;
@@ -293,14 +299,21 @@ export function getCellIndexOfCorner(
   if (index === -1) return -1;
 
   const firstCellIndex = cellMap.indexOf(index);
+  const sizeItem = sizes[index];
 
   switch (corner) {
     case 'tl':
       return firstCellIndex;
     case 'tr':
-      return firstCellIndex + sizes[index].width - 1;
+      if (!sizeItem) {
+        return firstCellIndex;
+      }
+      return firstCellIndex + sizeItem.width - 1;
     case 'bl':
-      return firstCellIndex + (sizes[index].height - 1) * cols;
+      if (!sizeItem) {
+        return firstCellIndex;
+      }
+      return firstCellIndex + (sizeItem.height - 1) * cols;
     case 'br':
       return cellMap.lastIndexOf(index);
   }
@@ -314,4 +327,27 @@ export function getCellIndices(
   return cellMap.flatMap((index, cellIndex) =>
     indices.includes(index) ? [cellIndex] : [],
   );
+}
+
+export function isDisabled(
+  list: Array<HTMLElement | null>,
+  index: number,
+  disabledIndices?: Array<number>,
+  loose?: boolean,
+) {
+  const element = list[index];
+  const baseCheck =
+    element == null ||
+    element.hasAttribute('disabled') ||
+    element.getAttribute('aria-disabled') === 'true';
+
+  if (disabledIndices) {
+    const hasIndex = disabledIndices.includes(index);
+    if (loose) {
+      return baseCheck || hasIndex;
+    }
+    return hasIndex;
+  }
+
+  return baseCheck;
 }

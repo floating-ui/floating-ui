@@ -15,6 +15,7 @@ import {
   getGridNavigatedIndex,
   getMaxIndex,
   getMinIndex,
+  isDisabled,
   isIndexOutOfBounds,
 } from '../utils/composite';
 import {enqueueFocus} from '../utils/enqueueFocus';
@@ -118,7 +119,7 @@ export const Composite = React.forwardRef<
     orientation = 'both',
     loop = true,
     cols = 1,
-    disabledIndices = [],
+    disabledIndices,
     activeIndex: externalActiveIndex,
     onNavigate: externalSetActiveIndex,
     itemSizes,
@@ -145,6 +146,8 @@ export const Composite = React.forwardRef<
     if (!allKeys.includes(event.key)) return;
 
     let nextIndex = activeIndex;
+    const minIndex = getMinIndex(elementsRef, disabledIndices);
+    const maxIndex = getMaxIndex(elementsRef, disabledIndices);
 
     if (isGrid) {
       const sizes =
@@ -157,12 +160,25 @@ export const Composite = React.forwardRef<
       // as if every item was 1x1, then convert back to real indices.
       const cellMap = buildCellMap(sizes, cols, dense);
       const minGridIndex = cellMap.findIndex(
-        (index) => index != null && !disabledIndices.includes(index),
+        (index) =>
+          index != null &&
+          !isDisabled(
+            elementsRef.current,
+            index,
+            disabledIndices,
+            disabledIndices == null,
+          ),
       );
       // last enabled index
       const maxGridIndex = cellMap.reduce(
         (foundIndex: number, index, cellIndex) =>
-          index != null && !disabledIndices?.includes(index)
+          index != null &&
+          !isDisabled(
+            elementsRef.current,
+            index,
+            disabledIndices,
+            disabledIndices == null,
+          )
             ? cellIndex
             : foundIndex,
         -1,
@@ -183,13 +199,14 @@ export const Composite = React.forwardRef<
             // treat undefined (empty grid spaces) as disabled indices so we
             // don't end up in them
             disabledIndices: getCellIndices(
-              [...disabledIndices, undefined],
+              [...(disabledIndices || []), undefined],
               cellMap,
             ),
+            disabledLoose: disabledIndices == null,
             minIndex: minGridIndex,
             maxIndex: maxGridIndex,
             prevIndex: getCellIndexOfCorner(
-              activeIndex,
+              activeIndex > maxIndex ? minIndex : activeIndex,
               sizes,
               cellMap,
               cols,
@@ -206,9 +223,6 @@ export const Composite = React.forwardRef<
         )
       ] as number; // navigated cell will never be nullish
     }
-
-    const minIndex = getMinIndex(elementsRef, disabledIndices);
-    const maxIndex = getMaxIndex(elementsRef, disabledIndices);
 
     const toEndKeys = {
       horizontal: [ARROW_RIGHT],
