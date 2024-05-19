@@ -321,12 +321,12 @@ export function useListNavigation(
       function runFocus(item: HTMLElement) {
         if (virtual) {
           setActiveId(item.id);
-          tree?.events.emit('virtualfocus', initialItem);
+          tree?.events.emit('virtualfocus', item);
           if (virtualItemRef) {
-            virtualItemRef.current = initialItem;
+            virtualItemRef.current = item;
           }
         } else {
-          enqueueFocus(initialItem, {
+          enqueueFocus(item, {
             preventScroll: true,
             // Mac Safari does not move the virtual cursor unless the focus call
             // is sync. However, for the very first focus call, we need to wait
@@ -351,7 +351,7 @@ export function useListNavigation(
       }
 
       requestAnimationFrame(() => {
-        const waitedItem = listRef.current[indexRef.current];
+        const waitedItem = listRef.current[indexRef.current] || initialItem;
 
         if (!waitedItem) return;
 
