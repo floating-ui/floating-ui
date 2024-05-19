@@ -320,15 +320,14 @@ export function isDisabled(
   index: number,
   disabledIndices?: Array<number>,
 ) {
-  const element = list[index];
-  const baseCheck =
-    element == null ||
-    element.hasAttribute('disabled') ||
-    element.getAttribute('aria-disabled') === 'true';
-
   if (disabledIndices) {
     return disabledIndices.includes(index);
   }
 
-  return baseCheck;
+  const element = list[index];
+  return (
+    element == null ||
+    element.hasAttribute('disabled') ||
+    element.getAttribute('aria-disabled') === 'true'
+  );
 }
