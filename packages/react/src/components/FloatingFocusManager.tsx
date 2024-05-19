@@ -346,8 +346,11 @@ export function FloatingFocusManager(
               )))
         );
 
+        // Restore focus to the previous tabbable element index to prevent
+        // focus from being lost outside the floating tree.
         if (
           restoreFocus &&
+          movedToUnrelatedNode &&
           activeElement(getDocument(floating)) === getDocument(floating).body
         ) {
           // Let `FloatingPortal` effect knows that focus is still inside the
@@ -361,8 +364,6 @@ export function FloatingFocusManager(
             tabbableContent[tabbableContent.length - 1] ||
             floating;
 
-          // Restore focus to the previous tabbable element index to prevent
-          // focus from being lost outside the floating tree.
           if (isHTMLElement(nodeToFocus)) {
             nodeToFocus.focus();
           }

@@ -162,29 +162,6 @@ export function Main() {
     }
   }
 
-  // Restore focus to an item when one gets removed.
-  useLayoutEffect(() => {
-    if (!isOpen || removedIndexRef.current === null) {
-      return;
-    }
-
-    const restoreIndex =
-      removedIndexRef.current === options.length
-        ? removedIndexRef.current - 1
-        : removedIndexRef.current;
-
-    if (restoreIndex !== -1) {
-      setActiveIndex(null);
-      queueMicrotask(() => {
-        setActiveIndex(restoreIndex);
-      });
-    } else {
-      refs.domReference.current?.focus();
-    }
-
-    removedIndexRef.current = null;
-  }, [options, isOpen, refs]);
-
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Omnibox</h1>
