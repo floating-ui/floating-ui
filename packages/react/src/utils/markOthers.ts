@@ -71,6 +71,8 @@ function applyAttributeToOthers(
     }
 
     [].forEach.call(parent.children, (node: Element) => {
+      if (getNodeName(node) === 'script') return;
+
       if (elementsToKeep.has(node)) {
         deep(node);
       } else {
@@ -80,8 +82,6 @@ function applyAttributeToOthers(
         const alreadyHidden = attr !== null && attr !== 'false';
         const counterValue = (counterMap.get(node) || 0) + 1;
         const markerValue = (markerCounter.get(node) || 0) + 1;
-
-        if (getNodeName(node) === 'script') return;
 
         counterMap.set(node, counterValue);
         markerCounter.set(node, markerValue);
