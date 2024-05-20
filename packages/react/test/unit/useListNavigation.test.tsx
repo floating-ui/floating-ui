@@ -17,6 +17,7 @@ import type {UseListNavigationProps} from '../../src/hooks/useListNavigation';
 import {Main as ComplexGrid} from '../visual/components/ComplexGrid';
 import {Main as Grid} from '../visual/components/Grid';
 import {Main as EmojiPicker} from '../visual/components/EmojiPicker';
+import {Main as ListboxFocus} from '../visual/components/ListboxFocus';
 
 function App(props: Omit<Partial<UseListNavigationProps>, 'listRef'>) {
   const [open, setOpen] = useState(false);
@@ -1096,4 +1097,13 @@ test('grid navigation with disabled list items', async () => {
   await userEvent.keyboard('{ArrowUp}');
 
   expect(screen.getByLabelText('cherry')).toHaveAttribute('data-active');
+});
+
+test('selectedIndex changing does not steal focus', async () => {
+  render(<ListboxFocus />);
+
+  await userEvent.click(screen.getByRole('button'));
+  await act(async () => {});
+
+  expect(screen.getByTestId('reference')).toHaveFocus();
 });
