@@ -255,7 +255,7 @@ importers:
   packages/react:
     dependencies:
       '@floating-ui/react-dom':
-        specifier: ^2.0.0
+        specifier: ^2.1.0
         version: link:../react-dom
       '@floating-ui/utils':
         specifier: ^0.2.0

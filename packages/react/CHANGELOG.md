@@ -1,5 +1,17 @@
 # @floating-ui/react
 
+## 0.26.16
+
+### Patch Changes
+
+- fix(useListNavigation): correct `scrollIntoView` and `focus` behavior with virtual focus and inner DOM-focused element + `FloatingList`
+- fix(FloatingPortal): prevent `undefined` id with unconditional rendering in React <18
+- fix(useListNavigation): prevent `selectedIndex` changes from stealing focus
+- fix(FloatingDelayGroup): prevent hydration error with Suspense
+- fix(useListNavigation, Composite): correct index calculations for grid navigation with nullish and disabled items when `disabledIndices` is inferred
+- perf(markOthers): avoid applying attributes to `script` tags needlessly
+- Update dependencies: `@floating-ui/react-dom@2.1.0`
+
 ## 0.26.15
 
 ### Patch Changes
