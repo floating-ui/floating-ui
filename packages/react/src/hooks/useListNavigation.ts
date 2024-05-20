@@ -309,6 +309,7 @@ export function useListNavigation(
   const latestOpenRef = useLatestRef(open);
   const scrollItemIntoViewRef = useLatestRef(scrollItemIntoView);
   const floatingRef = useLatestRef(floating);
+  const selectedIndexRef = useLatestRef(selectedIndex);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
   const [virtualId, setVirtualId] = React.useState<string | undefined>();
@@ -423,7 +424,7 @@ export function useListNavigation(
       if (activeIndex == null) {
         forceSyncFocus.current = false;
 
-        if (selectedIndex != null) {
+        if (selectedIndexRef.current != null) {
           return;
         }
 
@@ -476,7 +477,7 @@ export function useListNavigation(
     open,
     floating,
     activeIndex,
-    selectedIndex,
+    selectedIndexRef,
     nested,
     listRef,
     orientation,
