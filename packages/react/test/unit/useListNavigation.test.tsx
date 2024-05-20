@@ -1102,7 +1102,7 @@ test('grid navigation with disabled list items', async () => {
 test('selectedIndex changing does not steal focus', async () => {
   render(<ListboxFocus />);
 
-  await userEvent.click(screen.getByRole('button'));
+  await userEvent.click(screen.getByTestId('reference'));
   await act(async () => {});
 
   expect(screen.getByTestId('reference')).toHaveFocus();
