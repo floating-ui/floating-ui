@@ -271,57 +271,24 @@ coordinates.
 #### Option reactivity
 
 When using React state and middleware, stateful values inside
-_function options_ (useful when deriving from middleware state)
-aren't fresh or reactive.
+_functions_ aren't fresh or reactive.
 
 ```js
 const [value, setValue] = useState(0);
-// Reactive and fresh:
-offset(value);
-// Not reactive or fresh:
-offset(() => value);
+
+offset(value); // reactive and fresh
+offset(() => value); // NOT reactive or fresh
 ```
 
-Calling a middleware function returns an object with an
-`options{:.key}` key. These keys can hold the dependencies of the
-options object, allowing deep comparison to enable reactivity.
-
-Here's an example:
+Specifying the dependencies as a second argument of any
+middleware function will keep it reactive:
 
 ```js
-import {offset} from '@floating-ui/react';
-
-function App() {
-  const [value, setValue] = useState(0);
-
-  useFloating({
-    middleware: [
-      // Updates when `value` changes ✅
-      offset(value),
-
-      // Does not update when `value` changes ❌
-      offset(() => value),
-
-      // Updates when `value` changes ✅
-      {
-        ...offset(() => value),
-        options: [value],
-      },
-    ],
-  });
-}
+offset(() => value, [value]);
 ```
 
-As a wrapper:
-
-```js
-const reactiveOffset = (options, deps) => ({
-  ...offset(options),
-  options: deps,
-});
-
-reactiveOffset(() => value, [value]);
-```
+This goes for any function option, including `size(){:js}`'s
+`apply{:.function}` function.
 
 ### `elements{:.key}`
 
