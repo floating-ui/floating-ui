@@ -437,9 +437,11 @@ export function useHover(
         onPointerDown: setPointerRef,
         onPointerEnter: setPointerRef,
         onMouseMove(event) {
+          const { nativeEvent } = event;
+
           function handleMouseMove() {
             if (!blockMouseMoveRef.current) {
-              onOpenChange(true, event.nativeEvent, 'hover');
+              onOpenChange(true, nativeEvent, 'hover');
             }
           }
 
