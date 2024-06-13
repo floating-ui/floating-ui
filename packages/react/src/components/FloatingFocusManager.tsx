@@ -30,6 +30,7 @@ import {
 import {usePortalContext} from './FloatingPortal';
 import {useFloatingTree} from './FloatingTree';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
+import {useEffectEvent} from '../hooks/utils/useEffectEvent';
 
 const LIST_LIMIT = 20;
 let previouslyFocusedElements: Element[] = [];
@@ -164,6 +165,7 @@ export function FloatingFocusManager(
     onOpenChange,
     events,
     dataRef,
+    floatingId,
     elements: {domReference, floating},
   } = context;
 
@@ -193,35 +195,36 @@ export function FloatingFocusManager(
   const isPointerDownRef = React.useRef(false);
 
   const isInsidePortal = portalContext != null;
+  const firstElementChild = floating?.firstElementChild;
+  // If the floating element is acting as a positioning wrapper rather than the
+  // element that receives aria props, use it as the focus root instead.
+  const floatingFocusNode =
+    firstElementChild?.id === floatingId ? firstElementChild : floating;
 
-  const getTabbableContent = React.useCallback(
-    (container: HTMLElement | null = floating) => {
+  const getTabbableContent = useEffectEvent(
+    (container: Element | null = floatingFocusNode) => {
       return container ? tabbable(container, getTabbableOptions()) : [];
     },
-    [floating],
   );
 
-  const getTabbableElements = React.useCallback(
-    (container?: HTMLElement) => {
-      const content = getTabbableContent(container);
+  const getTabbableElements = useEffectEvent((container?: Element) => {
+    const content = getTabbableContent(container);
 
-      return orderRef.current
-        .map((type) => {
-          if (domReference && type === 'reference') {
-            return domReference;
-          }
+    return orderRef.current
+      .map((type) => {
+        if (domReference && type === 'reference') {
+          return domReference;
+        }
 
-          if (floating && type === 'floating') {
-            return floating;
-          }
+        if (floatingFocusNode && type === 'floating') {
+          return floatingFocusNode;
+        }
 
-          return content;
-        })
-        .filter(Boolean)
-        .flat() as Array<FocusableElement>;
-    },
-    [domReference, floating, orderRef, getTabbableContent],
-  );
+        return content;
+      })
+      .filter(Boolean)
+      .flat() as Array<FocusableElement>;
+  });
 
   React.useEffect(() => {
     if (disabled || !modal) return;
@@ -230,7 +233,10 @@ export function FloatingFocusManager(
       if (event.key === 'Tab') {
         // The focus guards have nothing to focus, so we need to stop the event.
         if (
-          contains(floating, activeElement(getDocument(floating))) &&
+          contains(
+            floatingFocusNode,
+            activeElement(getDocument(floatingFocusNode)),
+          ) &&
           getTabbableContent().length === 0 &&
           !isUntrappedTypeableCombobox
         ) {
@@ -251,7 +257,7 @@ export function FloatingFocusManager(
 
         if (
           orderRef.current[1] === 'floating' &&
-          target === floating &&
+          target === floatingFocusNode &&
           event.shiftKey
         ) {
           stopEvent(event);
@@ -260,7 +266,7 @@ export function FloatingFocusManager(
       }
     }
 
-    const doc = getDocument(floating);
+    const doc = getDocument(floatingFocusNode);
     doc.addEventListener('keydown', onKeyDown);
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
@@ -268,7 +274,7 @@ export function FloatingFocusManager(
   }, [
     disabled,
     domReference,
-    floating,
+    floatingFocusNode,
     modal,
     orderRef,
     isUntrappedTypeableCombobox,
@@ -390,43 +396,45 @@ export function FloatingFocusManager(
   ]);
 
   useModernLayoutEffect(() => {
-    if (disabled || !floating) return;
+    if (disabled || !isHTMLElement(floatingFocusNode)) return;
 
-    const doc = getDocument(floating);
+    const doc = getDocument(floatingFocusNode);
     const previouslyFocusedElement = activeElement(doc);
 
     // Wait for any layout effect state setters to execute to set `tabIndex`.
     queueMicrotask(() => {
-      const focusableElements = getTabbableElements(floating);
+      const focusableElements = getTabbableElements(floatingFocusNode);
       const initialFocusValue = initialFocusRef.current;
       const elToFocus =
         (typeof initialFocusValue === 'number'
           ? focusableElements[initialFocusValue]
-          : initialFocusValue.current) || floating;
+          : initialFocusValue.current) || floatingFocusNode;
       const focusAlreadyInsideFloatingEl = contains(
-        floating,
+        floatingFocusNode,
         previouslyFocusedElement,
       );
 
       if (!ignoreInitialFocus && !focusAlreadyInsideFloatingEl && open) {
-        enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
+        enqueueFocus(elToFocus, {
+          preventScroll: elToFocus === floatingFocusNode,
+        });
       }
     });
   }, [
     disabled,
     open,
-    floating,
+    floatingFocusNode,
     ignoreInitialFocus,
     getTabbableElements,
     initialFocusRef,
   ]);
 
   useModernLayoutEffect(() => {
-    if (disabled || !floating) return;
+    if (disabled || !floatingFocusNode) return;
 
     let preventReturnFocusScroll = false;
 
-    const doc = getDocument(floating);
+    const doc = getDocument(floatingFocusNode);
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
     let openEvent = contextData.openEvent;
@@ -515,7 +523,17 @@ export function FloatingFocusManager(
         });
       }
     };
-  }, [disabled, floating, returnFocusRef, dataRef, refs, events, tree, nodeId]);
+  }, [
+    disabled,
+    floating,
+    floatingFocusNode,
+    returnFocusRef,
+    dataRef,
+    refs,
+    events,
+    tree,
+    nodeId,
+  ]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
   // It will decide whether or not it needs to render its own guards.
@@ -546,7 +564,7 @@ export function FloatingFocusManager(
   useModernLayoutEffect(() => {
     if (
       disabled ||
-      !floating ||
+      !floatingFocusNode ||
       typeof MutationObserver !== 'function' ||
       ignoreInitialFocus
     ) {
@@ -554,24 +572,25 @@ export function FloatingFocusManager(
     }
 
     const handleMutation = () => {
-      const tabIndex = floating.getAttribute('tabindex');
+      const tabIndex = floatingFocusNode.getAttribute('tabindex');
       if (
         orderRef.current.includes('floating') ||
-        (activeElement(getDocument(floating)) !== refs.domReference.current &&
+        (activeElement(getDocument(floatingFocusNode)) !==
+          refs.domReference.current &&
           getTabbableContent().length === 0)
       ) {
         if (tabIndex !== '0') {
-          floating.setAttribute('tabindex', '0');
+          floatingFocusNode.setAttribute('tabindex', '0');
         }
       } else if (tabIndex !== '-1') {
-        floating.setAttribute('tabindex', '-1');
+        floatingFocusNode.setAttribute('tabindex', '-1');
       }
     };
 
     handleMutation();
     const observer = new MutationObserver(handleMutation);
 
-    observer.observe(floating, {
+    observer.observe(floatingFocusNode, {
       childList: true,
       subtree: true,
       attributes: true,
@@ -582,7 +601,7 @@ export function FloatingFocusManager(
     };
   }, [
     disabled,
-    floating,
+    floatingFocusNode,
     refs,
     orderRef,
     getTabbableContent,
