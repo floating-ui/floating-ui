@@ -352,18 +352,21 @@ export function FloatingFocusManager(
         if (
           restoreFocus &&
           movedToUnrelatedNode &&
-          activeElement(getDocument(floating)) === getDocument(floating).body
+          activeElement(getDocument(floatingFocusNode)) ===
+            getDocument(floatingFocusNode).body
         ) {
           // Let `FloatingPortal` effect knows that focus is still inside the
           // floating tree.
-          floating?.focus();
+          if (isHTMLElement(floatingFocusNode)) {
+            floatingFocusNode?.focus();
+          }
 
           const prevTabbableIndex = tabbableIndexRef.current;
           const tabbableContent = getTabbableContent() as Array<Element | null>;
           const nodeToFocus =
             tabbableContent[prevTabbableIndex] ||
             tabbableContent[tabbableContent.length - 1] ||
-            floating;
+            floatingFocusNode;
 
           if (isHTMLElement(nodeToFocus)) {
             nodeToFocus.focus();
@@ -401,6 +404,7 @@ export function FloatingFocusManager(
     disabled,
     domReference,
     floating,
+    floatingFocusNode,
     modal,
     nodeId,
     tree,
