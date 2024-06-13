@@ -1331,3 +1331,43 @@ test('returns focus to last connected element', async () => {
   await userEvent.keyboard('{Escape}');
   expect(screen.getByTestId('parent-reference')).toHaveFocus();
 });
+
+test('focus is placed on element with floating props when floating element is a wrapper', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const role = useRole(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([role]);
+
+    return (
+      <>
+        <button
+          ref={refs.setReference}
+          {...getReferenceProps({
+            onClick: () => setIsOpen((v) => !v),
+          })}
+        />
+        {isOpen && (
+          <FloatingFocusManager context={context}>
+            <div ref={refs.setFloating} data-testid="outer">
+              <div {...getFloatingProps()} data-testid="inner"></div>
+            </div>
+          </FloatingFocusManager>
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await userEvent.click(screen.getByRole('button'));
+  await act(async () => {});
+
+  expect(screen.getByTestId('inner')).toHaveFocus();
+});
