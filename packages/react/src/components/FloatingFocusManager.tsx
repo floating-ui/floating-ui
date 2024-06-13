@@ -660,6 +660,7 @@ export function FloatingFocusManager(
     };
   }, [
     disabled,
+    floating,
     floatingFocusNode,
     refs,
     orderRef,
