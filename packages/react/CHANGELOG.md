@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.26.17
+
+### Patch Changes
+
+- fix(FloatingFocusManager): place fallback focus on element with floating props
+- feat(FloatingFocusManager): `restoreFocus` prop. This enables automatic restoration of focus to the nearest tabbable element if the element that currently has focus inside the floating element is removed from the DOM.
+- fix(useHover): fix restMs options throwing SyntheticEvent warning on React < 17
+
 ## 0.26.16
 
 ### Patch Changes
