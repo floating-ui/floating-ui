@@ -117,6 +117,7 @@ export interface FloatingFocusManagerProps {
    * Determines if focus should be restored to the nearest tabbable element if
    * focus inside the floating element is lost (such as due to the removal of
    * the currently focused element from the DOM).
+   * @default false
    */
   restoreFocus?: boolean;
   /**
@@ -160,7 +161,7 @@ export function FloatingFocusManager(
     guards: _guards = true,
     initialFocus = 0,
     returnFocus = true,
-    restoreFocus = true,
+    restoreFocus = false,
     modal = true,
     visuallyHiddenDismiss = false,
     closeOnFocusOut = true,
