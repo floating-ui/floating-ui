@@ -181,6 +181,7 @@ export function Main() {
           <FloatingFocusManager
             context={context}
             initialFocus={-1}
+            restoreFocus
             modal={false}
           >
             <div
