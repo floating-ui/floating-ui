@@ -112,7 +112,7 @@ export function useFloatingPortalNode(
   return portalNode;
 }
 
-interface FloatingPortalProps {
+export interface FloatingPortalProps {
   children?: React.ReactNode;
   /**
    * Optionally selects the node with the id if it exists, or create it and
