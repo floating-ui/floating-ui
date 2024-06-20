@@ -122,6 +122,7 @@ export function useHover(
   const parentId = useFloatingParentNodeId();
   const handleCloseRef = useLatestRef(handleClose);
   const delayRef = useLatestRef(delay);
+  const openRef = useLatestRef(open);
 
   const pointerTypeRef = React.useRef<string>();
   const timeoutRef = React.useRef(-1);
@@ -247,7 +248,9 @@ export function useHover(
 
       if (openDelay) {
         timeoutRef.current = window.setTimeout(() => {
-          onOpenChange(true, event, 'hover');
+          if (!openRef.current) {
+            onOpenChange(true, event, 'hover');
+          }
         }, openDelay);
       } else {
         onOpenChange(true, event, 'hover');
@@ -350,6 +353,7 @@ export function useHover(
     clearPointerEvents,
     onOpenChange,
     open,
+    openRef,
     tree,
     delayRef,
     handleCloseRef,
@@ -437,10 +441,10 @@ export function useHover(
         onPointerDown: setPointerRef,
         onPointerEnter: setPointerRef,
         onMouseMove(event) {
-          const { nativeEvent } = event;
+          const {nativeEvent} = event;
 
           function handleMouseMove() {
-            if (!blockMouseMoveRef.current) {
+            if (!blockMouseMoveRef.current && !openRef.current) {
               onOpenChange(true, nativeEvent, 'hover');
             }
           }
@@ -471,5 +475,5 @@ export function useHover(
         },
       },
     };
-  }, [enabled, mouseOnly, open, restMs, onOpenChange, closeWithDelay]);
+  }, [enabled, mouseOnly, open, openRef, restMs, onOpenChange, closeWithDelay]);
 }
