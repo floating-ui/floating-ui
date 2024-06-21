@@ -6,6 +6,7 @@ import {
   getOppositeAxisPlacements,
   getOppositePlacement,
   getSide,
+  getSideAxis,
 } from '@floating-ui/utils';
 
 import type {DetectOverflowOptions} from '../detectOverflow';
@@ -96,6 +97,7 @@ export const flip = (
     }
 
     const side = getSide(placement);
+    const initialSideAxis = getSideAxis(initialPlacement);
     const isBasePlacement = getSide(initialPlacement) === initialPlacement;
     const rtl = await platform.isRTL?.(elements.floating);
 
@@ -163,6 +165,7 @@ export const flip = (
         switch (fallbackStrategy) {
           case 'bestFit': {
             const placement = overflowsData
+              .filter((d) => getSideAxis(d.placement) === initialSideAxis)
               .map(
                 (d) =>
                   [
