@@ -107,7 +107,9 @@ export const flip = (
         ? [getOppositePlacement(initialPlacement)]
         : getExpandedPlacements(initialPlacement));
 
-    if (!specifiedFallbackPlacements && fallbackAxisSideDirection !== 'none') {
+    const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== 'none';
+
+    if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) {
       fallbackPlacements.push(
         ...getOppositeAxisPlacements(
           initialPlacement,
@@ -166,9 +168,9 @@ export const flip = (
           case 'bestFit': {
             const placement = overflowsData
               .filter((d) =>
-                fallbackAxisSideDirection === 'none'
-                  ? true
-                  : getSideAxis(d.placement) === initialSideAxis,
+                hasFallbackAxisSideDirection
+                  ? getSideAxis(d.placement) === initialSideAxis
+                  : true,
               )
               .map(
                 (d) =>
