@@ -167,11 +167,18 @@ export const flip = (
         switch (fallbackStrategy) {
           case 'bestFit': {
             const placement = overflowsData
-              .filter((d) =>
-                hasFallbackAxisSideDirection
-                  ? getSideAxis(d.placement) === initialSideAxis
-                  : true,
-              )
+              .filter((d) => {
+                const currentSideAxis = getSideAxis(d.placement);
+                if (hasFallbackAxisSideDirection) {
+                  return (
+                    currentSideAxis === initialSideAxis ||
+                    // Create a bias to the `y` side axis due to horizontal
+                    // reading directions favoring greater width.
+                    currentSideAxis === 'y'
+                  );
+                }
+                return true;
+              })
               .map(
                 (d) =>
                   [
