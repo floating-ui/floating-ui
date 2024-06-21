@@ -6,6 +6,7 @@ import {
   getOppositeAxisPlacements,
   getOppositePlacement,
   getSide,
+  getSideAxis,
 } from '@floating-ui/utils';
 
 import type {DetectOverflowOptions} from '../detectOverflow';
@@ -96,6 +97,7 @@ export const flip = (
     }
 
     const side = getSide(placement);
+    const initialSideAxis = getSideAxis(initialPlacement);
     const isBasePlacement = getSide(initialPlacement) === initialPlacement;
     const rtl = await platform.isRTL?.(elements.floating);
 
@@ -105,7 +107,9 @@ export const flip = (
         ? [getOppositePlacement(initialPlacement)]
         : getExpandedPlacements(initialPlacement));
 
-    if (!specifiedFallbackPlacements && fallbackAxisSideDirection !== 'none') {
+    const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== 'none';
+
+    if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) {
       fallbackPlacements.push(
         ...getOppositeAxisPlacements(
           initialPlacement,
@@ -163,6 +167,18 @@ export const flip = (
         switch (fallbackStrategy) {
           case 'bestFit': {
             const placement = overflowsData
+              .filter((d) => {
+                if (hasFallbackAxisSideDirection) {
+                  const currentSideAxis = getSideAxis(d.placement);
+                  return (
+                    currentSideAxis === initialSideAxis ||
+                    // Create a bias to the `y` side axis due to horizontal
+                    // reading directions favoring greater width.
+                    currentSideAxis === 'y'
+                  );
+                }
+                return true;
+              })
               .map(
                 (d) =>
                   [
