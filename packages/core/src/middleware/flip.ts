@@ -165,7 +165,11 @@ export const flip = (
         switch (fallbackStrategy) {
           case 'bestFit': {
             const placement = overflowsData
-              .filter((d) => getSideAxis(d.placement) === initialSideAxis)
+              .filter((d) =>
+                fallbackAxisSideDirection === 'none'
+                  ? true
+                  : getSideAxis(d.placement) === initialSideAxis,
+              )
               .map(
                 (d) =>
                   [
