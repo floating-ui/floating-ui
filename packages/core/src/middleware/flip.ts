@@ -168,8 +168,8 @@ export const flip = (
           case 'bestFit': {
             const placement = overflowsData
               .filter((d) => {
-                const currentSideAxis = getSideAxis(d.placement);
                 if (hasFallbackAxisSideDirection) {
+                  const currentSideAxis = getSideAxis(d.placement);
                   return (
                     currentSideAxis === initialSideAxis ||
                     // Create a bias to the `y` side axis due to horizontal
