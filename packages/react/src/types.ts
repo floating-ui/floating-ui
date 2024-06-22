@@ -11,6 +11,8 @@ export * from '.';
 export type {FloatingArrowProps} from './components/FloatingArrow';
 export type {FloatingFocusManagerProps} from './components/FloatingFocusManager';
 export type {FloatingOverlayProps} from './components/FloatingOverlay';
+export type {FloatingPortalProps} from './components/FloatingPortal';
+export type {CompositeProps, CompositeItemProps} from './components/Composite';
 export type {UseClickProps} from './hooks/useClick';
 export type {UseClientPointProps} from './hooks/useClientPoint';
 export type {UseDismissProps} from './hooks/useDismiss';
