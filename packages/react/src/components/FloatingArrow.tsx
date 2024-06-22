@@ -81,12 +81,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const [isRTL, setIsRTL] = React.useState(false);
 
   useModernLayoutEffect(() => {
-    async function changeState() {
-      if (!floating) return;
-      const isRTL = getComputedStyle(floating).direction === 'rtl';
-      setIsRTL(isRTL);
-    }
-    changeState();
+    if (!floating) return;
+    setIsRTL(getComputedStyle(floating).direction === 'rtl');
   }, [floating]);
 
   if (!floating) {
