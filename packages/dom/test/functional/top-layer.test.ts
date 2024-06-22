@@ -236,3 +236,12 @@ import {click} from './utils/click';
     );
   });
 });
+
+test('fixed inside dialog with outer containing block', async ({page}) => {
+  await page.goto('http://localhost:1234/top-layer');
+  await click(page, '[data-testid="outer-true"]');
+
+  expect(await page.locator('#outer-dialog').screenshot()).toMatchSnapshot(
+    `top-layer.dialog.outer.png`,
+  );
+});

@@ -17,6 +17,7 @@ import {
   isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
+  isTopLayer,
 } from '@floating-ui/utils/dom';
 
 import type {Platform, ReferenceElement} from '../types';
@@ -26,7 +27,6 @@ import {getViewportRect} from '../utils/getViewportRect';
 import {getVisualOffsets} from '../utils/getVisualOffsets';
 import {getScale} from './getScale';
 import {isElement} from './isElement';
-import {isTopLayer} from '../utils/isTopLayer';
 
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;
