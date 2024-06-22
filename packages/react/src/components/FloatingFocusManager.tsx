@@ -600,7 +600,6 @@ export function FloatingFocusManager(
     events,
     tree,
     nodeId,
-    modal,
   ]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
