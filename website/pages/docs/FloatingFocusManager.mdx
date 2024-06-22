@@ -51,6 +51,7 @@ interface FloatingFocusManagerProps {
     | number
     | React.MutableRefObject<HTMLElement | null>;
   returnFocus?: boolean;
+  restoreFocus?: boolean;
   guards?: boolean;
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
@@ -142,6 +143,21 @@ This prop is ignored if the floating element lost focus.
 
 ```js
 <FloatingFocusManager context={context} returnFocus={false}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### `restoreFocus{:.keyword}`
+
+default: `false{:js}`
+
+Determines if focus should be restored to the nearest tabbable
+element if the currently focused element inside the floating
+element was removed from the DOM (causing focus to be lost
+otherwise).
+
+```js
+<FloatingFocusManager context={context} restoreFocus={true}>
   {/* floating element */}
 </FloatingFocusManager>
 ```
