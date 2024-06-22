@@ -24,6 +24,7 @@ import {markOthers, supportsInert} from '../utils/markOthers';
 import {
   getNextTabbable,
   getPreviousTabbable,
+  getTabbableAfter,
   getTabbableOptions,
   isOutsideEvent,
 } from '../utils/tabbable';
@@ -500,6 +501,7 @@ export function FloatingFocusManager(
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
     let openEvent = contextData.openEvent;
+    const domReference = refs.domReference.current;
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
@@ -561,7 +563,10 @@ export function FloatingFocusManager(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      const returnElement = getPreviouslyFocusedElement();
+      let returnElement = getPreviouslyFocusedElement();
+      if (!returnElement && isHTMLElement(domReference)) {
+        returnElement = getTabbableAfter(domReference);
+      }
 
       if (
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -595,6 +600,7 @@ export function FloatingFocusManager(
     events,
     tree,
     nodeId,
+    modal,
   ]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
