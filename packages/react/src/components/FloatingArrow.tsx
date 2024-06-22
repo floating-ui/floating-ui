@@ -80,6 +80,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const clipPathId = useId();
   const [isRTL, setIsRTL] = React.useState(false);
 
+  // https://github.com/floating-ui/floating-ui/issues/2932
   useModernLayoutEffect(() => {
     if (!floating) return;
     const isRTL = getComputedStyle(floating).direction === 'rtl';
