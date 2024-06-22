@@ -82,7 +82,10 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
 
   useModernLayoutEffect(() => {
     if (!floating) return;
-    setIsRTL(getComputedStyle(floating).direction === 'rtl');
+    const isRTL = getComputedStyle(floating).direction === 'rtl';
+    if (isRTL) {
+      setIsRTL(true);
+    }
   }, [floating]);
 
   if (!floating) {
