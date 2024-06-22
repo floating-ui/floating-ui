@@ -1,4 +1,4 @@
-import type {Rect, Strategy, VirtualElement} from '@floating-ui/core';
+import type {Rect, Strategy} from '@floating-ui/core';
 import {createCoords} from '@floating-ui/utils';
 import {
   getNodeName,
@@ -7,6 +7,7 @@ import {
   isOverflowElement,
 } from '@floating-ui/utils/dom';
 
+import type {VirtualElement} from '../types';
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {getWindowScrollBarX} from './getWindowScrollBarX';

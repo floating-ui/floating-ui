@@ -127,6 +127,7 @@ export type ComputePositionConfig = Prettify<
  */
 export interface VirtualElement {
   getBoundingClientRect(): ClientRectObject;
+  getClientRects?(): Array<ClientRectObject> | DOMRectList;
   contextElement?: Element;
 }
 

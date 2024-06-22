@@ -1,5 +1,9 @@
-import type {VirtualElement} from '@floating-ui/core';
-import {getOverflowAncestors, shift, useFloating} from '@floating-ui/react-dom';
+import {
+  getOverflowAncestors,
+  shift,
+  useFloating,
+  type VirtualElement,
+} from '@floating-ui/react-dom';
 import type {MutableRefObject} from 'react';
 import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
