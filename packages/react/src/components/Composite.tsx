@@ -46,7 +46,7 @@ type RenderProp =
   | JSX.Element
   | ((props: React.HTMLAttributes<HTMLElement>) => JSX.Element);
 
-interface CompositeProps {
+export interface CompositeProps {
   /**
    * Determines the element to render.
    * @example
@@ -300,7 +300,7 @@ export const Composite = React.forwardRef<
   );
 });
 
-interface CompositeItemProps {
+export interface CompositeItemProps {
   /**
    * Determines the element to render.
    * @example
