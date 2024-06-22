@@ -21,11 +21,11 @@ export interface ElementRects {
  * Custom positioning reference element.
  * @see https://floating-ui.com/docs/virtual-elements
  */
-export type VirtualElement = {
+export interface VirtualElement {
   getBoundingClientRect(): ClientRectObject;
   getClientRects?(): Array<ClientRectObject>;
   contextElement?: any;
-};
+}
 
 export const sides: Side[] = ['top', 'right', 'bottom', 'left'];
 export const alignments: Alignment[] = ['start', 'end'];
