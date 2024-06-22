@@ -1,6 +1,6 @@
 ---
-"@floating-ui/utils": patch
-"@floating-ui/dom": patch
+'@floating-ui/utils': patch
+'@floating-ui/dom': patch
 ---
 
-fix(types): add getClientRects() to VirtualElement
+fix(types): add optional `getClientRects()` method to `VirtualElement`
