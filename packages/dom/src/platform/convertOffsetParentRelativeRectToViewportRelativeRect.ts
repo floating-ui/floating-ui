@@ -6,11 +6,11 @@ import {
   getNodeScroll,
   isHTMLElement,
   isOverflowElement,
+  isTopLayer,
 } from '@floating-ui/utils/dom';
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
-import {isTopLayer} from '../utils/isTopLayer';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   elements,

@@ -58,6 +58,16 @@ export function isTableElement(element: Element): boolean {
   return ['table', 'td', 'th'].includes(getNodeName(element));
 }
 
+export function isTopLayer(element: Element): boolean {
+  return [':popover-open', ':modal'].some((selector) => {
+    try {
+      return element.matches(selector);
+    } catch (e) {
+      return false;
+    }
+  });
+}
+
 export function isContainingBlock(element: Element): boolean {
   const webkit = isWebKit();
   const css = getComputedStyle(element);
@@ -82,6 +92,10 @@ export function getContainingBlock(element: Element): HTMLElement | null {
   let currentNode: Node | null = getParentNode(element);
 
   while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+    if (isTopLayer(currentNode)) {
+      return null;
+    }
+
     if (isContainingBlock(currentNode)) {
       return currentNode;
     }

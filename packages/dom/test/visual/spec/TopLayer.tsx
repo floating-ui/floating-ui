@@ -1,5 +1,5 @@
 import {useFloating, autoUpdate, flip} from '@floating-ui/react-dom';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 
 import {Controls} from '../utils/Controls';
 
@@ -16,6 +16,32 @@ type Props = {
   withTransform: boolean;
   strategy: 'absolute' | 'fixed';
 };
+
+function OuterTopLayer() {
+  const {refs, floatingStyles} = useFloating({
+    strategy: 'fixed',
+    whileElementsMounted: autoUpdate,
+  });
+
+  const handleDialogRef = useCallback((node: HTMLDialogElement | null) => {
+    if (node) {
+      node.showModal();
+    }
+  }, []);
+
+  return (
+    <>
+      <div style={{containerType: 'inline-size'}}>
+        <dialog id="outer-dialog" ref={handleDialogRef}>
+          <button ref={refs.setReference}>My button</button>
+          <div ref={refs.setFloating} style={floatingStyles}>
+            My tooltip
+          </div>
+        </dialog>
+      </div>
+    </>
+  );
+}
 
 function NotStacked({children}: Props) {
   return children;
@@ -147,6 +173,7 @@ export function TopLayer() {
   const [withMargin, setWithMargin] = useState(false);
   const [layoutStyles, setLayoutStyles] = useState(true);
   const [strategy, setStrategy] = useState<'absolute' | 'fixed'>('fixed');
+  const [outer, setOuter] = useState(false);
 
   const {refs, floatingStyles, x, y} = useFloating({
     strategy,
@@ -194,6 +221,7 @@ export function TopLayer() {
       >
         Top Layer
       </h1>
+      {outer && <OuterTopLayer />}
       <Stack {...stackProps}>
         <div
           className={classes}
@@ -356,6 +384,22 @@ export function TopLayer() {
             onClick={() => setWithMargin(bool)}
             style={{
               backgroundColor: bool === withMargin ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>outer</h2>
+      <Controls>
+        {BOOLS.map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`outer-${bool}`}
+            onClick={() => setOuter(bool)}
+            style={{
+              backgroundColor: bool === outer ? 'black' : '',
             }}
           >
             {String(bool)}
