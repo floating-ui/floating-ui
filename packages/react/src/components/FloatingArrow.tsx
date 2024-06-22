@@ -1,9 +1,10 @@
-import {platform} from '@floating-ui/react-dom';
+import {getComputedStyle} from '@floating-ui/utils/dom';
 import * as React from 'react';
 
 import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';
 import {warn} from '../utils/log';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
   // Omit the original `refs` property from the context to avoid issues with
@@ -77,6 +78,16 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   }
 
   const clipPathId = useId();
+  const [isRTL, setIsRTL] = React.useState(false);
+
+  // https://github.com/floating-ui/floating-ui/issues/2932
+  useModernLayoutEffect(() => {
+    if (!floating) return;
+    const isRTL = getComputedStyle(floating).direction === 'rtl';
+    if (isRTL) {
+      setIsRTL(true);
+    }
+  }, [floating]);
 
   if (!floating) {
     return null;
@@ -91,7 +102,6 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const svgY = ((height / 2) * tipRadius) / 4;
 
   const [side, alignment] = placement.split('-') as [Side, Alignment];
-  const isRTL = platform.isRTL(floating);
   const isCustomShape = !!d;
   const isVerticalSide = side === 'top' || side === 'bottom';
 
