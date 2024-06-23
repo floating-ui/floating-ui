@@ -70,7 +70,7 @@ export function enableFocusInside(container: HTMLElement) {
   });
 }
 
-export function getTabbableAfter(element: HTMLElement) {
+export function getTabbableAfter(element: HTMLElement, floating: HTMLElement) {
   const tabbableElements = tabbable(
     getDocument(element).body,
     getTabbableOptions(),
@@ -84,7 +84,8 @@ export function getTabbableAfter(element: HTMLElement) {
     tabbableElements[tabbableIndex] &&
     (!currentElement ||
       !currentElement.isConnected ||
-      currentElement.hasAttribute(createAttribute('focus-guard')))
+      currentElement.hasAttribute(createAttribute('focus-guard')) ||
+      contains(floating, currentElement))
   ) {
     currentElement = tabbableElements[++tabbableIndex];
   }

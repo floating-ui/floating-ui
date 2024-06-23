@@ -563,9 +563,10 @@ export function FloatingFocusManager(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
+      const returnContextElement = domReference || previouslyFocusedElement;
       let returnElement = getPreviouslyFocusedElement();
-      if (!returnElement && isHTMLElement(domReference)) {
-        returnElement = getTabbableAfter(domReference);
+      if (!returnElement && isHTMLElement(returnContextElement) && floating) {
+        returnElement = getTabbableAfter(returnContextElement, floating);
       }
 
       if (

@@ -223,6 +223,7 @@ describe('returnFocus', () => {
 
     expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
   });
+
   test('return to the first focusable descendent of the reference, if the reference is not focusable', async () => {
     render(
       <Dialog
@@ -247,6 +248,112 @@ describe('returnFocus', () => {
     expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
 
     expect(screen.getByTestId('open-dialog')).toHaveFocus();
+  });
+
+  test('returns focus to next tabbable element after reference element if removed (modal)', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+      const [removed, setRemoved] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const click = useClick(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([click]);
+
+      return (
+        <>
+          {!removed && (
+            <button
+              ref={refs.setReference}
+              {...getReferenceProps()}
+              data-testid="reference"
+            />
+          )}
+          {isOpen && (
+            <FloatingFocusManager context={context}>
+              <div ref={refs.setFloating} {...getFloatingProps()}>
+                <button
+                  data-testid="remove"
+                  onClick={() => {
+                    setRemoved(true);
+                    setIsOpen(false);
+                  }}
+                >
+                  remove
+                </button>
+              </div>
+            </FloatingFocusManager>
+          )}
+          <button data-testid="fallback" />
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    fireEvent.click(screen.getByTestId('remove'));
+
+    expect(screen.getByTestId('fallback')).toHaveFocus();
+  });
+
+  test('returns focus to next tabbable element after reference element if removed (non-modal)', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+      const [removed, setRemoved] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const click = useClick(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([click]);
+
+      return (
+        <>
+          {!removed && (
+            <button
+              ref={refs.setReference}
+              {...getReferenceProps()}
+              data-testid="reference"
+            />
+          )}
+          {isOpen && (
+            <FloatingFocusManager context={context} modal={false}>
+              <div ref={refs.setFloating} {...getFloatingProps()}>
+                <button
+                  data-testid="remove"
+                  onClick={() => {
+                    setRemoved(true);
+                    setIsOpen(false);
+                  }}
+                >
+                  remove
+                </button>
+              </div>
+            </FloatingFocusManager>
+          )}
+          <button data-testid="fallback" />
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    fireEvent.click(screen.getByTestId('remove'));
+
+    expect(screen.getByTestId('fallback')).toHaveFocus();
   });
 });
 
