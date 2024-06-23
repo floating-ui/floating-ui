@@ -11,7 +11,10 @@ export * from '.';
 export type {FloatingArrowProps} from './components/FloatingArrow';
 export type {FloatingFocusManagerProps} from './components/FloatingFocusManager';
 export type {FloatingOverlayProps} from './components/FloatingOverlay';
-export type {FloatingPortalProps} from './components/FloatingPortal';
+export type {
+  FloatingPortalProps,
+  UseFloatingPortalNodeProps,
+} from './components/FloatingPortal';
 export type {CompositeProps, CompositeItemProps} from './components/Composite';
 export type {UseClickProps} from './hooks/useClick';
 export type {UseClientPointProps} from './hooks/useClientPoint';
@@ -28,6 +31,11 @@ export type {UseTypeaheadProps} from './hooks/useTypeahead';
 export type {UseFloatingRootContextOptions} from './hooks/useFloatingRootContext';
 export type {InnerProps, UseInnerOffsetProps} from './inner';
 export type {UseInteractionsReturn} from './hooks/useInteractions';
+export type {SafePolygonOptions} from './safePolygon';
+export type {
+  FloatingTreeProps,
+  FloatingNodeProps,
+} from './components/FloatingTree';
 export type {
   AlignedPlacement,
   Alignment,

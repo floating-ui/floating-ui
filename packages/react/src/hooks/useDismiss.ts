@@ -124,12 +124,7 @@ export function useDismiss(
   context: FloatingRootContext,
   props: UseDismissProps = {},
 ): ElementProps {
-  const {
-    open,
-    onOpenChange,
-    elements: {reference, domReference, floating},
-    dataRef,
-  } = context;
+  const {open, onOpenChange, elements, dataRef} = context;
   const {
     enabled = true,
     escapeKey = true,
@@ -234,7 +229,9 @@ export function useDismiss(
 
     const target = getTarget(event);
     const inertSelector = `[${createAttribute('inert')}]`;
-    const markers = getDocument(floating).querySelectorAll(inertSelector);
+    const markers = getDocument(elements.floating).querySelectorAll(
+      inertSelector,
+    );
 
     let targetRootAncestor = isElement(target) ? target : null;
     while (targetRootAncestor && !isLastTraversableNode(targetRootAncestor)) {
@@ -253,7 +250,7 @@ export function useDismiss(
       isElement(target) &&
       !isRootElement(target) &&
       // Clicked on a direct ancestor (e.g. FloatingOverlay).
-      !contains(target, floating) &&
+      !contains(target, elements.floating) &&
       // If the target root element contains none of the markers, then the
       // element was injected after the floating element rendered.
       Array.from(markers).every(
@@ -300,8 +297,8 @@ export function useDismiss(
       );
 
     if (
-      isEventTargetWithin(event, floating) ||
-      isEventTargetWithin(event, domReference) ||
+      isEventTargetWithin(event, elements.floating) ||
+      isEventTargetWithin(event, elements.domReference) ||
       targetIsInsideChildren
     ) {
       return;
@@ -349,7 +346,7 @@ export function useDismiss(
       onOpenChange(false, event, 'ancestor-scroll');
     }
 
-    const doc = getDocument(floating);
+    const doc = getDocument(elements.floating);
     escapeKey &&
       doc.addEventListener(
         'keydown',
@@ -366,17 +363,21 @@ export function useDismiss(
     let ancestors: (Element | Window | VisualViewport)[] = [];
 
     if (ancestorScroll) {
-      if (isElement(domReference)) {
-        ancestors = getOverflowAncestors(domReference);
+      if (isElement(elements.domReference)) {
+        ancestors = getOverflowAncestors(elements.domReference);
       }
 
-      if (isElement(floating)) {
-        ancestors = ancestors.concat(getOverflowAncestors(floating));
+      if (isElement(elements.floating)) {
+        ancestors = ancestors.concat(getOverflowAncestors(elements.floating));
       }
 
-      if (!isElement(reference) && reference && reference.contextElement) {
+      if (
+        !isElement(elements.reference) &&
+        elements.reference &&
+        elements.reference.contextElement
+      ) {
         ancestors = ancestors.concat(
-          getOverflowAncestors(reference.contextElement),
+          getOverflowAncestors(elements.reference.contextElement),
         );
       }
     }
@@ -411,9 +412,7 @@ export function useDismiss(
     };
   }, [
     dataRef,
-    floating,
-    domReference,
-    reference,
+    elements,
     escapeKey,
     outsidePress,
     outsidePressEvent,
@@ -435,41 +434,38 @@ export function useDismiss(
     insideReactTreeRef.current = false;
   }, [outsidePress, outsidePressEvent]);
 
-  return React.useMemo(() => {
-    if (!enabled) {
-      return {};
-    }
+  const reference: ElementProps['reference'] = React.useMemo(
+    () => ({
+      onKeyDown: closeOnEscapeKeyDown,
+      [bubbleHandlerKeys[referencePressEvent]]: (
+        event: React.SyntheticEvent,
+      ) => {
+        if (referencePress) {
+          onOpenChange(false, event.nativeEvent, 'reference-press');
+        }
+      },
+    }),
+    [closeOnEscapeKeyDown, onOpenChange, referencePress, referencePressEvent],
+  );
 
-    return {
-      reference: {
-        onKeyDown: closeOnEscapeKeyDown,
-        [bubbleHandlerKeys[referencePressEvent]]: (
-          event: React.SyntheticEvent,
-        ) => {
-          if (referencePress) {
-            onOpenChange(false, event.nativeEvent, 'reference-press');
-          }
-        },
+  const floating: ElementProps['floating'] = React.useMemo(
+    () => ({
+      onKeyDown: closeOnEscapeKeyDown,
+      onMouseDown() {
+        endedOrStartedInsideRef.current = true;
       },
-      floating: {
-        onKeyDown: closeOnEscapeKeyDown,
-        onMouseDown() {
-          endedOrStartedInsideRef.current = true;
-        },
-        onMouseUp() {
-          endedOrStartedInsideRef.current = true;
-        },
-        [captureHandlerKeys[outsidePressEvent]]: () => {
-          insideReactTreeRef.current = true;
-        },
+      onMouseUp() {
+        endedOrStartedInsideRef.current = true;
       },
-    };
-  }, [
-    enabled,
-    referencePress,
-    outsidePressEvent,
-    referencePressEvent,
-    onOpenChange,
-    closeOnEscapeKeyDown,
-  ]);
+      [captureHandlerKeys[outsidePressEvent]]: () => {
+        insideReactTreeRef.current = true;
+      },
+    }),
+    [closeOnEscapeKeyDown, outsidePressEvent],
+  );
+
+  return React.useMemo(
+    () => (enabled ? {reference, floating} : {}),
+    [enabled, reference, floating],
+  );
 }

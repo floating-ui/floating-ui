@@ -17,7 +17,6 @@ export interface ArrowOptions {
    * @default undefined
    */
   element: any;
-
   /**
    * The padding between the arrow element and the floating element edges.
    * Useful when the floating element has rounded corners.

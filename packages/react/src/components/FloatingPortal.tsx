@@ -35,15 +35,15 @@ const PortalContext = React.createContext<null | {
 
 const attr = createAttribute('portal');
 
+export interface UseFloatingPortalNodeProps {
+  id?: string;
+  root?: HTMLElement | null | React.MutableRefObject<HTMLElement | null>;
+}
+
 /**
  * @see https://floating-ui.com/docs/FloatingPortal#usefloatingportalnode
  */
-export function useFloatingPortalNode(
-  props: {
-    id?: string;
-    root?: HTMLElement | null | React.MutableRefObject<HTMLElement | null>;
-  } = {},
-) {
+export function useFloatingPortalNode(props: UseFloatingPortalNodeProps = {}) {
   const {id, root} = props;
 
   const uniqueId = useId();

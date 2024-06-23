@@ -1,7 +1,8 @@
 import {getUserAgent} from '@floating-ui/react/utils';
-import {detectOverflow, offset} from '@floating-ui/react-dom';
+import {evaluate} from '@floating-ui/utils';
+import {detectOverflow, offset, type Derivable} from '@floating-ui/react-dom';
 import * as React from 'react';
-import {flushSync} from 'react-dom';
+import * as ReactDOM from 'react-dom';
 
 import {useEffectEvent} from './hooks/utils/useEffectEvent';
 import type {
@@ -30,7 +31,7 @@ function getArgsWithCustomFloatingHeight(
   };
 }
 
-export interface InnerProps {
+export interface InnerProps extends DetectOverflowOptions {
   /**
    * A ref which contains an array of HTML elements.
    * @default empty list
@@ -74,12 +75,12 @@ export interface InnerProps {
 }
 
 /**
- * Positions the floating element such that an inner element inside
- * of it is anchored to the reference element.
+ * Positions the floating element such that an inner element inside of it is
+ * anchored to the reference element.
  * @see https://floating-ui.com/docs/inner
  */
 export const inner = (
-  props: InnerProps & Partial<DetectOverflowOptions>,
+  props: InnerProps | Derivable<InnerProps>,
 ): Middleware => ({
   name: 'inner',
   options: props,
@@ -94,7 +95,7 @@ export const inner = (
       referenceOverflowThreshold = 0,
       scrollRef,
       ...detectOverflowOptions
-    } = props;
+    } = evaluate(props, state);
 
     const {
       rects,
@@ -159,9 +160,9 @@ export const inner = (
         refOverflow.top >= -referenceOverflowThreshold ||
         refOverflow.bottom >= -referenceOverflowThreshold
       ) {
-        flushSync(() => onFallbackChange(true));
+        ReactDOM.flushSync(() => onFallbackChange(true));
       } else {
-        flushSync(() => onFallbackChange(false));
+        ReactDOM.flushSync(() => onFallbackChange(false));
       }
     }
 
@@ -228,9 +229,7 @@ export function useInnerOffset(
   const initialOverflowRef = React.useRef<SideObject | null>(null);
 
   React.useEffect(() => {
-    if (!enabled) {
-      return;
-    }
+    if (!enabled) return;
 
     function onWheel(e: WheelEvent) {
       if (e.ctrlKey || !el || overflowRef.current == null) {
@@ -250,7 +249,7 @@ export function useInnerOffset(
 
       if ((!isAtTop && dY > 0) || (!isAtBottom && dY < 0)) {
         e.preventDefault();
-        flushSync(() => {
+        ReactDOM.flushSync(() => {
           onChange((d) => d + Math[method](dY, remainingScroll * sign));
         });
       } else if (/firefox/i.test(getUserAgent())) {
@@ -312,7 +311,7 @@ export function useInnerOffset(
               (overflowRef.current.bottom < -0.5 && scrollDiff < -1) ||
               (overflowRef.current.top < -0.5 && scrollDiff > 1)
             ) {
-              flushSync(() => onChange((d) => d + scrollDiff));
+              ReactDOM.flushSync(() => onChange((d) => d + scrollDiff));
             }
           }
 

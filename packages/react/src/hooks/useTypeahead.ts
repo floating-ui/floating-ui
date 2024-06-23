@@ -109,25 +109,21 @@ export function useTypeahead(
     }
   }, [open, selectedIndex, activeIndex]);
 
-  return React.useMemo(() => {
-    if (!enabled) {
-      return {};
-    }
-
-    function setTypingChange(value: boolean) {
-      if (value) {
-        if (!dataRef.current.typing) {
-          dataRef.current.typing = value;
-          onTypingChange(value);
-        }
-      } else {
-        if (dataRef.current.typing) {
-          dataRef.current.typing = value;
-          onTypingChange(value);
-        }
+  const setTypingChange = useEffectEvent((value: boolean) => {
+    if (value) {
+      if (!dataRef.current.typing) {
+        dataRef.current.typing = value;
+        onTypingChange(value);
+      }
+    } else {
+      if (dataRef.current.typing) {
+        dataRef.current.typing = value;
+        onTypingChange(value);
       }
     }
+  });
 
+  const onKeyDown = useEffectEvent((event: React.KeyboardEvent) => {
     function getMatchingIndex(
       list: Array<string | null>,
       orderedList: Array<string | null>,
@@ -144,103 +140,97 @@ export function useTypeahead(
       return str ? list.indexOf(str) : -1;
     }
 
-    function onKeyDown(event: React.KeyboardEvent) {
-      const listContent = listRef.current;
+    const listContent = listRef.current;
 
-      if (stringRef.current.length > 0 && stringRef.current[0] !== ' ') {
-        if (
-          getMatchingIndex(listContent, listContent, stringRef.current) === -1
-        ) {
-          setTypingChange(false);
-        } else if (event.key === ' ') {
-          stopEvent(event);
-        }
-      }
-
+    if (stringRef.current.length > 0 && stringRef.current[0] !== ' ') {
       if (
-        listContent == null ||
-        ignoreKeysRef.current.includes(event.key) ||
-        // Character key.
-        event.key.length !== 1 ||
-        // Modifier key.
-        event.ctrlKey ||
-        event.metaKey ||
-        event.altKey
+        getMatchingIndex(listContent, listContent, stringRef.current) === -1
       ) {
-        return;
-      }
-
-      if (open && event.key !== ' ') {
+        setTypingChange(false);
+      } else if (event.key === ' ') {
         stopEvent(event);
-        setTypingChange(true);
-      }
-
-      // Bail out if the list contains a word like "llama" or "aaron". TODO:
-      // allow it in this case, too.
-      const allowRapidSuccessionOfFirstLetter = listContent.every((text) =>
-        text
-          ? text[0]?.toLocaleLowerCase() !== text[1]?.toLocaleLowerCase()
-          : true,
-      );
-
-      // Allows the user to cycle through items that start with the same letter
-      // in rapid succession.
-      if (
-        allowRapidSuccessionOfFirstLetter &&
-        stringRef.current === event.key
-      ) {
-        stringRef.current = '';
-        prevIndexRef.current = matchIndexRef.current;
-      }
-
-      stringRef.current += event.key;
-      clearTimeout(timeoutIdRef.current);
-      timeoutIdRef.current = setTimeout(() => {
-        stringRef.current = '';
-        prevIndexRef.current = matchIndexRef.current;
-        setTypingChange(false);
-      }, resetMs);
-
-      const prevIndex = prevIndexRef.current;
-
-      const index = getMatchingIndex(
-        listContent,
-        [
-          ...listContent.slice((prevIndex || 0) + 1),
-          ...listContent.slice(0, (prevIndex || 0) + 1),
-        ],
-        stringRef.current,
-      );
-
-      if (index !== -1) {
-        onMatch(index);
-        matchIndexRef.current = index;
-      } else if (event.key !== ' ') {
-        stringRef.current = '';
-        setTypingChange(false);
       }
     }
 
+    if (
+      listContent == null ||
+      ignoreKeysRef.current.includes(event.key) ||
+      // Character key.
+      event.key.length !== 1 ||
+      // Modifier key.
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    if (open && event.key !== ' ') {
+      stopEvent(event);
+      setTypingChange(true);
+    }
+
+    // Bail out if the list contains a word like "llama" or "aaron". TODO:
+    // allow it in this case, too.
+    const allowRapidSuccessionOfFirstLetter = listContent.every((text) =>
+      text
+        ? text[0]?.toLocaleLowerCase() !== text[1]?.toLocaleLowerCase()
+        : true,
+    );
+
+    // Allows the user to cycle through items that start with the same letter
+    // in rapid succession.
+    if (allowRapidSuccessionOfFirstLetter && stringRef.current === event.key) {
+      stringRef.current = '';
+      prevIndexRef.current = matchIndexRef.current;
+    }
+
+    stringRef.current += event.key;
+    clearTimeout(timeoutIdRef.current);
+    timeoutIdRef.current = setTimeout(() => {
+      stringRef.current = '';
+      prevIndexRef.current = matchIndexRef.current;
+      setTypingChange(false);
+    }, resetMs);
+
+    const prevIndex = prevIndexRef.current;
+
+    const index = getMatchingIndex(
+      listContent,
+      [
+        ...listContent.slice((prevIndex || 0) + 1),
+        ...listContent.slice(0, (prevIndex || 0) + 1),
+      ],
+      stringRef.current,
+    );
+
+    if (index !== -1) {
+      onMatch(index);
+      matchIndexRef.current = index;
+    } else if (event.key !== ' ') {
+      stringRef.current = '';
+      setTypingChange(false);
+    }
+  });
+
+  const reference: ElementProps['reference'] = React.useMemo(
+    () => ({onKeyDown}),
+    [onKeyDown],
+  );
+
+  const floating: ElementProps['floating'] = React.useMemo(() => {
     return {
-      reference: {onKeyDown},
-      floating: {
-        onKeyDown,
-        onKeyUp(event) {
-          if (event.key === ' ') {
-            setTypingChange(false);
-          }
-        },
+      onKeyDown,
+      onKeyUp(event) {
+        if (event.key === ' ') {
+          setTypingChange(false);
+        }
       },
     };
-  }, [
-    enabled,
-    open,
-    dataRef,
-    listRef,
-    resetMs,
-    ignoreKeysRef,
-    findMatchRef,
-    onMatch,
-    onTypingChange,
-  ]);
+  }, [onKeyDown, setTypingChange]);
+
+  return React.useMemo(
+    () => (enabled ? {reference, floating} : {}),
+    [enabled, reference, floating],
+  );
 }

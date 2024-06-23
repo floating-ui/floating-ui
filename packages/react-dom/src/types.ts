@@ -19,6 +19,7 @@ export type {
   ComputePositionConfig,
   ComputePositionReturn,
   Coords,
+  Derivable,
   DetectOverflowOptions,
   Dimensions,
   ElementContext,
@@ -108,6 +109,9 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
          */
         setFloating: (node: HTMLElement | null) => void;
       };
+      /**
+       * Object containing the reference and floating elements.
+       */
       elements: {
         reference: RT | null;
         floating: HTMLElement | null;
@@ -128,6 +132,9 @@ export type UseFloatingOptions<RT extends ReferenceType = ReferenceType> =
         floating: HTMLElement,
         update: () => void,
       ) => () => void;
+      /**
+       * Object containing the reference and floating elements.
+       */
       elements?: {
         reference?: RT | null;
         floating?: HTMLElement | null;
@@ -135,11 +142,13 @@ export type UseFloatingOptions<RT extends ReferenceType = ReferenceType> =
       /**
        * The `open` state of the floating element to synchronize with the
        * `isPositioned` value.
+       * @default false
        */
       open?: boolean;
       /**
        * Whether to use `transform` for positioning instead of `top` and `left`
        * (layout) in the `floatingStyles` object.
+       * @default false
        */
       transform?: boolean;
     }

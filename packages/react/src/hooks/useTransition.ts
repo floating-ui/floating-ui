@@ -41,10 +41,10 @@ export interface UseTransitionStatusProps {
    * The duration of the transition in milliseconds, or an object containing
    * `open` and `close` keys for different durations.
    */
-  duration?: number | Partial<{open: number; close: number}>;
+  duration?: number | {open?: number; close?: number};
 }
 
-type Status = 'unmounted' | 'initial' | 'open' | 'close';
+type TransitionStatus = 'unmounted' | 'initial' | 'open' | 'close';
 
 /**
  * Provides a status string to apply CSS transitions to a floating element,
@@ -56,7 +56,7 @@ export function useTransitionStatus(
   props: UseTransitionStatusProps = {},
 ): {
   isMounted: boolean;
-  status: Status;
+  status: TransitionStatus;
 } {
   const {
     open,
@@ -67,7 +67,7 @@ export function useTransitionStatus(
   const isNumberDuration = typeof duration === 'number';
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
-  const [status, setStatus] = React.useState<Status>('unmounted');
+  const [status, setStatus] = React.useState<TransitionStatus>('unmounted');
   const isMounted = useDelayUnmount(open, closeDuration);
 
   if (!isMounted && status === 'close') {

@@ -18,14 +18,12 @@ function isAnySideFullyClipped(overflow: SideObject) {
   return sides.some((side) => overflow[side] >= 0);
 }
 
-export type HideOptions = Partial<
-  DetectOverflowOptions & {
-    /**
-     * The strategy used to determine when to hide the floating element.
-     */
-    strategy: 'referenceHidden' | 'escaped';
-  }
->;
+export interface HideOptions extends DetectOverflowOptions {
+  /**
+   * The strategy used to determine when to hide the floating element.
+   */
+  strategy?: 'referenceHidden' | 'escaped';
+}
 
 /**
  * Provides data to hide the floating element in applicable situations, such as

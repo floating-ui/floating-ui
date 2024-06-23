@@ -93,22 +93,22 @@ export interface UseInteractionsReturn {
 export function useInteractions(
   propsList: Array<ElementProps | void> = [],
 ): UseInteractionsReturn {
-  // The dependencies are a dynamic array, so we can't use the linter's
-  // suggestion to add it to the deps array.
-  const deps = propsList;
+  const referenceDeps = propsList.map((key) => key?.reference);
+  const floatingDeps = propsList.map((key) => key?.floating);
+  const itemDeps = propsList.map((key) => key?.item);
 
   const getReferenceProps = React.useCallback(
     (userProps?: React.HTMLProps<Element>) =>
       mergeProps(userProps, propsList, 'reference'),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    deps,
+    referenceDeps,
   );
 
   const getFloatingProps = React.useCallback(
     (userProps?: React.HTMLProps<HTMLElement>) =>
       mergeProps(userProps, propsList, 'floating'),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    deps,
+    floatingDeps,
   );
 
   const getItemProps = React.useCallback(
@@ -116,12 +116,8 @@ export function useInteractions(
       userProps?: Omit<React.HTMLProps<HTMLElement>, 'selected' | 'active'> &
         ExtendedUserProps,
     ) => mergeProps(userProps, propsList, 'item'),
-    // Granularly check for `item` changes, because the `getItemProps` getter
-    // should be as referentially stable as possible since it may be passed as
-    // a prop to many components. All `item` key values must therefore be
-    // memoized.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    propsList.map((key) => key?.item),
+    itemDeps,
   );
 
   return React.useMemo(
