@@ -1,6 +1,6 @@
 import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
-import {createPortal} from 'react-dom';
+import * as ReactDOM from 'react-dom';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
@@ -222,7 +222,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
       {shouldRenderGuards && portalNode && (
         <span aria-owns={portalNode.id} style={HIDDEN_STYLES} />
       )}
-      {portalNode && createPortal(children, portalNode)}
+      {portalNode && ReactDOM.createPortal(children, portalNode)}
       {shouldRenderGuards && portalNode && (
         <FocusGuard
           data-type="outside"
