@@ -388,9 +388,7 @@ export function useListNavigation(
   // Sync `selectedIndex` to be the `activeIndex` upon opening the floating
   // element. Also, reset `activeIndex` upon closing the floating element.
   useModernLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
+    if (!enabled) return;
 
     if (open && elements.floating) {
       if (focusItemOnOpenRef.current && selectedIndex != null) {
@@ -412,9 +410,7 @@ export function useListNavigation(
   // Sync `activeIndex` to be the focused item while the floating element is
   // open.
   useModernLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
+    if (!enabled) return;
 
     if (open && elements.floating) {
       if (activeIndex == null) {
@@ -511,7 +507,10 @@ export function useListNavigation(
   }, [enabled, elements.floating, tree, parentId, virtual]);
 
   useModernLayoutEffect(() => {
-    if (!enabled || !tree || !virtual || parentId) return;
+    if (!enabled) return;
+    if (!tree) return;
+    if (!virtual) return;
+    if (parentId) return;
 
     function handleVirtualFocus(item: HTMLElement) {
       setVirtualId(item.id);

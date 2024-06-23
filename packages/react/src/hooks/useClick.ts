@@ -82,22 +82,13 @@ export function useClick(
         pointerTypeRef.current = event.pointerType;
       },
       onMouseDown(event) {
+        const pointerType = pointerTypeRef.current;
+
         // Ignore all buttons except for the "main" button.
         // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
-        if (event.button !== 0) {
-          return;
-        }
-
-        if (
-          isMouseLikePointerType(pointerTypeRef.current, true) &&
-          ignoreMouse
-        ) {
-          return;
-        }
-
-        if (eventOption === 'click') {
-          return;
-        }
+        if (event.button !== 0) return;
+        if (eventOption === 'click') return;
+        if (isMouseLikePointerType(pointerType, true) && ignoreMouse) return;
 
         if (
           open &&
@@ -114,17 +105,14 @@ export function useClick(
         }
       },
       onClick(event) {
+        const pointerType = pointerTypeRef.current;
+
         if (eventOption === 'mousedown' && pointerTypeRef.current) {
           pointerTypeRef.current = undefined;
           return;
         }
 
-        if (
-          isMouseLikePointerType(pointerTypeRef.current, true) &&
-          ignoreMouse
-        ) {
-          return;
-        }
+        if (isMouseLikePointerType(pointerType, true) && ignoreMouse) return;
 
         if (
           open &&

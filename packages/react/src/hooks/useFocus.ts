@@ -135,6 +135,7 @@ export function useFocus(
       onBlur(event) {
         blockFocusRef.current = false;
         const relatedTarget = event.relatedTarget;
+        const nativeEvent = event.nativeEvent;
 
         // Hit the non-modal focus management portal guard. Focus will be
         // moved into the floating element immediately after.
@@ -172,7 +173,7 @@ export function useFocus(
             return;
           }
 
-          onOpenChange(false, event.nativeEvent, 'focus');
+          onOpenChange(false, nativeEvent, 'focus');
         });
       },
     }),

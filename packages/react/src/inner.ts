@@ -281,46 +281,43 @@ export function useInnerOffset(
     }
   }, [enabled, open, elements.floating, overflowRef, scrollRef, onChange]);
 
-  return React.useMemo(() => {
-    if (!enabled) {
-      return {};
-    }
-
-    return {
-      floating: {
-        onKeyDown() {
-          controlledScrollingRef.current = true;
-        },
-        onWheel() {
-          controlledScrollingRef.current = false;
-        },
-        onPointerMove() {
-          controlledScrollingRef.current = false;
-        },
-        onScroll() {
-          const el = scrollRef?.current || elements.floating;
-
-          if (!overflowRef.current || !el || !controlledScrollingRef.current) {
-            return;
-          }
-
-          if (prevScrollTopRef.current !== null) {
-            const scrollDiff = el.scrollTop - prevScrollTopRef.current;
-
-            if (
-              (overflowRef.current.bottom < -0.5 && scrollDiff < -1) ||
-              (overflowRef.current.top < -0.5 && scrollDiff > 1)
-            ) {
-              ReactDOM.flushSync(() => onChange((d) => d + scrollDiff));
-            }
-          }
-
-          // [Firefox] Wait for the height change to have been applied.
-          requestAnimationFrame(() => {
-            prevScrollTopRef.current = el.scrollTop;
-          });
-        },
+  const floating: ElementProps['floating'] = React.useMemo(
+    () => ({
+      onKeyDown() {
+        controlledScrollingRef.current = true;
       },
-    };
-  }, [enabled, overflowRef, elements.floating, scrollRef, onChange]);
+      onWheel() {
+        controlledScrollingRef.current = false;
+      },
+      onPointerMove() {
+        controlledScrollingRef.current = false;
+      },
+      onScroll() {
+        const el = scrollRef?.current || elements.floating;
+
+        if (!overflowRef.current || !el || !controlledScrollingRef.current) {
+          return;
+        }
+
+        if (prevScrollTopRef.current !== null) {
+          const scrollDiff = el.scrollTop - prevScrollTopRef.current;
+
+          if (
+            (overflowRef.current.bottom < -0.5 && scrollDiff < -1) ||
+            (overflowRef.current.top < -0.5 && scrollDiff > 1)
+          ) {
+            ReactDOM.flushSync(() => onChange((d) => d + scrollDiff));
+          }
+        }
+
+        // [Firefox] Wait for the height change to have been applied.
+        requestAnimationFrame(() => {
+          prevScrollTopRef.current = el.scrollTop;
+        });
+      },
+    }),
+    [elements.floating, onChange, overflowRef, scrollRef],
+  );
+
+  return React.useMemo(() => (enabled ? {floating} : {}), [enabled, floating]);
 }

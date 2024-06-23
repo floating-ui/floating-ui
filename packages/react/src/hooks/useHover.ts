@@ -134,9 +134,7 @@ export function useHover(
   // When closing before opening, clear the delay timeouts to cancel it
   // from showing.
   React.useEffect(() => {
-    if (!enabled) {
-      return;
-    }
+    if (!enabled) return;
 
     function onOpenChange({open}: {open: boolean}) {
       if (!open) {
@@ -153,9 +151,9 @@ export function useHover(
   }, [enabled, events]);
 
   React.useEffect(() => {
-    if (!enabled || !handleCloseRef.current || !open) {
-      return;
-    }
+    if (!enabled) return;
+    if (!handleCloseRef.current) return;
+    if (!open) return;
 
     function onLeave(event: MouseEvent) {
       if (isHoverOpen()) {
@@ -220,9 +218,7 @@ export function useHover(
   // delegation system. If the cursor was on a disabled element and then entered
   // the reference (no gap), `mouseenter` doesn't fire in the delegation system.
   React.useEffect(() => {
-    if (!enabled) {
-      return;
-    }
+    if (!enabled) return;
 
     function isClickLikeOpenEvent() {
       return dataRef.current.openEvent
@@ -368,9 +364,7 @@ export function useHover(
   // handles nested floating elements.
   // https://github.com/floating-ui/floating-ui/issues/1722
   useModernLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
+    if (!enabled) return;
 
     if (
       open &&
