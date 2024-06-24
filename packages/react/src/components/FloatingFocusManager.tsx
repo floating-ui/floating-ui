@@ -376,7 +376,7 @@ export function FloatingFocusManager(
         // Focus did not move inside the floating tree, and there are no tabbable
         // portal guards to handle closing.
         if (
-          !modal &&
+          (isUntrappedTypeableCombobox ? true : !modal) &&
           relatedTarget &&
           movedToUnrelatedNode &&
           !isPointerDownRef.current &&
@@ -413,6 +413,7 @@ export function FloatingFocusManager(
     closeOnFocusOut,
     restoreFocus,
     getTabbableContent,
+    isUntrappedTypeableCombobox,
   ]);
 
   React.useEffect(() => {
@@ -690,7 +691,11 @@ export function FloatingFocusManager(
     );
   }
 
-  const shouldRenderGuards = !disabled && guards && (isInsidePortal || modal);
+  const shouldRenderGuards =
+    !disabled &&
+    guards &&
+    (modal ? !isUntrappedTypeableCombobox : true) &&
+    (isInsidePortal || modal);
 
   return (
     <>

@@ -1357,7 +1357,6 @@ test('untrapped combobox creates non-modal focus management', async () => {
   expect(screen.getByRole('button', {name: 'one'})).toHaveFocus();
   await userEvent.tab({shift: true});
   expect(screen.getByTestId('input')).toHaveFocus();
-  cleanup();
 });
 
 test('returns focus to last connected element', async () => {
@@ -1475,4 +1474,50 @@ test('focus is placed on element with floating props when floating element is a 
   await act(async () => {});
 
   expect(screen.getByTestId('inner')).toHaveFocus();
+});
+
+test('floating element closes upon tabbing out of modal combobox', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const click = useClick(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([click]);
+
+    return (
+      <>
+        <input
+          ref={refs.setReference}
+          {...getReferenceProps()}
+          data-testid="input"
+          role="combobox"
+        />
+        {isOpen && (
+          <FloatingFocusManager context={context} initialFocus={-1}>
+            <div
+              ref={refs.setFloating}
+              {...getFloatingProps()}
+              data-testid="floating"
+            >
+              <button tabIndex={-1}>one</button>
+            </div>
+          </FloatingFocusManager>
+        )}
+        <button data-testid="after" />
+      </>
+    );
+  }
+
+  render(<App />);
+  await userEvent.click(screen.getByTestId('input'));
+  await act(async () => {});
+  expect(screen.getByTestId('input')).toHaveFocus();
+  await userEvent.tab();
+  await act(async () => {});
+  expect(screen.getByTestId('after')).toHaveFocus();
 });
