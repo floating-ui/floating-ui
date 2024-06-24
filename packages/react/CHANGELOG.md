@@ -1,5 +1,20 @@
 # @floating-ui/react
 
+## 0.26.18
+
+### Patch Changes
+
+- fix(useInteractions): split prop getter dependencies so that only the relevant element changes when necessary. Previously `reference` and `floating` prop getters had dependencies grouped.
+- fix(useFocus): prevent SyntheticEvent warning on React <17
+- fix(inner): allow to make Derivable
+- fix(FloatingFocusManager): correctly close floating element when tabbing out of a modal combobox reference
+- fix(types): export `FloatingPortalProps`, `CompositeProps`, `CompositeItemProps`
+- chore: fix internal deps
+- fix(FloatingArrow): allow close transitions to play on floating element when grouped in instant phase
+- fix(useHover): prevent unnecessary delayed opens to preserve potential click open events. Fixes an issue when combining `useHover` and `useClick` hooks and a click occurred before the floating element could open on hover, it would unexpectedly close on `mouseleave` despite being triggered by a click.
+- refactor: improve types and internal codebase consistency. All documented types are now exported.
+- Update dependencies: `@floating-ui/utils@0.2.3`
+
 ## 0.26.17
 
 ### Patch Changes

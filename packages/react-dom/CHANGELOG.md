@@ -1,5 +1,11 @@
 # @floating-ui/react-dom
 
+## 2.1.1
+
+### Patch Changes
+
+- refactor: improve types and internal codebase consistency. All documented types are now exported.
+
 ## 2.1.0
 
 ### Minor Changes
