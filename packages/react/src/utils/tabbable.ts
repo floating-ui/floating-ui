@@ -1,5 +1,5 @@
 import {activeElement, contains, getDocument} from '@floating-ui/react/utils';
-import {tabbable} from 'tabbable';
+import {type FocusableElement, tabbable} from 'tabbable';
 import {createAttribute} from './createAttribute';
 
 export const getTabbableOptions = () =>
@@ -70,20 +70,19 @@ export function enableFocusInside(container: HTMLElement) {
   });
 }
 
-export function getTabbableAfter(element: HTMLElement, floating: HTMLElement) {
-  const tabbableElements = tabbable(
-    getDocument(element).body,
-    getTabbableOptions(),
-  );
+export function getTabbableAfter(
+  tabbableElements: Array<FocusableElement>,
+  element: HTMLElement,
+  floating: HTMLElement,
+) {
   const elementIndex = tabbableElements.indexOf(element);
 
   let tabbableIndex = elementIndex + 1;
   let currentElement = tabbableElements[tabbableIndex];
 
   while (
-    tabbableElements[tabbableIndex] &&
-    (!currentElement ||
-      !currentElement.isConnected ||
+    currentElement &&
+    (!currentElement.isConnected ||
       currentElement.hasAttribute(createAttribute('focus-guard')) ||
       contains(floating, currentElement))
   ) {

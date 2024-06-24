@@ -299,6 +299,7 @@ describe('returnFocus', () => {
     await act(async () => {});
 
     fireEvent.click(screen.getByTestId('remove'));
+    await act(async () => {});
 
     expect(screen.getByTestId('fallback')).toHaveFocus();
   });
@@ -352,6 +353,7 @@ describe('returnFocus', () => {
     await act(async () => {});
 
     fireEvent.click(screen.getByTestId('remove'));
+    await act(async () => {});
 
     expect(screen.getByTestId('fallback')).toHaveFocus();
   });
