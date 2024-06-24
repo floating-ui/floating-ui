@@ -9,38 +9,34 @@ import type {
   RootBoundary,
 } from './types';
 
-export type DetectOverflowOptions = Partial<{
+export interface DetectOverflowOptions {
   /**
    * The clipping element(s) or area in which overflow will be checked.
    * @default 'clippingAncestors'
    */
-  boundary: Boundary;
-
+  boundary?: Boundary;
   /**
    * The root clipping area in which overflow will be checked.
    * @default 'viewport'
    */
-  rootBoundary: RootBoundary;
-
+  rootBoundary?: RootBoundary;
   /**
    * The element in which overflow is being checked relative to a boundary.
    * @default 'floating'
    */
-  elementContext: ElementContext;
-
+  elementContext?: ElementContext;
   /**
    * Whether to check for overflow using the alternate element's boundary
    * (`clippingAncestors` boundary only).
    * @default false
    */
-  altBoundary: boolean;
-
+  altBoundary?: boolean;
   /**
    * Virtual padding for the resolved overflow detection offsets.
    * @default 0
    */
-  padding: Padding;
-}>;
+  padding?: Padding;
+}
 
 /**
  * Resolves with an object of overflow side offsets that determine how much the

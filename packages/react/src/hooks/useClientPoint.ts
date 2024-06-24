@@ -249,20 +249,21 @@ export function useClientPoint(
     }
   }, [enabled, x, y, setReference]);
 
-  return React.useMemo(() => {
-    if (!enabled) return {};
-
+  const reference: ElementProps['reference'] = React.useMemo(() => {
     function setPointerTypeRef({pointerType}: React.PointerEvent) {
       setPointerType(pointerType);
     }
 
     return {
-      reference: {
-        onPointerDown: setPointerTypeRef,
-        onPointerEnter: setPointerTypeRef,
-        onMouseMove: handleReferenceEnterOrMove,
-        onMouseEnter: handleReferenceEnterOrMove,
-      },
+      onPointerDown: setPointerTypeRef,
+      onPointerEnter: setPointerTypeRef,
+      onMouseMove: handleReferenceEnterOrMove,
+      onMouseEnter: handleReferenceEnterOrMove,
     };
-  }, [enabled, handleReferenceEnterOrMove]);
+  }, [handleReferenceEnterOrMove]);
+
+  return React.useMemo(
+    () => (enabled ? {reference} : {}),
+    [enabled, reference],
+  );
 }

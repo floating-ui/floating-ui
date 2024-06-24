@@ -1,10 +1,5 @@
 import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
-import type {
-  ComputePosition,
-  ComputePositionReturn,
-  Middleware,
-  MiddlewareData,
-} from './types';
+import type {ComputePosition, Middleware, MiddlewareData} from './types';
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
@@ -17,7 +12,7 @@ export const computePosition: ComputePosition = async (
   reference,
   floating,
   config,
-): Promise<ComputePositionReturn> => {
+) => {
   const {
     placement = 'bottom',
     strategy = 'absolute',

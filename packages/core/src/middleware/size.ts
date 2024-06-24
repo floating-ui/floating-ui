@@ -11,21 +11,19 @@ import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
 
-export type SizeOptions = Partial<
-  DetectOverflowOptions & {
-    /**
-     * Function that is called to perform style mutations to the floating element
-     * to change its size.
-     * @default undefined
-     */
-    apply(
-      args: MiddlewareState & {
-        availableWidth: number;
-        availableHeight: number;
-      },
-    ): void | Promise<void>;
-  }
->;
+export interface SizeOptions extends DetectOverflowOptions {
+  /**
+   * Function that is called to perform style mutations to the floating element
+   * to change its size.
+   * @default undefined
+   */
+  apply?(
+    args: MiddlewareState & {
+      availableWidth: number;
+      availableHeight: number;
+    },
+  ): void | Promise<void>;
+}
 
 /**
  * Provides data that allows you to change the size of the floating element —

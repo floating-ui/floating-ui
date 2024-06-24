@@ -11,6 +11,7 @@ import {
   type Middleware,
   type OffsetOptions,
   type ShiftOptions,
+  type LimitShiftOptions,
   type FlipOptions,
   type SizeOptions,
   type AutoPlacementOptions,
@@ -50,12 +51,11 @@ export const shift = (
   options: [options, deps],
 });
 
-type LimitShiftOptions = Parameters<typeof baseLimitShift>[0];
 /**
  * Built-in `limiter` that will stop `shift()` at a certain point.
  */
 export const limitShift = (
-  options?: LimitShiftOptions,
+  options?: LimitShiftOptions | Derivable<LimitShiftOptions>,
   deps?: React.DependencyList,
 ): {
   fn: (state: MiddlewareState) => Coords;

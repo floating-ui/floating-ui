@@ -42,36 +42,31 @@ export function getPlacementList(
   });
 }
 
-export type AutoPlacementOptions = Partial<
-  DetectOverflowOptions & {
-    /**
-     * The axis that runs along the alignment of the floating element. Determines
-     * whether to check for most space along this axis.
-     * @default false
-     */
-    crossAxis: boolean;
-
-    /**
-     * Choose placements with a particular alignment.
-     * @default undefined
-     */
-    alignment: Alignment | null;
-
-    /**
-     * Whether to choose placements with the opposite alignment if the preferred
-     * alignment does not fit.
-     * @default true
-     */
-    autoAlignment: boolean;
-
-    /**
-     * Which placements are allowed to be chosen. Placements must be within the
-     * `alignment` option if explicitly set.
-     * @default allPlacements (variable)
-     */
-    allowedPlacements: Array<Placement>;
-  }
->;
+export interface AutoPlacementOptions extends DetectOverflowOptions {
+  /**
+   * The axis that runs along the alignment of the floating element. Determines
+   * whether to check for most space along this axis.
+   * @default false
+   */
+  crossAxis?: boolean;
+  /**
+   * Choose placements with a particular alignment.
+   * @default undefined
+   */
+  alignment?: Alignment | null;
+  /**
+   * Whether to choose placements with the opposite alignment if the preferred
+   * alignment does not fit.
+   * @default true
+   */
+  autoAlignment?: boolean;
+  /**
+   * Which placements are allowed to be chosen. Placements must be within the
+   * `alignment` option if explicitly set.
+   * @default allPlacements (variable)
+   */
+  allowedPlacements?: Array<Placement>;
+}
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement

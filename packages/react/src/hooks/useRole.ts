@@ -3,6 +3,7 @@ import * as React from 'react';
 import {useFloatingParentNodeId} from '../components/FloatingTree';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {useId} from './useId';
+import type {ExtendedUserProps} from './useInteractions';
 
 type AriaRole =
   | 'tooltip'
@@ -58,65 +59,74 @@ export function useRole(
   const parentId = useFloatingParentNodeId();
   const isNested = parentId != null;
 
-  return React.useMemo(() => {
-    if (!enabled) return {};
+  const reference: ElementProps['reference'] = React.useMemo(() => {
+    if (ariaRole === 'tooltip' || role === 'label') {
+      return {
+        [`aria-${role === 'label' ? 'labelledby' : 'describedby'}`]: open
+          ? floatingId
+          : undefined,
+      };
+    }
 
+    return {
+      'aria-expanded': open ? 'true' : 'false',
+      'aria-haspopup': ariaRole === 'alertdialog' ? 'dialog' : ariaRole,
+      'aria-controls': open ? floatingId : undefined,
+      ...(ariaRole === 'listbox' && {role: 'combobox'}),
+      ...(ariaRole === 'menu' && {id: referenceId}),
+      ...(ariaRole === 'menu' && isNested && {role: 'menuitem'}),
+      ...(role === 'select' && {'aria-autocomplete': 'none'}),
+      ...(role === 'combobox' && {'aria-autocomplete': 'list'}),
+    };
+  }, [ariaRole, floatingId, isNested, open, referenceId, role]);
+
+  const floating: ElementProps['floating'] = React.useMemo(() => {
     const floatingProps = {
       id: floatingId,
       ...(ariaRole && {role: ariaRole}),
     };
 
     if (ariaRole === 'tooltip' || role === 'label') {
-      return {
-        reference: {
-          [`aria-${role === 'label' ? 'labelledby' : 'describedby'}`]: open
-            ? floatingId
-            : undefined,
-        },
-        floating: floatingProps,
-      };
+      return floatingProps;
     }
 
     return {
-      reference: {
-        'aria-expanded': open ? 'true' : 'false',
-        'aria-haspopup': ariaRole === 'alertdialog' ? 'dialog' : ariaRole,
-        'aria-controls': open ? floatingId : undefined,
-        ...(ariaRole === 'listbox' && {role: 'combobox'}),
-        ...(ariaRole === 'menu' && {id: referenceId}),
-        ...(ariaRole === 'menu' && isNested && {role: 'menuitem'}),
-        ...(role === 'select' && {'aria-autocomplete': 'none'}),
-        ...(role === 'combobox' && {'aria-autocomplete': 'list'}),
-      },
-      floating: {
-        ...floatingProps,
-        ...(ariaRole === 'menu' && {'aria-labelledby': referenceId}),
-      },
-      item({active, selected}) {
-        const commonProps = {
-          role: 'option',
-          ...(active && {id: `${floatingId}-option`}),
-        };
-
-        // For `menu`, we are unable to tell if the item is a `menuitemradio`
-        // or `menuitemcheckbox`. For backwards-compatibility reasons, also
-        // avoid defaulting to `menuitem` as it may overwrite custom role props.
-        switch (role) {
-          case 'select':
-            return {
-              ...commonProps,
-              'aria-selected': active && selected,
-            };
-          case 'combobox': {
-            return {
-              ...commonProps,
-              ...(active && {'aria-selected': true}),
-            };
-          }
-        }
-
-        return {};
-      },
+      ...floatingProps,
+      ...(ariaRole === 'menu' && {'aria-labelledby': referenceId}),
     };
-  }, [enabled, role, ariaRole, open, floatingId, referenceId, isNested]);
+  }, [ariaRole, floatingId, referenceId, role]);
+
+  const item: ElementProps['item'] = React.useCallback(
+    ({active, selected}: ExtendedUserProps) => {
+      const commonProps = {
+        role: 'option',
+        ...(active && {id: `${floatingId}-option`}),
+      };
+
+      // For `menu`, we are unable to tell if the item is a `menuitemradio`
+      // or `menuitemcheckbox`. For backwards-compatibility reasons, also
+      // avoid defaulting to `menuitem` as it may overwrite custom role props.
+      switch (role) {
+        case 'select':
+          return {
+            ...commonProps,
+            'aria-selected': active && selected,
+          };
+        case 'combobox': {
+          return {
+            ...commonProps,
+            ...(active && {'aria-selected': true}),
+          };
+        }
+      }
+
+      return {};
+    },
+    [floatingId, role],
+  );
+
+  return React.useMemo(
+    () => (enabled ? {reference, floating, item} : {}),
+    [enabled, reference, floating, item],
+  );
 }

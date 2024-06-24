@@ -77,6 +77,7 @@ export type {
   ElementRects,
   InlineOptions,
   Length,
+  LimitShiftOptions,
   MiddlewareData,
   MiddlewareReturn,
   Padding,
@@ -87,4 +88,6 @@ export type {
   SideObject,
   Strategy,
 } from '@floating-ui/core';
+// This export exists only for backwards compatibility. It will be removed in
+// the next major version.
 export {getOverflowAncestors} from '@floating-ui/utils/dom';

@@ -40,25 +40,23 @@ export function getRectsByLine(rects: Array<ClientRectObject>) {
   return groups.map((rect) => rectToClientRect(getBoundingRect(rect)));
 }
 
-export type InlineOptions = Partial<{
+export interface InlineOptions {
   /**
    * Viewport-relative `x` coordinate to choose a `ClientRect`.
    * @default undefined
    */
-  x: number;
-
+  x?: number;
   /**
    * Viewport-relative `y` coordinate to choose a `ClientRect`.
    * @default undefined
    */
-  y: number;
-
+  y?: number;
   /**
    * Represents the padding around a disjoined rect when choosing it.
    * @default 2
    */
-  padding: Padding;
-}>;
+  padding?: Padding;
+}
 
 /**
  * Provides improved positioning for inline reference elements that can span

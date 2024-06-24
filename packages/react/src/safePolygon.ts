@@ -33,7 +33,7 @@ function isInside(point: Point, rect: Rect) {
   );
 }
 
-interface SafePolygonOptions {
+export interface SafePolygonOptions {
   buffer?: number;
   blockPointerEvents?: boolean;
   requireIntent?: boolean;
