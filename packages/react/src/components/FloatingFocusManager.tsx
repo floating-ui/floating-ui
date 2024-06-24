@@ -24,7 +24,7 @@ import {markOthers, supportsInert} from '../utils/markOthers';
 import {
   getNextTabbable,
   getPreviousTabbable,
-  getTabbableAfter,
+  getClosestTabbableElement,
   getTabbableOptions,
   isOutsideEvent,
 } from '../utils/tabbable';
@@ -574,7 +574,7 @@ export function FloatingFocusManager(
       queueMicrotask(() => {
         let returnElement = getPreviouslyFocusedElement();
         if (!returnElement && isHTMLElement(returnContextElement) && floating) {
-          returnElement = getTabbableAfter(
+          returnElement = getClosestTabbableElement(
             tabbableElements,
             returnContextElement,
             floating,
@@ -593,14 +593,7 @@ export function FloatingFocusManager(
             ? isFocusInsideFloatingTree
             : true)
         ) {
-          enqueueFocus(returnElement, {
-            // When dismissing nested floating elements, by the time the rAF has
-            // executed, the nested ones will all have been unmounted. When they
-            // try to get focused, the calls get ignored — leaving the root
-            // reference focused as desired.
-            cancelPrevious: false,
-            preventScroll: preventReturnFocusScroll,
-          });
+          returnElement.focus({preventScroll: preventReturnFocusScroll});
         }
       });
     };

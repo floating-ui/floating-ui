@@ -70,24 +70,41 @@ export function enableFocusInside(container: HTMLElement) {
   });
 }
 
-export function getTabbableAfter(
+export function getClosestTabbableElement(
   tabbableElements: Array<FocusableElement>,
   element: HTMLElement,
   floating: HTMLElement,
 ) {
   const elementIndex = tabbableElements.indexOf(element);
 
-  let tabbableIndex = elementIndex + 1;
-  let currentElement = tabbableElements[tabbableIndex];
+  function traverseTabbableElements(next: boolean) {
+    const attr = createAttribute('focus-guard');
+    let index = elementIndex + (next ? 1 : 0);
+    let currentElement = tabbableElements[index];
 
-  while (
-    currentElement &&
-    (!currentElement.isConnected ||
-      currentElement.hasAttribute(createAttribute('focus-guard')) ||
-      contains(floating, currentElement))
-  ) {
-    currentElement = tabbableElements[++tabbableIndex];
+    while (
+      currentElement &&
+      (!currentElement.isConnected ||
+        currentElement.hasAttribute(attr) ||
+        contains(floating, currentElement))
+    ) {
+      if (next) {
+        index++;
+      } else {
+        index--;
+      }
+      currentElement = tabbableElements[index];
+    }
+
+    return currentElement;
   }
 
-  return currentElement;
+  // First, try to find the next tabbable element
+  const next = traverseTabbableElements(true);
+  if (next) {
+    return next;
+  }
+
+  // If we can't find a next tabbable element, try to find the previous one
+  return traverseTabbableElements(false);
 }
