@@ -58,7 +58,6 @@
   ],
   "dependencies": {
     "@floating-ui/dom": "^1.0.0",
-    "@floating-ui/utils": "^0.2.0",
     "vue-demi": ">=0.13.0"
   },
   "devDependencies": {

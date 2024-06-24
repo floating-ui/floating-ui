@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.1.0",
-    "@floating-ui/utils": "^0.2.0",
+    "@floating-ui/utils": "workspace:^",
     "tabbable": "^6.0.0"
   },
   "devDependencies": {
