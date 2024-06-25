@@ -1,5 +1,15 @@
 # @floating-ui/dom
 
+## 1.6.6
+
+### Patch Changes
+
+- fix(getContainingBlock): detect top layer elements
+- fix(types): add optional `getClientRects()` method to `VirtualElement`
+- chore: fix internal deps
+- refactor: improve types and internal codebase consistency. All documented types are now exported.
+- Update dependencies: `@floating-ui/utils@0.2.3`
+
 ## 1.6.5
 
 ### Patch Changes

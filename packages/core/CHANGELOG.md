@@ -1,5 +1,14 @@
 # @floating-ui/core
 
+## 1.6.3
+
+### Patch Changes
+
+- fix(flip): adjust `bestFit` algorithm to only use `initialPlacement` or `y` side axis with `fallbackAxisSideDirection`
+- chore: fix internal deps
+- refactor: improve types and internal codebase consistency. All documented types are now exported.
+- Update dependencies: `@floating-ui/utils@0.2.3`
+
 ## 1.6.2
 
 ### Patch Changes
