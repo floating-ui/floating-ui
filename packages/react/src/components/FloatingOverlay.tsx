@@ -44,10 +44,8 @@ export const FloatingOverlay = React.forwardRef(function FloatingOverlay(
       window.innerWidth - document.documentElement.clientWidth;
     const scrollX = bodyStyle.left
       ? parseFloat(bodyStyle.left)
-      : window.pageXOffset;
-    const scrollY = bodyStyle.top
-      ? parseFloat(bodyStyle.top)
-      : window.pageYOffset;
+      : window.scrollX;
+    const scrollY = bodyStyle.top ? parseFloat(bodyStyle.top) : window.scrollY;
 
     bodyStyle.overflow = 'hidden';
 
