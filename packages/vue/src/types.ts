@@ -53,6 +53,8 @@ export type {
 
 export type MaybeReadonlyRef<T> = T | Readonly<Ref<T>>;
 
+export type MaybeReadonlyRefOrGetter<T> = MaybeReadonlyRef<T> | (() => T);
+
 export type MaybeElement<T> = T | ComponentPublicInstance | null | undefined;
 
 export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
@@ -61,28 +63,28 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
      * Represents the open/close state of the floating element.
      * @default true
      */
-    open?: MaybeReadonlyRef<boolean | undefined>;
+    open?: MaybeReadonlyRefOrGetter<boolean | undefined>;
     /**
      * Where to place the floating element relative to its reference element.
      * @default 'bottom'
      */
-    placement?: MaybeReadonlyRef<Placement | undefined>;
+    placement?: MaybeReadonlyRefOrGetter<Placement | undefined>;
     /**
      * The type of CSS position property to use.
      * @default 'absolute'
      */
-    strategy?: MaybeReadonlyRef<Strategy | undefined>;
+    strategy?: MaybeReadonlyRefOrGetter<Strategy | undefined>;
     /**
      * These are plain objects that modify the positioning coordinates in some fashion, or provide useful data for the consumer to use.
      * @default undefined
      */
-    middleware?: MaybeReadonlyRef<Middleware[] | undefined>;
+    middleware?: MaybeReadonlyRefOrGetter<Middleware[] | undefined>;
     /**
      * Whether to use `transform` instead of `top` and `left` styles to
      * position the floating element (`floatingStyles`).
      * @default true
      */
-    transform?: MaybeReadonlyRef<boolean | undefined>;
+    transform?: MaybeReadonlyRefOrGetter<boolean | undefined>;
     /**
      * Callback to handle mounting/unmounting of the elements.
      * @default undefined
@@ -142,7 +144,7 @@ export type ArrowOptions = {
    * The arrow element or template ref to be positioned.
    * @required
    */
-  element: MaybeReadonlyRef<MaybeElement<Element>>;
+  element: MaybeReadonlyRefOrGetter<MaybeElement<Element>>;
   /**
    * The padding between the arrow element and the floating element edges. Useful when the floating element has rounded corners.
    * @default 0

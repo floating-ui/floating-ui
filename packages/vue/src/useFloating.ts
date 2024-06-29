@@ -12,8 +12,8 @@ import {
   ref,
   shallowReadonly,
   shallowRef,
-  unref,
   watch,
+  toValue,
 } from 'vue-demi';
 
 import type {
@@ -38,11 +38,15 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   options: UseFloatingOptions<T> = {},
 ): UseFloatingReturn {
   const whileElementsMountedOption = options.whileElementsMounted;
-  const openOption = computed(() => unref(options.open) ?? true);
-  const middlewareOption = computed(() => unref(options.middleware));
-  const placementOption = computed(() => unref(options.placement) ?? 'bottom');
-  const strategyOption = computed(() => unref(options.strategy) ?? 'absolute');
-  const transformOption = computed(() => unref(options.transform) ?? true);
+  const openOption = computed(() => toValue(options.open) ?? true);
+  const middlewareOption = computed(() => toValue(options.middleware));
+  const placementOption = computed(
+    () => toValue(options.placement) ?? 'bottom',
+  );
+  const strategyOption = computed(
+    () => toValue(options.strategy) ?? 'absolute',
+  );
+  const transformOption = computed(() => toValue(options.transform) ?? true);
   const referenceElement = computed(() => unwrapElement(reference.value));
   const floatingElement = computed(() => unwrapElement(floating.value));
   const x = ref(0);

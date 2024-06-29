@@ -141,12 +141,137 @@ describe('useFloating', () => {
     });
   });
 
+  test('updates floating coords when placement is a getter function', async () => {
+    const App = defineComponent({
+      name: 'App',
+      props: ['placement'],
+      setup(props: {placement?: Placement}) {
+        return setup({
+          placement: () => props.placement,
+          middleware: [offset(5)],
+        });
+      },
+      template: /* HTML */ `
+        <div ref="reference" />
+        <div ref="floating" />
+        <div data-testid="x">{{x}}</div>
+        <div data-testid="y">{{y}}</div>
+      `,
+    });
+
+    const {rerender, getByTestId} = render(App, {
+      props: {placement: 'bottom'},
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('x').textContent).toBe('0');
+      expect(getByTestId('y').textContent).toBe('5');
+    });
+
+    await rerender({placement: 'right'});
+
+    await waitFor(() => {
+      expect(getByTestId('x').textContent).toBe('5');
+      expect(getByTestId('y').textContent).toBe('0');
+    });
+  });
+
+  test('updates floating coords when middleware is a getter function', async () => {
+    const App = defineComponent({
+      name: 'App',
+      props: ['middleware'],
+      setup(props) {
+        return setup({middleware: () => props.middleware});
+      },
+      template: /* HTML */ `
+        <div ref="reference" />
+        <div ref="floating" />
+        <div data-testid="x">{{x}}</div>
+        <div data-testid="y">{{y}}</div>
+      `,
+    });
+
+    const {rerender, getByTestId} = render(App, {
+      props: {middleware: []},
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('x').textContent).toBe('0');
+      expect(getByTestId('y').textContent).toBe('0');
+    });
+
+    await rerender({middleware: [offset(10)]});
+
+    await waitFor(() => {
+      expect(getByTestId('x').textContent).toBe('0');
+      expect(getByTestId('y').textContent).toBe('10');
+    });
+  });
+
+  test('updates floating position when strategy is a getter function', async () => {
+    const App = defineComponent({
+      name: 'App',
+      props: ['strategy'],
+      setup(props: {strategy?: Strategy}) {
+        return setup({strategy: () => props.strategy});
+      },
+      template: /* HTML */ `
+        <div ref="reference" />
+        <div ref="floating" />
+        <div data-testid="position">{{strategy}}</div>
+      `,
+    });
+
+    const {rerender, getByTestId} = render(App, {
+      props: {strategy: 'absolute'},
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('position').textContent).toBe('absolute');
+    });
+
+    await rerender({strategy: 'fixed'});
+
+    await waitFor(() => {
+      expect(getByTestId('position').textContent).toBe('fixed');
+    });
+  });
+
   test('resets `isPositioned` on open change', async () => {
     const App = defineComponent({
       name: 'App',
       props: ['open'],
       setup(props: {open?: boolean}) {
         return setup({open: toRef(props, 'open')});
+      },
+      template: /* HTML */ `
+        <div ref="reference" />
+        <div ref="floating" />
+        <div data-testid="isPositioned">{{isPositioned}}</div>
+      `,
+    });
+
+    const {rerender, getByTestId} = render(App, {
+      props: {open: true},
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('isPositioned').textContent).toBe('true');
+    });
+
+    await rerender({open: false});
+
+    await waitFor(() => {
+      expect(getByTestId('isPositioned').textContent).toBe('false');
+    });
+  });
+
+  test('resets `isPositioned` on open change and open is a getter function', async () => {
+    const App = defineComponent({
+      name: 'App',
+      props: ['open'],
+      setup(props: {open?: boolean}) {
+        return setup({open: () => props.open});
       },
       template: /* HTML */ `
         <div ref="reference" />
