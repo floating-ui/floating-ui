@@ -17,6 +17,34 @@ The following browsers are supported (defined by `browserslist`):
 - iOS >= 12.0
 - Opera >= 53
 
+## Keeping Floating UI up to date
+
+Floating UI uses internal first-party dependencies (under the
+`@floating-ui` org) that may be out of date, but contain bug
+fixes you may need.
+
+Only certain packages are kept to the latest versions to avoid
+bumping dependant packages too frequently and to ensure wider
+version support. To upgrade these transitive packages, install
+them directly, which will update your lockfile, then uninstall
+them again so they aren't in your `package.json#dependencies`.
+
+For all packages, `@floating-ui/core` should be updated manually:
+
+```bash
+npm install @floating-ui/core@latest
+npm uninstall @floating-ui/core
+```
+
+For `@floating-ui/react`, `@floating-ui/react-dom`, or
+`@floating-ui/vue`, `@floating-ui/dom` should also be updated
+manually:
+
+```bash
+npm install @floating-ui/dom@latest
+npm uninstall @floating-ui/dom
+```
+
 ## Subpixel and accelerated positioning
 
 Instead of `top{:.key}` and `left{:.key}` as shown throughout the
