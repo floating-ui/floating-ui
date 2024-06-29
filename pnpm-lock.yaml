@@ -224,8 +224,8 @@ importers:
   packages/dom:
     dependencies:
       '@floating-ui/core':
-        specifier: ^1.0.0
-        version: 1.5.2
+        specifier: ^1.6.0
+        version: 1.6.3
       '@floating-ui/utils':
         specifier: workspace:^
         version: link:../utils
@@ -1704,6 +1704,9 @@ packages:
   '@floating-ui/core@1.5.2':
     resolution: {integrity: sha512-Ii3MrfY/GAIN3OhXNzpCKaLxHQfJF9qvwq/kEJYdqDxeIHa01K8sldugal6TmeeXl+WMvhv9cnVzUTaFFJF09A==}
 
+  '@floating-ui/core@1.6.3':
+    resolution: {integrity: sha512-1ZpCvYf788/ZXOhRQGFxnYQOVgeU+pi0i+d0Ow34La7qjIXETi6RNswGVKkA6KcDO8/+Ysu2E/CeUmmeEBDvTg==}
+
   '@floating-ui/devtools@0.0.4':
     resolution: {integrity: sha512-lSlvB45PgGS+YmGtOPseYBLwa+u+wPsZ+g/bT5kgzK2zLAKR5m9L5hS3b/OFZhrFWwehRf73RRSZ/WXg4r5WMw==}
     peerDependencies:
@@ -1720,6 +1723,9 @@ packages:
 
   '@floating-ui/utils@0.1.6':
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
+
+  '@floating-ui/utils@0.2.3':
+    resolution: {integrity: sha512-XGndio0l5/Gvd6CLIABvsav9HHezgDFFhDfHk1bvLfr9ni8dojqLSvBbotJEjmIwNHL7vK4QzBJTdBRoB+c1ww==}
 
   '@fluentui/keyboard-keys@9.0.7':
     resolution: {integrity: sha512-vaQ+lOveQTdoXJYqDQXWb30udSfTVcIuKk1rV0X0eGAgcHeSDeP1HxMy+OgHOQZH3OiBH4ZYeWxb+tmfiDiygQ==}
@@ -10730,13 +10736,17 @@ snapshots:
     dependencies:
       '@floating-ui/utils': 0.1.6
 
+  '@floating-ui/core@1.6.3':
+    dependencies:
+      '@floating-ui/utils': 0.2.3
+
   '@floating-ui/devtools@0.0.4(@floating-ui/dom@1.5.3)':
     dependencies:
       '@floating-ui/dom': 1.5.3
 
   '@floating-ui/dom@1.5.3':
     dependencies:
-      '@floating-ui/core': 1.5.2
+      '@floating-ui/core': 1.6.3
       '@floating-ui/utils': 0.1.6
 
   '@floating-ui/react-dom@2.0.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
@@ -10746,6 +10756,8 @@ snapshots:
       react-dom: 17.0.2(react@17.0.2)
 
   '@floating-ui/utils@0.1.6': {}
+
+  '@floating-ui/utils@0.2.3': {}
 
   '@fluentui/keyboard-keys@9.0.7':
     dependencies:
