@@ -21,13 +21,17 @@ The following browsers are supported (defined by `browserslist`):
 
 Floating UI uses internal first-party dependencies (under the
 `@floating-ui` org) that may be out of date, but contain bug
-fixes you may need.
+fixes you may need. You may also be using Floating UI itself as a
+transitive package of a different library.
 
 Only certain packages are kept to the latest versions to avoid
 bumping dependant packages too frequently and to ensure wider
-version support. To upgrade these transitive packages, install
-them directly, which will update your lockfile, then uninstall
-them again so they aren't in your `package.json#dependencies`.
+version support.
+
+To upgrade Floating UI as a transitive package, install the
+necessary packages directly, which will update your lockfile,
+then uninstall them again so they aren't in your
+`package.json#dependencies`.
 
 For all packages, `@floating-ui/core` should be updated manually:
 
@@ -44,6 +48,9 @@ manually:
 npm install @floating-ui/dom@latest
 npm uninstall @floating-ui/dom
 ```
+
+If you're using a different library which wraps Floating UI, you
+can also do the same for the relevant package it is depending on.
 
 ## Subpixel and accelerated positioning
 
