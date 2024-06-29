@@ -13,9 +13,9 @@
     "analyze": "vite-bundle-visualizer -o dist/stats.html"
   },
   "dependencies": {
-    "@floating-ui/devtools": "workspace:*",
-    "@floating-ui/dom": "workspace:*",
-    "@floating-ui/react": "workspace:*",
+    "@floating-ui/devtools": "workspace:^",
+    "@floating-ui/dom": "workspace:^",
+    "@floating-ui/react": "workspace:^",
     "@fluentui/react-components": "^9.44.2",
     "@fluentui/react-icons": "^2.0.224",
     "react": "^17.0.2",

@@ -39,6 +39,6 @@
   },
   "devDependencies": {
     "config": "workspace:*",
-    "@floating-ui/dom": "workspace:*"
+    "@floating-ui/dom": "^1.0.0"
   }
 }
