@@ -131,8 +131,8 @@ export function getNodeScroll(element: Element | Window): {
   }
 
   return {
-    scrollLeft: element.pageXOffset,
-    scrollTop: element.pageYOffset,
+    scrollLeft: element.scrollX,
+    scrollTop: element.scrollY,
   };
 }
 
