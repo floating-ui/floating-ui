@@ -1,5 +1,15 @@
 # @floating-ui/vue
 
+## 1.1.0
+
+### Minor Changes
+
+- feat: support `MaybeReadonlyRefOrGetter` in `useFloating`
+
+### Patch Changes
+
+- Update dependencies: `@floating-ui/utils@0.2.4`
+
 ## 1.0.7
 
 ### Patch Changes
