@@ -1,7 +1,6 @@
-import type {Rect, Side} from '@floating-ui/core';
 import {contains, getTarget} from '@floating-ui/react/utils';
 import {isElement} from '@floating-ui/utils/dom';
-
+import type {Rect, Side} from './types';
 import type {HandleCloseFn} from './hooks/useHover';
 import {getChildren} from './utils/getChildren';
 
