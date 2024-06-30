@@ -1,5 +1,6 @@
 import {activeElement, contains, getDocument} from '@floating-ui/react/utils';
-import {tabbable} from 'tabbable';
+import {type FocusableElement, tabbable} from 'tabbable';
+import {createAttribute} from './createAttribute';
 
 export const getTabbableOptions = () =>
   ({
@@ -67,4 +68,43 @@ export function enableFocusInside(container: HTMLElement) {
       element.removeAttribute('tabindex');
     }
   });
+}
+
+export function getClosestTabbableElement(
+  tabbableElements: Array<FocusableElement>,
+  element: HTMLElement,
+  floating: HTMLElement,
+) {
+  const elementIndex = tabbableElements.indexOf(element);
+
+  function traverseTabbableElements(next: boolean) {
+    const attr = createAttribute('focus-guard');
+    let index = elementIndex + (next ? 1 : 0);
+    let currentElement = tabbableElements[index];
+
+    while (
+      currentElement &&
+      (!currentElement.isConnected ||
+        currentElement.hasAttribute(attr) ||
+        contains(floating, currentElement))
+    ) {
+      if (next) {
+        index++;
+      } else {
+        index--;
+      }
+      currentElement = tabbableElements[index];
+    }
+
+    return currentElement;
+  }
+
+  // First, try to find the next tabbable element
+  const next = traverseTabbableElements(true);
+  if (next) {
+    return next;
+  }
+
+  // If we can't find a next tabbable element, try to find the previous one
+  return traverseTabbableElements(false);
 }
