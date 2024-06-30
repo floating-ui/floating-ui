@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.2.4
+
+### Patch Changes
+
+- refactor: use `scrollX`/`scrollY` instead of deprecated `pageXOffset`/`pageYOffset`
+
 ## 0.2.3
 
 ### Patch Changes

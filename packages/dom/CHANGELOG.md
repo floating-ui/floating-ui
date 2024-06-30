@@ -1,5 +1,12 @@
 # @floating-ui/dom
 
+## 1.6.7
+
+### Patch Changes
+
+- chore: fix internal dependency versioning
+- Update dependencies: `@floating-ui/utils@0.2.4`
+
 ## 1.6.6
 
 ### Patch Changes

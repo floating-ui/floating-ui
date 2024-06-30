@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.26.19
+
+### Patch Changes
+
+- refactor: use `scrollX`/`scrollY` instead of deprecated `pageXOffset`/`pageYOffset`
+- chore: fix internal dependency versioning
+- Update dependencies: `@floating-ui/utils@0.2.4`
+
 ## 0.26.18
 
 ### Patch Changes
