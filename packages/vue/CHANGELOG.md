@@ -1,5 +1,11 @@
 # @floating-ui/vue
 
+## 1.1.1
+
+### Patch Changes
+
+- fix: ensure `MaybeReadonlyRefOrGetter` works in earlier versions of Vue
+
 ## 1.1.0
 
 ### Minor Changes
