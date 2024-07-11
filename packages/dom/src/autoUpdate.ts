@@ -150,10 +150,17 @@ export function autoUpdate(
         ]
       : [];
 
+  const ancestorResizeObserver =
+    typeof ResizeObserver === 'function' ? new ResizeObserver(update) : null;
   ancestors.forEach((ancestor) => {
     ancestorScroll &&
       ancestor.addEventListener('scroll', update, {passive: true});
-    ancestorResize && ancestor.addEventListener('resize', update);
+    if (ancestorResize) {
+      ancestor.addEventListener('resize', update);
+      if (ancestor instanceof Element) {
+        ancestorResizeObserver?.observe(ancestor);
+      }
+    }
   });
 
   const cleanupIo =
@@ -217,6 +224,7 @@ export function autoUpdate(
     cleanupIo?.();
     resizeObserver?.disconnect();
     resizeObserver = null;
+    ancestorResizeObserver?.disconnect();
 
     if (animationFrame) {
       cancelAnimationFrame(frameId);
