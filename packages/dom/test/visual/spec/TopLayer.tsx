@@ -30,16 +30,14 @@ function OuterTopLayer() {
   }, []);
 
   return (
-    <>
-      <div style={{containerType: 'inline-size'}}>
-        <dialog id="outer-dialog" ref={handleDialogRef}>
-          <button ref={refs.setReference}>My button</button>
-          <div ref={refs.setFloating} style={floatingStyles}>
-            My tooltip
-          </div>
-        </dialog>
-      </div>
-    </>
+    <div style={{containerType: 'inline-size'}}>
+      <dialog id="outer-dialog" ref={handleDialogRef}>
+        <button ref={refs.setReference}>My button</button>
+        <div ref={refs.setFloating} style={floatingStyles}>
+          My tooltip
+        </div>
+      </dialog>
+    </div>
   );
 }
 
@@ -56,20 +54,16 @@ function InnerTopLayer() {
   }, []);
 
   return (
-    <>
-      <div>
-        <dialog
-          id="inner-dialog"
-          ref={handleDialogRef}
-          style={{containerType: 'inline-size', width: 300, height: 300}}
-        >
-          <button ref={refs.setReference}>My button</button>
-          <div ref={refs.setFloating} style={floatingStyles}>
-            My tooltip
-          </div>
-        </dialog>
+    <dialog
+      id="inner-dialog"
+      ref={handleDialogRef}
+      style={{containerType: 'inline-size', width: 300, height: 300}}
+    >
+      <button ref={refs.setReference}>My button</button>
+      <div ref={refs.setFloating} style={floatingStyles}>
+        My tooltip
       </div>
-    </>
+    </dialog>
   );
 }
 
