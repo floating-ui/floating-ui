@@ -797,9 +797,6 @@ export function useListNavigation(
   ]);
 
   const reference: ElementProps['reference'] = React.useMemo(() => {
-    const disabledIndices = disabledIndicesRef.current;
-    const activeItem = listRef.current.find((item) => item?.id === activeId);
-
     function checkVirtualMouse(event: React.PointerEvent) {
       if (focusItemOnOpen === 'auto' && isVirtualClick(event.nativeEvent)) {
         focusItemOnOpenRef.current = true;
@@ -863,7 +860,7 @@ export function useListNavigation(
                 isCrossCloseKey && !isCurrentTarget
                   ? deepestNode.context?.elements.domReference
                   : isCrossOpenKey
-                    ? activeItem
+                    ? listRef.current.find((item) => item?.id === activeId)
                     : null;
 
               if (dispatchItem) {
@@ -907,7 +904,10 @@ export function useListNavigation(
             stopEvent(event);
 
             if (open) {
-              indexRef.current = getMinIndex(listRef, disabledIndices);
+              indexRef.current = getMinIndex(
+                listRef,
+                disabledIndicesRef.current,
+              );
               onNavigate(indexRef.current);
             } else {
               onOpenChange(true, event.nativeEvent, 'list-navigation');
