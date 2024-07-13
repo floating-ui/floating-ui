@@ -245,3 +245,14 @@ test('fixed inside dialog with outer containing block', async ({page}) => {
     `top-layer.dialog.outer.png`,
   );
 });
+
+test('top layer containing block with inner floating element', async ({
+  page,
+}) => {
+  await page.goto('http://localhost:1234/top-layer');
+  await click(page, '[data-testid="inner-true"]');
+
+  expect(await page.locator('#inner-dialog').screenshot()).toMatchSnapshot(
+    `top-layer.dialog.inner.png`,
+  );
+});
