@@ -30,16 +30,40 @@ function OuterTopLayer() {
   }, []);
 
   return (
-    <>
-      <div style={{containerType: 'inline-size'}}>
-        <dialog id="outer-dialog" ref={handleDialogRef}>
-          <button ref={refs.setReference}>My button</button>
-          <div ref={refs.setFloating} style={floatingStyles}>
-            My tooltip
-          </div>
-        </dialog>
+    <div style={{containerType: 'inline-size'}}>
+      <dialog id="outer-dialog" ref={handleDialogRef}>
+        <button ref={refs.setReference}>My button</button>
+        <div ref={refs.setFloating} style={floatingStyles}>
+          My tooltip
+        </div>
+      </dialog>
+    </div>
+  );
+}
+
+function InnerTopLayer() {
+  const {refs, floatingStyles} = useFloating({
+    strategy: 'fixed',
+    whileElementsMounted: autoUpdate,
+  });
+
+  const handleDialogRef = useCallback((node: HTMLDialogElement | null) => {
+    if (node) {
+      node.showModal();
+    }
+  }, []);
+
+  return (
+    <dialog
+      id="inner-dialog"
+      ref={handleDialogRef}
+      style={{containerType: 'inline-size', width: 300, height: 300}}
+    >
+      <button ref={refs.setReference}>My button</button>
+      <div ref={refs.setFloating} style={floatingStyles}>
+        My tooltip
       </div>
-    </>
+    </dialog>
   );
 }
 
@@ -174,6 +198,7 @@ export function TopLayer() {
   const [layoutStyles, setLayoutStyles] = useState(true);
   const [strategy, setStrategy] = useState<'absolute' | 'fixed'>('fixed');
   const [outer, setOuter] = useState(false);
+  const [inner, setInner] = useState(false);
 
   const {refs, floatingStyles, x, y} = useFloating({
     strategy,
@@ -222,6 +247,7 @@ export function TopLayer() {
         Top Layer
       </h1>
       {outer && <OuterTopLayer />}
+      {inner && <InnerTopLayer />}
       <Stack {...stackProps}>
         <div
           className={classes}
@@ -400,6 +426,22 @@ export function TopLayer() {
             onClick={() => setOuter(bool)}
             style={{
               backgroundColor: bool === outer ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>inner</h2>
+      <Controls>
+        {BOOLS.map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`inner-${bool}`}
+            onClick={() => setInner(bool)}
+            style={{
+              backgroundColor: bool === inner ? 'black' : '',
             }}
           >
             {String(bool)}

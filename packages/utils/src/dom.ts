@@ -92,12 +92,10 @@ export function getContainingBlock(element: Element): HTMLElement | null {
   let currentNode: Node | null = getParentNode(element);
 
   while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
-    if (isTopLayer(currentNode)) {
-      return null;
-    }
-
     if (isContainingBlock(currentNode)) {
       return currentNode;
+    } else if (isTopLayer(currentNode)) {
+      return null;
     }
 
     currentNode = getParentNode(currentNode);
