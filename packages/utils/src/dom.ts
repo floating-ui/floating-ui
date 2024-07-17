@@ -68,9 +68,11 @@ export function isTopLayer(element: Element): boolean {
   });
 }
 
-export function isContainingBlock(element: Element): boolean {
+export function isContainingBlock(element: Element): boolean;
+export function isContainingBlock(css: CSSStyleDeclaration): boolean;
+export function isContainingBlock(elementOrCss: Element | CSSStyleDeclaration): boolean {
   const webkit = isWebKit();
-  const css = getComputedStyle(element);
+  const css = isElement(elementOrCss) ? getComputedStyle(elementOrCss) : elementOrCss;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   return (
