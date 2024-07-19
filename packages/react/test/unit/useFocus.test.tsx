@@ -125,7 +125,9 @@ test('stays open when focus moves to element inside reference that is rendered i
 
   // Move focus to an element inside the reference
   const insideReference = root.getByTestId('inside-reference');
-  insideReference.focus();
+  act(() => {
+    insideReference.focus();
+  });
 
   // trigger the blur event caused by the focus move, note relatedTarget points to the shadow root here
   fireEvent.focusOut(button, {relatedTarget: container});
