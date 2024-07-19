@@ -53,12 +53,16 @@ interface MenuProps {
   label: string;
   nested?: boolean;
   children?: React.ReactNode;
+  keepMounted?: boolean;
 }
 
 export const MenuComponent = React.forwardRef<
   HTMLButtonElement,
   MenuProps & React.HTMLProps<HTMLButtonElement>
->(function Menu({children, label, ...props}, forwardedRef) {
+>(function Menu(
+  {children, label, keepMounted = false, ...props},
+  forwardedRef,
+) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [allowHover, setAllowHover] = React.useState(false);
@@ -239,7 +243,7 @@ export const MenuComponent = React.forwardRef<
         }}
       >
         <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
-          {isOpen && (
+          {(keepMounted || isOpen) && (
             <FloatingPortal>
               <FloatingFocusManager
                 context={context}
@@ -250,7 +254,15 @@ export const MenuComponent = React.forwardRef<
                 <div
                   ref={refs.setFloating}
                   className="flex flex-col rounded bg-white shadow-lg outline-none p-1 border border-slate-900/10 bg-clip-padding"
-                  style={floatingStyles}
+                  style={{
+                    ...floatingStyles,
+                    visibility: !keepMounted
+                      ? undefined
+                      : isOpen
+                        ? 'visible'
+                        : 'hidden',
+                  }}
+                  aria-hidden={!isOpen}
                   {...getFloatingProps()}
                 >
                   {children}
@@ -357,10 +369,10 @@ export const Main = () => {
           <MenuItem label="Undo" onClick={() => console.log('Undo')} />
           <MenuItem label="Redo" />
           <MenuItem label="Cut" disabled />
-          <Menu label="Copy as">
+          <Menu label="Copy as" keepMounted>
             <MenuItem label="Text" />
             <MenuItem label="Video" />
-            <Menu label="Image">
+            <Menu label="Image" keepMounted>
               <MenuItem label=".png" />
               <MenuItem label=".jpg" />
               <MenuItem label=".svg" />
