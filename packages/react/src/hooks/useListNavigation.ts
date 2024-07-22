@@ -298,6 +298,7 @@ export function useListNavigation(
   const isPointerModalityRef = React.useRef(true);
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousMountedRef = React.useRef(!!elements.floating);
+  const previousOpenRef = React.useRef(open);
   const forceSyncFocus = React.useRef(false);
   const forceScrollIntoViewRef = React.useRef(false);
 
@@ -428,7 +429,7 @@ export function useListNavigation(
 
         // Initial sync.
         if (
-          !previousMountedRef.current &&
+          (!previousOpenRef.current || !previousMountedRef.current) &&
           focusItemOnOpenRef.current &&
           (keyRef.current != null ||
             (focusItemOnOpenRef.current === true && keyRef.current == null))
@@ -535,6 +536,10 @@ export function useListNavigation(
     if (!open) {
       keyRef.current = null;
     }
+  }, [open]);
+
+  useModernLayoutEffect(() => {
+    previousOpenRef.current = open;
   }, [open]);
 
   const hasActiveIndex = activeIndex != null;

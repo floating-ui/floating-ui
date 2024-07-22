@@ -18,6 +18,7 @@ import {Main as ComplexGrid} from '../visual/components/ComplexGrid';
 import {Main as Grid} from '../visual/components/Grid';
 import {Main as EmojiPicker} from '../visual/components/EmojiPicker';
 import {Main as ListboxFocus} from '../visual/components/ListboxFocus';
+import {Main as NestedMenu} from '../visual/components/Menu';
 
 function App(props: Omit<Partial<UseListNavigationProps>, 'listRef'>) {
   const [open, setOpen] = useState(false);
@@ -1106,4 +1107,15 @@ test('selectedIndex changing does not steal focus', async () => {
   await act(async () => {});
 
   expect(screen.getByTestId('reference')).toHaveFocus();
+});
+
+test('focus management in nested lists', async () => {
+  render(<NestedMenu />);
+  await userEvent.click(screen.getByRole('button', {name: 'Edit'}));
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowRight}');
+
+  expect(screen.getByText('Text')).toHaveFocus();
 });
