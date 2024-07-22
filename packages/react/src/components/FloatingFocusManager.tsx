@@ -24,6 +24,7 @@ import {markOthers, supportsInert} from '../utils/markOthers';
 import {
   getNextTabbable,
   getPreviousTabbable,
+  getClosestTabbableElement,
   getTabbableOptions,
   isOutsideEvent,
 } from '../utils/tabbable';
@@ -500,6 +501,7 @@ export function FloatingFocusManager(
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
     let openEvent = contextData.openEvent;
+    const domReference = refs.domReference.current;
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
@@ -561,29 +563,39 @@ export function FloatingFocusManager(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      const returnElement = getPreviouslyFocusedElement();
+      const returnContextElement = domReference || previouslyFocusedElement;
+      const tabbableElements = tabbable(
+        getDocument(returnContextElement).body,
+        getTabbableOptions(),
+      );
 
-      if (
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        returnFocusRef.current &&
-        !preventReturnFocusRef.current &&
-        isHTMLElement(returnElement) &&
-        // If the focus moved somewhere else after mount, avoid returning focus
-        // since it likely entered a different element which should be
-        // respected: https://github.com/floating-ui/floating-ui/issues/2607
-        (returnElement !== activeEl && activeEl !== doc.body
-          ? isFocusInsideFloatingTree
-          : true)
-      ) {
-        enqueueFocus(returnElement, {
-          // When dismissing nested floating elements, by the time the rAF has
-          // executed, the menus will all have been unmounted. When they try
-          // to get focused, the calls get ignored — leaving the root
-          // reference focused as desired.
-          cancelPrevious: false,
-          preventScroll: preventReturnFocusScroll,
-        });
-      }
+      // Wait for the return element to get potentially disconnected before
+      // checking.
+      queueMicrotask(() => {
+        let returnElement = getPreviouslyFocusedElement();
+        if (!returnElement && isHTMLElement(returnContextElement) && floating) {
+          returnElement = getClosestTabbableElement(
+            tabbableElements,
+            returnContextElement,
+            floating,
+          );
+        }
+
+        if (
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          returnFocusRef.current &&
+          !preventReturnFocusRef.current &&
+          isHTMLElement(returnElement) &&
+          // If the focus moved somewhere else after mount, avoid returning focus
+          // since it likely entered a different element which should be
+          // respected: https://github.com/floating-ui/floating-ui/issues/2607
+          (returnElement !== activeEl && activeEl !== doc.body
+            ? isFocusInsideFloatingTree
+            : true)
+        ) {
+          returnElement.focus({preventScroll: preventReturnFocusScroll});
+        }
+      });
     };
   }, [
     disabled,
