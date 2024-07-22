@@ -1,5 +1,15 @@
 # @floating-ui/react
 
+## 0.26.20
+
+### Patch Changes
+
+- fix: wrap `focus` call in `act` in `useFocus` tests
+- fix: focus always mounted nested lists with listNavigation
+- fix(FloatingFocusManager): return focus to next tabbable after reference element if removed after floating element opens without other previously focused elements to use
+- fix(useListNavigation): avoid reading ref in render
+- Update dependencies: `@floating-ui/utils@0.2.5`
+
 ## 0.26.19
 
 ### Patch Changes
