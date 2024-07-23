@@ -1,5 +1,5 @@
 {
-  "name": "@floating-ui/utils",
+  "name": "@gathertown/floating-ui-utils",
   "version": "0.2.5",
   "description": "Utilities for Floating UI",
   "publishConfig": {

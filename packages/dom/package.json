@@ -1,5 +1,5 @@
 {
-  "name": "@floating-ui/dom",
+  "name": "@gathertown/floating-ui-dom",
   "version": "1.6.8",
   "description": "Floating UI for the web",
   "publishConfig": {

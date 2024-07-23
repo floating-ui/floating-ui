@@ -1,5 +1,5 @@
 {
-  "name": "@floating-ui/react-native",
+  "name": "@gathertown/floating-ui-react-native",
   "version": "0.10.6",
   "description": "Floating UI for React Native",
   "publishConfig": {

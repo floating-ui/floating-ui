@@ -1,5 +1,5 @@
 {
-  "name": "@floating-ui/core",
+  "name": "@gathertown/floating-ui-core",
   "version": "1.6.5",
   "description": "Positioning library for floating elements: tooltips, popovers, dropdowns, and more",
   "publishConfig": {
