@@ -178,12 +178,13 @@ export function getOverflowAncestors(
   const win = getWindow(scrollableAncestor);
 
   if (isBody) {
+    const frameElement = getFrameElement(win);
     return list.concat(
       win,
       win.visualViewport || [],
       isOverflowElement(scrollableAncestor) ? scrollableAncestor : [],
-      win.frameElement && traverseIframes
-        ? getOverflowAncestors(win.frameElement)
+      frameElement && traverseIframes
+        ? getOverflowAncestors(frameElement)
         : [],
     );
   }
@@ -192,4 +193,16 @@ export function getOverflowAncestors(
     scrollableAncestor,
     getOverflowAncestors(scrollableAncestor, [], traverseIframes),
   );
+}
+
+export function getFrameElement(frame: Window): Element | null {
+  return Object.getPrototypeOf(frame.parent) ? frame.frameElement : null;
+}
+
+export function getParentWindow(frame: Window): Window | null {
+  return getFrameElement(frame) ? frame.parent : null;
+}
+
+export function hasAccessToParentWindow(frame: Window): boolean {
+  return !!Object.getPrototypeOf(frame.parent);
 }
