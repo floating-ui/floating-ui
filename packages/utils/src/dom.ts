@@ -198,11 +198,3 @@ export function getOverflowAncestors(
 export function getFrameElement(win: Window): Element | null {
   return Object.getPrototypeOf(win.parent) ? win.frameElement : null;
 }
-
-export function getParentWindow(win: Window): Window | null {
-  return getFrameElement(win) ? win.parent : null;
-}
-
-export function hasAccessToParentWindow(win: Window): boolean {
-  return !!Object.getPrototypeOf(win.parent);
-}
