@@ -195,14 +195,14 @@ export function getOverflowAncestors(
   );
 }
 
-export function getFrameElement(frame: Window): Element | null {
-  return Object.getPrototypeOf(frame.parent) ? frame.frameElement : null;
+export function getFrameElement(win: Window): Element | null {
+  return Object.getPrototypeOf(win.parent) ? win.frameElement : null;
 }
 
-export function getParentWindow(frame: Window): Window | null {
-  return getFrameElement(frame) ? frame.parent : null;
+export function getParentWindow(win: Window): Window | null {
+  return getFrameElement(win) ? win.parent : null;
 }
 
-export function hasAccessToParentWindow(frame: Window): boolean {
-  return !!Object.getPrototypeOf(frame.parent);
+export function hasAccessToParentWindow(win: Window): boolean {
+  return !!Object.getPrototypeOf(win.parent);
 }
