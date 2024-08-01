@@ -8,6 +8,7 @@ import {isElement} from '../platform/isElement';
 import {getVisualOffsets, shouldAddVisualOffsets} from './getVisualOffsets';
 import {unwrapElement} from './unwrapElement';
 import type {VirtualElement} from '../types';
+import { getFrameElement } from '@floating-ui/utils/dom';
 
 export function getBoundingClientRect(
   element: Element | VirtualElement,
@@ -50,7 +51,7 @@ export function getBoundingClientRect(
         : offsetParent;
 
     let currentWin = win;
-    let currentIFrame = currentWin.frameElement;
+    let currentIFrame = getFrameElement(currentWin);
     while (currentIFrame && offsetParent && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
@@ -72,7 +73,7 @@ export function getBoundingClientRect(
       y += top;
 
       currentWin = getWindow(currentIFrame);
-      currentIFrame = currentWin.frameElement;
+      currentIFrame = getFrameElement(currentWin);
     }
   }
 
