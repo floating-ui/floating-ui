@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.2.6
+
+### Patch Changes
+
+- fix: test if `frameElement` is readable to avoid errors in Safari and MSEdge with cross-origin iframes
+
 ## 0.2.5
 
 ### Patch Changes
