@@ -1,4 +1,6 @@
-import type {Placement} from '@floating-ui/react';
+import type { Middleware, Placement} from '@floating-ui/react';
+import {hide} from '@floating-ui/react';
+import {autoPlacement, shift} from '@floating-ui/react';
 import {
   arrow,
   autoUpdate,
@@ -14,29 +16,33 @@ const ROUND_D =
   'M0 20C0 20 2.06906 19.9829 5.91817 15.4092C7.49986 13.5236 8.97939 12.3809 10.0002 12.3809C11.0202 12.3809 12.481 13.6451 14.0814 15.5472C17.952 20.1437 20 20 20 20H0Z';
 
 function Demo({
-  placement,
+  placement: placementProp,
   arrowProps,
   floatingStyle,
   floatingProps,
+  middleware,
+  children,
 }: {
-  placement: Placement;
-  arrowProps: Partial<React.SVGAttributes<SVGSVGElement> & FloatingArrowProps>;
+  placement?: Placement;
+  arrowProps?: Partial<React.SVGAttributes<SVGSVGElement> & FloatingArrowProps>;
   floatingStyle?: React.CSSProperties;
   floatingProps?: React.HTMLAttributes<HTMLDivElement>;
+  middleware?: Array<Middleware>;
+  children?: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
   const arrowRef = useRef<SVGSVGElement>(null);
 
-  const {floatingStyles, refs, context} = useFloating({
-    placement,
+  const {floatingStyles, placement: finalPlacement, middlewareData, refs, context} = useFloating({
+    placement: placementProp,
     open: isOpen,
     onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
-    middleware: [offset(8), arrow({element: arrowRef})],
+    middleware: [offset(8), ...(middleware ?? []), arrow({element: arrowRef})],
   });
 
-  const edgeAlignment = placement.split('-')[1];
+  const edgeAlignment = placementProp?.split('-')[1];
 
   return (
     <div>
@@ -48,7 +54,7 @@ function Demo({
           color: 'white',
         }}
       >
-        {placement}
+        {finalPlacement}
       </span>
       {isOpen && (
         <div
@@ -56,11 +62,14 @@ function Demo({
           className="bg-black text-white p-2 bg-clip-padding"
           {...floatingProps}
           style={{
+            visibility: middlewareData.hide?.referenceHidden
+              ? 'hidden'
+              : 'visible',
             ...floatingStyles,
             ...floatingStyle,
           }}
         >
-          Tooltip
+          {children ?? 'Tooltip'}
           <FloatingArrow
             context={context}
             ref={arrowRef}
@@ -181,6 +190,47 @@ export const Main = () => {
             floatingProps={{
               className: 'border border-pink-500 text-pink-500 bg-white p-2',
             }}
+          />
+        ))}
+      </div>
+      <h2 className="text-xl font-bold mb-6 mt-10">
+        Arrow with shift()
+      </h2>
+      <div className="grid grid-cols-1 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[130rem] mb-4">
+        {allPlacements.map((placement) => (
+          <Demo
+            key={placement}
+            arrowProps={{
+              fill: 'rgba(255,0,0)',
+              staticOffset: undefined,
+            }}
+            floatingStyle={{
+              zIndex: 1500,
+            }}
+            placement={placement}
+            middleware={[
+              shift(),
+              // Use hide() so the examples are not shifted onto the screen while we're not looking at this section
+              hide()
+            ]}
+          >
+            {'0123456789 '.repeat(40)}
+          </Demo>
+        ))}
+      </div>
+      <h2 className="text-xl font-bold mb-6 mt-10">
+        Arrow with autoPlacement()
+      </h2>
+      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
+        {allPlacements.map((placement) => (
+          <Demo
+            key={placement}
+            arrowProps={{
+              fill: 'rgba(255,0,0)',
+            }}
+            middleware={[
+              autoPlacement({allowedPlacements: [placement]})
+            ]}
           />
         ))}
       </div>

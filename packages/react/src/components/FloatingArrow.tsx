@@ -30,6 +30,8 @@ export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
   tipRadius?: number;
   /**
    * Forces a static offset over dynamic positioning under a certain condition.
+   * If the shift() middleware causes the popover to shift, this value will be
+   * ignored.
    */
   staticOffset?: string | number | null;
   /**
@@ -154,7 +156,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
           isVerticalSide || isCustomShape
             ? '100%'
             : `calc(100% - ${computedStrokeWidth / 2}px)`,
-        transform: `${rotation}${transform ?? ''}`,
+        transform: [rotation, transform].filter(t => !!t).join(' '),
         ...restStyle,
       }}
     >

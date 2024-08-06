@@ -152,7 +152,8 @@ default: `undefined{:js}` (use dynamic position)
 A static offset override of the arrow from the floating element
 edge. Often desirable if the floating element is smaller than the
 reference element along the relevant axis and has an edge
-alignment (`'start'{:js}`/`'end'{:js}`).
+alignment (`'start'{:js}`/`'end'{:js}`). This is ignored if the
+shift() middleware caused the floating element to shift.
 
 ```js
 <FloatingArrow
