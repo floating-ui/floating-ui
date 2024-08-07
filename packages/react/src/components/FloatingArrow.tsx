@@ -30,6 +30,8 @@ export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
   tipRadius?: number;
   /**
    * Forces a static offset over dynamic positioning under a certain condition.
+   * If the shift() middleware causes the popover to shift, this value will be
+   * ignored.
    */
   staticOffset?: string | number | null;
   /**
@@ -58,7 +60,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     context: {
       placement,
       elements: {floating},
-      middlewareData: {arrow},
+      middlewareData: {arrow, shift},
     },
     width = 14,
     height = 7,
@@ -105,14 +107,27 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const isCustomShape = !!d;
   const isVerticalSide = side === 'top' || side === 'bottom';
 
-  const yOffsetProp = staticOffset && alignment === 'end' ? 'bottom' : 'top';
-  let xOffsetProp = staticOffset && alignment === 'end' ? 'right' : 'left';
-  if (staticOffset && isRTL) {
+  // Shift the arrow back if the element was shifted from the shift() middleware.
+  let shiftTransformX = null;
+  let shiftTransformY = null;
+  if (isVerticalSide) {
+    shiftTransformX = shift?.x ? `translate(${-shift.x}px, 0)` : null;
+  } else {
+    shiftTransformY = shift?.y ? `translate(0, ${-shift.y}px)` : null;
+  }
+
+  // Determine the effective static offset. The provided static offset will be
+  // ignored if the popover needed to be shifted due to the shift() middleware.
+  const effectiveStaticOffset = (staticOffset && !shiftTransformX && !shiftTransformY) ? staticOffset : undefined;
+
+  const yOffsetProp = effectiveStaticOffset && alignment === 'end' ? 'bottom' : 'top';
+  let xOffsetProp = effectiveStaticOffset && alignment === 'end' ? 'right' : 'left';
+  if (effectiveStaticOffset && isRTL) {
     xOffsetProp = alignment === 'end' ? 'left' : 'right';
   }
 
-  const arrowX = arrow?.x != null ? staticOffset || arrow.x : '';
-  const arrowY = arrow?.y != null ? staticOffset || arrow.y : '';
+  const arrowX = arrow?.x != null && side !== 'right' ? effectiveStaticOffset || arrow.x : '';
+  const arrowY = arrow?.y != null && side !== 'bottom' ? effectiveStaticOffset || arrow.y : '';
 
   const dValue =
     d ||
@@ -146,7 +161,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
           isVerticalSide || isCustomShape
             ? '100%'
             : `calc(100% - ${computedStrokeWidth / 2}px)`,
-        transform: `${rotation}${transform ?? ''}`,
+        transform: [shiftTransformX, shiftTransformY, rotation, transform].filter(t => !!t).join(' '),
         ...restStyle,
       }}
     >
