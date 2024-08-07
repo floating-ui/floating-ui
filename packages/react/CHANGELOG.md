@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.26.22
+
+### Patch Changes
+
+- Update dependencies: `@floating-ui/utils@0.2.7`
+
 ## 0.26.21
 
 ### Patch Changes
