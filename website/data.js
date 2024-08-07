@@ -40,6 +40,14 @@ export const SPONSORS = [
     url: 'https://dopt.com/?utm_source=floating_ui_website',
     MemberId: 483438,
   },
+  {
+    title: 'Route4Me',
+    description:
+      'Best Route Planning and Route Optimization Software',
+    image: '/sponsors/route4me.jpg',
+    url: 'https://route4me.com/?utm_source=floating_ui_website',
+    MemberId: 590152,
+  },
 ];
 
 // https://opencollective.com/floating-ui/tiers/mini-sponsor/all.json
