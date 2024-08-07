@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.2.7
+
+### Patch Changes
+
+- fix(getFrameElement): ensure `win.parent` is an object
+
 ## 0.2.6
 
 ### Patch Changes
