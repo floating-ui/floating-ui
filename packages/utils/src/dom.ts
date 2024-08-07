@@ -68,9 +68,13 @@ export function isTopLayer(element: Element): boolean {
   });
 }
 
-export function isContainingBlock(elementOrCss: Element | CSSStyleDeclaration): boolean {
+export function isContainingBlock(
+  elementOrCss: Element | CSSStyleDeclaration,
+): boolean {
   const webkit = isWebKit();
-  const css = isElement(elementOrCss) ? getComputedStyle(elementOrCss) : elementOrCss;
+  const css = isElement(elementOrCss)
+    ? getComputedStyle(elementOrCss)
+    : elementOrCss;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   return (
@@ -183,9 +187,7 @@ export function getOverflowAncestors(
       win,
       win.visualViewport || [],
       isOverflowElement(scrollableAncestor) ? scrollableAncestor : [],
-      frameElement && traverseIframes
-        ? getOverflowAncestors(frameElement)
-        : [],
+      frameElement && traverseIframes ? getOverflowAncestors(frameElement) : [],
     );
   }
 
@@ -196,5 +198,7 @@ export function getOverflowAncestors(
 }
 
 export function getFrameElement(win: Window): Element | null {
-  return Object.getPrototypeOf(win.parent) ? win.frameElement : null;
+  return win.parent && Object.getPrototypeOf(win.parent)
+    ? win.frameElement
+    : null;
 }
