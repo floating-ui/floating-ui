@@ -156,7 +156,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const floatingStyles = React.useMemo(() => {
     const initialStyles = {
       position: strategy,
-      left: 0,
+      insetInlineStart: 0,
       top: 0,
     };
 
@@ -177,7 +177,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
     return {
       position: strategy,
-      left: x,
+      insetInlineStart: x,
       top: y,
     };
   }, [strategy, transform, elements.floating, data.x, data.y]);
