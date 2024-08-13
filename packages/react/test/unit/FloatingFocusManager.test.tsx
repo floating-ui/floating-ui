@@ -883,6 +883,75 @@ describe('disabled', () => {
     await act(async () => {});
     expect(screen.getByTestId('floating')).toHaveFocus();
   });
+
+  test('supports keepMounted behavior', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const click = useClick(context);
+      const dismiss = useDismiss(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([
+        click,
+        dismiss,
+      ]);
+
+      return (
+        <>
+          <button
+            data-testid="reference"
+            ref={refs.setReference}
+            {...getReferenceProps()}
+          />
+          <FloatingFocusManager
+            context={context}
+            disabled={!isOpen}
+            modal={false}
+          >
+            <div
+              ref={refs.setFloating}
+              data-testid="floating"
+              {...getFloatingProps()}
+            >
+              <button data-testid="child" />
+            </div>
+          </FloatingFocusManager>
+          <button data-testid="after" />
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await act(async () => {});
+
+    expect(screen.getByTestId('floating')).not.toHaveFocus();
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await act(async () => {});
+
+    expect(screen.getByTestId('child')).toHaveFocus();
+
+    await userEvent.tab();
+
+    expect(screen.getByTestId('after')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    expect(screen.getByTestId('child')).toHaveFocus();
+
+    await userEvent.keyboard('{Escape}');
+
+    expect(screen.getByTestId('reference')).toHaveFocus();
+  });
 });
 
 describe('order', () => {
