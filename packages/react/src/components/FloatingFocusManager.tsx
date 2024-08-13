@@ -237,6 +237,10 @@ export function FloatingFocusManager(
   });
 
   React.useEffect(() => {
+    preventReturnFocusRef.current = false;
+  }, [disabled]);
+
+  React.useEffect(() => {
     if (disabled) return;
     if (!modal) return;
 
