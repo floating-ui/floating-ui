@@ -32,6 +32,7 @@ import {usePortalContext} from './FloatingPortal';
 import {useFloatingTree} from './FloatingTree';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 import {useEffectEvent} from '../hooks/utils/useEffectEvent';
+import {getRootFocusNode} from '../utils/getRootFocusNode';
 
 const LIST_LIMIT = 20;
 let previouslyFocusedElements: Element[] = [];
@@ -205,11 +206,7 @@ export function FloatingFocusManager(
   const tabbableIndexRef = React.useRef(-1);
 
   const isInsidePortal = portalContext != null;
-  const firstElementChild = floating?.firstElementChild;
-  // If the floating element is acting as a positioning wrapper rather than the
-  // element that receives aria props, use it as the focus root instead.
-  const floatingFocusNode =
-    firstElementChild?.id === floatingId ? firstElementChild : floating;
+  const floatingFocusNode = getRootFocusNode(floating, floatingId);
 
   const getTabbableContent = useEffectEvent(
     (container: Element | null = floatingFocusNode) => {

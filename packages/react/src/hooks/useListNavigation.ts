@@ -38,6 +38,7 @@ import {getDeepestNode} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 import {warn} from '../utils/log';
+import {getRootFocusNode} from '../utils/getRootFocusNode';
 
 let isPreventScrollSupported = false;
 
@@ -244,7 +245,7 @@ export function useListNavigation(
   context: FloatingRootContext,
   props: UseListNavigationProps,
 ): ElementProps {
-  const {open, onOpenChange, elements} = context;
+  const {open, onOpenChange, elements, floatingId} = context;
   const {
     listRef,
     activeIndex,
@@ -286,6 +287,9 @@ export function useListNavigation(
       );
     }
   }
+
+  const floatingFocusNode = getRootFocusNode(elements.floating, floatingId);
+  const floatingFocusNodeRef = useLatestRef(floatingFocusNode);
 
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
@@ -572,7 +576,7 @@ export function useListNavigation(
           onNavigate(null);
 
           if (!virtual) {
-            enqueueFocus(floatingRef.current, {preventScroll: true});
+            enqueueFocus(floatingFocusNodeRef.current, {preventScroll: true});
           }
         },
       }),
@@ -581,7 +585,7 @@ export function useListNavigation(
     return props;
   }, [
     open,
-    floatingRef,
+    floatingFocusNodeRef,
     focusItem,
     focusItemOnHover,
     listRef,
@@ -596,7 +600,10 @@ export function useListNavigation(
     // If the floating element is animating out, ignore navigation. Otherwise,
     // the `activeIndex` gets set to 0 despite not being open so the next time
     // the user ArrowDowns, the first item won't be focused.
-    if (!latestOpenRef.current && event.currentTarget === floatingRef.current) {
+    if (
+      !latestOpenRef.current &&
+      event.currentTarget === floatingFocusNodeRef.current
+    ) {
       return;
     }
 
