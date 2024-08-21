@@ -377,7 +377,6 @@ export function useHover(
       if (isElement(elements.domReference) && floatingEl) {
         const body = getDocument(elements.floating).body;
         body.setAttribute(safePolygonIdentifier, '');
-        body.style.pointerEvents = 'none';
 
         const ref = elements.domReference as unknown as
           | HTMLElement
@@ -391,10 +390,12 @@ export function useHover(
           parentFloating.style.pointerEvents = '';
         }
 
+        body.style.pointerEvents = 'none';
         ref.style.pointerEvents = 'auto';
         floatingEl.style.pointerEvents = 'auto';
 
         return () => {
+          body.style.pointerEvents = '';
           ref.style.pointerEvents = '';
           floatingEl.style.pointerEvents = '';
         };
