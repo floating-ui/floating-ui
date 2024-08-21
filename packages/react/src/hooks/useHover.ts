@@ -371,13 +371,14 @@ export function useHover(
       handleCloseRef.current?.__options.blockPointerEvents &&
       isHoverOpen()
     ) {
-      const body = getDocument(elements.floating).body;
-      body.setAttribute(safePolygonIdentifier, '');
-      body.style.pointerEvents = 'none';
       performedPointerEventsMutationRef.current = true;
       const floatingEl = elements.floating;
 
       if (isElement(elements.domReference) && floatingEl) {
+        const body = getDocument(elements.floating).body;
+        body.setAttribute(safePolygonIdentifier, '');
+        body.style.pointerEvents = 'none';
+
         const ref = elements.domReference as unknown as
           | HTMLElement
           | SVGSVGElement;
