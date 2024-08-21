@@ -385,7 +385,7 @@ export function FloatingFocusManager(
           relatedTarget !== getPreviouslyFocusedElement()
         ) {
           preventReturnFocusRef.current = true;
-          onOpenChange(false, event);
+          onOpenChange(false, event, 'floating-focus-out');
         }
       });
     }

@@ -235,8 +235,13 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
                 getNextTabbable() ||
                 focusManagerState?.refs.domReference.current;
               nextTabbable?.focus();
+
               focusManagerState?.closeOnFocusOut &&
-                focusManagerState?.onOpenChange(false, event.nativeEvent);
+                focusManagerState?.onOpenChange(
+                  false,
+                  event.nativeEvent,
+                  'floating-focus-out',
+                );
             }
           }}
         />
