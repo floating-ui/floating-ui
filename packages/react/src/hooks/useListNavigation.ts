@@ -38,6 +38,7 @@ import {getDeepestNode} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 import {warn} from '../utils/log';
+import {getFloatingFocusElement} from '../utils/getFloatingFocusElement';
 
 let isPreventScrollSupported = false;
 
@@ -287,6 +288,9 @@ export function useListNavigation(
     }
   }
 
+  const floatingFocusElement = getFloatingFocusElement(elements.floating);
+  const floatingFocusElementRef = useLatestRef(floatingFocusElement);
+
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
 
@@ -305,7 +309,6 @@ export function useListNavigation(
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
   const scrollItemIntoViewRef = useLatestRef(scrollItemIntoView);
-  const floatingRef = useLatestRef(elements.floating);
   const selectedIndexRef = useLatestRef(selectedIndex);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
@@ -572,7 +575,9 @@ export function useListNavigation(
           onNavigate(null);
 
           if (!virtual) {
-            enqueueFocus(floatingRef.current, {preventScroll: true});
+            enqueueFocus(floatingFocusElementRef.current, {
+              preventScroll: true,
+            });
           }
         },
       }),
@@ -581,7 +586,7 @@ export function useListNavigation(
     return props;
   }, [
     open,
-    floatingRef,
+    floatingFocusElementRef,
     focusItem,
     focusItemOnHover,
     listRef,
@@ -596,7 +601,10 @@ export function useListNavigation(
     // If the floating element is animating out, ignore navigation. Otherwise,
     // the `activeIndex` gets set to 0 despite not being open so the next time
     // the user ArrowDowns, the first item won't be focused.
-    if (!latestOpenRef.current && event.currentTarget === floatingRef.current) {
+    if (
+      !latestOpenRef.current &&
+      event.currentTarget === floatingFocusElementRef.current
+    ) {
       return;
     }
 
