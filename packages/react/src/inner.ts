@@ -1,5 +1,5 @@
 import {getUserAgent} from '@floating-ui/react/utils';
-import {evaluate, getPaddingObject} from '@floating-ui/utils';
+import {evaluate} from '@floating-ui/utils';
 import {detectOverflow, offset, type Derivable} from '@floating-ui/react-dom';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
