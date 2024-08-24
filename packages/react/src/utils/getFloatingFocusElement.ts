@@ -1,3 +1,5 @@
+export const FOCUSABLE_ATTRIBUTE = 'data-floating-ui-focusable';
+
 export function getFloatingFocusElement(
   floatingElement: HTMLElement | null,
 ): HTMLElement | null {
@@ -8,8 +10,8 @@ export function getFloatingFocusElement(
   // This indicates the floating element is acting as a positioning wrapper, and
   // so focus should be managed on the child element with the event handlers and
   // aria props.
-  return floatingElement.hasAttribute('data-floating-ui-focusable')
+  return floatingElement.hasAttribute(FOCUSABLE_ATTRIBUTE)
     ? floatingElement
-    : floatingElement.querySelector('[data-floating-ui-focusable]') ||
+    : floatingElement.querySelector(`[${FOCUSABLE_ATTRIBUTE}]`) ||
         floatingElement;
 }

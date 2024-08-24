@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import type {ElementProps} from '../types';
+import {FOCUSABLE_ATTRIBUTE} from '../utils/getFloatingFocusElement';
 
 const ACTIVE_KEY = 'active';
 const SELECTED_KEY = 'selected';
@@ -27,7 +28,7 @@ function mergeProps<Key extends keyof ElementProps>(
   return {
     ...(elementKey === 'floating' && {
       tabIndex: -1,
-      'data-floating-ui-focusable': '',
+      [FOCUSABLE_ATTRIBUTE]: '',
     }),
     ...domUserProps,
     ...propsList
