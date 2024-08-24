@@ -371,13 +371,13 @@ export function useHover(
       handleCloseRef.current?.__options.blockPointerEvents &&
       isHoverOpen()
     ) {
-      const body = getDocument(elements.floating).body;
-      body.setAttribute(safePolygonIdentifier, '');
-      body.style.pointerEvents = 'none';
       performedPointerEventsMutationRef.current = true;
       const floatingEl = elements.floating;
 
       if (isElement(elements.domReference) && floatingEl) {
+        const body = getDocument(elements.floating).body;
+        body.setAttribute(safePolygonIdentifier, '');
+
         const ref = elements.domReference as unknown as
           | HTMLElement
           | SVGSVGElement;
@@ -390,10 +390,12 @@ export function useHover(
           parentFloating.style.pointerEvents = '';
         }
 
+        body.style.pointerEvents = 'none';
         ref.style.pointerEvents = 'auto';
         floatingEl.style.pointerEvents = 'auto';
 
         return () => {
+          body.style.pointerEvents = '';
           ref.style.pointerEvents = '';
           floatingEl.style.pointerEvents = '';
         };
