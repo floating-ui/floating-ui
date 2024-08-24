@@ -245,7 +245,7 @@ export function useListNavigation(
   context: FloatingRootContext,
   props: UseListNavigationProps,
 ): ElementProps {
-  const {open, onOpenChange, elements, floatingId} = context;
+  const {open, onOpenChange, elements} = context;
   const {
     listRef,
     activeIndex,
@@ -309,7 +309,6 @@ export function useListNavigation(
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
   const scrollItemIntoViewRef = useLatestRef(scrollItemIntoView);
-  const floatingRef = useLatestRef(elements.floating);
   const selectedIndexRef = useLatestRef(selectedIndex);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
