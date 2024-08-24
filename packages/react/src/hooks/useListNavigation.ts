@@ -38,7 +38,7 @@ import {getDeepestNode} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 import {warn} from '../utils/log';
-import {getRootFocusNode} from '../utils/getRootFocusNode';
+import {getFloatingFocusElement} from '../utils/getFloatingFocusElement';
 
 let isPreventScrollSupported = false;
 
@@ -288,8 +288,8 @@ export function useListNavigation(
     }
   }
 
-  const floatingFocusNode = getRootFocusNode(elements.floating, floatingId);
-  const floatingFocusNodeRef = useLatestRef(floatingFocusNode);
+  const floatingFocusElement = getFloatingFocusElement(elements.floating);
+  const floatingFocusElementRef = useLatestRef(floatingFocusElement);
 
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
@@ -576,7 +576,9 @@ export function useListNavigation(
           onNavigate(null);
 
           if (!virtual) {
-            enqueueFocus(floatingFocusNodeRef.current, {preventScroll: true});
+            enqueueFocus(floatingFocusElementRef.current, {
+              preventScroll: true,
+            });
           }
         },
       }),
@@ -585,7 +587,7 @@ export function useListNavigation(
     return props;
   }, [
     open,
-    floatingFocusNodeRef,
+    floatingFocusElementRef,
     focusItem,
     focusItemOnHover,
     listRef,
@@ -602,7 +604,7 @@ export function useListNavigation(
     // the user ArrowDowns, the first item won't be focused.
     if (
       !latestOpenRef.current &&
-      event.currentTarget === floatingFocusNodeRef.current
+      event.currentTarget === floatingFocusElementRef.current
     ) {
       return;
     }
