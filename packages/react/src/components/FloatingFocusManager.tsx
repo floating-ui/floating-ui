@@ -356,7 +356,7 @@ export function FloatingFocusManager(
           // Let `FloatingPortal` effect knows that focus is still inside the
           // floating tree.
           if (isHTMLElement(floatingFocusElement)) {
-            floatingFocusElement?.focus();
+            floatingFocusElement.focus();
           }
 
           const prevTabbableIndex = tabbableIndexRef.current;
