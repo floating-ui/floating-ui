@@ -103,6 +103,18 @@ export const inner = (
     } = state;
 
     const item = listRef.current[index];
+    const scrollEl = scrollRef?.current || floating;
+
+    // Valid combinations:
+    // 1. Floating element is the scrollRef and has a border (default)
+    // 2. Floating element is not the scrollRef, floating element has a border
+    // 3. Floating element is not the scrollRef, scrollRef has a border
+    // Floating > {...getFloatingProps()} wrapper > scrollRef > items is not
+    // allowed as VoiceOver doesn't work.
+    const clientTop = floating.clientTop || scrollEl.clientTop;
+    const floatingIsBordered = floating.clientTop !== 0;
+    const scrollElIsBordered = scrollEl.clientTop !== 0;
+    const floatingIsScrollEl = floating === scrollEl;
 
     if (__DEV__) {
       if (!state.placement.startsWith('bottom')) {
@@ -128,10 +140,11 @@ export const inner = (
       ).fn(state)),
     };
 
-    const el = scrollRef?.current || floating;
-
     const overflow = await detectOverflow(
-      getArgsWithCustomFloatingHeight(nextArgs, el.scrollHeight),
+      getArgsWithCustomFloatingHeight(
+        nextArgs,
+        scrollEl.scrollHeight + clientTop + floating.clientTop,
+      ),
       detectOverflowOptions,
     );
     const refOverflow = await detectOverflow(nextArgs, {
@@ -144,16 +157,21 @@ export const inner = (
 
     const maxHeight = Math.max(
       0,
-      el.scrollHeight - diffY - Math.max(0, overflow.bottom),
+      scrollEl.scrollHeight +
+        ((floatingIsBordered && floatingIsScrollEl) || scrollElIsBordered
+          ? clientTop * 2
+          : 0) -
+        diffY -
+        Math.max(0, overflow.bottom),
     );
 
-    el.style.maxHeight = `${maxHeight}px`;
-    el.scrollTop = diffY;
+    scrollEl.style.maxHeight = `${maxHeight}px`;
+    scrollEl.scrollTop = diffY;
 
     // There is not enough space, fallback to standard anchored positioning
     if (onFallbackChange) {
       if (
-        el.offsetHeight <
+        scrollEl.offsetHeight <
           item.offsetHeight *
             Math.min(minItemsVisible, listRef.current.length - 1) -
             1 ||
@@ -170,7 +188,7 @@ export const inner = (
       overflowRef.current = await detectOverflow(
         getArgsWithCustomFloatingHeight(
           {...nextArgs, y: nextY},
-          el.offsetHeight,
+          scrollEl.offsetHeight + clientTop + floating.clientTop,
         ),
         detectOverflowOptions,
       );
