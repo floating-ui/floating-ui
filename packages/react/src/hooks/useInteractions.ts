@@ -25,7 +25,10 @@ function mergeProps<Key extends keyof ElementProps>(
   }
 
   return {
-    ...(elementKey === 'floating' && {tabIndex: -1}),
+    ...(elementKey === 'floating' && {
+      tabIndex: -1,
+      'data-floating-ui-focusable': '',
+    }),
     ...domUserProps,
     ...propsList
       .map((value) => {
