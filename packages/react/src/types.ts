@@ -107,6 +107,7 @@ export type OpenChangeReason =
   | 'click'
   | 'hover'
   | 'focus'
+  | 'floating-focus-out'
   | 'list-navigation'
   | 'safe-polygon';
 
