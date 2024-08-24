@@ -151,6 +151,9 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
   const beforeInsideRef = React.useRef<HTMLSpanElement>(null);
   const afterInsideRef = React.useRef<HTMLSpanElement>(null);
 
+  const modal = focusManagerState?.modal;
+  const open = focusManagerState?.open;
+
   const shouldRenderGuards =
     // The FocusManager and therefore floating element are currently open/
     // rendered.
@@ -164,7 +167,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
   React.useEffect(() => {
-    if (!portalNode || !preserveTabOrder || focusManagerState?.modal) {
+    if (!portalNode || !preserveTabOrder || modal) {
       return;
     }
 
@@ -186,7 +189,14 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
       portalNode.removeEventListener('focusin', onFocus, true);
       portalNode.removeEventListener('focusout', onFocus, true);
     };
-  }, [portalNode, preserveTabOrder, focusManagerState?.modal]);
+  }, [portalNode, preserveTabOrder, modal]);
+
+  React.useEffect(() => {
+    if (!portalNode) return;
+    if (open) return;
+
+    enableFocusInside(portalNode);
+  }, [open, portalNode]);
 
   return (
     <PortalContext.Provider
