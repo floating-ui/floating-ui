@@ -2,4 +2,4 @@
 "@floating-ui/react": patch
 ---
 
-feat reason string for the closeOnFocusOut handling
+feat: add `onOpenChange` reason string for `FloatingFocusManager`'s `closeOnFocusOut` handling
