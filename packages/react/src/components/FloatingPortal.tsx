@@ -250,7 +250,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
                 focusManagerState?.onOpenChange(
                   false,
                   event.nativeEvent,
-                  'floating-focus-out',
+                  'focus-out',
                 );
             }
           }}
