@@ -58,7 +58,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     context: {
       placement,
       elements: {floating},
-      middlewareData: {arrow},
+      middlewareData: {arrow, shift},
     },
     width = 14,
     height = 7,
@@ -93,6 +93,14 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     return null;
   }
 
+  const [side, alignment] = placement.split('-') as [Side, Alignment];
+  const isVerticalSide = side === 'top' || side === 'bottom';
+
+  let computedStaticOffset = staticOffset;
+  if ((isVerticalSide && shift?.x) || (!isVerticalSide && shift?.y)) {
+    computedStaticOffset = null;
+  }
+
   // Strokes must be double the border width, this ensures the stroke's width
   // works as you'd expect.
   const computedStrokeWidth = strokeWidth * 2;
@@ -101,18 +109,18 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const svgX = (width / 2) * (tipRadius / -8 + 1);
   const svgY = ((height / 2) * tipRadius) / 4;
 
-  const [side, alignment] = placement.split('-') as [Side, Alignment];
   const isCustomShape = !!d;
-  const isVerticalSide = side === 'top' || side === 'bottom';
 
-  const yOffsetProp = staticOffset && alignment === 'end' ? 'bottom' : 'top';
-  let xOffsetProp = staticOffset && alignment === 'end' ? 'right' : 'left';
-  if (staticOffset && isRTL) {
+  const yOffsetProp =
+    computedStaticOffset && alignment === 'end' ? 'bottom' : 'top';
+  let xOffsetProp =
+    computedStaticOffset && alignment === 'end' ? 'right' : 'left';
+  if (computedStaticOffset && isRTL) {
     xOffsetProp = alignment === 'end' ? 'left' : 'right';
   }
 
-  const arrowX = arrow?.x != null ? staticOffset || arrow.x : '';
-  const arrowY = arrow?.y != null ? staticOffset || arrow.y : '';
+  const arrowX = arrow?.x != null ? computedStaticOffset || arrow.x : '';
+  const arrowY = arrow?.y != null ? computedStaticOffset || arrow.y : '';
 
   const dValue =
     d ||
