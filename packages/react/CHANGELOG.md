@@ -1,5 +1,17 @@
 # @floating-ui/react
 
+## 0.26.23
+
+### Patch Changes
+
+- feat: add `onOpenChange` reason string for `FloatingFocusManager`'s `closeOnFocusOut` handling
+- fix(inner): correctly handle borders
+- fix(FloatingArrow): ignore `staticOffset` prop if floating element is shifted. Fixes an issue where the arrow could potentially point to nothing if it was shifted enough from its reference element.
+- fix(useListNavigation, Composite): prevent `onNavigate` from potentially passing in an `undefined` value instead of `null`
+- fix(useHover): `blockPointerEvents` no longer adds `pointer-events: none` to unintended `<body>` elements.
+- fix: manage focus on element with floating props spread on it
+- fix(FloatingFocusManager): support keepMounted behavior with `disabled` prop
+
 ## 0.26.22
 
 ### Patch Changes
