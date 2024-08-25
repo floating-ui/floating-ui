@@ -658,52 +658,57 @@ export function useListNavigation(
             : foundIndex,
         -1,
       );
-      indexRef.current = cellMap[
-        getGridNavigatedIndex(
-          {
-            current: cellMap.map((itemIndex) =>
-              itemIndex != null ? listRef.current[itemIndex] : null,
-            ),
-          },
-          {
-            event,
-            orientation,
-            loop,
-            cols,
-            // treat undefined (empty grid spaces) as disabled indices so we
-            // don't end up in them
-            disabledIndices: getCellIndices(
-              [
-                ...(disabledIndices ||
-                  listRef.current.map((_, index) =>
-                    isDisabled(listRef.current, index) ? index : undefined,
-                  )),
-                undefined,
-              ],
-              cellMap,
-            ),
-            minIndex: minGridIndex,
-            maxIndex: maxGridIndex,
-            prevIndex: getCellIndexOfCorner(
-              indexRef.current > maxIndex ? minIndex : indexRef.current,
-              sizes,
-              cellMap,
-              cols,
-              // use a corner matching the edge closest to the direction
-              // we're moving in so we don't end up in the same item. Prefer
-              // top/left over bottom/right.
-              event.key === ARROW_DOWN
-                ? 'bl'
-                : event.key === ARROW_RIGHT
-                  ? 'tr'
-                  : 'tl',
-            ),
-            stopEvent: true,
-          },
-        )
-      ] as number; // navigated cell will never be nullish
 
-      onNavigate(indexRef.current);
+      const index =
+        cellMap[
+          getGridNavigatedIndex(
+            {
+              current: cellMap.map((itemIndex) =>
+                itemIndex != null ? listRef.current[itemIndex] : null,
+              ),
+            },
+            {
+              event,
+              orientation,
+              loop,
+              cols,
+              // treat undefined (empty grid spaces) as disabled indices so we
+              // don't end up in them
+              disabledIndices: getCellIndices(
+                [
+                  ...(disabledIndices ||
+                    listRef.current.map((_, index) =>
+                      isDisabled(listRef.current, index) ? index : undefined,
+                    )),
+                  undefined,
+                ],
+                cellMap,
+              ),
+              minIndex: minGridIndex,
+              maxIndex: maxGridIndex,
+              prevIndex: getCellIndexOfCorner(
+                indexRef.current > maxIndex ? minIndex : indexRef.current,
+                sizes,
+                cellMap,
+                cols,
+                // use a corner matching the edge closest to the direction
+                // we're moving in so we don't end up in the same item. Prefer
+                // top/left over bottom/right.
+                event.key === ARROW_DOWN
+                  ? 'bl'
+                  : event.key === ARROW_RIGHT
+                    ? 'tr'
+                    : 'tl',
+              ),
+              stopEvent: true,
+            },
+          )
+        ];
+
+      if (index != null) {
+        indexRef.current = index;
+        onNavigate(indexRef.current);
+      }
 
       if (orientation === 'both') {
         return;
