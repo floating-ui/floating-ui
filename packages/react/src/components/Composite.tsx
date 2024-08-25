@@ -174,49 +174,56 @@ export const Composite = React.forwardRef<
         -1,
       );
 
-      nextIndex = cellMap[
-        getGridNavigatedIndex(
-          {
-            current: cellMap.map((itemIndex) =>
-              itemIndex ? elementsRef.current[itemIndex] : null,
-            ),
-          },
-          {
-            event,
-            orientation,
-            loop,
-            cols,
-            // treat undefined (empty grid spaces) as disabled indices so we
-            // don't end up in them
-            disabledIndices: getCellIndices(
-              [
-                ...(disabledIndices ||
-                  elementsRef.current.map((_, index) =>
-                    isDisabled(elementsRef.current, index) ? index : undefined,
-                  )),
-                undefined,
-              ],
-              cellMap,
-            ),
-            minIndex: minGridIndex,
-            maxIndex: maxGridIndex,
-            prevIndex: getCellIndexOfCorner(
-              activeIndex > maxIndex ? minIndex : activeIndex,
-              sizes,
-              cellMap,
+      const maybeNextIndex =
+        cellMap[
+          getGridNavigatedIndex(
+            {
+              current: cellMap.map((itemIndex) =>
+                itemIndex ? elementsRef.current[itemIndex] : null,
+              ),
+            },
+            {
+              event,
+              orientation,
+              loop,
               cols,
-              // use a corner matching the edge closest to the direction we're
-              // moving in so we don't end up in the same item. Prefer
-              // top/left over bottom/right.
-              event.key === ARROW_DOWN
-                ? 'bl'
-                : event.key === ARROW_RIGHT
-                  ? 'tr'
-                  : 'tl',
-            ),
-          },
-        )
-      ] as number; // navigated cell will never be nullish
+              // treat undefined (empty grid spaces) as disabled indices so we
+              // don't end up in them
+              disabledIndices: getCellIndices(
+                [
+                  ...(disabledIndices ||
+                    elementsRef.current.map((_, index) =>
+                      isDisabled(elementsRef.current, index)
+                        ? index
+                        : undefined,
+                    )),
+                  undefined,
+                ],
+                cellMap,
+              ),
+              minIndex: minGridIndex,
+              maxIndex: maxGridIndex,
+              prevIndex: getCellIndexOfCorner(
+                activeIndex > maxIndex ? minIndex : activeIndex,
+                sizes,
+                cellMap,
+                cols,
+                // use a corner matching the edge closest to the direction we're
+                // moving in so we don't end up in the same item. Prefer
+                // top/left over bottom/right.
+                event.key === ARROW_DOWN
+                  ? 'bl'
+                  : event.key === ARROW_RIGHT
+                    ? 'tr'
+                    : 'tl',
+              ),
+            },
+          )
+        ];
+
+      if (maybeNextIndex != null) {
+        nextIndex = maybeNextIndex;
+      }
     }
 
     const toEndKeys = {
