@@ -183,4 +183,10 @@ export const MINI_SPONSORS = [
     url: 'https://basementfloodhelpers.com/',
     MemberId: 517657,
   },
+  {
+    logo: '/sponsors/automatio.svg',
+    label: 'Automatio - No code Web Scraping &amp; Automation.',
+    url: 'https://automatio.co/',
+    MemberId: 595794,
+  },
 ];
