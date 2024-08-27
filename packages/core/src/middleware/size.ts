@@ -82,16 +82,11 @@ export const size = (
     let availableHeight = overflowAvailableHeight;
     let availableWidth = overflowAvailableWidth;
 
-    if (isYAxis) {
-      availableWidth =
-        alignment || noShift
-          ? min(overflowAvailableWidth, maximumClippingWidth)
-          : maximumClippingWidth;
-    } else {
-      availableHeight =
-        alignment || noShift
-          ? min(overflowAvailableHeight, maximumClippingHeight)
-          : maximumClippingHeight;
+    if (state.middlewareData.shift?.enabled.x) {
+      availableWidth = maximumClippingWidth;
+    }
+    if (state.middlewareData.shift?.enabled.y) {
+      availableHeight = maximumClippingHeight;
     }
 
     if (noShift && !alignment) {
