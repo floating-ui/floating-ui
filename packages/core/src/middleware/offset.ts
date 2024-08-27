@@ -59,7 +59,11 @@ export async function convertValueToCoords(
   let {mainAxis, crossAxis, alignmentAxis} =
     typeof rawValue === 'number'
       ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}
-      : {mainAxis: 0, crossAxis: 0, alignmentAxis: null, ...rawValue};
+      : {
+          mainAxis: rawValue.mainAxis ?? 0,
+          crossAxis: rawValue.crossAxis ?? 0,
+          alignmentAxis: rawValue.alignmentAxis,
+        };
 
   if (alignment && typeof alignmentAxis === 'number') {
     crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;
