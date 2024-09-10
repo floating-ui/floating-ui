@@ -75,6 +75,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
+  const openRef = useLatestRef(open);
 
   const update = React.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
@@ -93,7 +94,14 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
     computePosition(referenceRef.current, floatingRef.current, config).then(
       (data) => {
-        const fullData = {...data, isPositioned: true};
+        const fullData = {
+          ...data,
+          // The floating element's position may be recomputed while it's closed
+          // but still mounted (such as when transitioning out). To ensure
+          // `isPositioned` will be `false` initially on the next open, avoid
+          // setting it to `true` when `open === false` (must be specified).
+          isPositioned: openRef.current !== false,
+        };
         if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
           dataRef.current = fullData;
           ReactDOM.flushSync(() => {
@@ -102,7 +110,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
         }
       },
     );
-  }, [latestMiddleware, placement, strategy, platformRef]);
+  }, [latestMiddleware, placement, strategy, platformRef, openRef]);
 
   useModernLayoutEffect(() => {
     if (open === false && dataRef.current.isPositioned) {
