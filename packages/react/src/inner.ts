@@ -1,5 +1,5 @@
 import {getUserAgent} from '@floating-ui/react/utils';
-import {evaluate} from '@floating-ui/utils';
+import {evaluate, max, min, round} from '@floating-ui/utils';
 import {detectOverflow, offset, type Derivable} from '@floating-ui/react-dom';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -152,17 +152,19 @@ export const inner = (
       elementContext: 'reference',
     });
 
-    const diffY = Math.max(0, overflow.top);
+    const diffY = max(0, overflow.top);
     const nextY = nextArgs.y + diffY;
 
-    const maxHeight = Math.max(
-      0,
-      scrollEl.scrollHeight +
-        ((floatingIsBordered && floatingIsScrollEl) || scrollElIsBordered
-          ? clientTop * 2
-          : 0) -
-        diffY -
-        Math.max(0, overflow.bottom),
+    const maxHeight = round(
+      max(
+        0,
+        scrollEl.scrollHeight +
+          ((floatingIsBordered && floatingIsScrollEl) || scrollElIsBordered
+            ? clientTop * 2
+            : 0) -
+          diffY -
+          max(0, overflow.bottom),
+      ),
     );
 
     scrollEl.style.maxHeight = `${maxHeight}px`;
@@ -170,18 +172,13 @@ export const inner = (
 
     // There is not enough space, fallback to standard anchored positioning
     if (onFallbackChange) {
-      if (
-        scrollEl.offsetHeight <
-          item.offsetHeight *
-            Math.min(minItemsVisible, listRef.current.length - 1) -
-            1 ||
+      const shouldFallback =
+        (scrollEl.scrollHeight > scrollEl.offsetHeight &&
+          scrollEl.offsetHeight < item.offsetHeight * minItemsVisible - 1) ||
         refOverflow.top >= -referenceOverflowThreshold ||
-        refOverflow.bottom >= -referenceOverflowThreshold
-      ) {
-        ReactDOM.flushSync(() => onFallbackChange(true));
-      } else {
-        ReactDOM.flushSync(() => onFallbackChange(false));
-      }
+        refOverflow.bottom >= -referenceOverflowThreshold;
+
+      ReactDOM.flushSync(() => onFallbackChange(shouldFallback));
     }
 
     if (overflowRef) {
