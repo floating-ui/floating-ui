@@ -2,6 +2,7 @@ import {expect, test} from '@playwright/test';
 
 import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
+import {resize} from './utils/resize';
 import {scroll} from './utils/scroll';
 
 allPlacements.forEach((placement) => {
@@ -96,7 +97,8 @@ test('center aligned placements can fill the whole viewport along the crossAxis 
   page,
 }) => {
   await page.goto('http://localhost:1234/size');
-  await click(page, `[data-testid="flipshift-true"]`);
+  await click(page, `[data-testid="flip-true"]`);
+  await click(page, `[data-testid="shift-before"]`);
 
   await scroll(page, {x: 325, y: 605});
 
@@ -109,8 +111,42 @@ test('edge aligned placements can fill the whole viewport along the crossAxis wi
   page,
 }) => {
   await page.goto('http://localhost:1234/size');
+  await click(page, `[data-testid="placement-bottom-start"]`);
+  await click(page, `[data-testid="shift-before"]`);
+
+  await scroll(page, {x: 620});
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `edge-aligned-shift-left-start.png`,
+  );
+
+  await resize(page, {width: 420});
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `edge-aligned-shift-left-end.png`,
+  );
+
+  await resize(page, {width: 300});
+  await scroll(page, {x: 395});
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `edge-aligned-shift-right-start.png`,
+  );
+
+  await resize(page, {width: 400});
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `edge-aligned-shift-right-end.png`,
+  );
+});
+
+test('edge aligned placements can fill the whole viewport on one side along the crossAxis when shift is after', async ({
+  page,
+}) => {
+  await page.goto('http://localhost:1234/size');
   await click(page, `[data-testid="placement-right-start"]`);
-  await click(page, `[data-testid="flipshift-true"]`);
+  await click(page, `[data-testid="flip-true"]`);
+  await click(page, `[data-testid="shift-after"]`);
 
   await scroll(page, {x: 600, y: 800});
 
@@ -158,5 +194,29 @@ test('edge aligned placements can fill the whole viewport along the crossAxis wi
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `left-start-shift.png`,
+  );
+});
+
+test('can fill the whole viewport along the main axis with shift.crossAxis', async ({
+  page,
+}) => {
+  await page.goto('http://localhost:1234/size');
+  await click(page, `[data-testid="shift-before"]`);
+  await click(page, `[data-testid="shift.crossAxis-true"]`);
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `shift-crossAxis-whole.png`,
+  );
+
+  await resize(page, {height: 170});
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `shift-crossAxis-top-start.png`,
+  );
+
+  await resize(page, {height: 300});
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `shift-crossAxis-top-end.png`,
   );
 });

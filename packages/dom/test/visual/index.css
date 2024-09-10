@@ -196,6 +196,14 @@ main {
   display: none;
 }
 
+.resize {
+  resize: both;
+  max-height: 480px;
+  max-width: 480px;
+  min-height: 120px;
+  min-width: 120px;
+}
+
 .prose {
   font-size: 1.125rem;
   color: #555;

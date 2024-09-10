@@ -91,6 +91,10 @@ export const shift = (
       data: {
         x: limitedCoords.x - x,
         y: limitedCoords.y - y,
+        enabled: {
+          [mainAxis]: checkMainAxis,
+          [crossAxis]: checkCrossAxis,
+        },
       },
     };
   },

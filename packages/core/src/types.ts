@@ -1,4 +1,5 @@
 import type {
+  Axis,
   ClientRectObject,
   Coords,
   Dimensions,
@@ -77,7 +78,9 @@ export interface MiddlewareData {
     escapedOffsets?: SideObject;
   };
   offset?: Coords & {placement: Placement};
-  shift?: Coords;
+  shift?: Coords & {
+    enabled: {[key in Axis]: boolean};
+  };
 }
 
 export interface ComputePositionConfig {
