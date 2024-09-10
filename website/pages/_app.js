@@ -3,7 +3,7 @@ import '@docsearch/css';
 import '../assets/reach-skip-nav.css';
 import '../assets/global.css';
 
-import localFont from 'next/font/local';
+import {Figtree} from 'next/font/google';
 import {useRouter} from 'next/router';
 import {
   createContext,
@@ -17,9 +17,9 @@ import {flushSync} from 'react-dom';
 import Layout from '../lib/components/Layout';
 import {useLocalStorage} from '../lib/hooks/useLocalStorage';
 
-const VariableFont = localFont({
-  src: '../assets/Satoshi-Variable.ttf',
+const VariableFont = Figtree({
   variable: '--font-variable',
+  subsets: ['latin'],
 });
 
 const AppContext = createContext({});
