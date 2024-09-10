@@ -60,8 +60,8 @@ export async function convertValueToCoords(
     typeof rawValue === 'number'
       ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}
       : {
-          mainAxis: rawValue.mainAxis ?? 0,
-          crossAxis: rawValue.crossAxis ?? 0,
+          mainAxis: rawValue.mainAxis || 0,
+          crossAxis: rawValue.crossAxis || 0,
           alignmentAxis: rawValue.alignmentAxis,
         };
 
