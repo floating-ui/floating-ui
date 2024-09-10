@@ -121,8 +121,8 @@ computePosition(referenceEl, floatingEl, {
       apply({availableWidth, availableHeight, elements}) {
         // Change styles, e.g.
         Object.assign(elements.floating.style, {
-          maxWidth: `${availableWidth}px`,
-          maxHeight: `${availableHeight}px`,
+          maxWidth: `${Math.max(0, availableWidth)}px`,
+          maxHeight: `${Math.max(0, availableHeight)}px`,
         });
       },
     }),
@@ -141,8 +141,8 @@ useFloating(reference, floating, {
       apply({availableWidth, availableHeight, elements}) {
         // Change styles, e.g.
         Object.assign(elements.floating.style, {
-          maxWidth: `${availableWidth}px`,
-          maxHeight: `${availableHeight}px`,
+          maxWidth: `${Math.max(0, availableWidth)}px`,
+          maxHeight: `${Math.max(0, availableHeight)}px`,
         });
       },
     }),
@@ -241,6 +241,10 @@ overflow its clipping context. You'll generally set this as the
 Represents how tall the floating element can be before it will
 overflow its clipping context. You'll generally set this as the
 `maxHeight{:.key}` CSS property.
+
+<Notice>
+  Both properties can be negative. When applying max styles, you should clamp them above `0{:js}`.
+</Notice>
 
 #### ...middlewareState
 
@@ -363,8 +367,25 @@ passed in:
 size({
   apply({rects, elements}) {
     Object.assign(elements.floating.style, {
-      width: `${rects.reference.width}px`,
+      minWidth: `${rects.reference.width}px`,
     });
   },
 });
+```
+
+## Troubleshooting
+
+### `maxHeight` style left on floating element
+
+Leaving the `maxHeight` style on the floating element can cause
+issues in certain situations where it can and should expand more.
+By removing the style inside the `apply{:.function}` function
+when the `scrollHeight` is less than the `availableHeight`, you
+can prevent this:
+
+```js
+elements.floating.style.maxHeight =
+  availableHeight >= elements.floating.scrollHeight
+    ? ''
+    : `${availableHeight}px`;
 ```
