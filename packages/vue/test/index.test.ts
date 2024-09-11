@@ -237,6 +237,35 @@ describe('useFloating', () => {
     });
   });
 
+  test('updates `isPositioned` on open change', async () => {
+    const App = defineComponent({
+      name: 'App',
+      props: ['open'],
+      setup(props: {open?: boolean}) {
+        return setup({open: toRef(props, 'open')});
+      },
+      template: /* HTML */ `
+        <div ref="reference" />
+        <div ref="floating" />
+        <div data-testid="isPositioned">{{isPositioned}}</div>
+      `,
+    });
+
+    const {rerender, getByTestId} = render(App, {
+      props: {open: false},
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('isPositioned').textContent).toBe('false');
+    });
+
+    await rerender({open: true});
+
+    await waitFor(() => {
+      expect(getByTestId('isPositioned').textContent).toBe('true');
+    });
+  });
+
   test('resets `isPositioned` on open change', async () => {
     const App = defineComponent({
       name: 'App',
@@ -291,6 +320,41 @@ describe('useFloating', () => {
     await rerender({open: false});
 
     await waitFor(() => {
+      expect(getByTestId('isPositioned').textContent).toBe('false');
+    });
+  });
+
+  test('does not set `isPositioned` to true when open is false', async () => {
+    const App = defineComponent({
+      name: 'App',
+      props: ['open', 'strategy'],
+      setup(props: {open?: boolean; strategy?: Strategy}) {
+        return setup({
+          open: toRef(props, 'open'),
+          strategy: toRef(props, 'strategy'),
+        });
+      },
+      template: /* HTML */ `
+        <div ref="reference" />
+        <div ref="floating" />
+        <div data-testid="position">{{strategy}}</div>
+        <div data-testid="isPositioned">{{isPositioned}}</div>
+      `,
+    });
+
+    const {rerender, getByTestId} = render(App, {
+      props: {open: false, strategy: 'absolute'},
+    });
+
+    await waitFor(() => {
+      expect(getByTestId('position').textContent).toBe('absolute');
+      expect(getByTestId('isPositioned').textContent).toBe('false');
+    });
+
+    await rerender({strategy: 'fixed'});
+
+    await waitFor(() => {
+      expect(getByTestId('position').textContent).toBe('fixed');
       expect(getByTestId('isPositioned').textContent).toBe('false');
     });
   });
