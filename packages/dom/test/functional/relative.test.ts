@@ -20,7 +20,7 @@ import {click} from './utils/click';
     await click(page, `[data-testid="relative-${node}"]`);
     await click(page, `[data-testid="offset-100"]`);
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${node}.png`,
+      `${node}-offset-100.png`,
     );
   });
 });
