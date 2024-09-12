@@ -47,8 +47,17 @@ export function getRectRelativeToOffsetParent(
     }
   }
 
-  const x = rect.left + scroll.scrollLeft - offsets.x;
-  const y = rect.top + scroll.scrollTop - offsets.y;
+  let htmlX = 0;
+  let htmlY = 0;
+
+  if (documentElement && !isOffsetParentAnElement) {
+    const {top, left} = documentElement.getBoundingClientRect();
+    htmlY = top + scroll.scrollTop;
+    htmlX = left + scroll.scrollLeft;
+  }
+
+  const x = rect.left + scroll.scrollLeft - offsets.x - htmlX;
+  const y = rect.top + scroll.scrollTop - offsets.y - htmlY;
 
   return {
     x,
