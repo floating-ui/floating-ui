@@ -91,6 +91,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       return;
     }
 
+    const open = openOption.value;
+
     computePosition(referenceElement.value, floatingElement.value, {
       middleware: middlewareOption.value,
       placement: placementOption.value,
@@ -101,7 +103,13 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       strategy.value = position.strategy;
       placement.value = position.placement;
       middlewareData.value = position.middlewareData;
-      isPositioned.value = true;
+      /**
+       * The floating element's position may be recomputed while it's closed
+       * but still mounted (such as when transitioning out). To ensure
+       * `isPositioned` will be `false` initially on the next open, avoid
+       * setting it to `true` when `open === false` (must be specified).
+       */
+      isPositioned.value = open !== false;
     });
   }
 
@@ -136,9 +144,13 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     }
   }
 
-  watch([middlewareOption, placementOption, strategyOption], update, {
-    flush: 'sync',
-  });
+  watch(
+    [middlewareOption, placementOption, strategyOption, openOption],
+    update,
+    {
+      flush: 'sync',
+    },
+  );
   watch([referenceElement, floatingElement], attach, {flush: 'sync'});
   watch(openOption, reset, {flush: 'sync'});
 
