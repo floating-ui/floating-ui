@@ -50,7 +50,7 @@ export function getRectRelativeToOffsetParent(
   let htmlX = 0;
   let htmlY = 0;
 
-  if (documentElement && !isOffsetParentAnElement) {
+  if (documentElement && !isOffsetParentAnElement && !isFixed) {
     const {top, left} = documentElement.getBoundingClientRect();
     htmlY = top + scroll.scrollTop;
     htmlX = left + scroll.scrollLeft;
