@@ -7,7 +7,7 @@ runs:
       shell: sh
     - run: pnpm run playwright
       shell: sh
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: visual-snapshots-diff
