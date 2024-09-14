@@ -55,7 +55,7 @@ export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
 export const FloatingArrow = React.forwardRef(function FloatingArrow(
   props: FloatingArrowProps,
   ref: React.ForwardedRef<SVGSVGElement>,
-): JSX.Element | null {
+): React.JSX.Element | null {
   const {
     context: {
       placement,
@@ -156,7 +156,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
           isVerticalSide || isCustomShape
             ? '100%'
             : `calc(100% - ${computedStrokeWidth / 2}px)`,
-        transform: [rotation, transform].filter(t => !!t).join(' '),
+        transform: [rotation, transform].filter((t) => !!t).join(' '),
         ...restStyle,
       }}
     >

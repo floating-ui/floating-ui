@@ -139,7 +139,7 @@ export interface FloatingPortalProps {
  * while retaining its location in the React tree.
  * @see https://floating-ui.com/docs/FloatingPortal
  */
-export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
+export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
   const {children, id, root = null, preserveTabOrder = true} = props;
 
   const portalNode = useFloatingPortalNode({id, root});

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   act,
   cleanup,
@@ -155,7 +156,7 @@ test('does not open when window blurs then receives focus', async () => {
 test('blurs when hitting an "inside" focus guard', async () => {
   vi.useRealTimers();
 
-  function Tooltip({children}: {children: JSX.Element}) {
+  function Tooltip({children}: {children: React.JSX.Element}) {
     const [open, setOpen] = useState(false);
 
     const {refs, context} = useFloating({

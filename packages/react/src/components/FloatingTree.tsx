@@ -53,7 +53,7 @@ export interface FloatingNodeProps {
  * Provides parent node context for nested floating elements.
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export function FloatingNode(props: FloatingNodeProps): JSX.Element {
+export function FloatingNode(props: FloatingNodeProps): React.JSX.Element {
   const {children, id} = props;
 
   const parentId = useFloatingParentNodeId();
@@ -81,7 +81,7 @@ export interface FloatingTreeProps {
  * - Custom communication between parent and child floating elements
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export function FloatingTree(props: FloatingTreeProps): JSX.Element {
+export function FloatingTree(props: FloatingTreeProps): React.JSX.Element {
   const {children} = props;
 
   const nodesRef = React.useRef<Array<FloatingNodeType>>([]);
