@@ -1,6 +1,7 @@
 import {
   getComputedStyle,
   getContainingBlock,
+  getDocumentElement,
   getParentNode,
   getWindow,
   isContainingBlock,
@@ -29,7 +30,17 @@ function getTrueOffsetParent(
     return polyfill(element);
   }
 
-  return element.offsetParent;
+  let rawOffsetParent = element.offsetParent;
+
+  // Firefox returns the <html> element as the offsetParent if it's non-static,
+  // while Chrome and Safari return the <body> element. The <body> element must
+  // be used to perform the correct calculations even if the <html> element is
+  // non-static.
+  if (getDocumentElement(element) === rawOffsetParent) {
+    rawOffsetParent = rawOffsetParent.ownerDocument.body;
+  }
+
+  return rawOffsetParent;
 }
 
 // Gets the closest ancestor positioned element. Handles some edge cases,

@@ -8,6 +8,7 @@ export const NODES: Node[] = [null, 'html', 'body', 'offsetParent'];
 
 export function Relative() {
   const [node, setNode] = useState<Node>(null);
+  const [offset, setOffset] = useState(0);
   const {x, y, refs, strategy, update} = useFloating();
 
   useLayoutEffect(() => {
@@ -21,10 +22,12 @@ export function Relative() {
         element = document.body;
         break;
       default:
+        element = document.querySelector('.container');
     }
 
     if (element) {
       element.style.position = 'relative';
+      element.style.top = `${-offset}px`;
     }
 
     update();
@@ -32,9 +35,10 @@ export function Relative() {
     return () => {
       if (element) {
         element.style.position = '';
+        element.style.top = '';
       }
     };
-  }, [node, update]);
+  }, [node, offset, update]);
 
   return (
     <>
@@ -63,6 +67,7 @@ export function Relative() {
         </div>
       </div>
 
+      <h2>Node</h2>
       <Controls>
         {NODES.map((localNode) => (
           <button
@@ -74,6 +79,22 @@ export function Relative() {
             }}
           >
             {localNode ?? 'None'}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Offset</h2>
+      <Controls>
+        {[0, 100].map((localOffset) => (
+          <button
+            key={localOffset}
+            data-testid={`offset-${localOffset}`}
+            onClick={() => setOffset(localOffset)}
+            style={{
+              backgroundColor: offset === localOffset ? 'black' : '',
+            }}
+          >
+            {localOffset}
           </button>
         ))}
       </Controls>
