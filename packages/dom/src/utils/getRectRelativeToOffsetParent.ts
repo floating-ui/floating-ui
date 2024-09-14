@@ -53,13 +53,13 @@ export function getRectRelativeToOffsetParent(
   let htmlY = 0;
 
   if (documentElement && !isOffsetParentAnElement && !isFixed) {
-    const {top, left} = documentElement.getBoundingClientRect();
-    htmlY = top + scroll.scrollTop;
+    const htmlRect = documentElement.getBoundingClientRect();
+    htmlY = htmlRect.top + scroll.scrollTop;
     htmlX =
-      left +
+      htmlRect.left +
       scroll.scrollLeft -
-      // RTL <body> scrollbar
-      (left + getNodeScroll(documentElement).scrollLeft);
+      // RTL <body> scrollbar.
+      getWindowScrollBarX(documentElement, htmlRect);
   }
 
   const x = rect.left + scroll.scrollLeft - offsets.x - htmlX;
