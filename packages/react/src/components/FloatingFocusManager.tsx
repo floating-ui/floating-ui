@@ -78,7 +78,7 @@ const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
 });
 
 export interface FloatingFocusManagerProps {
-  children: JSX.Element;
+  children: React.JSX.Element;
   /**
    * The floating context returned from `useFloating`.
    */
@@ -154,7 +154,7 @@ export interface FloatingFocusManagerProps {
  */
 export function FloatingFocusManager(
   props: FloatingFocusManagerProps,
-): JSX.Element {
+): React.JSX.Element {
   const {
     context,
     children,

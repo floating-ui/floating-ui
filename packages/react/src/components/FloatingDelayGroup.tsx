@@ -65,7 +65,7 @@ interface FloatingDelayGroupProps {
  */
 export function FloatingDelayGroup(
   props: FloatingDelayGroupProps,
-): JSX.Element {
+): React.JSX.Element {
   const {children, delay, timeoutMs = 0} = props;
 
   const [state, setState] = React.useReducer(

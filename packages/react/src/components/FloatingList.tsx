@@ -67,7 +67,7 @@ interface FloatingListProps {
  * Provides context for a list of items within the floating element.
  * @see https://floating-ui.com/docs/FloatingList
  */
-export function FloatingList(props: FloatingListProps): JSX.Element {
+export function FloatingList(props: FloatingListProps): React.JSX.Element {
   const {children, elementsRef, labelsRef} = props;
 
   const [map, setMap] = React.useState(() => new Map<Node, number | null>());

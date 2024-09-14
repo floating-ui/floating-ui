@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {act, fireEvent, render, screen} from '@testing-library/react';
 import {cloneElement, useState} from 'react';
 import {vi} from 'vitest';
@@ -14,7 +15,7 @@ vi.useFakeTimers();
 
 interface Props {
   label: string;
-  children: JSX.Element;
+  children: React.JSX.Element;
 }
 
 export const Tooltip = ({children, label}: Props) => {

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {cloneElement, useRef, useState} from 'react';
@@ -68,7 +69,7 @@ function App(
 interface DialogProps {
   open?: boolean;
   render: (props: {close: () => void}) => React.ReactNode;
-  children: JSX.Element;
+  children: React.JSX.Element;
 }
 
 const Dialog = ({render, open: passedOpen = false, children}: DialogProps) => {
@@ -571,8 +572,8 @@ describe('modal', () => {
       open?: boolean;
       modal?: boolean;
       render: (props: {close: () => void}) => React.ReactNode;
-      children?: JSX.Element;
-      sideChildren?: JSX.Element;
+      children?: React.JSX.Element;
+      sideChildren?: React.JSX.Element;
     }
 
     const Dialog = ({
