@@ -31,6 +31,7 @@ const PortalContext = React.createContext<null | {
   afterInsideRef: React.RefObject<HTMLSpanElement>;
   beforeOutsideRef: React.RefObject<HTMLSpanElement>;
   afterOutsideRef: React.RefObject<HTMLSpanElement>;
+  fallbackReturnFocusRef: React.RefObject<HTMLElement | null>;
 }>(null);
 
 const attr = createAttribute('portal');
@@ -150,6 +151,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
   const afterOutsideRef = React.useRef<HTMLSpanElement>(null);
   const beforeInsideRef = React.useRef<HTMLSpanElement>(null);
   const afterInsideRef = React.useRef<HTMLSpanElement>(null);
+  const fallbackReturnFocusRef = React.useRef<HTMLElement | null>(null);
 
   const modal = focusManagerState?.modal;
   const open = focusManagerState?.open;
@@ -207,6 +209,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
           afterOutsideRef,
           beforeInsideRef,
           afterInsideRef,
+          fallbackReturnFocusRef,
           portalNode,
           setFocusManagerState,
         }),
@@ -232,6 +235,12 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
       {shouldRenderGuards && portalNode && (
         <span aria-owns={portalNode.id} style={HIDDEN_STYLES} />
       )}
+      <span
+        ref={fallbackReturnFocusRef}
+        tabIndex={-1}
+        aria-hidden
+        style={HIDDEN_STYLES}
+      />
       {portalNode && ReactDOM.createPortal(children, portalNode)}
       {shouldRenderGuards && portalNode && (
         <FocusGuard

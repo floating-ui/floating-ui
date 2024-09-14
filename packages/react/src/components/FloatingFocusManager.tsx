@@ -24,7 +24,6 @@ import {markOthers, supportsInert} from '../utils/markOthers';
 import {
   getNextTabbable,
   getPreviousTabbable,
-  getClosestTabbableElement,
   getTabbableOptions,
   isOutsideEvent,
 } from '../utils/tabbable';
@@ -502,7 +501,8 @@ export function FloatingFocusManager(
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
     let openEvent = contextData.openEvent;
-    const domReference = refs.domReference.current;
+    let fallbackReturnFocusElement =
+      portalContext?.fallbackReturnFocusRef.current;
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
@@ -564,24 +564,16 @@ export function FloatingFocusManager(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      const returnContextElement = domReference || previouslyFocusedElement;
-      const tabbableElements = tabbable(
-        getDocument(returnContextElement).body,
-        getTabbableOptions(),
-      );
+      const currentFallbackReturnFocusElement =
+        portalContext?.fallbackReturnFocusRef.current;
+      if (currentFallbackReturnFocusElement) {
+        fallbackReturnFocusElement = currentFallbackReturnFocusElement;
+      }
 
-      // Wait for the return element to get potentially disconnected before
-      // checking.
+      const returnElement =
+        getPreviouslyFocusedElement() || fallbackReturnFocusElement;
+
       queueMicrotask(() => {
-        let returnElement = getPreviouslyFocusedElement();
-        if (!returnElement && isHTMLElement(returnContextElement) && floating) {
-          returnElement = getClosestTabbableElement(
-            tabbableElements,
-            returnContextElement,
-            floating,
-          );
-        }
-
         if (
           // eslint-disable-next-line react-hooks/exhaustive-deps
           returnFocusRef.current &&
@@ -595,6 +587,10 @@ export function FloatingFocusManager(
             : true)
         ) {
           returnElement.focus({preventScroll: preventReturnFocusScroll});
+          if (returnElement === fallbackReturnFocusElement) {
+            // The body must take the blur. Tab index context is now preserved.
+            returnElement.blur();
+          }
         }
       });
     };
@@ -608,6 +604,7 @@ export function FloatingFocusManager(
     events,
     tree,
     nodeId,
+    portalContext?.fallbackReturnFocusRef,
   ]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
