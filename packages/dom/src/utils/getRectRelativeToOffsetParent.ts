@@ -43,6 +43,8 @@ export function getRectRelativeToOffsetParent(
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     } else if (documentElement) {
+      // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
+      // Firefox with layout.scrollbar.side = 3 in about:config to test this.
       offsets.x = getWindowScrollBarX(documentElement);
     }
   }
@@ -53,7 +55,11 @@ export function getRectRelativeToOffsetParent(
   if (documentElement && !isOffsetParentAnElement && !isFixed) {
     const {top, left} = documentElement.getBoundingClientRect();
     htmlY = top + scroll.scrollTop;
-    htmlX = left + scroll.scrollLeft;
+    htmlX =
+      left +
+      scroll.scrollLeft -
+      // RTL <body> scrollbar
+      (left + getNodeScroll(documentElement).scrollLeft);
   }
 
   const x = rect.left + scroll.scrollLeft - offsets.x - htmlX;
