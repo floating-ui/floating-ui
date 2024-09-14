@@ -544,7 +544,7 @@ export function FloatingFocusManager(
 
     events.on('openchange', onOpenChange);
 
-    const fallbackEl = document.createElement('span');
+    const fallbackEl = doc.createElement('span');
     fallbackEl.setAttribute('tabindex', '-1');
     fallbackEl.setAttribute('aria-hidden', 'true');
     Object.assign(fallbackEl.style, HIDDEN_STYLES);
