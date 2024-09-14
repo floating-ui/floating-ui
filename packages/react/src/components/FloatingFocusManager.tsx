@@ -501,8 +501,6 @@ export function FloatingFocusManager(
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
     let openEvent = contextData.openEvent;
-    let fallbackReturnFocusElement =
-      portalContext?.fallbackReturnFocusRef.current;
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
@@ -546,6 +544,15 @@ export function FloatingFocusManager(
 
     events.on('openchange', onOpenChange);
 
+    const fallbackEl = document.createElement('span');
+    fallbackEl.setAttribute('tabindex', '-1');
+    fallbackEl.setAttribute('aria-hidden', 'true');
+    Object.assign(fallbackEl.style, HIDDEN_STYLES);
+
+    if (isInsidePortal && domReference) {
+      domReference.insertAdjacentElement('afterend', fallbackEl);
+    }
+
     return () => {
       events.off('openchange', onOpenChange);
 
@@ -564,14 +571,7 @@ export function FloatingFocusManager(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      const currentFallbackReturnFocusElement =
-        portalContext?.fallbackReturnFocusRef.current;
-      if (currentFallbackReturnFocusElement) {
-        fallbackReturnFocusElement = currentFallbackReturnFocusElement;
-      }
-
-      const returnElement =
-        getPreviouslyFocusedElement() || fallbackReturnFocusElement;
+      const returnElement = getPreviouslyFocusedElement() || fallbackEl;
 
       queueMicrotask(() => {
         if (
@@ -587,11 +587,9 @@ export function FloatingFocusManager(
             : true)
         ) {
           returnElement.focus({preventScroll: preventReturnFocusScroll});
-          if (returnElement === fallbackReturnFocusElement) {
-            // The body must take the blur. Tab index context is now preserved.
-            returnElement.blur();
-          }
         }
+
+        fallbackEl.remove();
       });
     };
   }, [
@@ -604,7 +602,8 @@ export function FloatingFocusManager(
     events,
     tree,
     nodeId,
-    portalContext?.fallbackReturnFocusRef,
+    isInsidePortal,
+    domReference,
   ]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
