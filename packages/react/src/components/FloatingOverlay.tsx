@@ -12,6 +12,60 @@ export interface FloatingOverlayProps {
   lockScroll?: boolean;
 }
 
+function enableScrollLock() {
+  const isIOS = /iP(hone|ad|od)|iOS/.test(getPlatform());
+  const bodyStyle = document.body.style;
+  // RTL <body> scrollbar
+  const scrollbarX =
+    Math.round(document.documentElement.getBoundingClientRect().left) +
+    document.documentElement.scrollLeft;
+  const paddingProp = scrollbarX ? 'paddingLeft' : 'paddingRight';
+  const scrollbarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+  const scrollX = bodyStyle.left ? parseFloat(bodyStyle.left) : window.scrollX;
+  const scrollY = bodyStyle.top ? parseFloat(bodyStyle.top) : window.scrollY;
+
+  bodyStyle.overflow = 'hidden';
+
+  if (scrollbarWidth) {
+    bodyStyle[paddingProp] = `${scrollbarWidth}px`;
+  }
+
+  // Only iOS doesn't respect `overflow: hidden` on document.body, and this
+  // technique has fewer side effects.
+  if (isIOS) {
+    // iOS 12 does not support `visualViewport`.
+    const offsetLeft = window.visualViewport?.offsetLeft || 0;
+    const offsetTop = window.visualViewport?.offsetTop || 0;
+
+    Object.assign(bodyStyle, {
+      position: 'fixed',
+      top: `${-(scrollY - Math.floor(offsetTop))}px`,
+      left: `${-(scrollX - Math.floor(offsetLeft))}px`,
+      right: '0',
+    });
+  }
+
+  return () => {
+    Object.assign(bodyStyle, {
+      overflow: '',
+      [paddingProp]: '',
+    });
+
+    if (isIOS) {
+      Object.assign(bodyStyle, {
+        position: '',
+        top: '',
+        left: '',
+        right: '',
+      });
+      window.scrollTo(scrollX, scrollY);
+    }
+  };
+}
+
+let cleanup = () => {};
+
 /**
  * Provides base styling for a fixed overlay element to dim content or block
  * pointer events behind a floating element.
@@ -29,59 +83,14 @@ export const FloatingOverlay = React.forwardRef(function FloatingOverlay(
 
     lockCount++;
 
-    const isIOS = /iP(hone|ad|od)|iOS/.test(getPlatform());
-    const bodyStyle = document.body.style;
-    // RTL <body> scrollbar
-    const scrollbarX =
-      Math.round(document.documentElement.getBoundingClientRect().left) +
-      document.documentElement.scrollLeft;
-    const paddingProp = scrollbarX ? 'paddingLeft' : 'paddingRight';
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
-    const scrollX = bodyStyle.left
-      ? parseFloat(bodyStyle.left)
-      : window.scrollX;
-    const scrollY = bodyStyle.top ? parseFloat(bodyStyle.top) : window.scrollY;
-
-    bodyStyle.overflow = 'hidden';
-
-    if (scrollbarWidth) {
-      bodyStyle[paddingProp] = `${scrollbarWidth}px`;
-    }
-
-    // Only iOS doesn't respect `overflow: hidden` on document.body, and this
-    // technique has fewer side effects.
-    if (isIOS && lockCount === 1) {
-      // iOS 12 does not support `visualViewport`.
-      const offsetLeft = window.visualViewport?.offsetLeft || 0;
-      const offsetTop = window.visualViewport?.offsetTop || 0;
-
-      Object.assign(bodyStyle, {
-        position: 'fixed',
-        top: `${-(scrollY - Math.floor(offsetTop))}px`,
-        left: `${-(scrollX - Math.floor(offsetLeft))}px`,
-        right: '0',
-      });
+    if (lockCount === 1) {
+      cleanup = enableScrollLock();
     }
 
     return () => {
       lockCount--;
-
       if (lockCount === 0) {
-        Object.assign(bodyStyle, {
-          overflow: '',
-          [paddingProp]: '',
-        });
-
-        if (isIOS) {
-          Object.assign(bodyStyle, {
-            position: '',
-            top: '',
-            left: '',
-            right: '',
-          });
-          window.scrollTo(scrollX, scrollY);
-        }
+        cleanup();
       }
     };
   }, [lockScroll]);
