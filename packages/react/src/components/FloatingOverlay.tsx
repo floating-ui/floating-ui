@@ -2,9 +2,7 @@ import {getPlatform} from '@floating-ui/react/utils';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {useId} from '../hooks/useId';
-
-const activeLocks = new Set<string>();
+let lockCount = 0;
 
 export interface FloatingOverlayProps {
   /**
@@ -26,12 +24,10 @@ export const FloatingOverlay = React.forwardRef(function FloatingOverlay(
 ) {
   const {lockScroll = false, ...rest} = props;
 
-  const lockId = useId();
-
   useModernLayoutEffect(() => {
     if (!lockScroll) return;
 
-    activeLocks.add(lockId);
+    lockCount++;
 
     const isIOS = /iP(hone|ad|od)|iOS/.test(getPlatform());
     const bodyStyle = document.body.style;
@@ -55,7 +51,7 @@ export const FloatingOverlay = React.forwardRef(function FloatingOverlay(
 
     // Only iOS doesn't respect `overflow: hidden` on document.body, and this
     // technique has fewer side effects.
-    if (isIOS) {
+    if (isIOS && lockCount === 1) {
       // iOS 12 does not support `visualViewport`.
       const offsetLeft = window.visualViewport?.offsetLeft || 0;
       const offsetTop = window.visualViewport?.offsetTop || 0;
@@ -69,9 +65,9 @@ export const FloatingOverlay = React.forwardRef(function FloatingOverlay(
     }
 
     return () => {
-      activeLocks.delete(lockId);
+      lockCount--;
 
-      if (activeLocks.size === 0) {
+      if (lockCount === 0) {
         Object.assign(bodyStyle, {
           overflow: '',
           [paddingProp]: '',
@@ -88,7 +84,7 @@ export const FloatingOverlay = React.forwardRef(function FloatingOverlay(
         }
       }
     };
-  }, [lockId, lockScroll]);
+  }, [lockScroll]);
 
   return (
     <div
