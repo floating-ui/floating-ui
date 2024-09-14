@@ -24,7 +24,6 @@ import {markOthers, supportsInert} from '../utils/markOthers';
 import {
   getNextTabbable,
   getPreviousTabbable,
-  getClosestTabbableElement,
   getTabbableOptions,
   isOutsideEvent,
 } from '../utils/tabbable';
@@ -502,7 +501,6 @@ export function FloatingFocusManager(
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
     let openEvent = contextData.openEvent;
-    const domReference = refs.domReference.current;
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
@@ -546,6 +544,15 @@ export function FloatingFocusManager(
 
     events.on('openchange', onOpenChange);
 
+    const fallbackEl = doc.createElement('span');
+    fallbackEl.setAttribute('tabindex', '-1');
+    fallbackEl.setAttribute('aria-hidden', 'true');
+    Object.assign(fallbackEl.style, HIDDEN_STYLES);
+
+    if (isInsidePortal && domReference) {
+      domReference.insertAdjacentElement('afterend', fallbackEl);
+    }
+
     return () => {
       events.off('openchange', onOpenChange);
 
@@ -564,24 +571,9 @@ export function FloatingFocusManager(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      const returnContextElement = domReference || previouslyFocusedElement;
-      const tabbableElements = tabbable(
-        getDocument(returnContextElement).body,
-        getTabbableOptions(),
-      );
+      const returnElement = getPreviouslyFocusedElement() || fallbackEl;
 
-      // Wait for the return element to get potentially disconnected before
-      // checking.
       queueMicrotask(() => {
-        let returnElement = getPreviouslyFocusedElement();
-        if (!returnElement && isHTMLElement(returnContextElement) && floating) {
-          returnElement = getClosestTabbableElement(
-            tabbableElements,
-            returnContextElement,
-            floating,
-          );
-        }
-
         if (
           // eslint-disable-next-line react-hooks/exhaustive-deps
           returnFocusRef.current &&
@@ -596,6 +588,8 @@ export function FloatingFocusManager(
         ) {
           returnElement.focus({preventScroll: preventReturnFocusScroll});
         }
+
+        fallbackEl.remove();
       });
     };
   }, [
@@ -608,6 +602,8 @@ export function FloatingFocusManager(
     events,
     tree,
     nodeId,
+    isInsidePortal,
+    domReference,
   ]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
