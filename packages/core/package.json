@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/core",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "description": "Positioning library for floating elements: tooltips, popovers, dropdowns, and more",
   "publishConfig": {
     "access": "public"
