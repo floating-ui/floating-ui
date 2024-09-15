@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.2.8
+
+### Patch Changes
+
+- fix: make element utils ssr-friendly
+
 ## 0.2.7
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @floating-ui/dom
 
+## 1.6.11
+
+### Patch Changes
+
+- fix: handle html relative offset
+- Update dependencies: `@floating-ui/utils@0.2.8`
+
 ## 1.6.10
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @floating-ui/core
 
+## 1.6.8
+
+### Patch Changes
+
+- fix(size): fill viewport along an axis if shift is enabled on that axis
+- fix(offset): avoid NaN when mainAxis or crossAxis is undefined
+- Update dependencies: `@floating-ui/utils@0.2.8`
+
 ## 1.6.7
 
 ### Patch Changes

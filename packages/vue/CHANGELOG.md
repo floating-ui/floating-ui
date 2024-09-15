@@ -1,5 +1,12 @@
 # @floating-ui/vue
 
+## 1.1.5
+
+### Patch Changes
+
+- fix(useFloating): avoid setting `isPositioned` to true when `open` is false
+- Update dependencies: `@floating-ui/utils@0.2.8`
+
 ## 1.1.4
 
 ### Patch Changes

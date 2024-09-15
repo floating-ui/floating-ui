@@ -1,5 +1,16 @@
 # @floating-ui/react
 
+## 0.26.24
+
+### Patch Changes
+
+- fix(FloatingOverlay): correct multiple locks behavior on iOS
+- fix(FloatingFocusManager): avoid returning focus to nearest tabbable element of the reference if it gets removed when the floating element closes to avoid unwanted focus effects of unrelated elements firing. Tab index context remains preserved if the floating element is portaled.
+- refactor: use `React.JSX.Element` types. Ensure you've upgraded to the latest `@types/react` patches (versions since May 6, 2023)
+- fix(FloatingArrow): avoid requiring leading space for manually specified `transform` style property
+- fix(inner): round `maxHeight` and apply `minItemsVisible` only when scrollable
+- Update dependencies: `@floating-ui/react-dom@2.1.2`, `@floating-ui/utils@0.2.8`
+
 ## 0.26.23
 
 ### Patch Changes

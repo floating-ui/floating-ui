@@ -1,5 +1,11 @@
 # @floating-ui/react-dom
 
+## 2.1.2
+
+### Patch Changes
+
+- fix(useFloating): avoid setting `isPositioned` to true when `open` is false
+
 ## 2.1.1
 
 ### Patch Changes
