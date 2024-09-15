@@ -1,5 +1,9 @@
 type OverflowAncestors = Array<Element | Window | VisualViewport>;
 
+function hasWindow() {
+  return typeof window !== 'undefined';
+}
+
 export function getNodeName(node: Node | Window): string {
   if (isNode(node)) {
     return (node.nodeName || '').toLowerCase();
@@ -21,14 +25,26 @@ export function getDocumentElement(node: Node | Window): HTMLElement {
 }
 
 export function isNode(value: unknown): value is Node {
+  if (!hasWindow()) {
+    return false;
+  }
+
   return value instanceof Node || value instanceof getWindow(value).Node;
 }
 
 export function isElement(value: unknown): value is Element {
+  if (!hasWindow()) {
+    return false;
+  }
+
   return value instanceof Element || value instanceof getWindow(value).Element;
 }
 
 export function isHTMLElement(value: unknown): value is HTMLElement {
+  if (!hasWindow()) {
+    return false;
+  }
+
   return (
     value instanceof HTMLElement ||
     value instanceof getWindow(value).HTMLElement
@@ -36,8 +52,7 @@ export function isHTMLElement(value: unknown): value is HTMLElement {
 }
 
 export function isShadowRoot(value: unknown): value is ShadowRoot {
-  // Browsers without `ShadowRoot` support.
-  if (typeof ShadowRoot === 'undefined') {
+  if (!hasWindow() || typeof ShadowRoot === 'undefined') {
     return false;
   }
 
