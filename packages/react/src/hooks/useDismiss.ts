@@ -419,7 +419,11 @@ export function useDismiss(
           escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
           escapeKeyCapture,
         );
-        doc.removeEventListener('compositionstart', handleCompositionEnd, true);
+        doc.removeEventListener(
+          'compositionstart',
+          handleCompositionStart,
+          true,
+        );
         doc.removeEventListener('compositionend', handleCompositionEnd, true);
       }
 
