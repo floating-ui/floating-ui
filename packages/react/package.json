@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react",
-  "version": "0.26.24",
+  "version": "0.26.25",
   "description": "Floating UI for React",
   "publishConfig": {
     "access": "public"
