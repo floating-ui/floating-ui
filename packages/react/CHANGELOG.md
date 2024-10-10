@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.26.25
+
+### Patch Changes
+
+- fix(useHover): ignore insignificant movement when resetting `restMs`
+
 ## 0.26.24
 
 ### Patch Changes
