@@ -154,9 +154,17 @@ export function useDismiss(
   const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
     normalizeProp(capture);
 
+  const isComposingRef = React.useRef(false);
+
   const closeOnEscapeKeyDown = useEffectEvent(
     (event: React.KeyboardEvent<Element> | KeyboardEvent) => {
       if (!open || !enabled || !escapeKey || event.key !== 'Escape') {
+        return;
+      }
+
+      // Wait until IME is settled. Pressing `Escape` while composing should
+      // close the compose menu, but not the floating element.
+      if (isComposingRef.current) {
         return;
       }
 
@@ -346,13 +354,26 @@ export function useDismiss(
       onOpenChange(false, event, 'ancestor-scroll');
     }
 
+    function handleCompositionStart() {
+      isComposingRef.current = true;
+    }
+
+    function handleCompositionEnd() {
+      isComposingRef.current = false;
+    }
+
     const doc = getDocument(elements.floating);
-    escapeKey &&
+
+    if (escapeKey) {
       doc.addEventListener(
         'keydown',
         escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
         escapeKeyCapture,
       );
+      doc.addEventListener('compositionstart', handleCompositionStart, true);
+      doc.addEventListener('compositionend', handleCompositionEnd, true);
+    }
+
     outsidePress &&
       doc.addEventListener(
         outsidePressEvent,
@@ -392,12 +413,16 @@ export function useDismiss(
     });
 
     return () => {
-      escapeKey &&
+      if (escapeKey) {
         doc.removeEventListener(
           'keydown',
           escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
           escapeKeyCapture,
         );
+        doc.removeEventListener('compositionstart', handleCompositionEnd, true);
+        doc.removeEventListener('compositionend', handleCompositionEnd, true);
+      }
+
       outsidePress &&
         doc.removeEventListener(
           outsidePressEvent,
