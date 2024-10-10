@@ -34,15 +34,22 @@ import {useEffectEvent} from '../hooks/utils/useEffectEvent';
 import {getFloatingFocusElement} from '../utils/getFloatingFocusElement';
 
 const LIST_LIMIT = 20;
-let previouslyFocusedElements: Element[] = [];
+let previouslyFocusedElements: (Element | null)[] = [];
+
+function isValidFocusedElement(element: Element | null) {
+  return element == null || element.isConnected;
+}
 
 function addPreviouslyFocusedElement(element: Element | null) {
   previouslyFocusedElements = previouslyFocusedElements.filter(
-    (el) => el.isConnected,
+    isValidFocusedElement,
   );
   let tabbableEl = element;
-  if (!tabbableEl || getNodeName(tabbableEl) === 'body') return;
-  if (!isTabbable(tabbableEl, getTabbableOptions())) {
+  if (
+    tabbableEl &&
+    getNodeName(tabbableEl) !== 'body' &&
+    !isTabbable(tabbableEl, getTabbableOptions())
+  ) {
     const tabbableChild = tabbable(tabbableEl, getTabbableOptions())[0];
     if (tabbableChild) {
       tabbableEl = tabbableChild;
@@ -58,7 +65,7 @@ function getPreviouslyFocusedElement() {
   return previouslyFocusedElements
     .slice()
     .reverse()
-    .find((el) => el.isConnected);
+    .find(isValidFocusedElement);
 }
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
