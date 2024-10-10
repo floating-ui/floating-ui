@@ -51,7 +51,9 @@ function App(
     <>
       <button {...getReferenceProps({ref: refs.setReference})} />
       {open && (
-        <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
+        <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})}>
+          <input />
+        </div>
       )}
     </>
   );
