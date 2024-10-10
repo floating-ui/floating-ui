@@ -125,6 +125,7 @@ export function useHover(
   const blockMouseMoveRef = React.useRef(true);
   const performedPointerEventsMutationRef = React.useRef(false);
   const unbindMouseMoveRef = React.useRef(() => {});
+  const restTimeoutPendingRef = React.useRef(false);
 
   const isHoverOpen = React.useCallback(() => {
     const type = dataRef.current.openEvent?.type;
@@ -141,6 +142,7 @@ export function useHover(
         clearTimeout(timeoutRef.current);
         clearTimeout(restTimeoutRef.current);
         blockMouseMoveRef.current = true;
+        restTimeoutPendingRef.current = false;
       }
     }
 
@@ -261,6 +263,7 @@ export function useHover(
 
       const doc = getDocument(elements.floating);
       clearTimeout(restTimeoutRef.current);
+      restTimeoutPendingRef.current = false;
 
       if (handleCloseRef.current && dataRef.current.floatingContext) {
         // Prevent clearing `onScrollMouseLeave` timeout.
@@ -406,6 +409,7 @@ export function useHover(
   useModernLayoutEffect(() => {
     if (!open) {
       pointerTypeRef.current = undefined;
+      restTimeoutPendingRef.current = false;
       cleanupMouseMoveHandler();
       clearPointerEvents();
     }
@@ -450,11 +454,20 @@ export function useHover(
           return;
         }
 
+        // Ignore insignificant movements to account for tremors.
+        if (
+          restTimeoutPendingRef.current &&
+          event.movementX ** 2 + event.movementY ** 2 < 2
+        ) {
+          return;
+        }
+
         clearTimeout(restTimeoutRef.current);
 
         if (pointerTypeRef.current === 'touch') {
           handleMouseMove();
         } else {
+          restTimeoutPendingRef.current = true;
           restTimeoutRef.current = window.setTimeout(handleMouseMove, restMs);
         }
       },
