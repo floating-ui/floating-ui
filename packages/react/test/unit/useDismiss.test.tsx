@@ -67,7 +67,7 @@ describe('true', () => {
     cleanup();
   });
 
-  test('does not dismiss with escape key if IME is active', () => {
+  test('does not dismiss with escape key if IME is active', async () => {
     const onClose = vi.fn();
 
     render(<App onClose={onClose} escapeKey />);
@@ -82,9 +82,14 @@ describe('true', () => {
     fireEvent.compositionStart(textbox);
     fireEvent.keyDown(textbox, {key: 'Escape'});
     fireEvent.compositionEnd(textbox);
+
+    // Wait for the compositionend timeout tick due to Safari
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     expect(onClose).toHaveBeenCalledTimes(0);
 
     fireEvent.keyDown(textbox, {key: 'Escape'});
+
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
