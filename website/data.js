@@ -189,4 +189,10 @@ export const MINI_SPONSORS = [
     url: 'https://automatio.co/',
     MemberId: 595794,
   },
+  {
+    logo: '/sponsors/wordhint.svg',
+    label: 'WordHint - Connections Hint Today',
+    url: 'https://www.wordhint.net/connections/hint/today/',
+    MemberId: 607663,
+  },
 ];
