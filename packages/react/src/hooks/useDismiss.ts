@@ -446,6 +446,8 @@ export function useDismiss(
       ancestors.forEach((ancestor) => {
         ancestor.removeEventListener('scroll', onScroll);
       });
+
+      window.clearTimeout(compositionTimeout);
     };
   }, [
     dataRef,
