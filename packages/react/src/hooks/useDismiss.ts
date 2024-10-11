@@ -350,16 +350,24 @@ export function useDismiss(
     dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
     dataRef.current.__outsidePressBubbles = outsidePressBubbles;
 
+    let compositionTimeout = -1;
+
     function onScroll(event: Event) {
       onOpenChange(false, event, 'ancestor-scroll');
     }
 
     function handleCompositionStart() {
+      window.clearTimeout(compositionTimeout);
       isComposingRef.current = true;
     }
 
     function handleCompositionEnd() {
-      isComposingRef.current = false;
+      // Safari fires `compositionend` before `keydown`, so we need to wait
+      // until the next tick to set `isComposing` to `false`.
+      // https://bugs.webkit.org/show_bug.cgi?id=165004
+      compositionTimeout = window.setTimeout(() => {
+        isComposingRef.current = false;
+      });
     }
 
     const doc = getDocument(elements.floating);
