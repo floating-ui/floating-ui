@@ -378,8 +378,8 @@ export function useDismiss(
         escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
         escapeKeyCapture,
       );
-      doc.addEventListener('compositionstart', handleCompositionStart, true);
-      doc.addEventListener('compositionend', handleCompositionEnd, true);
+      doc.addEventListener('compositionstart', handleCompositionStart);
+      doc.addEventListener('compositionend', handleCompositionEnd);
     }
 
     outsidePress &&
@@ -427,12 +427,8 @@ export function useDismiss(
           escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
           escapeKeyCapture,
         );
-        doc.removeEventListener(
-          'compositionstart',
-          handleCompositionStart,
-          true,
-        );
-        doc.removeEventListener('compositionend', handleCompositionEnd, true);
+        doc.removeEventListener('compositionstart', handleCompositionStart);
+        doc.removeEventListener('compositionend', handleCompositionEnd);
       }
 
       outsidePress &&
