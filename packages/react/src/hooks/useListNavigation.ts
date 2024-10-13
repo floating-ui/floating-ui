@@ -845,8 +845,7 @@ export function useListNavigation(
       onKeyDown(event) {
         isPointerModalityRef.current = false;
 
-        const isHomeOrEnd = ['Home', 'End'].includes(event.key);
-        const isArrowKey = event.key.indexOf('Arrow') === 0 || isHomeOrEnd;
+        const isArrowKey = event.key.indexOf('Arrow') === 0;
         const isCrossOpenKey = isCrossOrientationOpenKey(
           event.key,
           orientation,
@@ -857,8 +856,7 @@ export function useListNavigation(
           orientation,
           rtl,
         );
-        const isMainKey =
-          isMainOrientationKey(event.key, orientation) || isHomeOrEnd;
+        const isMainKey = isMainOrientationKey(event.key, orientation);
         const isNavigationKey =
           (nested ? isCrossOpenKey : isMainKey) ||
           event.key === 'Enter' ||
