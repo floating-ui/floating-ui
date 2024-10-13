@@ -51,14 +51,14 @@ computePosition(referenceEl, floatingEl, {
 
 ## Shadow DOM fix
 
-There's an unfortunate platform gap regarding `offsetParent`
-where the spec says to hide the actual CSS `offsetParent` inside
-shadow DOM hierarchies, notable when using web components. This
-causes the position to be wrong when a positioned parent has a
-shadowed child floating element. Since Chrome 109, the
-`offsetParent` property now matches the spec, as well as Safari
-and Firefox for quite some time, which causes the positioning
-issue.
+The spec says to hide the actual CSS `offsetParent` inside shadow
+DOM hierarchies, notable when using web components. This causes
+the position to be wrong when a positioned parent has a shadowed
+child floating element.
+
+Since Chrome 109, the `offsetParent` property now matches the
+spec, as well as Safari and Firefox for quite some time, which
+causes the positioning issue.
 
 In many cases, using the `'fixed'{:js}` strategy instead of
 `'absolute'{:js}` will fix this positioning issue, but in case it
@@ -80,6 +80,13 @@ computePosition(referenceEl, floatingEl, {
   },
 });
 ```
+
+<Notice>
+  There is no method that works with closed shadow roots, only
+  open ones. [You'll need to manually return the element in
+  `getOffsetParent`](https://github.com/floating-ui/floating-ui/issues/2955#issuecomment-2251022042)
+  for closed shadow roots.
+</Notice>
 
 ## Concepts
 
