@@ -598,6 +598,14 @@ export function useListNavigation(
     isPointerModalityRef.current = false;
     forceSyncFocus.current = true;
 
+    // When composing a character, Chrome fires ArrowDown twice. Firefox/Safari
+    // don't appear to suffer from this. `event.isComposing` is avoided due to
+    // Safari not supporting it properly (although it's not needed in the first
+    // place for Safari, just avoiding any possible issues).
+    if (event.which === 229) {
+      return;
+    }
+
     // If the floating element is animating out, ignore navigation. Otherwise,
     // the `activeIndex` gets set to 0 despite not being open so the next time
     // the user ArrowDowns, the first item won't be focused.
