@@ -13,6 +13,7 @@ import {
   isElement,
   isHTMLElement,
   isLastTraversableNode,
+  isWebKit,
 } from '@floating-ui/utils/dom';
 import * as React from 'react';
 
@@ -365,9 +366,14 @@ export function useDismiss(
       // Safari fires `compositionend` before `keydown`, so we need to wait
       // until the next tick to set `isComposing` to `false`.
       // https://bugs.webkit.org/show_bug.cgi?id=165004
-      compositionTimeout = window.setTimeout(() => {
-        isComposingRef.current = false;
-      });
+      compositionTimeout = window.setTimeout(
+        () => {
+          isComposingRef.current = false;
+        },
+        // 0ms or 1ms don't work in Safari. 5ms appears to consistently work.
+        // Only apply to WebKit for the test to remain 0ms.
+        isWebKit() ? 5 : 0,
+      );
     }
 
     const doc = getDocument(elements.floating);
