@@ -2,6 +2,7 @@ import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type {ReactNode} from 'react';
 import {useState} from 'react';
+import {vi} from 'vitest';
 
 import {
   FloatingFocusManager,
@@ -18,7 +19,11 @@ import {
 import type {UseDismissProps} from '../../src/hooks/useDismiss';
 import {normalizeProp} from '../../src/hooks/useDismiss';
 
-function App(props: UseDismissProps) {
+function App(
+  props: UseDismissProps & {
+    onClose?: () => void;
+  },
+) {
   const [open, setOpen] = useState(true);
   const {refs, context} = useFloating({
     open,
@@ -28,6 +33,9 @@ function App(props: UseDismissProps) {
         expect(reason).toBe('outside-press');
       } else if (props.escapeKey) {
         expect(reason).toBe('escape-key');
+        if (!open) {
+          props.onClose?.();
+        }
       } else if (props.referencePress) {
         expect(reason).toBe('reference-press');
       } else if (props.ancestorScroll) {
@@ -43,7 +51,9 @@ function App(props: UseDismissProps) {
     <>
       <button {...getReferenceProps({ref: refs.setReference})} />
       {open && (
-        <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
+        <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})}>
+          <input />
+        </div>
       )}
     </>
   );
@@ -55,6 +65,32 @@ describe('true', () => {
     fireEvent.keyDown(document.body, {key: 'Escape'});
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     cleanup();
+  });
+
+  test('does not dismiss with escape key if IME is active', async () => {
+    const onClose = vi.fn();
+
+    render(<App onClose={onClose} escapeKey />);
+
+    const textbox = screen.getByRole('textbox');
+
+    fireEvent.focus(textbox);
+
+    // Simulate behavior when "あ" (Japanese) is entered and Esc is pressed for IME
+    // cancellation.
+    fireEvent.change(textbox, {target: {value: 'あ'}});
+    fireEvent.compositionStart(textbox);
+    fireEvent.keyDown(textbox, {key: 'Escape'});
+    fireEvent.compositionEnd(textbox);
+
+    // Wait for the compositionend timeout tick due to Safari
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(onClose).toHaveBeenCalledTimes(0);
+
+    fireEvent.keyDown(textbox, {key: 'Escape'});
+
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   test('dismisses with outside pointer press', async () => {

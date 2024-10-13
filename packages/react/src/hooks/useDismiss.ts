@@ -13,6 +13,7 @@ import {
   isElement,
   isHTMLElement,
   isLastTraversableNode,
+  isWebKit,
 } from '@floating-ui/utils/dom';
 import * as React from 'react';
 
@@ -154,9 +155,17 @@ export function useDismiss(
   const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
     normalizeProp(capture);
 
+  const isComposingRef = React.useRef(false);
+
   const closeOnEscapeKeyDown = useEffectEvent(
     (event: React.KeyboardEvent<Element> | KeyboardEvent) => {
       if (!open || !enabled || !escapeKey || event.key !== 'Escape') {
+        return;
+      }
+
+      // Wait until IME is settled. Pressing `Escape` while composing should
+      // close the compose menu, but not the floating element.
+      if (isComposingRef.current) {
         return;
       }
 
@@ -342,17 +351,43 @@ export function useDismiss(
     dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
     dataRef.current.__outsidePressBubbles = outsidePressBubbles;
 
+    let compositionTimeout = -1;
+
     function onScroll(event: Event) {
       onOpenChange(false, event, 'ancestor-scroll');
     }
 
+    function handleCompositionStart() {
+      window.clearTimeout(compositionTimeout);
+      isComposingRef.current = true;
+    }
+
+    function handleCompositionEnd() {
+      // Safari fires `compositionend` before `keydown`, so we need to wait
+      // until the next tick to set `isComposing` to `false`.
+      // https://bugs.webkit.org/show_bug.cgi?id=165004
+      compositionTimeout = window.setTimeout(
+        () => {
+          isComposingRef.current = false;
+        },
+        // 0ms or 1ms don't work in Safari. 5ms appears to consistently work.
+        // Only apply to WebKit for the test to remain 0ms.
+        isWebKit() ? 5 : 0,
+      );
+    }
+
     const doc = getDocument(elements.floating);
-    escapeKey &&
+
+    if (escapeKey) {
       doc.addEventListener(
         'keydown',
         escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
         escapeKeyCapture,
       );
+      doc.addEventListener('compositionstart', handleCompositionStart);
+      doc.addEventListener('compositionend', handleCompositionEnd);
+    }
+
     outsidePress &&
       doc.addEventListener(
         outsidePressEvent,
@@ -392,12 +427,16 @@ export function useDismiss(
     });
 
     return () => {
-      escapeKey &&
+      if (escapeKey) {
         doc.removeEventListener(
           'keydown',
           escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
           escapeKeyCapture,
         );
+        doc.removeEventListener('compositionstart', handleCompositionStart);
+        doc.removeEventListener('compositionend', handleCompositionEnd);
+      }
+
       outsidePress &&
         doc.removeEventListener(
           outsidePressEvent,
@@ -409,6 +448,8 @@ export function useDismiss(
       ancestors.forEach((ancestor) => {
         ancestor.removeEventListener('scroll', onScroll);
       });
+
+      window.clearTimeout(compositionTimeout);
     };
   }, [
     dataRef,
