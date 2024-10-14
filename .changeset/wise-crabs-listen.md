@@ -1,5 +1,5 @@
 ---
-"@floating-ui/react": patch
+'@floating-ui/react': patch
 ---
 
-fix(inner): round if not scrollable
+fix(inner): round `max-height` only if not scrollable
