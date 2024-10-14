@@ -837,7 +837,9 @@ export function useListNavigation(
       onKeyDown(event) {
         isPointerModalityRef.current = false;
 
-        const isArrowKey = event.key.indexOf('Arrow') === 0;
+        const isArrowKey = event.key.startsWith('Arrow');
+        const isHomeOrEndKey = ['Home', 'End'].includes(event.key);
+        const isMoveKey = isArrowKey || isHomeOrEndKey;
         const isCrossOpenKey = isCrossOrientationOpenKey(
           event.key,
           orientation,
@@ -858,13 +860,12 @@ export function useListNavigation(
           const rootNode = tree?.nodesRef.current.find(
             (node) => node.parentId == null,
           );
-
           const deepestNode =
             tree && rootNode
               ? getDeepestNode(tree.nodesRef.current, rootNode.id)
               : null;
 
-          if (isArrowKey && deepestNode && virtualItemRef) {
+          if (isMoveKey && deepestNode && virtualItemRef) {
             const eventObject = new KeyboardEvent('keydown', {
               key: event.key,
               bubbles: true,
@@ -888,7 +889,7 @@ export function useListNavigation(
               }
             }
 
-            if (isMainKey && deepestNode.context) {
+            if ((isMainKey || isHomeOrEndKey) && deepestNode.context) {
               if (
                 deepestNode.context.open &&
                 deepestNode.parentId &&

@@ -19,6 +19,7 @@ import {Main as Grid} from '../visual/components/Grid';
 import {Main as EmojiPicker} from '../visual/components/EmojiPicker';
 import {Main as ListboxFocus} from '../visual/components/ListboxFocus';
 import {Main as NestedMenu} from '../visual/components/Menu';
+import {Menu, MenuItem} from '../visual/components/MenuVirtual';
 
 function App(props: Omit<Partial<UseListNavigationProps>, 'listRef'>) {
   const [open, setOpen] = useState(false);
@@ -1118,4 +1119,44 @@ test('focus management in nested lists', async () => {
   await userEvent.keyboard('{ArrowRight}');
 
   expect(screen.getByText('Text')).toHaveFocus();
+});
+
+test('virtual nested Home or End key press', async () => {
+  render(
+    <Menu label="Edit">
+      <MenuItem label="Undo" />
+      <MenuItem label="Redo" />
+      <Menu label="Copy as">
+        <MenuItem label="Text" />
+        <MenuItem label="Video" />
+        <Menu label="Image">
+          <MenuItem label=".png" />
+          <MenuItem label=".jpg" />
+          <MenuItem label=".svg" />
+          <MenuItem label=".gif" />
+        </Menu>
+        <MenuItem label="Audio" />
+      </Menu>
+      <Menu label="Share">
+        <MenuItem label="Mail" />
+        <MenuItem label="Instagram" />
+      </Menu>
+    </Menu>,
+  );
+
+  act(() => {
+    screen.getByRole('combobox').focus();
+  });
+
+  await userEvent.keyboard('{ArrowDown}'); // open menu
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowDown}'); // focus Copy as menu
+  await userEvent.keyboard('{ArrowRight}'); // open Copy as submenu
+  await userEvent.keyboard('{End}');
+
+  expect(screen.getByText('Audio')).toHaveAttribute('aria-selected', 'true');
+  expect(screen.getByText('Share')).not.toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
 });
