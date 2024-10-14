@@ -1,5 +1,16 @@
 # @floating-ui/react
 
+## 0.26.25
+
+### Patch Changes
+
+- fix(useListNavigation): handle virtual nested Home/End key press
+- fix(useHover): ignore insignificant movement when resetting `restMs`
+- fix(useListNavigation): ignore duplicate arrow navigation when composing
+- feat(useDelayGroup): add `enabled` option
+- fix(useDismiss): handle IME keydown events on Escape
+- fix(inner): round `max-height` only if not scrollable
+
 ## 0.26.24
 
 ### Patch Changes
