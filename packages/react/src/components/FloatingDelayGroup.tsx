@@ -116,6 +116,10 @@ export function FloatingDelayGroup(
 }
 
 interface UseGroupOptions {
+  /**
+   * Whether delay grouping should be enabled.
+   * @default true
+   */
   enabled?: boolean;
   id?: any;
 }
@@ -130,7 +134,7 @@ export function useDelayGroup(
   options: UseGroupOptions = {},
 ): GroupContext {
   const {open, onOpenChange, floatingId} = context;
-  const {id: optionId, enabled} = options;
+  const {id: optionId, enabled = true} = options;
   const id = optionId ?? floatingId;
 
   const groupContext = useDelayGroupContext();
