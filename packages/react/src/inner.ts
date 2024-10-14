@@ -154,8 +154,10 @@ export const inner = (
 
     const diffY = max(0, overflow.top);
     const nextY = nextArgs.y + diffY;
+    const isScrollable = scrollEl.scrollHeight > scrollEl.clientHeight;
+    const rounder = isScrollable ? (v: number) => v : round;
 
-    const maxHeight = round(
+    const maxHeight = rounder(
       max(
         0,
         scrollEl.scrollHeight +
@@ -173,7 +175,7 @@ export const inner = (
     // There is not enough space, fallback to standard anchored positioning
     if (onFallbackChange) {
       const shouldFallback =
-        (scrollEl.scrollHeight > scrollEl.offsetHeight &&
+        (isScrollable &&
           scrollEl.offsetHeight < item.offsetHeight * minItemsVisible - 1) ||
         refOverflow.top >= -referenceOverflowThreshold ||
         refOverflow.bottom >= -referenceOverflowThreshold;
