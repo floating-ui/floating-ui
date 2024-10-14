@@ -116,6 +116,7 @@ export function FloatingDelayGroup(
 }
 
 interface UseGroupOptions {
+  enabled?: boolean;
   id?: any;
 }
 
@@ -129,7 +130,7 @@ export function useDelayGroup(
   options: UseGroupOptions = {},
 ): GroupContext {
   const {open, onOpenChange, floatingId} = context;
-  const {id: optionId} = options;
+  const {id: optionId, enabled} = options;
   const id = optionId ?? floatingId;
 
   const groupContext = useDelayGroupContext();
@@ -137,6 +138,7 @@ export function useDelayGroup(
     groupContext;
 
   useModernLayoutEffect(() => {
+    if (!enabled) return;
     if (!currentId) return;
 
     setState({
@@ -149,7 +151,7 @@ export function useDelayGroup(
     if (currentId !== id) {
       onOpenChange(false);
     }
-  }, [id, onOpenChange, setState, currentId, initialDelay]);
+  }, [enabled, id, onOpenChange, setState, currentId, initialDelay]);
 
   useModernLayoutEffect(() => {
     function unset() {
@@ -157,6 +159,7 @@ export function useDelayGroup(
       setState({delay: initialDelay, currentId: null});
     }
 
+    if (!enabled) return;
     if (!currentId) return;
 
     if (!open && currentId === id) {
@@ -169,12 +172,22 @@ export function useDelayGroup(
 
       unset();
     }
-  }, [open, setState, currentId, id, onOpenChange, initialDelay, timeoutMs]);
+  }, [
+    enabled,
+    open,
+    setState,
+    currentId,
+    id,
+    onOpenChange,
+    initialDelay,
+    timeoutMs,
+  ]);
 
   useModernLayoutEffect(() => {
+    if (!enabled) return;
     if (setCurrentId === NOOP || !open) return;
     setCurrentId(id);
-  }, [open, setCurrentId, id]);
+  }, [enabled, open, setCurrentId, id]);
 
   return groupContext;
 }
