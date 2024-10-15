@@ -111,6 +111,7 @@ export interface FloatingFocusManagerProps {
    * floating element closes/unmounts (or if that is not available, the
    * previously focused element). This prop is ignored if the floating element
    * lost focus.
+   * It can be also set to a ref to explicitly control the element to return focus to.
    * @default true
    */
   returnFocus?: boolean | React.MutableRefObject<HTMLElement | null>;
