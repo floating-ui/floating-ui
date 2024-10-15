@@ -555,7 +555,7 @@ export function FloatingFocusManager(
 
     function getReturnElement() {
       if (typeof returnFocusRef.current === 'boolean') {
-        return getPreviouslyFocusedElement || fallbackEl;
+        return getPreviouslyFocusedElement() || fallbackEl;
       }
 
       return returnFocusRef.current.current || fallbackEl;

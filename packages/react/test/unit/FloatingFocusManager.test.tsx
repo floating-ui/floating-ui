@@ -177,6 +177,29 @@ describe('returnFocus', () => {
     expect(screen.getByTestId('reference')).not.toHaveFocus();
   });
 
+  test('ref', async () => {
+    function Test() {
+      const ref = useRef<HTMLInputElement | null>(null);
+      return (
+        <div>
+          <input />
+          <input data-testid="focus-target" ref={ref} />
+          <input />
+          <App returnFocus={ref} />
+        </div>
+      );
+    }
+
+    render(<Test />);
+    screen.getByTestId('reference').focus();
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    fireEvent.click(screen.getByTestId('three'));
+    await act(async () => {});
+    expect(screen.getByTestId('focus-target')).toHaveFocus();
+  });
+
   test('always returns to the reference for nested elements', async () => {
     const NestedDialog: React.FC<DialogProps> = (props) => {
       const parentId = useFloatingParentNodeId();
