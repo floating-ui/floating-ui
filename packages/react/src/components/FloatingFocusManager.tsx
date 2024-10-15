@@ -113,7 +113,7 @@ export interface FloatingFocusManagerProps {
    * lost focus.
    * @default true
    */
-  returnFocus?: boolean;
+  returnFocus?: boolean | React.MutableRefObject<HTMLElement | null>;
   /**
    * Determines if focus should be restored to the nearest tabbable element if
    * focus inside the floating element is lost (such as due to the removal of
@@ -553,6 +553,14 @@ export function FloatingFocusManager(
       domReference.insertAdjacentElement('afterend', fallbackEl);
     }
 
+    function getReturnElement() {
+      if (typeof returnFocusRef.current === 'boolean') {
+        return getPreviouslyFocusedElement || fallbackEl;
+      }
+
+      return returnFocusRef.current.current || fallbackEl;
+    }
+
     return () => {
       events.off('openchange', onOpenChange);
 
@@ -571,7 +579,7 @@ export function FloatingFocusManager(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      const returnElement = getPreviouslyFocusedElement() || fallbackEl;
+      const returnElement = getReturnElement();
 
       queueMicrotask(() => {
         if (
