@@ -2,4 +2,4 @@
 "@floating-ui/react": patch
 ---
 
-feat(FloatingFocusManager): Specify element to return focus to
+feat(FloatingFocusManager): specify element to return focus to
