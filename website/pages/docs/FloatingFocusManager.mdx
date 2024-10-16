@@ -50,7 +50,9 @@ interface FloatingFocusManagerProps {
   initialFocus?:
     | number
     | React.MutableRefObject<HTMLElement | null>;
-  returnFocus?: boolean;
+  returnFocus?:
+    | boolean
+    | React.MutableRefObject<HTMLElement | null>;
   restoreFocus?: boolean;
   guards?: boolean;
   modal?: boolean;
@@ -140,6 +142,7 @@ default: `true{:js}`
 Determines if focus should be returned to the reference element
 (or if that is not available, the previously focused element).
 This prop is ignored if the floating element lost focus.
+It can be also set to a ref to explicitly control the element to return focus to.
 
 ```js
 <FloatingFocusManager context={context} returnFocus={false}>
