@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.26.26
+
+### Patch Changes
+
+- feat(FloatingFocusManager): specify element to return focus to
+
 ## 0.26.25
 
 ### Patch Changes
