@@ -126,7 +126,7 @@ workspaces. The website is using Next.js SSG and Tailwind CSS for styling.
 
 #### DOM
 
-`pnpm run dev --filter @floating-ui/dom` in the root will launch the
+`pnpm run --filter @floating-ui/dom dev` in the root will launch the
 `@floating-ui/dom` development visual tests at `http://localhost:1234`. The
 playground uses React to write each test route, bundled by Vite.
 
@@ -140,7 +140,7 @@ as much as possible.
 
 #### React
 
-`pnpm run dev --filter @floating-ui/react` in the root will launch the
+`pnpm run --filter @floating-ui/react dev` in the root will launch the
 `@floating-ui/react` development tests at `http://localhost:1234`.
 
 ## Credits
