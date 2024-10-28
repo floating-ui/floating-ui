@@ -1,5 +1,5 @@
 ---
-"@floating-ui/react": patch
+'@floating-ui/react': patch
 ---
 
-fix(useFloating): access domReference instead of reference
+fix(useFloating): access `domReference` instead of `reference`
