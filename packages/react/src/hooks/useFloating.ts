@@ -39,7 +39,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const [positionReference, _setPositionReference] =
     React.useState<ReferenceType | null>(null);
 
-  const optionDomReference = computedElements?.reference;
+  const optionDomReference = computedElements?.domReference;
   const domReference = (optionDomReference ||
     _domReference) as NarrowedElement<RT>;
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
