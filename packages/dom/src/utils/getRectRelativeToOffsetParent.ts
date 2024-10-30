@@ -11,6 +11,7 @@ import type {VirtualElement} from '../types';
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
+import {getHTMLOffset} from './getHTMLOffset';
 
 export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
@@ -49,21 +50,13 @@ export function getRectRelativeToOffsetParent(
     }
   }
 
-  let htmlX = 0;
-  let htmlY = 0;
+  const htmlOffset =
+    documentElement && !isOffsetParentAnElement && !isFixed
+      ? getHTMLOffset(documentElement, scroll)
+      : createCoords(0);
 
-  if (documentElement && !isOffsetParentAnElement && !isFixed) {
-    const htmlRect = documentElement.getBoundingClientRect();
-    htmlY = htmlRect.top + scroll.scrollTop;
-    htmlX =
-      htmlRect.left +
-      scroll.scrollLeft -
-      // RTL <body> scrollbar.
-      getWindowScrollBarX(documentElement, htmlRect);
-  }
-
-  const x = rect.left + scroll.scrollLeft - offsets.x - htmlX;
-  const y = rect.top + scroll.scrollTop - offsets.y - htmlY;
+  const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
+  const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
 
   return {
     x,

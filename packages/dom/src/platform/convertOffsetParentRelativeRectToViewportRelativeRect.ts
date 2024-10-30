@@ -11,6 +11,7 @@ import {
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
+import {getHTMLOffset} from '../utils/getHTMLOffset';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   elements,
@@ -52,10 +53,16 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
     }
   }
 
+  const htmlOffset =
+    documentElement && !isOffsetParentAnElement && !isFixed
+      ? getHTMLOffset(documentElement, scroll, true)
+      : createCoords(0);
+
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y,
+    x:
+      rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
+    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y,
   };
 }
