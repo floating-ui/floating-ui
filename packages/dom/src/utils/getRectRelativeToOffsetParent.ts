@@ -50,17 +50,13 @@ export function getRectRelativeToOffsetParent(
     }
   }
 
-  let htmlX = 0;
-  let htmlY = 0;
+  const htmlOffset =
+    documentElement && !isOffsetParentAnElement && !isFixed
+      ? getHTMLOffset(documentElement, scroll)
+      : createCoords(0);
 
-  if (documentElement && !isOffsetParentAnElement && !isFixed) {
-    const htmlOffset = getHTMLOffset(documentElement, scroll);
-    htmlX = htmlOffset.x;
-    htmlY = htmlOffset.y;
-  }
-
-  const x = rect.left + scroll.scrollLeft - offsets.x - htmlX;
-  const y = rect.top + scroll.scrollTop - offsets.y - htmlY;
+  const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
+  const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
 
   return {
     x,
