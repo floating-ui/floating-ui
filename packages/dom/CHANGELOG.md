@@ -1,5 +1,12 @@
 # @floating-ui/dom
 
+## 1.6.12
+
+### Patch Changes
+
+- fix: handle relative html offset clipping rect
+- fix(getClippingRect): allow passing `DOMRect` as a `boundary`
+
 ## 1.6.11
 
 ### Patch Changes
