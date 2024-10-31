@@ -53,12 +53,13 @@ interface MenuProps {
   label: string;
   nested?: boolean;
   children?: React.ReactNode;
+  virtualItemRef: React.RefObject<HTMLElement>;
 }
 
 export const MenuComponent = React.forwardRef<
   HTMLElement,
   MenuProps & React.HTMLAttributes<HTMLElement>
->(function Menu({children, label, ...props}, forwardedRef) {
+>(function Menu({children, label, virtualItemRef, ...props}, forwardedRef) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [allowHover, setAllowHover] = React.useState(false);
@@ -66,7 +67,6 @@ export const MenuComponent = React.forwardRef<
 
   const elementsRef = React.useRef<Array<HTMLElement | null>>([]);
   const labelsRef = React.useRef<Array<string | null>>([]);
-  const virtualItemRef = React.useRef<HTMLElement | null>(null);
 
   const tree = useFloatingTree();
   const nodeId = useFloatingNodeId();
@@ -359,18 +359,20 @@ export const Menu = React.forwardRef<
 });
 
 export const Main = () => {
+  const virtualItemRef = React.useRef<HTMLElement | null>(null);
+
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Menu Virtual</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
-        <Menu label="Edit">
+        <Menu label="Edit" virtualItemRef={virtualItemRef}>
           <MenuItem label="Undo" onClick={() => console.log('Undo')} />
           <MenuItem label="Redo" />
           <MenuItem label="Cut" disabled />
-          <Menu label="Copy as">
+          <Menu label="Copy as" virtualItemRef={virtualItemRef}>
             <MenuItem label="Text" />
             <MenuItem label="Video" />
-            <Menu label="Image">
+            <Menu label="Image" virtualItemRef={virtualItemRef}>
               <MenuItem label=".png" />
               <MenuItem label=".jpg" />
               <MenuItem label=".svg" />
@@ -378,7 +380,7 @@ export const Main = () => {
             </Menu>
             <MenuItem label="Audio" />
           </Menu>
-          <Menu label="Share">
+          <Menu label="Share" virtualItemRef={virtualItemRef}>
             <MenuItem label="Mail" />
             <MenuItem label="Instagram" />
           </Menu>
