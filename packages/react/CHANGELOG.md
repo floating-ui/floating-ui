@@ -1,5 +1,14 @@
 # @floating-ui/react
 
+## 0.26.27
+
+### Patch Changes
+
+- fix(useListNavigation): ignore Home/End key press for typeable combobox references
+- fix(useListNavigation): ensure submenu references are set as `virtualItemRef` on floating close
+- fix(inner): use list ref length for fallback detection
+- fix(FloatingPortal): allow `root` to be reactive from `null` to an element
+
 ## 0.26.26
 
 ### Patch Changes
