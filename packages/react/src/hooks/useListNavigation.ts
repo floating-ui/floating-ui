@@ -296,6 +296,8 @@ export function useListNavigation(
 
   const onNavigate = useEffectEvent(unstable_onNavigate);
 
+  const typeableComboboxReference = isTypeableCombobox(elements.domReference);
+
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
   const keyRef = React.useRef<null | string>(null);
@@ -631,16 +633,18 @@ export function useListNavigation(
     const minIndex = getMinIndex(listRef, disabledIndices);
     const maxIndex = getMaxIndex(listRef, disabledIndices);
 
-    if (event.key === 'Home') {
-      stopEvent(event);
-      indexRef.current = minIndex;
-      onNavigate(indexRef.current);
-    }
+    if (!typeableComboboxReference) {
+      if (event.key === 'Home') {
+        stopEvent(event);
+        indexRef.current = minIndex;
+        onNavigate(indexRef.current);
+      }
 
-    if (event.key === 'End') {
-      stopEvent(event);
-      indexRef.current = maxIndex;
-      onNavigate(indexRef.current);
+      if (event.key === 'End') {
+        stopEvent(event);
+        indexRef.current = maxIndex;
+        onNavigate(indexRef.current);
+      }
     }
 
     // Grid navigation.
