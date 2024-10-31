@@ -83,6 +83,9 @@ export function useFloatingPortalNode(props: UseFloatingPortalNodeProps = {}) {
   }, [id, uniqueId]);
 
   useModernLayoutEffect(() => {
+    // Wait for the root to exist before creating the portal node. The root must
+    // be stored in state, not a ref, for this to work reactively.
+    if (root === null) return;
     if (!uniqueId) return;
     if (portalNodeRef.current) return;
 
@@ -140,7 +143,7 @@ export interface FloatingPortalProps {
  * @see https://floating-ui.com/docs/FloatingPortal
  */
 export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
-  const {children, id, root = null, preserveTabOrder = true} = props;
+  const {children, id, root, preserveTabOrder = true} = props;
 
   const portalNode = useFloatingPortalNode({id, root});
   const [focusManagerState, setFocusManagerState] =
