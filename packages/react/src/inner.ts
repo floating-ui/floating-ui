@@ -176,8 +176,7 @@ export const inner = (
     if (onFallbackChange) {
       const shouldFallback =
         scrollEl.offsetHeight <
-          item.offsetHeight *
-            Math.min(minItemsVisible, listRef.current.length) -
+          item.offsetHeight * min(minItemsVisible, listRef.current.length) -
             1 ||
         refOverflow.top >= -referenceOverflowThreshold ||
         refOverflow.bottom >= -referenceOverflowThreshold;
