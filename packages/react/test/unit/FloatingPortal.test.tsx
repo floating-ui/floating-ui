@@ -83,3 +83,30 @@ test('allows refs as roots', async () => {
   expect(parent?.parentElement).toBe(el);
   document.body.removeChild(el);
 });
+
+test('allows roots to be initially null', async () => {
+  function RootApp() {
+    const [root, setRoot] = useState<HTMLElement | null>(null);
+    const [renderRoot, setRenderRoot] = useState(false);
+
+    React.useEffect(() => {
+      setRenderRoot(true);
+    }, []);
+
+    return (
+      <>
+        {renderRoot && <div ref={setRoot} data-testid="root" />}
+        <App root={root} />;
+      </>
+    );
+  }
+
+  render(<RootApp />);
+
+  fireEvent.click(screen.getByTestId('reference'));
+  await act(async () => {});
+
+  const subRoot = screen.getByTestId('floating').parentElement;
+  const root = screen.getByTestId('root');
+  expect(root).toBe(subRoot?.parentElement);
+});
