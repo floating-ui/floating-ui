@@ -1160,3 +1160,77 @@ test('virtual nested Home or End key press', async () => {
     'true',
   );
 });
+
+test('Home or End key press is ignored for typeable combobox reference', async () => {
+  function App() {
+    const [open, setOpen] = useState(false);
+    const listRef = useRef<Array<HTMLLIElement | null>>([]);
+    const [activeIndex, setActiveIndex] = useState<null | number>(null);
+    const {refs, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+    });
+    const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
+      [
+        useClick(context),
+        useListNavigation(context, {
+          listRef,
+          activeIndex,
+          onNavigate: setActiveIndex,
+        }),
+      ],
+    );
+
+    return (
+      <>
+        <input
+          role="combobox"
+          ref={refs.setReference}
+          {...getReferenceProps()}
+        />
+        {open && (
+          <div role="menu" {...getFloatingProps({ref: refs.setFloating})}>
+            <ul>
+              {['one', 'two', 'three'].map((string, index) => (
+                <li
+                  data-testid={`item-${index}`}
+                  aria-selected={activeIndex === index}
+                  key={string}
+                  tabIndex={-1}
+                  {...getItemProps({
+                    ref(node: HTMLLIElement) {
+                      listRef.current[index] = node;
+                    },
+                  })}
+                >
+                  {string}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  act(() => {
+    screen.getByRole('combobox').focus();
+  });
+
+  await userEvent.keyboard('{ArrowDown}');
+
+  await act(async () => {});
+
+  expect(screen.getByTestId('item-0')).toHaveFocus();
+
+  await userEvent.keyboard('{End}');
+
+  expect(screen.getByTestId('item-0')).toHaveFocus();
+
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{Home}');
+
+  expect(screen.getByTestId('item-1')).toHaveFocus();
+});
