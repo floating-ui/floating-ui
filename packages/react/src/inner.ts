@@ -175,8 +175,9 @@ export const inner = (
     // There is not enough space, fallback to standard anchored positioning
     if (onFallbackChange) {
       const shouldFallback =
-        (isScrollable &&
-          scrollEl.offsetHeight < item.offsetHeight * minItemsVisible - 1) ||
+        scrollEl.offsetHeight <
+          item.offsetHeight * min(minItemsVisible, listRef.current.length) -
+            1 ||
         refOverflow.top >= -referenceOverflowThreshold ||
         refOverflow.bottom >= -referenceOverflowThreshold;
 
