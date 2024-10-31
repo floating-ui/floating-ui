@@ -622,8 +622,12 @@ export function useListNavigation(
       stopEvent(event);
       onOpenChange(false, event.nativeEvent, 'list-navigation');
 
-      if (isHTMLElement(elements.domReference) && !virtual) {
-        elements.domReference.focus();
+      if (isHTMLElement(elements.domReference)) {
+        if (virtual) {
+          tree?.events.emit('virtualfocus', elements.domReference);
+        } else {
+          elements.domReference.focus();
+        }
       }
 
       return;

@@ -1122,14 +1122,15 @@ test('focus management in nested lists', async () => {
 });
 
 test('virtual nested Home or End key press', async () => {
+  const ref = {current: null};
   render(
-    <Menu label="Edit">
+    <Menu label="Edit" virtualItemRef={ref}>
       <MenuItem label="Undo" />
       <MenuItem label="Redo" />
-      <Menu label="Copy as">
+      <Menu label="Copy as" virtualItemRef={ref}>
         <MenuItem label="Text" />
         <MenuItem label="Video" />
-        <Menu label="Image">
+        <Menu label="Image" virtualItemRef={ref}>
           <MenuItem label=".png" />
           <MenuItem label=".jpg" />
           <MenuItem label=".svg" />
@@ -1137,7 +1138,7 @@ test('virtual nested Home or End key press', async () => {
         </Menu>
         <MenuItem label="Audio" />
       </Menu>
-      <Menu label="Share">
+      <Menu label="Share" virtualItemRef={ref}>
         <MenuItem label="Mail" />
         <MenuItem label="Instagram" />
       </Menu>
@@ -1159,6 +1160,50 @@ test('virtual nested Home or End key press', async () => {
     'aria-selected',
     'true',
   );
+});
+
+test('domReference trigger in nested virtual menu is set as virtual item', async () => {
+  const ref = {current: null};
+  function App() {
+    return (
+      <Menu label="Edit" virtualItemRef={ref}>
+        <MenuItem label="Undo" />
+        <MenuItem label="Redo" />
+        <Menu label="Copy as" data-testid="copy" virtualItemRef={ref}>
+          <MenuItem label="Text" />
+          <MenuItem label="Video" />
+          <Menu label="Image" virtualItemRef={ref}>
+            <MenuItem label=".png" />
+            <MenuItem label=".jpg" />
+            <MenuItem label=".svg" />
+            <MenuItem label=".gif" />
+          </Menu>
+          <MenuItem label="Audio" />
+        </Menu>
+        <Menu label="Share" virtualItemRef={ref}>
+          <MenuItem label="Mail" />
+          <MenuItem label="Instagram" />
+        </Menu>
+      </Menu>
+    );
+  }
+
+  render(<App />);
+
+  act(() => {
+    screen.getByRole('combobox').focus();
+  });
+
+  await userEvent.keyboard('{ArrowDown}'); // open menu
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowDown}'); // focus Copy as menu
+  await userEvent.keyboard('{ArrowRight}'); // open Copy as submenu
+
+  expect(screen.getByText('Text')).toHaveAttribute('aria-selected', 'true');
+
+  await userEvent.keyboard('{ArrowLeft}'); // close Copy as submenu
+
+  expect(ref.current).toBe(screen.getByTestId('copy'));
 });
 
 test('Home or End key press is ignored for typeable combobox reference', async () => {
