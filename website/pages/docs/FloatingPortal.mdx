@@ -71,6 +71,13 @@ appended to.
 <FloatingPortal root={rootNodeRef} />
 ```
 
+<Notice>
+  If the `rootNode` doesn't exist when the portal is mounted,
+  ensure you pass an element directly (not a ref) and specify
+  `null` as the default value before it is set. This lets it wait
+  for the root to be available.
+</Notice>
+
 ### `id{:.keyword}`
 
 Optionally selects the node with the id if it exists, or create
