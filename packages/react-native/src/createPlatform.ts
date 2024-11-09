@@ -1,8 +1,10 @@
 import type {Platform, VirtualElement} from '@floating-ui/core';
-import {Dimensions} from 'react-native';
+import {Dimensions, Platform as RNPlatform, StatusBar} from 'react-native';
 import type {View} from 'react-native';
 
 const ORIGIN = {x: 0, y: 0};
+
+const isAndroid = RNPlatform.OS === 'android';
 
 function isView(reference: View | VirtualElement): reference is View {
   return 'measure' in reference;
@@ -37,6 +39,7 @@ export const createPlatform = ({
             if (isView(reference)) {
               reference[method](
                 (x: number, y: number, width: number, height: number) => {
+                  y = isAndroid && !sameScrollView && StatusBar.currentHeight ? y + StatusBar.currentHeight : y;
                   const referenceRect = {
                     width,
                     height,
@@ -70,10 +73,17 @@ export const createPlatform = ({
     });
   },
   getClippingRect() {
-    const {width, height} = Dimensions.get('window');
+    const {width: windowWidth, height: windowHeight} = Dimensions.get('window');
+    const {height: screenHeight} = Dimensions.get('screen');
+    const statusBarHeight = StatusBar.currentHeight || 0;
+    // on iOS: screenHeight = windowHeight
+    // on Android: screenHeight = windowHeight + statusBarHeight + navigationBarHeight
+    const navigationBarHeight = isAndroid
+      ? screenHeight - windowHeight - statusBarHeight
+      : 0;
     return Promise.resolve({
-      width,
-      height,
+      width: windowWidth,
+      height: screenHeight - navigationBarHeight,
       ...(sameScrollView ? scrollOffsets : ORIGIN),
     });
   },
