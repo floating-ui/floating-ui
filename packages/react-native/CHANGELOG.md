@@ -1,5 +1,11 @@
 # @floating-ui/react-native
 
+## 0.10.7
+
+### Patch Changes
+
+- fix: correctly calculate y-coordinate on Android
+
 ## 0.10.6
 
 ### Patch Changes
