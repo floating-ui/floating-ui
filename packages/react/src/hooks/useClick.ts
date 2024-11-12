@@ -49,6 +49,12 @@ export interface UseClickProps {
    * @default true
    */
   keyboardHandlers?: boolean;
+  /**
+   * When combining with the `useHover()` Hook, determines whether to keep the
+   * floating element open upon toggle when clicked after opening on hover.
+   * @default true
+   */
+  stickyHover?: boolean;
 }
 
 /**
@@ -71,6 +77,7 @@ export function useClick(
     toggle = true,
     ignoreMouse = false,
     keyboardHandlers = true,
+    stickyHover = true,
   } = props;
 
   const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
@@ -93,7 +100,7 @@ export function useClick(
         if (
           open &&
           toggle &&
-          (dataRef.current.openEvent
+          (dataRef.current.openEvent && stickyHover
             ? dataRef.current.openEvent.type === 'mousedown'
             : true)
         ) {
@@ -117,7 +124,7 @@ export function useClick(
         if (
           open &&
           toggle &&
-          (dataRef.current.openEvent
+          (dataRef.current.openEvent && stickyHover
             ? dataRef.current.openEvent.type === 'click'
             : true)
         ) {
@@ -179,6 +186,7 @@ export function useClick(
       keyboardHandlers,
       onOpenChange,
       open,
+      stickyHover,
       toggle,
     ],
   );
