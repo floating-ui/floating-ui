@@ -186,6 +186,7 @@ export const Composite = React.forwardRef<
               event,
               orientation,
               loop,
+              rtl: false,
               cols,
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
