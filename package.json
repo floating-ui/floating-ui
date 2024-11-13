@@ -1,6 +1,7 @@
 {
   "name": "@floating-ui/monorepo",
   "private": true,
+  "packageManager": "pnpm@8.13.1",
   "version": "0.0.0",
   "description": "Floating UI monorepo",
   "engines": {
