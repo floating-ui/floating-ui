@@ -11,6 +11,7 @@ import {useRef, useState} from 'react';
 interface Props {
   orientation?: 'horizontal' | 'both';
   loop?: boolean;
+  rtl?: boolean;
 }
 
 /*
@@ -27,7 +28,7 @@ interface Props {
  * 36   36
  */
 
-export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
+export const Main = ({orientation = 'horizontal', loop = false, rtl = false}: Props) => {
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -60,6 +61,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
       cols: 7,
       orientation,
       loop,
+      rtl,
       openOnArrowKeyDown: false,
       disabledIndices,
       itemSizes,
