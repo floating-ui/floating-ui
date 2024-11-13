@@ -142,7 +142,7 @@ describe('`toggle` prop', () => {
   });
 });
 
-describe('stickIfOpen prop', async () => {
+describe('`stickIfOpen` prop', async () => {
   function App({stickIfOpen}: {stickIfOpen?: boolean}) {
     const [open, setOpen] = useState(false);
     const {refs, context} = useFloating({
