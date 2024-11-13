@@ -142,6 +142,72 @@ describe('`toggle` prop', () => {
   });
 });
 
+describe('stickIfOpen prop', async () => {
+  function App({stickIfOpen}: {stickIfOpen?: boolean}) {
+    const [open, setOpen] = useState(false);
+    const {refs, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+    });
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      useHover(context),
+      useClick(context, {stickIfOpen}),
+    ]);
+
+    return (
+      <>
+        <button
+          {...getReferenceProps({ref: refs.setReference})}
+          data-testid="reference"
+        />
+        {open && (
+          <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
+        )}
+      </>
+    );
+  }
+
+  test('true: `open` state remains `true` after click and mouseleave', async () => {
+    render(<App stickIfOpen />);
+
+    const button = screen.getByRole('button');
+
+    fireEvent.mouseEnter(button);
+
+    await act(async () => {});
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+    fireEvent.mouseLeave(button);
+
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+  });
+
+  test('false: `open` state becomes `false` after click and mouseleave', async () => {
+    render(<App stickIfOpen={false} />);
+
+    const button = screen.getByRole('button');
+
+    fireEvent.mouseEnter(button);
+
+    await act(async () => {});
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+});
+
 describe('non-buttons', () => {
   test('adds Enter keydown', () => {
     render(<App button={false} />);
@@ -195,42 +261,6 @@ test('ignores Space keydown on another element then keyup on the button', async 
   fireEvent.keyUp(button, {key: ' '});
 
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-});
-
-test('with useHover does not close on mouseleave after click', async () => {
-  function App() {
-    const [open, setOpen] = useState(false);
-    const {refs, context} = useFloating({
-      open,
-      onOpenChange: setOpen,
-    });
-    const {getReferenceProps, getFloatingProps} = useInteractions([
-      useHover(context),
-      useClick(context),
-    ]);
-
-    return (
-      <>
-        <button
-          {...getReferenceProps({ref: refs.setReference})}
-          data-testid="reference"
-        />
-        {open && (
-          <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
-        )}
-      </>
-    );
-  }
-
-  render(<App />);
-
-  const button = screen.getByTestId('reference');
-  fireEvent.mouseEnter(button);
-  fireEvent.click(button);
-  fireEvent.mouseLeave(button);
-
-  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
-  cleanup();
 });
 
 test('reason string', async () => {
