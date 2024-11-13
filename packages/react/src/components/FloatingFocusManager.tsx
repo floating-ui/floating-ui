@@ -234,10 +234,6 @@ export function FloatingFocusManager(
   });
 
   React.useEffect(() => {
-    preventReturnFocusRef.current = false;
-  }, [disabled]);
-
-  React.useEffect(() => {
     if (disabled) return;
     if (!modal) return;
 
@@ -614,6 +610,14 @@ export function FloatingFocusManager(
     isInsidePortal,
     domReference,
   ]);
+
+  React.useEffect(() => {
+    // The `returnFocus` cleanup behavior is inside a microtask; ensure we
+    // wait for it to complete before resetting the flag.
+    queueMicrotask(() => {
+      preventReturnFocusRef.current = false;
+    });
+  }, [disabled]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
   // It will decide whether or not it needs to render its own guards.
