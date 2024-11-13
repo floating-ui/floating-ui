@@ -350,3 +350,109 @@ describe('grid', () => {
     expect(screen.getByTestId('78')).toHaveFocus();
   });
 });
+
+describe('rtl', () => {
+  test('list', async () => {
+    render(
+      <Composite rtl>
+        <CompositeItem data-testid="1">1</CompositeItem>
+        <CompositeItem data-testid="2">2</CompositeItem>
+        <CompositeItem data-testid="3">3</CompositeItem>
+      </Composite>,
+    );
+
+    act(() => screen.getByTestId('1').focus());
+    expect(screen.getByTestId('1')).toHaveAttribute('data-active');
+
+    fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowLeft'});
+    await microtask();
+    expect(screen.getByTestId('2')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('2')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('2')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByTestId('2'), {key: 'ArrowRight'});
+    await microtask();
+    expect(screen.getByTestId('1')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('1')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowRight'});
+    await microtask();
+    expect(screen.getByTestId('3')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('3')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('3')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByTestId('3'), {key: 'ArrowLeft'});
+    await microtask();
+    expect(screen.getByTestId('1')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('1')).toHaveFocus();
+  });
+
+  test('grid', async () => {
+    function App() {
+      return (
+        // 1 to 8 numpad on 2 rows, but 2, 3, 6 and 7 are one big button, and so are 4 and 8.
+        // 4 3 2 1
+        // 8 7 6 5
+        <Composite
+          rtl
+          cols={4}
+          itemSizes={[
+            {width: 1, height: 1},
+            {width: 2, height: 2},
+            {width: 1, height: 2},
+            {width: 1, height: 1},
+          ]}
+        >
+          {['1', '2367', '48', '5'].map((i) => (
+            <CompositeItem key={i} data-testid={i}>
+              {i}
+            </CompositeItem>
+          ))}
+        </Composite>
+      );
+    }
+
+    render(<App />);
+
+    act(() => screen.getByTestId('1').focus());
+    expect(screen.getByTestId('1')).toHaveAttribute('data-active');
+
+    fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowLeft'});
+    await microtask();
+    expect(screen.getByTestId('2367')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('2367')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('2367')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByTestId('2367'), {key: 'ArrowLeft'});
+    await microtask();
+    expect(screen.getByTestId('48')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('48')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('48')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByTestId('48'), {key: 'ArrowRight'});
+    await microtask();
+    expect(screen.getByTestId('2367')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('2367')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('2367')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByTestId('2367'), {key: 'ArrowRight'});
+    await microtask();
+    expect(screen.getByTestId('1')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('1')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
+    await microtask();
+    expect(screen.getByTestId('5')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('5')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('5')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByTestId('5'), {key: 'ArrowRight'});
+    await microtask();
+    expect(screen.getByTestId('48')).toHaveAttribute('data-active');
+    expect(screen.getByTestId('48')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('48')).toHaveFocus();
+  });
+});
