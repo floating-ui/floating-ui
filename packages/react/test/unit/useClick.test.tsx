@@ -167,14 +167,12 @@ describe('stickIfOpen prop', async () => {
     );
   }
 
-  test('true: `open` state remains `true` after click and mouseleave', async () => {
+  test('true: `open` state remains `true` after click and mouseleave', () => {
     render(<App stickIfOpen />);
 
     const button = screen.getByRole('button');
 
     fireEvent.mouseEnter(button);
-
-    await act(async () => {});
 
     fireEvent.click(button);
 
@@ -183,16 +181,16 @@ describe('stickIfOpen prop', async () => {
     fireEvent.mouseLeave(button);
 
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+    cleanup();
   });
 
-  test('false: `open` state becomes `false` after click and mouseleave', async () => {
+  test('false: `open` state becomes `false` after click and mouseleave', () => {
     render(<App stickIfOpen={false} />);
 
     const button = screen.getByRole('button');
 
     fireEvent.mouseEnter(button);
-
-    await act(async () => {});
 
     fireEvent.click(button);
 
@@ -205,6 +203,8 @@ describe('stickIfOpen prop', async () => {
     fireEvent.click(button);
 
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+    cleanup();
   });
 });
 
