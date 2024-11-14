@@ -36,9 +36,6 @@ export interface UseClickProps {
   /**
    * Whether to ignore the logic for mouse input (for example, if `useHover()`
    * is also being used).
-   * When `useHover()` and `useClick()` are used together, clicking the
-   * reference element after hovering it will keep the floating element open
-   * even once the cursor leaves. This may be not be desirable in some cases.
    * @default false
    */
   ignoreMouse?: boolean;
@@ -49,6 +46,13 @@ export interface UseClickProps {
    * @default true
    */
   keyboardHandlers?: boolean;
+  /**
+   * If already open from another event such as the `useHover()` Hook,
+   * determines whether to keep the floating element open when clicking the
+   * reference element for the first time.
+   * @default true
+   */
+  stickIfOpen?: boolean;
 }
 
 /**
@@ -71,6 +75,7 @@ export function useClick(
     toggle = true,
     ignoreMouse = false,
     keyboardHandlers = true,
+    stickIfOpen = true,
   } = props;
 
   const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
@@ -93,7 +98,7 @@ export function useClick(
         if (
           open &&
           toggle &&
-          (dataRef.current.openEvent
+          (dataRef.current.openEvent && stickIfOpen
             ? dataRef.current.openEvent.type === 'mousedown'
             : true)
         ) {
@@ -117,7 +122,7 @@ export function useClick(
         if (
           open &&
           toggle &&
-          (dataRef.current.openEvent
+          (dataRef.current.openEvent && stickIfOpen
             ? dataRef.current.openEvent.type === 'click'
             : true)
         ) {
@@ -179,6 +184,7 @@ export function useClick(
       keyboardHandlers,
       onOpenChange,
       open,
+      stickIfOpen,
       toggle,
     ],
   );

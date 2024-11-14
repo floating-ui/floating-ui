@@ -216,17 +216,17 @@ export function useHover(
     }
   });
 
+  const isClickLikeOpenEvent = useEffectEvent(() => {
+    return dataRef.current.openEvent
+      ? ['click', 'mousedown'].includes(dataRef.current.openEvent.type)
+      : false;
+  });
+
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
   // the reference (no gap), `mouseenter` doesn't fire in the delegation system.
   React.useEffect(() => {
     if (!enabled) return;
-
-    function isClickLikeOpenEvent() {
-      return dataRef.current.openEvent
-        ? ['click', 'mousedown'].includes(dataRef.current.openEvent.type)
-        : false;
-    }
 
     function onMouseEnter(event: MouseEvent) {
       clearTimeout(timeoutRef.current);
@@ -251,7 +251,7 @@ export function useHover(
             onOpenChange(true, event, 'hover');
           }
         }, openDelay);
-      } else {
+      } else if (!open) {
         onOpenChange(true, event, 'hover');
       }
     }
@@ -279,7 +279,9 @@ export function useHover(
           onClose() {
             clearPointerEvents();
             cleanupMouseMoveHandler();
-            closeWithDelay(event, true, 'safe-polygon');
+            if (!isClickLikeOpenEvent()) {
+              closeWithDelay(event, true, 'safe-polygon');
+            }
           },
         });
 
@@ -320,7 +322,9 @@ export function useHover(
         onClose() {
           clearPointerEvents();
           cleanupMouseMoveHandler();
-          closeWithDelay(event);
+          if (!isClickLikeOpenEvent()) {
+            closeWithDelay(event);
+          }
         },
       })(event);
     }
@@ -360,6 +364,7 @@ export function useHover(
     delayRef,
     handleCloseRef,
     dataRef,
+    isClickLikeOpenEvent,
   ]);
 
   // Block pointer-events of every element other than the reference and floating
@@ -480,10 +485,12 @@ export function useHover(
         clearTimeout(timeoutRef.current);
       },
       onMouseLeave(event) {
-        closeWithDelay(event.nativeEvent, false);
+        if (!isClickLikeOpenEvent()) {
+          closeWithDelay(event.nativeEvent, false);
+        }
       },
     }),
-    [closeWithDelay],
+    [closeWithDelay, isClickLikeOpenEvent],
   );
 
   return React.useMemo(

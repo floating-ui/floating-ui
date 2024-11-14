@@ -69,6 +69,7 @@ interface UseClickProps {
   toggle?: boolean;
   ignoreMouse?: boolean;
   keyboardHandlers?: boolean;
+  stickIfOpen?: boolean;
 }
 ```
 
@@ -116,11 +117,6 @@ default: `false{:js}`
 Whether to ignore the logic for mouse input (for example, if
 `useHover(){:js}` is also being used).
 
-When `useHover(){:js}` and `useClick(){:js}` are used together,
-clicking the reference element after hovering it will keep the
-floating element open even once the cursor leaves. This may be
-not be desirable in some cases.
-
 ```js
 useClick(context, {
   ignoreMouse: true,
@@ -138,5 +134,19 @@ floating element via keyboard "click").
 ```js
 useClick(context, {
   keyboardHandlers: false,
+});
+```
+
+### `stickIfOpen{:.key}`
+
+default: `true{:js}`
+
+If already open from another event such as the `useHover(){:js}`
+Hook, determines whether to keep the floating element open when
+clicking the reference element for the first time.
+
+```js
+useClick(context, {
+  stickIfOpen: false,
 });
 ```
