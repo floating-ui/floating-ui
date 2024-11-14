@@ -687,6 +687,7 @@ export function useListNavigation(
               event,
               orientation,
               loop,
+              rtl,
               cols,
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
@@ -712,7 +713,7 @@ export function useListNavigation(
                 // top/left over bottom/right.
                 event.key === ARROW_DOWN
                   ? 'bl'
-                  : event.key === ARROW_RIGHT
+                  : event.key === (rtl ? ARROW_LEFT : ARROW_RIGHT)
                     ? 'tr'
                     : 'tl',
               ),

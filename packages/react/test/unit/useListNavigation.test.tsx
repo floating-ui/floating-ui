@@ -299,7 +299,7 @@ describe('loop', () => {
 });
 
 describe('orientation', () => {
-  test('navigates down on ArrowDown', async () => {
+  test('navigates down on ArrowRight', async () => {
     render(<App orientation="horizontal" />);
 
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowRight'});
@@ -334,6 +334,48 @@ describe('orientation', () => {
 
     // Reached the end of the list.
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowLeft'});
+    expect(screen.getByTestId('item-0')).toHaveFocus();
+
+    cleanup();
+  });
+});
+
+describe('rtl', () => {
+  test('navigates down on ArrowLeft', async () => {
+    render(<App rtl={true} orientation="horizontal" />);
+
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowLeft'});
+    expect(screen.queryByRole('menu')).toBeInTheDocument();
+    expect(screen.getByTestId('item-0')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowLeft'});
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowLeft'});
+    expect(screen.getByTestId('item-2')).toHaveFocus();
+
+    // Reached the end of the list.
+    fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowLeft'});
+    expect(screen.getByTestId('item-2')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('navigates up on ArrowRight', async () => {
+    render(<App rtl={true} orientation="horizontal" />);
+
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowRight'});
+    expect(screen.queryByRole('menu')).toBeInTheDocument();
+    expect(screen.getByTestId('item-2')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowRight'});
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowRight'});
+    expect(screen.getByTestId('item-0')).toHaveFocus();
+
+    // Reached the end of the list.
+    fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowRight'});
     expect(screen.getByTestId('item-0')).toHaveFocus();
 
     cleanup();
@@ -487,6 +529,7 @@ describe('grid navigation', () => {
     expect(screen.getAllByRole('option')[8]).toHaveFocus();
     cleanup();
   });
+
   test('focuses first non-disabled item in grid', () => {
     render(<Grid />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
@@ -650,6 +693,7 @@ describe('grid navigation', () => {
     cleanup();
   });
 });
+
 describe('grid navigation when items have different sizes', () => {
   test('focuses first non-disabled item in grid', () => {
     render(<ComplexGrid />);
@@ -659,198 +703,203 @@ describe('grid navigation when items have different sizes', () => {
     cleanup();
   });
 
-  test('focuses next item using ArrowRight key, skipping disabled items', () => {
-    render(<ComplexGrid />);
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
-    fireEvent.click(screen.getByRole('button'));
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[8]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[10]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[13]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[15]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[20]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[24]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[34]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[36]).toHaveFocus();
-    cleanup();
-  });
+  describe.each([
+    {rtl: false, arrowToStart: 'ArrowLeft', arrowToEnd: 'ArrowRight'},
+    {rtl: true, arrowToStart: 'ArrowRight', arrowToEnd: 'ArrowLeft'},
+  ])('with rtl $rtl', ({rtl, arrowToStart, arrowToEnd}) => {
+    test(`focuses next item using ${arrowToEnd} key, skipping disabled items`, () => {
+      render(<ComplexGrid rtl={rtl} />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[8]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[10]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[13]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[15]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[20]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[24]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[34]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[36]).toHaveFocus();
+      cleanup();
+    });
 
-  test('focuses previous item using ArrowLeft key, skipping disabled items', () => {
-    render(<ComplexGrid />);
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
-    fireEvent.click(screen.getByRole('button'));
+    test(`focuses previous item using ${arrowToStart} key, skipping disabled items`, () => {
+      render(<ComplexGrid rtl={rtl} />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
 
-    act(() => screen.getAllByRole('option')[36].focus());
+      act(() => screen.getAllByRole('option')[36].focus());
 
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    expect(screen.getAllByRole('option')[34]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    expect(screen.getAllByRole('option')[28]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    expect(screen.getAllByRole('option')[20]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    expect(screen.getAllByRole('option')[7]).toHaveFocus();
-    cleanup();
-  });
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      expect(screen.getAllByRole('option')[34]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      expect(screen.getAllByRole('option')[28]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      expect(screen.getAllByRole('option')[20]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      expect(screen.getAllByRole('option')[7]).toHaveFocus();
+      cleanup();
+    });
 
-  test('moves through rows when pressing ArrowDown, prefers left side of wide items', () => {
-    render(<ComplexGrid />);
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
-    fireEvent.click(screen.getByRole('button'));
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    expect(screen.getAllByRole('option')[20]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    expect(screen.getAllByRole('option')[25]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    expect(screen.getAllByRole('option')[31]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    expect(screen.getAllByRole('option')[36]).toHaveFocus();
+    test(`moves through rows when pressing ArrowDown, prefers ${rtl ? 'right' : 'left'} side of wide items`, () => {
+      render(<ComplexGrid rtl={rtl} />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      expect(screen.getAllByRole('option')[20]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      expect(screen.getAllByRole('option')[25]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      expect(screen.getAllByRole('option')[31]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      expect(screen.getAllByRole('option')[36]).toHaveFocus();
 
-    cleanup();
-  });
+      cleanup();
+    });
 
-  test('moves through rows when pressing ArrowUp, prefers left side of wide items', () => {
-    render(<ComplexGrid />);
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
-    fireEvent.click(screen.getByRole('button'));
+    test(`moves through rows when pressing ArrowUp, prefers ${rtl ? 'right' : 'left'} side of wide items`, () => {
+      render(<ComplexGrid rtl={rtl} />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
 
-    act(() => screen.getAllByRole('option')[29].focus());
+      act(() => screen.getAllByRole('option')[29].focus());
 
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    expect(screen.getAllByRole('option')[21]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    expect(screen.getAllByRole('option')[15]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    expect(screen.getAllByRole('option')[8]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      expect(screen.getAllByRole('option')[21]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      expect(screen.getAllByRole('option')[15]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      expect(screen.getAllByRole('option')[8]).toHaveFocus();
 
-    cleanup();
-  });
+      cleanup();
+    });
 
-  test('loops over column with ArrowDown, prefers left side of wide items', () => {
-    render(<ComplexGrid loop />);
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
-    fireEvent.click(screen.getByRole('button'));
+    test(`loops over column with ArrowDown, prefers ${rtl ? 'right' : 'left'} side of wide items`, () => {
+      render(<ComplexGrid rtl={rtl} loop />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
 
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
 
-    expect(screen.getAllByRole('option')[13]).toHaveFocus();
+      expect(screen.getAllByRole('option')[13]).toHaveFocus();
 
-    cleanup();
-  });
+      cleanup();
+    });
 
-  test('loops over column with ArrowUp, prefers left side of wide items', () => {
-    render(<ComplexGrid loop />);
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
-    fireEvent.click(screen.getByRole('button'));
+    test(`loops over column with ArrowUp, prefers ${rtl ? 'right' : 'left'} side of wide items`, () => {
+      render(<ComplexGrid rtl={rtl} loop />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
 
-    act(() => screen.getAllByRole('option')[30].focus());
+      act(() => screen.getAllByRole('option')[30].focus());
 
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
 
-    expect(screen.getAllByRole('option')[8]).toHaveFocus();
+      expect(screen.getAllByRole('option')[8]).toHaveFocus();
 
-    cleanup();
-  });
+      cleanup();
+    });
 
-  test('loops over row with "both" orientation, prefers top side of tall items', () => {
-    render(<ComplexGrid orientation="both" loop />);
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
-    fireEvent.click(screen.getByRole('button'));
+    test('loops over row with "both" orientation, prefers top side of tall items', () => {
+      render(<ComplexGrid rtl={rtl} orientation="both" loop />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
 
-    act(() => screen.getAllByRole('option')[20].focus());
+      act(() => screen.getAllByRole('option')[20].focus());
 
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[21]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[20]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    expect(screen.getAllByRole('option')[21]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowLeft'});
-    expect(screen.getAllByRole('option')[21]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[21]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[20]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      expect(screen.getAllByRole('option')[21]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToStart});
+      expect(screen.getAllByRole('option')[21]).toHaveFocus();
 
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
-    expect(screen.getAllByRole('option')[22]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[24]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[20]).toHaveFocus();
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[21]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      expect(screen.getAllByRole('option')[22]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[24]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[20]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[21]).toHaveFocus();
 
-    cleanup();
-  });
+      cleanup();
+    });
 
-  test('looping works on last row', () => {
-    render(<ComplexGrid orientation="both" loop />);
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
-    fireEvent.click(screen.getByRole('button'));
+    test('looping works on last row', () => {
+      render(<ComplexGrid rtl={rtl} orientation="both" loop />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
 
-    act(() => screen.getAllByRole('option')[36].focus());
+      act(() => screen.getAllByRole('option')[36].focus());
 
-    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowRight'});
-    expect(screen.getAllByRole('option')[36]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: arrowToEnd});
+      expect(screen.getAllByRole('option')[36]).toHaveFocus();
 
-    cleanup();
-  });
+      cleanup();
+    });
+  })
 });
 
 test('scheduled list population', async () => {
