@@ -66,6 +66,10 @@ export interface CompositeProps {
    */
   loop?: boolean;
   /**
+   * Whether the direction of the composite’s navigation is in RTL layout.
+   */
+  rtl?: boolean;
+  /**
    * Determines the number of columns there are in the composite
    * (i.e. it’s a grid).
    */
@@ -118,6 +122,7 @@ export const Composite = React.forwardRef<
     render,
     orientation = 'both',
     loop = true,
+    rtl = false,
     cols = 1,
     disabledIndices,
     activeIndex: externalActiveIndex,
@@ -148,6 +153,9 @@ export const Composite = React.forwardRef<
     let nextIndex = activeIndex;
     const minIndex = getMinIndex(elementsRef, disabledIndices);
     const maxIndex = getMaxIndex(elementsRef, disabledIndices);
+
+    const horizontalEndKey = rtl ? ARROW_LEFT : ARROW_RIGHT;
+    const horizontalStartKey = rtl ? ARROW_RIGHT : ARROW_LEFT;
 
     if (isGrid) {
       const sizes =
@@ -186,7 +194,7 @@ export const Composite = React.forwardRef<
               event,
               orientation,
               loop,
-              rtl: false,
+              rtl,
               cols,
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
@@ -214,7 +222,7 @@ export const Composite = React.forwardRef<
                 // top/left over bottom/right.
                 event.key === ARROW_DOWN
                   ? 'bl'
-                  : event.key === ARROW_RIGHT
+                  : event.key === horizontalEndKey
                     ? 'tr'
                     : 'tl',
               ),
@@ -228,15 +236,15 @@ export const Composite = React.forwardRef<
     }
 
     const toEndKeys = {
-      horizontal: [ARROW_RIGHT],
+      horizontal: [horizontalEndKey],
       vertical: [ARROW_DOWN],
-      both: [ARROW_RIGHT, ARROW_DOWN],
+      both: [horizontalEndKey, ARROW_DOWN],
     }[orientation];
 
     const toStartKeys = {
-      horizontal: [ARROW_LEFT],
+      horizontal: [horizontalStartKey],
       vertical: [ARROW_UP],
-      both: [ARROW_LEFT, ARROW_UP],
+      both: [horizontalStartKey, ARROW_UP],
     }[orientation];
 
     const preventedKeys = isGrid

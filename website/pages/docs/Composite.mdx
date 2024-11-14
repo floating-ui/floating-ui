@@ -72,6 +72,7 @@ interface CompositeProps {
   render?: RenderProp;
   orientation?: 'horizontal' | 'vertical' | 'both';
   loop?: boolean;
+  rtl?: boolean;
   cols?: number;
   disabledIndices?: number[];
   activeIndex?: number;
@@ -110,6 +111,17 @@ navigating past the first or last item.
 
 ```js
 <Composite loop={false} />
+```
+
+### `rtl{:.keyword}`
+
+default: `false{:js}`
+
+Whether the direction of the composite's navigation is in RTL
+layout.
+
+```js
+<Composite rtl={true} />
 ```
 
 ### `cols{:.keyword}`
