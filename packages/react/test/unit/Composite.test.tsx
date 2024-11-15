@@ -3,10 +3,6 @@ import {useState} from 'react';
 
 import {Composite, CompositeItem} from '../../src';
 
-function microtask() {
-  return act(async () => {});
-}
-
 describe('list', () => {
   test('controlled mode', async () => {
     function App() {
@@ -26,25 +22,25 @@ describe('list', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('2')).toHaveAttribute('data-active');
     expect(screen.getByTestId('2')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('2'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('3')).toHaveAttribute('data-active');
     expect(screen.getByTestId('3')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('3')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('3'), {key: 'ArrowUp'});
-    await microtask();
+
     expect(screen.getByTestId('2')).toHaveAttribute('data-active');
     expect(screen.getByTestId('2')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2')).toHaveFocus();
 
     act(() => screen.getByTestId('1').focus());
-    await microtask();
+
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
   });
@@ -62,25 +58,25 @@ describe('list', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('2')).toHaveAttribute('data-active');
     expect(screen.getByTestId('2')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('2'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('3')).toHaveAttribute('data-active');
     expect(screen.getByTestId('3')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('3')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('3'), {key: 'ArrowUp'});
-    await microtask();
+
     expect(screen.getByTestId('2')).toHaveAttribute('data-active');
     expect(screen.getByTestId('2')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2')).toHaveFocus();
 
     act(() => screen.getByTestId('1').focus());
-    await microtask();
+
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
   });
@@ -107,37 +103,37 @@ describe('grid', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('4')).toHaveAttribute('data-active');
     expect(screen.getByTestId('4')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('4')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('4'), {key: 'ArrowRight'});
-    await microtask();
+
     expect(screen.getByTestId('5')).toHaveAttribute('data-active');
     expect(screen.getByTestId('5')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('5')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('5'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('8')).toHaveAttribute('data-active');
     expect(screen.getByTestId('8')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('8')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('8'), {key: 'ArrowLeft'});
-    await microtask();
+
     expect(screen.getByTestId('7')).toHaveAttribute('data-active');
     expect(screen.getByTestId('7')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('7')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('7'), {key: 'ArrowUp'});
-    await microtask();
+
     expect(screen.getByTestId('4')).toHaveAttribute('data-active');
     expect(screen.getByTestId('4')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('4')).toHaveFocus();
 
     act(() => screen.getByTestId('9').focus());
-    await microtask();
+
     expect(screen.getByTestId('9')).toHaveAttribute('data-active');
     expect(screen.getByTestId('9')).toHaveAttribute('tabindex', '0');
   });
@@ -173,37 +169,37 @@ describe('grid', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('456')).toHaveAttribute('data-active');
     expect(screen.getByTestId('456')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('456')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('456'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('7')).toHaveAttribute('data-active');
     expect(screen.getByTestId('7')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('7')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('7'), {key: 'ArrowRight'});
-    await microtask();
+
     expect(screen.getByTestId('8')).toHaveAttribute('data-active');
     expect(screen.getByTestId('8')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('8')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('8'), {key: 'ArrowUp'});
-    await microtask();
+
     expect(screen.getByTestId('456')).toHaveAttribute('data-active');
     expect(screen.getByTestId('456')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('456')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('456'), {key: 'ArrowUp'});
-    await microtask();
+
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('1')).toHaveFocus();
 
     act(() => screen.getByTestId('9').focus());
-    await microtask();
+
     expect(screen.getByTestId('9')).toHaveAttribute('data-active');
     expect(screen.getByTestId('9')).toHaveAttribute('tabindex', '0');
   });
@@ -238,37 +234,37 @@ describe('grid', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('4578')).toHaveAttribute('data-active');
     expect(screen.getByTestId('4578')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('4578')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('4578'), {key: 'ArrowRight'});
-    await microtask();
+
     expect(screen.getByTestId('6')).toHaveAttribute('data-active');
     expect(screen.getByTestId('6')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('6')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('6'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('9')).toHaveAttribute('data-active');
     expect(screen.getByTestId('9')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('9')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('9'), {key: 'ArrowLeft'});
-    await microtask();
+
     expect(screen.getByTestId('4578')).toHaveAttribute('data-active');
     expect(screen.getByTestId('4578')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('4578')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('4578'), {key: 'ArrowUp'});
-    await microtask();
+
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('1')).toHaveFocus();
 
     act(() => screen.getByTestId('9').focus());
-    await microtask();
+
     expect(screen.getByTestId('9')).toHaveAttribute('data-active');
     expect(screen.getByTestId('9')).toHaveAttribute('tabindex', '0');
   });
@@ -302,7 +298,7 @@ describe('grid', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('78')).toHaveAttribute('data-active');
     expect(screen.getByTestId('78')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('78')).toHaveFocus();
@@ -338,13 +334,13 @@ describe('grid', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('4')).toHaveAttribute('data-active');
     expect(screen.getByTestId('4')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('4')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('4'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('78')).toHaveAttribute('data-active');
     expect(screen.getByTestId('78')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('78')).toHaveFocus();
@@ -365,25 +361,25 @@ describe('rtl', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowLeft'});
-    await microtask();
+
     expect(screen.getByTestId('2')).toHaveAttribute('data-active');
     expect(screen.getByTestId('2')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('2'), {key: 'ArrowRight'});
-    await microtask();
+
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('1')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowRight'});
-    await microtask();
+
     expect(screen.getByTestId('3')).toHaveAttribute('data-active');
     expect(screen.getByTestId('3')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('3')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('3'), {key: 'ArrowLeft'});
-    await microtask();
+
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('1')).toHaveFocus();
@@ -420,37 +416,37 @@ describe('rtl', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowLeft'});
-    await microtask();
+
     expect(screen.getByTestId('2367')).toHaveAttribute('data-active');
     expect(screen.getByTestId('2367')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2367')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('2367'), {key: 'ArrowLeft'});
-    await microtask();
+
     expect(screen.getByTestId('48')).toHaveAttribute('data-active');
     expect(screen.getByTestId('48')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('48')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('48'), {key: 'ArrowRight'});
-    await microtask();
+
     expect(screen.getByTestId('2367')).toHaveAttribute('data-active');
     expect(screen.getByTestId('2367')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2367')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('2367'), {key: 'ArrowRight'});
-    await microtask();
+
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('1')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
-    await microtask();
+
     expect(screen.getByTestId('5')).toHaveAttribute('data-active');
     expect(screen.getByTestId('5')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('5')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByTestId('5'), {key: 'ArrowRight'});
-    await microtask();
+
     expect(screen.getByTestId('48')).toHaveAttribute('data-active');
     expect(screen.getByTestId('48')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('48')).toHaveFocus();

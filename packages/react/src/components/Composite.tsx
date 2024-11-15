@@ -18,7 +18,6 @@ import {
   isDisabled,
   isIndexOutOfBounds,
 } from '../utils/composite';
-import {enqueueFocus} from '../utils/enqueueFocus';
 import {FloatingList, useListItem} from './FloatingList';
 
 function renderJsx(
@@ -287,11 +286,7 @@ export const Composite = React.forwardRef<
       }
 
       onNavigate(nextIndex);
-
-      // Wait for FocusManager `returnFocus` to execute.
-      queueMicrotask(() => {
-        enqueueFocus(elementsRef.current[nextIndex]);
-      });
+      elementsRef.current[nextIndex]?.focus();
     }
   }
 
