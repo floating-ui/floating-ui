@@ -1,5 +1,16 @@
 # @floating-ui/react
 
+## 0.26.28
+
+### Patch Changes
+
+- fix(Composite): change focus to be sync
+- fix(useClick): improve consistency when combining with `useHover()`
+- feat(useClick): add `stickIfOpen` prop to determine whether to remain open upon first click when first opened by another event
+- feat(Composite): add RTL support
+- fix(FloatingFocusManager): ensure `returnFocus` is ignored correctly when using `disabled` prop
+- fix(useListNavigation): incorrect behaviour with RTL grid
+
 ## 0.26.27
 
 ### Patch Changes
