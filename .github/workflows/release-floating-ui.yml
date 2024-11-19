@@ -27,8 +27,10 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: node .github/changeset-version.js
           publish: pnpm run release
+          version: node .github/changeset-version.js
+          commit: 'chore: version packages'
+          title: 'chore: version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
