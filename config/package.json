@@ -14,12 +14,12 @@
     "api-extractor.base.json"
   ],
   "bin": {
-    "build-api": "./scripts/build-api.mjs",
-    "compat-exports": "./scripts/compat-exports.mjs"
+    "build-api": "./scripts/build-api.js",
+    "compat-exports": "./scripts/compat-exports.js"
   },
-  "main": "dist/src/index.mjs",
-  "module": "dist/src/index.mjs",
-  "types": "dist/src/index.d.mts",
+  "main": "dist/src/index.js",
+  "module": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "devDependencies": {
     "glob": "^10.3.10",
     "minimist": "^1.2.8",

@@ -1,8 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "./config/scripts/build-api.mjs"
-  ],
+  "globalDependencies": ["./config/scripts/build-api.js"],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
