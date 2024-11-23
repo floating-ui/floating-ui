@@ -12,7 +12,8 @@
     "../**/playwright.config.ts",
     "../**/*.test-d.ts",
     "../**/*.test-d.tsx",
-    "scripts/*.js"
+    "scripts/*.js",
+    "./src"
   ],
   "exclude": ["node_modules", "dist", "out-tsc"]
 }
