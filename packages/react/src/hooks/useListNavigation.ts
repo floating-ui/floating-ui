@@ -97,6 +97,8 @@ function isCrossOrientationCloseKey(
   return doSwitch(orientation, vertical, horizontal);
 }
 
+const ariaActiveDescendant = 'aria-activedescendant';
+
 export interface UseListNavigationProps {
   /**
    * A ref that holds an array of list items.
@@ -106,9 +108,13 @@ export interface UseListNavigationProps {
   /**
    * The index of the currently active (focused or highlighted) item, which may
    * or may not be selected.
+   *
+   * By specifying `'manual'`, the Hook will not cause a re-render. This allows
+   * you to opt into fine-grained rendering control to maximize performance.
+   * DOM diffing must be handled manually based on the current `activeIndex`.
    * @default null
    */
-  activeIndex: number | null | undefined;
+  activeIndex: number | null | 'manual';
   /**
    * A callback that is called when the user navigates to a new active item,
    * passed in a new `activeIndex`.
@@ -244,7 +250,7 @@ export function useListNavigation(
   const {open, onOpenChange, elements} = context;
   const {
     listRef,
-    activeIndex,
+    activeIndex: rawActiveIndex,
     onNavigate: unstable_onNavigate = () => {},
     enabled = true,
     selectedIndex = null,
@@ -291,13 +297,32 @@ export function useListNavigation(
   const tree = useFloatingTree();
 
   const onNavigate = useEffectEvent(() => {
-    unstable_onNavigate(indexRef.current === -1 ? null : indexRef.current);
-    if (activeIndex === undefined) {
+    const nextIndex = indexRef.current === -1 ? null : indexRef.current;
+    const ariaId = nextIndex === null ? null : activeDescendantIdRef.current;
+
+    unstable_onNavigate(nextIndex);
+
+    if (isManualActiveIndex) {
+      if (virtual && open && ariaId) {
+        elements.domReference?.setAttribute(ariaActiveDescendant, ariaId);
+        if (!typeableComboboxReference) {
+          floatingFocusElement?.setAttribute(ariaActiveDescendant, ariaId);
+        }
+      } else {
+        elements.domReference?.removeAttribute(ariaActiveDescendant);
+        if (!typeableComboboxReference) {
+          floatingFocusElement?.removeAttribute(ariaActiveDescendant);
+        }
+      }
+
       focusItem();
     }
   });
 
   const typeableComboboxReference = isTypeableCombobox(elements.domReference);
+  const activeIndex = rawActiveIndex === 'manual' ? null : rawActiveIndex;
+  const isManualActiveIndex = rawActiveIndex === 'manual';
+  const hasActiveIndex = activeIndex != null;
 
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
@@ -308,6 +333,7 @@ export function useListNavigation(
   const previousOpenRef = React.useRef(open);
   const forceSyncFocusRef = React.useRef(false);
   const forceScrollIntoViewRef = React.useRef(false);
+  const activeDescendantIdRef = React.useRef<string>();
 
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
@@ -320,7 +346,12 @@ export function useListNavigation(
   const focusItem = useEffectEvent(() => {
     function runFocus(item: HTMLElement) {
       if (virtual) {
-        setActiveId(item.id);
+        if (isManualActiveIndex) {
+          activeDescendantIdRef.current = item.id;
+        } else {
+          setActiveId(item.id);
+        }
+
         tree?.events.emit('virtualfocus', item);
         if (virtualItemRef) {
           virtualItemRef.current = item;
@@ -396,58 +427,58 @@ export function useListNavigation(
   // open.
   useModernLayoutEffect(() => {
     if (!enabled) return;
+    if (!open) return;
+    if (!elements.floating) return;
 
-    if (open && elements.floating) {
-      if (activeIndex == null) {
-        forceSyncFocusRef.current = false;
+    if (activeIndex == null) {
+      forceSyncFocusRef.current = false;
 
-        if (selectedIndexRef.current != null) {
-          return;
-        }
-
-        // Reset while the floating element was open (e.g. the list changed).
-        if (previousMountedRef.current) {
-          indexRef.current = -1;
-          focusItem();
-        }
-
-        // Initial sync.
-        if (
-          (!previousOpenRef.current || !previousMountedRef.current) &&
-          focusItemOnOpenRef.current &&
-          (keyRef.current != null ||
-            (focusItemOnOpenRef.current === true && keyRef.current == null))
-        ) {
-          let runs = 0;
-          const waitForListPopulated = () => {
-            if (listRef.current[0] == null) {
-              // Avoid letting the browser paint if possible on the first try,
-              // otherwise use rAF. Don't try more than twice, since something
-              // is wrong otherwise.
-              if (runs < 2) {
-                const scheduler = runs ? requestAnimationFrame : queueMicrotask;
-                scheduler(waitForListPopulated);
-              }
-              runs++;
-            } else {
-              indexRef.current =
-                keyRef.current == null ||
-                isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
-                nested
-                  ? getMinIndex(listRef, disabledIndicesRef.current)
-                  : getMaxIndex(listRef, disabledIndicesRef.current);
-              keyRef.current = null;
-              onNavigate();
-            }
-          };
-
-          waitForListPopulated();
-        }
-      } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
-        indexRef.current = activeIndex;
-        focusItem();
-        forceScrollIntoViewRef.current = false;
+      if (selectedIndexRef.current != null) {
+        return;
       }
+
+      // Reset while the floating element was open (e.g. the list changed).
+      if (previousMountedRef.current) {
+        indexRef.current = -1;
+        focusItem();
+      }
+
+      // Initial sync.
+      if (
+        (!previousOpenRef.current || !previousMountedRef.current) &&
+        focusItemOnOpenRef.current &&
+        (keyRef.current != null ||
+          (focusItemOnOpenRef.current === true && keyRef.current == null))
+      ) {
+        let runs = 0;
+        const waitForListPopulated = () => {
+          if (listRef.current[0] == null) {
+            // Avoid letting the browser paint if possible on the first try,
+            // otherwise use rAF. Don't try more than twice, since something
+            // is wrong otherwise.
+            if (runs < 2) {
+              const scheduler = runs ? requestAnimationFrame : queueMicrotask;
+              scheduler(waitForListPopulated);
+            }
+            runs++;
+          } else {
+            indexRef.current =
+              keyRef.current == null ||
+              isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
+              nested
+                ? getMinIndex(listRef, disabledIndicesRef.current)
+                : getMaxIndex(listRef, disabledIndicesRef.current);
+            keyRef.current = null;
+            onNavigate();
+          }
+        };
+
+        waitForListPopulated();
+      }
+    } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
+      indexRef.current = activeIndex;
+      focusItem();
+      forceScrollIntoViewRef.current = false;
     }
   }, [
     enabled,
@@ -498,7 +529,11 @@ export function useListNavigation(
     if (parentId) return;
 
     function handleVirtualFocus(item: HTMLElement) {
-      setVirtualId(item.id);
+      if (isManualActiveIndex) {
+        activeDescendantIdRef.current = item.id;
+      } else {
+        setVirtualId(item.id);
+      }
 
       if (virtualItemRef) {
         virtualItemRef.current = item;
@@ -509,10 +544,19 @@ export function useListNavigation(
     return () => {
       tree.events.off('virtualfocus', handleVirtualFocus);
     };
-  }, [enabled, tree, virtual, parentId, virtualItemRef]);
+  }, [
+    enabled,
+    tree,
+    virtual,
+    parentId,
+    virtualItemRef,
+    elements.domReference,
+    isManualActiveIndex,
+  ]);
 
   useModernLayoutEffect(() => {
     previousOnNavigateRef.current = onNavigate;
+    previousOpenRef.current = open;
     previousMountedRef.current = !!elements.floating;
   });
 
@@ -521,12 +565,6 @@ export function useListNavigation(
       keyRef.current = null;
     }
   }, [open]);
-
-  useModernLayoutEffect(() => {
-    previousOpenRef.current = open;
-  }, [open]);
-
-  const hasActiveIndex = activeIndex != null;
 
   const item = React.useMemo(() => {
     function syncCurrentTarget(currentTarget: HTMLElement | null) {
@@ -789,7 +827,7 @@ export function useListNavigation(
       virtual &&
       open &&
       hasActiveIndex && {
-        'aria-activedescendant': virtualId || activeId,
+        [ariaActiveDescendant]: virtualId || activeId,
       }
     );
   }, [virtual, open, hasActiveIndex, virtualId, activeId]);
@@ -797,8 +835,7 @@ export function useListNavigation(
   const floating: ElementProps['floating'] = React.useMemo(() => {
     return {
       'aria-orientation': orientation === 'both' ? undefined : orientation,
-      ...(!isTypeableCombobox(elements.domReference) &&
-        ariaActiveDescendantProp),
+      ...(!typeableComboboxReference && ariaActiveDescendantProp),
       onKeyDown: commonOnKeyDown,
       onPointerMove() {
         isPointerModalityRef.current = true;
@@ -807,8 +844,8 @@ export function useListNavigation(
   }, [
     ariaActiveDescendantProp,
     commonOnKeyDown,
-    elements.domReference,
     orientation,
+    typeableComboboxReference,
   ]);
 
   const reference: ElementProps['reference'] = React.useMemo(() => {
@@ -883,6 +920,7 @@ export function useListNavigation(
                 stopEvent(event);
                 dispatchItem.dispatchEvent(eventObject);
                 setVirtualId(undefined);
+                activeDescendantIdRef.current = undefined;
               }
             }
 
