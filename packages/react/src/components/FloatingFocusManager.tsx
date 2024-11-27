@@ -15,7 +15,11 @@ import {tabbable, isTabbable} from 'tabbable';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
-import type {FloatingContext, OpenChangeReason} from '../types';
+import {
+  useMergeRefs,
+  type FloatingContext,
+  type OpenChangeReason,
+} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
@@ -146,6 +150,7 @@ export interface FloatingFocusManagerProps {
    * @default true
    */
   closeOnFocusOut?: boolean;
+  inactiveElementAnnotation?: 'inert' | 'aria-hidden';
 }
 
 /**
@@ -167,6 +172,7 @@ export function FloatingFocusManager(
     modal = true,
     visuallyHiddenDismiss = false,
     closeOnFocusOut = true,
+    inactiveElementAnnotation: _inactiveElementAnnotation,
   } = props;
   const {
     open,
@@ -191,6 +197,8 @@ export function FloatingFocusManager(
 
   // Force the guards to be rendered if the `inert` attribute is not supported.
   const guards = supportsInert() ? _guards : true;
+  const inactiveElementAnnotation =
+    _inactiveElementAnnotation ?? (guards ? 'aria-hidden' : 'inert');
 
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
@@ -414,6 +422,18 @@ export function FloatingFocusManager(
     isUntrappedTypeableCombobox,
   ]);
 
+  const beforeGuardRef = React.useRef<HTMLSpanElement | null>(null);
+  const afterGuardRef = React.useRef<HTMLSpanElement | null>(null);
+
+  const mergedBeforeGuardRef = useMergeRefs([
+    beforeGuardRef,
+    portalContext?.beforeInsideRef,
+  ]);
+  const mergedAfterGuardRef = useMergeRefs([
+    afterGuardRef,
+    portalContext?.afterInsideRef,
+  ]);
+
   React.useEffect(() => {
     if (disabled) return;
 
@@ -425,11 +445,20 @@ export function FloatingFocusManager(
     );
 
     if (floating) {
+      const useInertAttribute = inactiveElementAnnotation === 'inert';
       const insideElements = [
         floating,
         ...portalNodes,
         startDismissButtonRef.current,
         endDismissButtonRef.current,
+        ...(useInertAttribute
+          ? [
+              beforeGuardRef.current,
+              afterGuardRef.current,
+              portalContext?.beforeOutsideRef?.current,
+              portalContext?.afterOutsideRef?.current,
+            ]
+          : []),
         orderRef.current.includes('reference') || isUntrappedTypeableCombobox
           ? domReference
           : null,
@@ -437,7 +466,7 @@ export function FloatingFocusManager(
 
       const cleanup =
         modal || isUntrappedTypeableCombobox
-          ? markOthers(insideElements, guards, !guards)
+          ? markOthers(insideElements, !useInertAttribute, useInertAttribute)
           : markOthers(insideElements);
 
       return () => {
@@ -453,6 +482,7 @@ export function FloatingFocusManager(
     portalContext,
     isUntrappedTypeableCombobox,
     guards,
+    inactiveElementAnnotation,
   ]);
 
   useModernLayoutEffect(() => {
@@ -724,7 +754,7 @@ export function FloatingFocusManager(
       {shouldRenderGuards && (
         <FocusGuard
           data-type="inside"
-          ref={portalContext?.beforeInsideRef}
+          ref={mergedBeforeGuardRef}
           onFocus={(event) => {
             if (modal) {
               const els = getTabbableElements();
@@ -756,7 +786,7 @@ export function FloatingFocusManager(
       {shouldRenderGuards && (
         <FocusGuard
           data-type="inside"
-          ref={portalContext?.afterInsideRef}
+          ref={mergedAfterGuardRef}
           onFocus={(event) => {
             if (modal) {
               enqueueFocus(getTabbableElements()[0]);
