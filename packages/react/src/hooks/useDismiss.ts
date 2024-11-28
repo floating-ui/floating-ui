@@ -291,7 +291,11 @@ export function useDismiss(
 
       const isRTL = style.direction === 'rtl';
 
-      // Check click position relative to scrollbar
+      // Check click position relative to scrollbar.
+      // In some browsers it is possible to change the <body> (or window)
+      // scrollbar to the left side, but is very rare and is difficult to
+      // check for. Plus, for modal dialogs with backdrops, it is more
+      // important that the backdrop is checked but not so much the window.
       const xCond =
         canScrollY &&
         (isRTL
