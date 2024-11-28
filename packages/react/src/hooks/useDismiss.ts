@@ -9,6 +9,7 @@ import {
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {
   getComputedStyle,
+  getNodeName,
   getParentNode,
   isElement,
   isHTMLElement,
@@ -271,28 +272,35 @@ export function useDismiss(
 
     // Check if the click occurred on the scrollbar
     if (isHTMLElement(target) && floating) {
-      // In Firefox, `target.scrollWidth > target.clientWidth` for inline
-      // elements.
+      const lastTraversableNode = isLastTraversableNode(target);
+      const style = getComputedStyle(target);
+      const checks = ['scroll', 'auto'];
+      const isScrollableX =
+        lastTraversableNode || checks.includes(style.overflowX);
+      const isScrollableY =
+        lastTraversableNode || checks.includes(style.overflowY);
+
       const canScrollX =
-        target.clientWidth > 0 && target.scrollWidth > target.clientWidth;
+        isScrollableX &&
+        target.clientWidth > 0 &&
+        target.scrollWidth > target.clientWidth;
       const canScrollY =
-        target.clientHeight > 0 && target.scrollHeight > target.clientHeight;
+        isScrollableY &&
+        target.clientHeight > 0 &&
+        target.scrollHeight > target.clientHeight;
 
-      let xCond = canScrollY && event.offsetX > target.clientWidth;
+      const isRTL = style.direction === 'rtl';
 
-      // In some browsers it is possible to change the <body> (or window)
-      // scrollbar to the left side, but is very rare and is difficult to
-      // check for. Plus, for modal dialogs with backdrops, it is more
-      // important that the backdrop is checked but not so much the window.
-      if (canScrollY) {
-        const isRTL = getComputedStyle(target).direction === 'rtl';
+      // Check click position relative to scrollbar
+      const xCond =
+        canScrollY &&
+        (isRTL
+          ? event.offsetX <= target.offsetWidth - target.clientWidth
+          : event.offsetX > target.clientWidth);
 
-        if (isRTL) {
-          xCond = event.offsetX <= target.offsetWidth - target.clientWidth;
-        }
-      }
+      const yCond = canScrollX && event.offsetY > target.clientHeight;
 
-      if (xCond || (canScrollX && event.offsetY > target.clientHeight)) {
+      if (xCond || yCond) {
         return;
       }
     }
