@@ -836,6 +836,23 @@ describe('modal', () => {
   });
 });
 
+describe('modal + guards + inactiveElementAnnotation="inert"', () => {
+  test('adds the `inert` attribute to all nodes outside the floating element except for guards', async () => {
+    render(
+      <App guards={true} modal={true} inactiveElementAnnotation="inert" />,
+    );
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('reference')).toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-1')).toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-2')).toHaveAttribute('inert');
+    expect(screen.getByTestId('last')).toHaveAttribute('inert');
+  });
+});
+
 describe('disabled', () => {
   test('true -> false', async () => {
     function App() {
