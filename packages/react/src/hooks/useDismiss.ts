@@ -9,7 +9,6 @@ import {
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {
   getComputedStyle,
-  getNodeName,
   getParentNode,
   isElement,
   isHTMLElement,
