@@ -274,11 +274,11 @@ export function useDismiss(
     if (isHTMLElement(target) && floating) {
       const lastTraversableNode = isLastTraversableNode(target);
       const style = getComputedStyle(target);
-      const checks = ['scroll', 'auto'];
+      const scrollRe = /auto|scroll/;
       const isScrollableX =
-        lastTraversableNode || checks.includes(style.overflowX);
+        lastTraversableNode || scrollRe.test(style.overflowX);
       const isScrollableY =
-        lastTraversableNode || checks.includes(style.overflowY);
+        lastTraversableNode || scrollRe.test(style.overflowY);
 
       const canScrollX =
         isScrollableX &&
