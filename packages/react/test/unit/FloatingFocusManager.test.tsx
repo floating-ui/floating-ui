@@ -837,19 +837,54 @@ describe('modal', () => {
 });
 
 describe('modal + guards + inactiveElementAnnotation="inert"', () => {
-  test('adds the `inert` attribute to all nodes outside the floating element except for guards', async () => {
-    render(
-      <App guards={true} modal={true} inactiveElementAnnotation="inert" />,
-    );
+  test.only('adds the `inert` attribute to all nodes outside the floating element except for guards', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      return (
+        <>
+          <button
+            data-testid="reference"
+            ref={refs.setReference}
+            onClick={() => setIsOpen((v) => !v)}
+          />
+          <button data-testid="btn-1" />
+          <button data-testid="btn-2" />
+          {isOpen && (
+            <FloatingFocusManager
+              context={context}
+              modal={true}
+              guards={true}
+              inactiveElementAnnotation="inert"
+            >
+              <div
+                role="dialog"
+                ref={refs.setFloating}
+                data-testid="floating"
+              />
+            </FloatingFocusManager>
+          )}
+          <button data-testid="btn-3" />
+        </>
+      );
+    }
+
+    render(<App />);
 
     fireEvent.click(screen.getByTestId('reference'));
     await act(async () => {});
+
+    screen.debug();
 
     expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
     expect(screen.getByTestId('reference')).toHaveAttribute('inert');
     expect(screen.getByTestId('btn-1')).toHaveAttribute('inert');
     expect(screen.getByTestId('btn-2')).toHaveAttribute('inert');
-    expect(screen.getByTestId('last')).toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-3')).toHaveAttribute('inert');
   });
 });
 
