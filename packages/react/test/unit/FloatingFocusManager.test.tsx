@@ -837,7 +837,7 @@ describe('modal', () => {
 });
 
 describe('modal + guards + inactiveElementAnnotation="inert"', () => {
-  test.only('adds the `inert` attribute to all nodes outside the floating element except for guards', async () => {
+  test('adds the `inert` attribute to all nodes outside the floating element except for guards', async () => {
     function App() {
       const [isOpen, setIsOpen] = useState(false);
       const {refs, context} = useFloating({
