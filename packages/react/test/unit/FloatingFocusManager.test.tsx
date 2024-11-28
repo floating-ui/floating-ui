@@ -878,13 +878,18 @@ describe('modal + guards + inactiveElementAnnotation="inert"', () => {
     fireEvent.click(screen.getByTestId('reference'));
     await act(async () => {});
 
-    screen.debug();
-
     expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
     expect(screen.getByTestId('reference')).toHaveAttribute('inert');
     expect(screen.getByTestId('btn-1')).toHaveAttribute('inert');
     expect(screen.getByTestId('btn-2')).toHaveAttribute('inert');
     expect(screen.getByTestId('btn-3')).toHaveAttribute('inert');
+
+    const guards = screen
+      .getAllByRole('button')
+      .filter((el) => el.hasAttribute('data-floating-ui-guard'));
+    guards.forEach((guard) => {
+      expect(guard).not.toHaveAttribute('inert');
+    });
   });
 });
 
