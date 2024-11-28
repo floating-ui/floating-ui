@@ -296,15 +296,16 @@ export function useDismiss(
       // scrollbar to the left side, but is very rare and is difficult to
       // check for. Plus, for modal dialogs with backdrops, it is more
       // important that the backdrop is checked but not so much the window.
-      const xCond =
+      const clickedVerticalScrollbar =
         canScrollY &&
         (isRTL
           ? event.offsetX <= target.offsetWidth - target.clientWidth
           : event.offsetX > target.clientWidth);
 
-      const yCond = canScrollX && event.offsetY > target.clientHeight;
+      const clickedHorizontalScrollbar =
+        canScrollX && event.offsetY > target.clientHeight;
 
-      if (xCond || yCond) {
+      if (clickedVerticalScrollbar || clickedHorizontalScrollbar) {
         return;
       }
     }
