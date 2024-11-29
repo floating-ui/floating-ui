@@ -463,8 +463,8 @@ export function FloatingFocusManager(
           ? [
               beforeGuardRef.current,
               afterGuardRef.current,
-              portalContext?.beforeOutsideRef?.current,
-              portalContext?.afterOutsideRef?.current,
+              portalContext?.beforeOutsideRef.current,
+              portalContext?.afterOutsideRef.current,
             ]
           : []),
         orderRef.current.includes('reference') || isUntrappedTypeableCombobox
