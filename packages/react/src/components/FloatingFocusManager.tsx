@@ -602,6 +602,7 @@ export function FloatingFocusManager(
       const returnElement = getReturnElement();
 
       queueMicrotask(() => {
+        // This is `returnElement`, if it's tabbable, or its first tabbable child.
         const tabbableReturnElement = getFirstTabbableElement(returnElement);
         if (
           // eslint-disable-next-line react-hooks/exhaustive-deps
