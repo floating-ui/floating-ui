@@ -859,7 +859,7 @@ describe('modal + guards + inactiveElementAnnotation="inert"', () => {
               context={context}
               modal={true}
               guards={true}
-              inactiveElementAnnotation="inert"
+              outsideElementsInert={true}
             >
               <div
                 role="dialog"
