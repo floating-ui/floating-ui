@@ -21,7 +21,7 @@ import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
 import {getChildren} from '../utils/getChildren';
-import {markOthers, supportsInert} from '../utils/markOthers';
+import {markOthers} from '../utils/markOthers';
 import {
   getNextTabbable,
   getPreviousTabbable,
@@ -147,19 +147,6 @@ export interface FloatingFocusManagerProps {
    * @default true
    */
   closeOnFocusOut?: boolean;
-  /**
-   * Determines how the focus manager should handle inert elements outside of
-   * the floating element. By default, when guards are rendered, all outside elements
-   * have the `aria-hidden` attribute applied to them. If this prop is set to `true`,
-   * the `inert` attribute will be applied instead.
-   *
-   * If guards are not rendered, this prop has no effect, as the `inert` attribute is applied anyway.
-   *
-   * This has no effect if the `inert` attribute is not supported by the browser.
-   *
-   * @default false
-   */
-  outsideElementsInert?: boolean;
 }
 
 /**
@@ -174,14 +161,13 @@ export function FloatingFocusManager(
     children,
     disabled = false,
     order = ['content'],
-    guards: _guards = true,
+    guards = true,
     initialFocus = 0,
     returnFocus = true,
     restoreFocus = false,
     modal = true,
     visuallyHiddenDismiss = false,
     closeOnFocusOut = true,
-    outsideElementsInert: _outsideElementsInert,
   } = props;
   const {
     open,
@@ -203,11 +189,6 @@ export function FloatingFocusManager(
   // start.
   const isUntrappedTypeableCombobox =
     isTypeableCombobox(domReference) && ignoreInitialFocus;
-
-  // Force the guards to be rendered if the `inert` attribute is not supported.
-  const inertSupported = supportsInert();
-  const guards = inertSupported ? _guards : true;
-  const outsideElementsInert = _outsideElementsInert && inertSupported;
 
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
@@ -459,14 +440,10 @@ export function FloatingFocusManager(
         ...portalNodes,
         startDismissButtonRef.current,
         endDismissButtonRef.current,
-        ...(outsideElementsInert
-          ? [
-              beforeGuardRef.current,
-              afterGuardRef.current,
-              portalContext?.beforeOutsideRef?.current,
-              portalContext?.afterOutsideRef?.current,
-            ]
-          : []),
+        beforeGuardRef.current,
+        afterGuardRef.current,
+        portalContext?.beforeOutsideRef?.current,
+        portalContext?.afterOutsideRef?.current,
         orderRef.current.includes('reference') || isUntrappedTypeableCombobox
           ? domReference
           : null,
@@ -474,11 +451,7 @@ export function FloatingFocusManager(
 
       const cleanup =
         modal || isUntrappedTypeableCombobox
-          ? markOthers(
-              insideElements,
-              !outsideElementsInert,
-              outsideElementsInert,
-            )
+          ? markOthers(insideElements, true)
           : markOthers(insideElements);
 
       return () => {
@@ -494,7 +467,6 @@ export function FloatingFocusManager(
     portalContext,
     isUntrappedTypeableCombobox,
     guards,
-    outsideElementsInert,
   ]);
 
   useModernLayoutEffect(() => {
