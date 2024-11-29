@@ -12,11 +12,11 @@ test('single call', () => {
 
   const cleanup = markOthers([target], true);
 
-  expect(other.getAttribute('inert')).toBe('true');
+  expect(other.getAttribute('aria-hidden')).toBe('true');
 
   cleanup();
 
-  expect(other.getAttribute('inert')).toBe(null);
+  expect(other.getAttribute('aria-hidden')).toBe(null);
 });
 
 test('multiple calls', () => {
@@ -27,26 +27,26 @@ test('multiple calls', () => {
 
   const cleanup = markOthers([target], true);
 
-  expect(other.getAttribute('inert')).toBe('true');
+  expect(other.getAttribute('aria-hidden')).toBe('true');
 
   const nextTarget = document.createElement('div');
   document.body.appendChild(nextTarget);
 
   const nextCleanup = markOthers([nextTarget], true);
 
-  expect(target.getAttribute('inert')).toBe('true');
-  expect(nextTarget.getAttribute('inert')).toBe(null);
+  expect(target.getAttribute('aria-hidden')).toBe('true');
+  expect(nextTarget.getAttribute('aria-hidden')).toBe(null);
 
   document.body.removeChild(nextTarget);
 
   nextCleanup();
 
-  expect(target.getAttribute('inert')).toBe(null);
-  expect(other.getAttribute('inert')).toBe('true');
+  expect(target.getAttribute('aria-hidden')).toBe(null);
+  expect(other.getAttribute('aria-hidden')).toBe('true');
 
   cleanup();
 
-  expect(other.getAttribute('inert')).toBe(null);
+  expect(other.getAttribute('aria-hidden')).toBe(null);
 
   document.body.appendChild(nextTarget);
 });
@@ -60,25 +60,25 @@ test('out of order cleanup', () => {
 
   const cleanup = markOthers([target], true);
 
-  expect(other.getAttribute('inert')).toBe('true');
+  expect(other.getAttribute('aria-hidden')).toBe('true');
 
   const nextTarget = document.createElement('div');
   document.body.appendChild(nextTarget);
 
   const nextCleanup = markOthers([nextTarget], true);
 
-  expect(target.getAttribute('inert')).toBe('true');
-  expect(nextTarget.getAttribute('inert')).toBe(null);
+  expect(target.getAttribute('aria-hidden')).toBe('true');
+  expect(nextTarget.getAttribute('aria-hidden')).toBe(null);
 
   cleanup();
 
-  expect(nextTarget.getAttribute('inert')).toBe(null);
-  expect(target.getAttribute('inert')).toBe('true');
-  expect(other.getAttribute('inert')).toBe('true');
+  expect(nextTarget.getAttribute('aria-hidden')).toBe(null);
+  expect(target.getAttribute('aria-hidden')).toBe('true');
+  expect(other.getAttribute('aria-hidden')).toBe('true');
 
   nextCleanup();
 
-  expect(nextTarget.getAttribute('inert')).toBe(null);
-  expect(other.getAttribute('inert')).toBe(null);
-  expect(target.getAttribute('inert')).toBe(null);
+  expect(nextTarget.getAttribute('aria-hidden')).toBe(null);
+  expect(other.getAttribute('aria-hidden')).toBe(null);
+  expect(target.getAttribute('aria-hidden')).toBe(null);
 });

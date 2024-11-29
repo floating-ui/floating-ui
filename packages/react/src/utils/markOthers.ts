@@ -10,6 +10,9 @@ let uncontrolledElementsSet = new WeakSet<Element>();
 let markerMap: Record<string, WeakMap<Element, number>> = {};
 let lockCount = 0;
 
+export const supportsInert = (): boolean =>
+  typeof HTMLElement !== 'undefined' && 'inert' in HTMLElement.prototype;
+
 const unwrapHost = (node: Element | ShadowRoot): Element | null =>
   node && ((node as ShadowRoot).host || unwrapHost(node.parentNode as Element));
 
@@ -33,10 +36,11 @@ const correctElements = (parent: HTMLElement, targets: Element[]): Element[] =>
 function applyAttributeToOthers(
   uncorrectedAvoidElements: Element[],
   body: HTMLElement,
+  ariaHidden: boolean,
   inert: boolean,
 ): Undo {
   const markerName = 'data-floating-ui-inert';
-  const controlAttribute = inert ? 'inert' : null;
+  const controlAttribute = inert ? 'inert' : ariaHidden ? 'aria-hidden' : null;
   const avoidElements = correctElements(body, uncorrectedAvoidElements);
   const elementsToKeep = new Set<Node>();
   const elementsToStop = new Set<Node>(avoidElements);
@@ -132,11 +136,16 @@ function applyAttributeToOthers(
   };
 }
 
-export function markOthers(avoidElements: Element[], inert = false): Undo {
+export function markOthers(
+  avoidElements: Element[],
+  ariaHidden = false,
+  inert = false,
+): Undo {
   const body = getDocument(avoidElements[0]).body;
   return applyAttributeToOthers(
     avoidElements.concat(Array.from(body.querySelectorAll('[aria-live]'))),
     body,
+    ariaHidden,
     inert,
   );
 }

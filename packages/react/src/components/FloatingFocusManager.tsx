@@ -21,7 +21,7 @@ import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
 import {getChildren} from '../utils/getChildren';
-import {markOthers} from '../utils/markOthers';
+import {markOthers, supportsInert} from '../utils/markOthers';
 import {
   getNextTabbable,
   getPreviousTabbable,
@@ -165,7 +165,7 @@ export function FloatingFocusManager(
     children,
     disabled = false,
     order = ['content'],
-    guards = true,
+    guards: _guards = true,
     initialFocus = 0,
     returnFocus = true,
     restoreFocus = false,
@@ -193,6 +193,10 @@ export function FloatingFocusManager(
   // start.
   const isUntrappedTypeableCombobox =
     isTypeableCombobox(domReference) && ignoreInitialFocus;
+
+  // Force the guards to be rendered if the `inert` attribute is not supported.
+  const inertSupported = supportsInert();
+  const guards = inertSupported ? _guards : true;
 
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
@@ -455,7 +459,7 @@ export function FloatingFocusManager(
 
       const cleanup =
         modal || isUntrappedTypeableCombobox
-          ? markOthers(insideElements, true)
+          ? markOthers(insideElements, !inertSupported, inertSupported)
           : markOthers(insideElements);
 
       return () => {
@@ -471,6 +475,7 @@ export function FloatingFocusManager(
     portalContext,
     isUntrappedTypeableCombobox,
     guards,
+    inertSupported,
   ]);
 
   useModernLayoutEffect(() => {
