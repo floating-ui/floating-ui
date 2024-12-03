@@ -65,7 +65,6 @@ const DevtoolsContext = React.createContext<DevtoolsContextValue>(
 export const DevtoolsProvider = (
   props: React.ProviderProps<DevtoolsContextValue>,
 ) => (
-  // eslint-disable-next-line react/prop-types
   <div className={themes[props.value.theme]}>
     <DevtoolsContext.Provider {...props} />
   </div>
