@@ -66,7 +66,7 @@ export function Table() {
               backgroundColor: sameParent === bool ? 'black' : '',
             }}
           >
-            {String(bool) ?? 'None'}
+            {String(bool)}
           </button>
         ))}
       </Controls>
@@ -82,7 +82,7 @@ export function Table() {
               backgroundColor: node === localNode ? 'black' : '',
             }}
           >
-            {localNode ?? 'None'}
+            {localNode}
           </button>
         ))}
       </Controls>
