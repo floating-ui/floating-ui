@@ -97,8 +97,6 @@ function isCrossOrientationCloseKey(
   return doSwitch(orientation, vertical, horizontal);
 }
 
-const ariaActiveDescendant = 'aria-activedescendant';
-
 export interface UseListNavigationProps {
   /**
    * A ref that holds an array of list items.
@@ -108,13 +106,9 @@ export interface UseListNavigationProps {
   /**
    * The index of the currently active (focused or highlighted) item, which may
    * or may not be selected.
-   *
-   * By specifying `'manual'`, the Hook will not cause a re-render. This allows
-   * you to opt into fine-grained rendering control to maximize performance.
-   * DOM diffing must be handled manually based on the current `activeIndex`.
    * @default null
    */
-  activeIndex: number | null | 'manual';
+  activeIndex: number | null;
   /**
    * A callback that is called when the user navigates to a new active item,
    * passed in a new `activeIndex`.
@@ -250,7 +244,7 @@ export function useListNavigation(
   const {open, onOpenChange, elements} = context;
   const {
     listRef,
-    activeIndex: rawActiveIndex,
+    activeIndex,
     onNavigate: unstable_onNavigate = () => {},
     enabled = true,
     selectedIndex = null,
@@ -297,32 +291,10 @@ export function useListNavigation(
   const tree = useFloatingTree();
 
   const onNavigate = useEffectEvent(() => {
-    const nextIndex = indexRef.current === -1 ? null : indexRef.current;
-    const ariaId = nextIndex === null ? null : activeDescendantIdRef.current;
-
-    unstable_onNavigate(nextIndex);
-
-    if (isManualActiveIndex) {
-      if (virtual && open && ariaId) {
-        elements.domReference?.setAttribute(ariaActiveDescendant, ariaId);
-        if (!typeableComboboxReference) {
-          floatingFocusElement?.setAttribute(ariaActiveDescendant, ariaId);
-        }
-      } else {
-        elements.domReference?.removeAttribute(ariaActiveDescendant);
-        if (!typeableComboboxReference) {
-          floatingFocusElement?.removeAttribute(ariaActiveDescendant);
-        }
-      }
-
-      focusItem();
-    }
+    unstable_onNavigate(indexRef.current === -1 ? null : indexRef.current);
   });
 
   const typeableComboboxReference = isTypeableCombobox(elements.domReference);
-  const activeIndex = rawActiveIndex === 'manual' ? null : rawActiveIndex;
-  const isManualActiveIndex = rawActiveIndex === 'manual';
-  const hasActiveIndex = activeIndex != null;
 
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
@@ -333,7 +305,6 @@ export function useListNavigation(
   const previousOpenRef = React.useRef(open);
   const forceSyncFocusRef = React.useRef(false);
   const forceScrollIntoViewRef = React.useRef(false);
-  const activeDescendantIdRef = React.useRef<string>();
 
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
@@ -346,12 +317,7 @@ export function useListNavigation(
   const focusItem = useEffectEvent(() => {
     function runFocus(item: HTMLElement) {
       if (virtual) {
-        if (isManualActiveIndex) {
-          activeDescendantIdRef.current = item.id;
-        } else {
-          setActiveId(item.id);
-        }
-
+        setActiveId(item.id);
         tree?.events.emit('virtualfocus', item);
         if (virtualItemRef) {
           virtualItemRef.current = item;
@@ -529,11 +495,7 @@ export function useListNavigation(
     if (parentId) return;
 
     function handleVirtualFocus(item: HTMLElement) {
-      if (isManualActiveIndex) {
-        activeDescendantIdRef.current = item.id;
-      } else {
-        setVirtualId(item.id);
-      }
+      setVirtualId(item.id);
 
       if (virtualItemRef) {
         virtualItemRef.current = item;
@@ -544,15 +506,7 @@ export function useListNavigation(
     return () => {
       tree.events.off('virtualfocus', handleVirtualFocus);
     };
-  }, [
-    enabled,
-    tree,
-    virtual,
-    parentId,
-    virtualItemRef,
-    elements.domReference,
-    isManualActiveIndex,
-  ]);
+  }, [enabled, tree, virtual, parentId, virtualItemRef]);
 
   useModernLayoutEffect(() => {
     previousOnNavigateRef.current = onNavigate;
@@ -565,6 +519,8 @@ export function useListNavigation(
       keyRef.current = null;
     }
   }, [open]);
+
+  const hasActiveIndex = activeIndex != null;
 
   const item = React.useMemo(() => {
     function syncCurrentTarget(currentTarget: HTMLElement | null) {
@@ -827,7 +783,7 @@ export function useListNavigation(
       virtual &&
       open &&
       hasActiveIndex && {
-        [ariaActiveDescendant]: virtualId || activeId,
+        'aria-activedescendant': virtualId || activeId,
       }
     );
   }, [virtual, open, hasActiveIndex, virtualId, activeId]);
@@ -835,7 +791,7 @@ export function useListNavigation(
   const floating: ElementProps['floating'] = React.useMemo(() => {
     return {
       'aria-orientation': orientation === 'both' ? undefined : orientation,
-      ...(!typeableComboboxReference && ariaActiveDescendantProp),
+      ...(!isTypeableCombobox ? ariaActiveDescendantProp : {}),
       onKeyDown: commonOnKeyDown,
       onPointerMove() {
         isPointerModalityRef.current = true;
@@ -844,8 +800,9 @@ export function useListNavigation(
   }, [
     ariaActiveDescendantProp,
     commonOnKeyDown,
+    elements.domReference,
     orientation,
-    typeableComboboxReference,
+    isTypeableCombobox,
   ]);
 
   const reference: ElementProps['reference'] = React.useMemo(() => {
@@ -920,7 +877,6 @@ export function useListNavigation(
                 stopEvent(event);
                 dispatchItem.dispatchEvent(eventObject);
                 setVirtualId(undefined);
-                activeDescendantIdRef.current = undefined;
               }
             }
 
