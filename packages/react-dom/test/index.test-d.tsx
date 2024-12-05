@@ -22,7 +22,7 @@ function App() {
           return {};
         },
       },
-      false && shift(),
+      false,
       null,
       undefined,
     ],

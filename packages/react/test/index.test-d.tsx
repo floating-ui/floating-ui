@@ -27,13 +27,7 @@ function App() {
   useFloating();
   const {refs, floatingStyles, update, context} = useFloating({
     placement: 'right',
-    middleware: [
-      shift(),
-      arrow({element: arrowRef}),
-      false && shift(),
-      null,
-      undefined,
-    ],
+    middleware: [shift(), arrow({element: arrowRef}), false, null, undefined],
     strategy: 'fixed',
     platform: {
       ...platform,
