@@ -450,16 +450,26 @@ export function FloatingFocusManager(
         endDismissButtonRef.current,
         beforeGuardRef.current,
         afterGuardRef.current,
-        portalContext?.beforeOutsideRef?.current,
-        portalContext?.afterOutsideRef?.current,
+        portalContext?.beforeOutsideRef.current,
+        portalContext?.afterOutsideRef.current,
         orderRef.current.includes('reference') || isUntrappedTypeableCombobox
           ? domReference
           : null,
       ].filter((x): x is Element => x != null);
 
+      const openEvent = dataRef.current.openEvent;
+      const useAriaHidden =
+        !inertSupported ||
+        // `inert` blocks pointer-events, causing `mouseleave` to fire.
+        // Ideally these types of floating elements should be non-modal,
+        // but we can't assume that, especially for backwards compatibility.
+        Boolean(
+          openEvent && ['mouseenter', 'mousemove'].includes(openEvent.type),
+        );
+
       const cleanup =
         modal || isUntrappedTypeableCombobox
-          ? markOthers(insideElements, !inertSupported, inertSupported)
+          ? markOthers(insideElements, useAriaHidden, !useAriaHidden)
           : markOthers(insideElements);
 
       return () => {
@@ -476,6 +486,7 @@ export function FloatingFocusManager(
     isUntrappedTypeableCombobox,
     guards,
     inertSupported,
+    dataRef,
   ]);
 
   useModernLayoutEffect(() => {
