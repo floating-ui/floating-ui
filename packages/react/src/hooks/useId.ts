@@ -9,7 +9,7 @@ const genId = () =>
   // on <React 18
   `floating-ui-${Math.random().toString(36).slice(2, 6)}${count++}`;
 
-function useFloatingId() {
+function useFloatingId(): string | undefined {
   const [id, setId] = React.useState(() =>
     serverHandoffComplete ? genId() : undefined,
   );
@@ -28,7 +28,7 @@ function useFloatingId() {
   return id;
 }
 
-const useReactId = SafeReact.useId as () => string;
+const useReactId = SafeReact.useId as () => string | undefined;
 
 /**
  * Uses React 18's built-in `useId()` when available, or falls back to a

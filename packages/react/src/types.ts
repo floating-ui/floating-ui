@@ -156,7 +156,7 @@ export interface FloatingRootContext<RT extends ReferenceType = ReferenceType> {
     floating: HTMLElement | null;
   };
   events: FloatingEvents;
-  floatingId: string;
+  floatingId: string | undefined;
   refs: {
     setPositionReference(node: ReferenceType | null): void;
   };
@@ -171,7 +171,7 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
   events: FloatingEvents;
   dataRef: React.MutableRefObject<ContextData>;
   nodeId: string | undefined;
-  floatingId: string;
+  floatingId: string | undefined;
   refs: ExtendedRefs<RT>;
   elements: ExtendedElements<RT>;
 };
