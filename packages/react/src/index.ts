@@ -33,7 +33,7 @@ export {useMergeRefs} from './hooks/useMergeRefs';
 export {useRole} from './hooks/useRole';
 export {useTransitionStatus, useTransitionStyles} from './hooks/useTransition';
 export {useTypeahead} from './hooks/useTypeahead';
-export {inner, useInnerOffset} from './inner';
+export {inner, useInnerOffset} from './_deprecated-inner';
 export {safePolygon} from './safePolygon';
 export type * from './types';
 export {
