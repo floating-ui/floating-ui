@@ -42,7 +42,7 @@
     "react-native"
   ],
   "peerDependencies": {
-    "react": ">=16.8.0",
+    "react": ">=16.8.0 || ^19.0.0-rc",
     "react-native": ">=0.64.0"
   },
   "dependencies": {
