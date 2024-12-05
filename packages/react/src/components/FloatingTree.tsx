@@ -27,13 +27,14 @@ export const useFloatingTree = <
  * Registers a node into the `FloatingTree`, returning its id.
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export function useFloatingNodeId(customParentId?: string): string {
+export function useFloatingNodeId(customParentId?: string): string | undefined {
   const id = useId();
   const tree = useFloatingTree();
   const reactParentId = useFloatingParentNodeId();
   const parentId = customParentId || reactParentId;
 
   useModernLayoutEffect(() => {
+    if (!id) return;
     const node = {id, parentId};
     tree?.addNode(node);
     return () => {
@@ -46,7 +47,7 @@ export function useFloatingNodeId(customParentId?: string): string {
 
 export interface FloatingNodeProps {
   children?: React.ReactNode;
-  id: string;
+  id: string | undefined;
 }
 
 /**
