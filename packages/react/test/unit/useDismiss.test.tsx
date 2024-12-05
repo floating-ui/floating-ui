@@ -107,6 +107,13 @@ describe('true', () => {
     cleanup();
   });
 
+  test('dismisses with native click', async () => {
+    render(<App referencePress />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    cleanup();
+  });
+
   test('dismisses with ancestor scroll', async () => {
     render(<App ancestorScroll />);
     fireEvent.scroll(window);

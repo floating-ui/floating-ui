@@ -490,13 +490,18 @@ export function useDismiss(
   const reference: ElementProps['reference'] = React.useMemo(
     () => ({
       onKeyDown: closeOnEscapeKeyDown,
-      [bubbleHandlerKeys[referencePressEvent]]: (
-        event: React.SyntheticEvent,
-      ) => {
-        if (referencePress) {
+      ...(referencePress && {
+        [bubbleHandlerKeys[referencePressEvent]]: (
+          event: React.SyntheticEvent,
+        ) => {
           onOpenChange(false, event.nativeEvent, 'reference-press');
-        }
-      },
+        },
+        ...(referencePressEvent !== 'click' && {
+          onClick(event) {
+            onOpenChange(false, event.nativeEvent, 'reference-press');
+          },
+        }),
+      }),
     }),
     [closeOnEscapeKeyDown, onOpenChange, referencePress, referencePressEvent],
   );
