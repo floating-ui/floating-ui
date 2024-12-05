@@ -786,7 +786,9 @@ describe('grid navigation when items have different sizes', () => {
       cleanup();
     });
 
-    test(`moves through rows when pressing ArrowDown, prefers ${rtl ? 'right' : 'left'} side of wide items`, () => {
+    test(`moves through rows when pressing ArrowDown, prefers ${
+      rtl ? 'right' : 'left'
+    } side of wide items`, () => {
       render(<ComplexGrid rtl={rtl} />);
       fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
       fireEvent.click(screen.getByRole('button'));
@@ -802,7 +804,9 @@ describe('grid navigation when items have different sizes', () => {
       cleanup();
     });
 
-    test(`moves through rows when pressing ArrowUp, prefers ${rtl ? 'right' : 'left'} side of wide items`, () => {
+    test(`moves through rows when pressing ArrowUp, prefers ${
+      rtl ? 'right' : 'left'
+    } side of wide items`, () => {
       render(<ComplexGrid rtl={rtl} />);
       fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
       fireEvent.click(screen.getByRole('button'));
@@ -819,7 +823,9 @@ describe('grid navigation when items have different sizes', () => {
       cleanup();
     });
 
-    test(`loops over column with ArrowDown, prefers ${rtl ? 'right' : 'left'} side of wide items`, () => {
+    test(`loops over column with ArrowDown, prefers ${
+      rtl ? 'right' : 'left'
+    } side of wide items`, () => {
       render(<ComplexGrid rtl={rtl} loop />);
       fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
       fireEvent.click(screen.getByRole('button'));
@@ -835,7 +841,9 @@ describe('grid navigation when items have different sizes', () => {
       cleanup();
     });
 
-    test(`loops over column with ArrowUp, prefers ${rtl ? 'right' : 'left'} side of wide items`, () => {
+    test(`loops over column with ArrowUp, prefers ${
+      rtl ? 'right' : 'left'
+    } side of wide items`, () => {
       render(<ComplexGrid rtl={rtl} loop />);
       fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
       fireEvent.click(screen.getByRole('button'));
@@ -899,7 +907,7 @@ describe('grid navigation when items have different sizes', () => {
 
       cleanup();
     });
-  })
+  });
 });
 
 test('scheduled list population', async () => {
