@@ -545,7 +545,10 @@ export function FloatingFocusManager(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      if (reason === 'hover' && event.type === 'mouseleave') {
+      if (
+        ['hover', 'safe-polygon'].includes(reason) &&
+        event.type === 'mouseleave'
+      ) {
         preventReturnFocusRef.current = true;
       }
 

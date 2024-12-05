@@ -13,6 +13,7 @@ import {
   useFloating,
   useFloatingNodeId,
   useFloatingParentNodeId,
+  useHover,
   useInteractions,
   useRole,
 } from '../../src';
@@ -1712,4 +1713,53 @@ test('floating element closes upon tabbing out of modal combobox', async () => {
   await userEvent.tab();
   await act(async () => {});
   expect(screen.getByTestId('after')).toHaveFocus();
+});
+
+test('focus does not return to reference when floating element is triggered by hover', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const hover = useHover(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([hover]);
+
+    return (
+      <>
+        <button
+          ref={refs.setReference}
+          {...getReferenceProps()}
+          data-testid="reference"
+        />
+        {isOpen && (
+          <FloatingFocusManager context={context}>
+            <div
+              ref={refs.setFloating}
+              {...getFloatingProps()}
+              data-testid="floating"
+            />
+          </FloatingFocusManager>
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  const reference = screen.getByTestId('reference');
+
+  act(() => reference.focus());
+
+  await userEvent.hover(reference);
+  await act(async () => {});
+
+  expect(screen.getByTestId('floating')).toHaveFocus();
+
+  await userEvent.unhover(screen.getByTestId('floating'));
+
+  expect(screen.getByTestId('reference')).not.toHaveFocus();
 });
