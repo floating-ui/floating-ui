@@ -203,7 +203,7 @@ export function FloatingFocusManager(
   // Force the guards to be rendered if the `inert` attribute is not supported.
   const inertSupported = supportsInert();
   const guards = inertSupported ? _guards : true;
-  const useAriaHidden = !inertSupported || !outsideElementsInert;
+  const useInert = !guards || (inertSupported && outsideElementsInert);
 
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
@@ -466,7 +466,7 @@ export function FloatingFocusManager(
 
       const cleanup =
         modal || isUntrappedTypeableCombobox
-          ? markOthers(insideElements, useAriaHidden, !useAriaHidden)
+          ? markOthers(insideElements, !useInert, useInert)
           : markOthers(insideElements);
 
       return () => {
@@ -482,7 +482,7 @@ export function FloatingFocusManager(
     portalContext,
     isUntrappedTypeableCombobox,
     guards,
-    useAriaHidden,
+    useInert,
   ]);
 
   useModernLayoutEffect(() => {
