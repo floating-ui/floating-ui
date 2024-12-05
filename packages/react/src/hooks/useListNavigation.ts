@@ -791,7 +791,7 @@ export function useListNavigation(
   const floating: ElementProps['floating'] = React.useMemo(() => {
     return {
       'aria-orientation': orientation === 'both' ? undefined : orientation,
-      ...(!isTypeableCombobox ? ariaActiveDescendantProp : {}),
+      ...(!typeableComboboxReference ? ariaActiveDescendantProp : {}),
       onKeyDown: commonOnKeyDown,
       onPointerMove() {
         isPointerModalityRef.current = true;
@@ -800,9 +800,8 @@ export function useListNavigation(
   }, [
     ariaActiveDescendantProp,
     commonOnKeyDown,
-    elements.domReference,
     orientation,
-    isTypeableCombobox,
+    typeableComboboxReference,
   ]);
 
   const reference: ElementProps['reference'] = React.useMemo(() => {
