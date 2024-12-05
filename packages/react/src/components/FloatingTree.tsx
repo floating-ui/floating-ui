@@ -47,7 +47,7 @@ export function useFloatingNodeId(customParentId?: string): string | undefined {
 
 export interface FloatingNodeProps {
   children?: React.ReactNode;
-  id: string;
+  id: string | undefined;
 }
 
 /**

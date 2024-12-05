@@ -177,7 +177,7 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
 };
 
 export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
-  id: string;
+  id: string | undefined;
   parentId: string | null;
   context?: FloatingContext<RT>;
 }
