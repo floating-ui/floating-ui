@@ -58,6 +58,7 @@ interface FloatingFocusManagerProps {
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
   closeOnFocusOut?: boolean;
+  outsideElementsInert?: boolean;
   order?: Array<'reference' | 'floating' | 'content'>;
 }
 ```
@@ -141,8 +142,9 @@ default: `true{:js}`
 
 Determines if focus should be returned to the reference element
 (or if that is not available, the previously focused element).
-This prop is ignored if the floating element lost focus.
-It can be also set to a ref to explicitly control the element to return focus to.
+This prop is ignored if the floating element lost focus. It can
+be also set to a ref to explicitly control the element to return
+focus to.
 
 ```js
 <FloatingFocusManager context={context} returnFocus={false}>
@@ -267,6 +269,12 @@ floating elements. This affects non-modal focus management.
   {/* floating element */}
 </FloatingFocusManager>
 ```
+
+### `outsideElementsInert{:.keyword}`
+
+Determines whether outside elements are `inert` when
+`modal{:.keyword}` is enabled. This enables pointer modality
+without a backdrop.
 
 ### `order{:.keyword}`
 
