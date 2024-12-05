@@ -1754,6 +1754,6 @@ test('uses aria-hidden instead of inert on outside nodes if opened with hover an
   await userEvent.hover(screen.getByTestId('reference'));
   await act(async () => {});
 
-  expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
+  expect(screen.getByText('outside')).not.toHaveAttribute('inert');
   expect(screen.getByText('outside')).toHaveAttribute('aria-hidden', 'true');
 });
