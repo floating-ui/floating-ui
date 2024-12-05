@@ -488,7 +488,7 @@ describe('modal', () => {
     expect(screen.queryByRole('dialog')).toBeInTheDocument();
   });
 
-  test('true - comboboxes hide all other nodes', async () => {
+  test('true - comboboxes hide all other nodes with aria-hidden', async () => {
     function App() {
       const [open, setOpen] = useState(false);
       const {refs, context} = useFloating({
@@ -532,6 +532,53 @@ describe('modal', () => {
     expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden');
+  });
+
+  test('true - comboboxes hide all other nodes with inert when outsideElementsInert=true', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {refs, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <input
+            role="combobox"
+            data-testid="reference"
+            ref={refs.setReference}
+            onFocus={() => setOpen(true)}
+          />
+          <button data-testid="btn-1" />
+          <button data-testid="btn-2" />
+          {open && (
+            <FloatingFocusManager
+              context={context}
+              modal={true}
+              order={['reference']}
+              outsideElementsInert
+            >
+              <div
+                role="listbox"
+                ref={refs.setFloating}
+                data-testid="floating"
+              />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.focus(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    expect(screen.getByTestId('reference')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-1')).toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-2')).toHaveAttribute('inert');
   });
 
   test('false - comboboxes do not hide all other nodes', async () => {
@@ -743,8 +790,8 @@ describe('modal', () => {
       'aria-hidden',
       'true',
     );
-    expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
-    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden', 'true');
     expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden', 'true');
 
@@ -754,6 +801,54 @@ describe('modal', () => {
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');
+  });
+
+  test('true - applies inert to outside nodes when outsideElementsInert=true', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      return (
+        <>
+          <input
+            data-testid="reference"
+            ref={refs.setReference}
+            onClick={() => setIsOpen((v) => !v)}
+          />
+          <div>
+            <div data-testid="aria-live" aria-live="polite" />
+            <button data-testid="btn-1" />
+            <button data-testid="btn-2" />
+          </div>
+          {isOpen && (
+            <FloatingFocusManager context={context} outsideElementsInert>
+              <div ref={refs.setFloating} data-testid="floating" />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    expect(screen.getByTestId('reference')).toHaveAttribute('inert');
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-1')).toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-2')).toHaveAttribute('inert');
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    expect(screen.getByTestId('reference')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-1')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('btn-2')).not.toHaveAttribute('inert');
   });
 
   test('false - does not apply inert to outside nodes', async () => {
