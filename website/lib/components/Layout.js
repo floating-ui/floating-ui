@@ -36,7 +36,6 @@ import FloatingTreeIcon from '../../public/icons/FloatingTree.svg';
 import GettingStartedIcon from '../../public/icons/getting-started.svg';
 import HideIcon from '../../public/icons/hide.svg';
 import InlineIcon from '../../public/icons/inline.svg';
-import InnerIcon from '../../public/icons/inner.svg';
 import MagicWandIcon from '../../public/icons/magic-wand.svg';
 import MiddlewareIcon from '../../public/icons/middleware.svg';
 import OffsetIcon from '../../public/icons/offset.svg';
