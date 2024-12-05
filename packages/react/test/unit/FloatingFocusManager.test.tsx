@@ -1763,3 +1763,46 @@ test('focus does not return to reference when floating element is triggered by h
 
   expect(screen.getByTestId('reference')).not.toHaveFocus();
 });
+
+test('uses aria-hidden instead of inert on outside nodes if opened with hover and modal=true', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const hover = useHover(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([hover]);
+
+    return (
+      <>
+        <button
+          ref={refs.setReference}
+          {...getReferenceProps()}
+          data-testid="reference"
+        />
+        {isOpen && (
+          <FloatingFocusManager context={context}>
+            <div
+              ref={refs.setFloating}
+              {...getFloatingProps()}
+              data-testid="floating"
+            />
+          </FloatingFocusManager>
+        )}
+        <button>outside</button>
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await userEvent.hover(screen.getByTestId('reference'));
+  await act(async () => {});
+
+  expect(screen.getByText('outside')).not.toHaveAttribute('inert');
+  expect(screen.getByText('outside')).toHaveAttribute('aria-hidden', 'true');
+});
