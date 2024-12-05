@@ -15,7 +15,8 @@ import {tabbable, isTabbable} from 'tabbable';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
-import type {FloatingContext, OpenChangeReason} from '../types';
+import {useMergeRefs} from '../hooks/useMergeRefs';
+import {type FloatingContext, type OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
@@ -40,17 +41,12 @@ function addPreviouslyFocusedElement(element: Element | null) {
   previouslyFocusedElements = previouslyFocusedElements.filter(
     (el) => el.isConnected,
   );
-  let tabbableEl = element;
-  if (!tabbableEl || getNodeName(tabbableEl) === 'body') return;
-  if (!isTabbable(tabbableEl, getTabbableOptions())) {
-    const tabbableChild = tabbable(tabbableEl, getTabbableOptions())[0];
-    if (tabbableChild) {
-      tabbableEl = tabbableChild;
+
+  if (element && getNodeName(element) !== 'body') {
+    previouslyFocusedElements.push(element);
+    if (previouslyFocusedElements.length > LIST_LIMIT) {
+      previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
     }
-  }
-  previouslyFocusedElements.push(tabbableEl);
-  if (previouslyFocusedElements.length > LIST_LIMIT) {
-    previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
   }
 }
 
@@ -59,6 +55,15 @@ function getPreviouslyFocusedElement() {
     .slice()
     .reverse()
     .find((el) => el.isConnected);
+}
+
+function getFirstTabbableElement(container: Element) {
+  const tabbableOptions = getTabbableOptions();
+  if (isTabbable(container, tabbableOptions)) {
+    return container;
+  }
+
+  return tabbable(container, tabbableOptions)[0];
 }
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
@@ -190,7 +195,8 @@ export function FloatingFocusManager(
     isTypeableCombobox(domReference) && ignoreInitialFocus;
 
   // Force the guards to be rendered if the `inert` attribute is not supported.
-  const guards = supportsInert() ? _guards : true;
+  const inertSupported = supportsInert();
+  const guards = inertSupported ? _guards : true;
 
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
@@ -414,6 +420,18 @@ export function FloatingFocusManager(
     isUntrappedTypeableCombobox,
   ]);
 
+  const beforeGuardRef = React.useRef<HTMLSpanElement | null>(null);
+  const afterGuardRef = React.useRef<HTMLSpanElement | null>(null);
+
+  const mergedBeforeGuardRef = useMergeRefs([
+    beforeGuardRef,
+    portalContext?.beforeInsideRef,
+  ]);
+  const mergedAfterGuardRef = useMergeRefs([
+    afterGuardRef,
+    portalContext?.afterInsideRef,
+  ]);
+
   React.useEffect(() => {
     if (disabled) return;
 
@@ -430,6 +448,10 @@ export function FloatingFocusManager(
         ...portalNodes,
         startDismissButtonRef.current,
         endDismissButtonRef.current,
+        beforeGuardRef.current,
+        afterGuardRef.current,
+        portalContext?.beforeOutsideRef?.current,
+        portalContext?.afterOutsideRef?.current,
         orderRef.current.includes('reference') || isUntrappedTypeableCombobox
           ? domReference
           : null,
@@ -437,7 +459,7 @@ export function FloatingFocusManager(
 
       const cleanup =
         modal || isUntrappedTypeableCombobox
-          ? markOthers(insideElements, guards, !guards)
+          ? markOthers(insideElements, !inertSupported, inertSupported)
           : markOthers(insideElements);
 
       return () => {
@@ -453,6 +475,7 @@ export function FloatingFocusManager(
     portalContext,
     isUntrappedTypeableCombobox,
     guards,
+    inertSupported,
   ]);
 
   useModernLayoutEffect(() => {
@@ -579,19 +602,23 @@ export function FloatingFocusManager(
       const returnElement = getReturnElement();
 
       queueMicrotask(() => {
+        // This is `returnElement`, if it's tabbable, or its first tabbable child.
+        const tabbableReturnElement = getFirstTabbableElement(returnElement);
         if (
           // eslint-disable-next-line react-hooks/exhaustive-deps
           returnFocusRef.current &&
           !preventReturnFocusRef.current &&
-          isHTMLElement(returnElement) &&
+          isHTMLElement(tabbableReturnElement) &&
           // If the focus moved somewhere else after mount, avoid returning focus
           // since it likely entered a different element which should be
           // respected: https://github.com/floating-ui/floating-ui/issues/2607
-          (returnElement !== activeEl && activeEl !== doc.body
+          (tabbableReturnElement !== activeEl && activeEl !== doc.body
             ? isFocusInsideFloatingTree
             : true)
         ) {
-          returnElement.focus({preventScroll: preventReturnFocusScroll});
+          tabbableReturnElement.focus({
+            preventScroll: preventReturnFocusScroll,
+          });
         }
 
         fallbackEl.remove();
@@ -724,7 +751,7 @@ export function FloatingFocusManager(
       {shouldRenderGuards && (
         <FocusGuard
           data-type="inside"
-          ref={portalContext?.beforeInsideRef}
+          ref={mergedBeforeGuardRef}
           onFocus={(event) => {
             if (modal) {
               const els = getTabbableElements();
@@ -756,7 +783,7 @@ export function FloatingFocusManager(
       {shouldRenderGuards && (
         <FocusGuard
           data-type="inside"
-          ref={portalContext?.afterInsideRef}
+          ref={mergedAfterGuardRef}
           onFocus={(event) => {
             if (modal) {
               enqueueFocus(getTabbableElements()[0]);
