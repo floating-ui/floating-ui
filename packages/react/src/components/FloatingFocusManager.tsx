@@ -151,6 +151,12 @@ export interface FloatingFocusManagerProps {
    * @default true
    */
   closeOnFocusOut?: boolean;
+  /**
+   * Determines whether outside elements are `inert` when `modal` is enabled.
+   * This enables pointer modality without a backdrop.
+   * @default false
+   */
+  outsideElementsInert?: boolean;
 }
 
 /**
@@ -172,6 +178,7 @@ export function FloatingFocusManager(
     modal = true,
     visuallyHiddenDismiss = false,
     closeOnFocusOut = true,
+    outsideElementsInert = false,
   } = props;
   const {
     open,
@@ -180,7 +187,6 @@ export function FloatingFocusManager(
     onOpenChange,
     events,
     dataRef,
-    floatingId,
     elements: {domReference, floating},
   } = context;
 
@@ -197,6 +203,7 @@ export function FloatingFocusManager(
   // Force the guards to be rendered if the `inert` attribute is not supported.
   const inertSupported = supportsInert();
   const guards = inertSupported ? _guards : true;
+  const useAriaHidden = !inertSupported || !outsideElementsInert;
 
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
@@ -457,16 +464,6 @@ export function FloatingFocusManager(
           : null,
       ].filter((x): x is Element => x != null);
 
-      const openEvent = dataRef.current.openEvent;
-      const useAriaHidden =
-        !inertSupported ||
-        // `inert` blocks pointer-events, causing `mouseleave` to fire.
-        // Ideally these types of floating elements should be non-modal,
-        // but we can't assume that, especially for backwards compatibility.
-        Boolean(
-          openEvent && ['mouseenter', 'mousemove'].includes(openEvent.type),
-        );
-
       const cleanup =
         modal || isUntrappedTypeableCombobox
           ? markOthers(insideElements, useAriaHidden, !useAriaHidden)
@@ -485,8 +482,7 @@ export function FloatingFocusManager(
     portalContext,
     isUntrappedTypeableCombobox,
     guards,
-    inertSupported,
-    dataRef,
+    useAriaHidden,
   ]);
 
   useModernLayoutEffect(() => {

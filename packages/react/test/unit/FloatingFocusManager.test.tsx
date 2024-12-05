@@ -528,10 +528,10 @@ describe('modal', () => {
     fireEvent.focus(screen.getByTestId('reference'));
     await act(async () => {});
 
-    expect(screen.getByTestId('reference')).not.toHaveAttribute('inert');
-    expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
-    expect(screen.getByTestId('btn-1')).toHaveAttribute('inert');
-    expect(screen.getByTestId('btn-2')).toHaveAttribute('inert');
+    expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden');
   });
 
   test('false - comboboxes do not hide all other nodes', async () => {
@@ -705,7 +705,7 @@ describe('modal', () => {
     expect(screen.queryByTestId('close-nested-dialog')).toBeInTheDocument();
   });
 
-  test('true - applies inert to outside nodes', async () => {
+  test('true - applies aria-hidden to outside nodes', async () => {
     function App() {
       const [isOpen, setIsOpen] = useState(false);
       const {refs, context} = useFloating({
@@ -739,18 +739,21 @@ describe('modal', () => {
     fireEvent.click(screen.getByTestId('reference'));
     await act(async () => {});
 
-    expect(screen.getByTestId('reference')).toHaveAttribute('inert', 'true');
+    expect(screen.getByTestId('reference')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
     expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('inert');
-    expect(screen.getByTestId('btn-1')).toHaveAttribute('inert', 'true');
-    expect(screen.getByTestId('btn-2')).toHaveAttribute('inert', 'true');
+    expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden', 'true');
 
     fireEvent.click(screen.getByTestId('reference'));
 
-    expect(screen.getByTestId('reference')).not.toHaveAttribute('inert');
-    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('inert');
-    expect(screen.getByTestId('btn-1')).not.toHaveAttribute('inert');
-    expect(screen.getByTestId('btn-2')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');
   });
 
   test('false - does not apply inert to outside nodes', async () => {
