@@ -237,11 +237,6 @@ const interactions = [
 		icon: CompositeIcon,
 	},
 	{
-		url: '/docs/inner',
-		title: 'Inner',
-		icon: InnerIcon,
-	},
-	{
 		url: '/docs/react-utils',
 		title: 'React Utils',
 		icon: MagicWandIcon,

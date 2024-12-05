@@ -29,7 +29,7 @@ export type {
 } from './hooks/useTransition';
 export type {UseTypeaheadProps} from './hooks/useTypeahead';
 export type {UseFloatingRootContextOptions} from './hooks/useFloatingRootContext';
-export type {InnerProps, UseInnerOffsetProps} from './inner';
+export type {InnerProps, UseInnerOffsetProps} from './_deprecated-inner';
 export type {UseInteractionsReturn} from './hooks/useInteractions';
 export type {SafePolygonOptions} from './safePolygon';
 export type {

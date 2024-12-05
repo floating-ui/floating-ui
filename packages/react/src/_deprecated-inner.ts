@@ -78,6 +78,7 @@ export interface InnerProps extends DetectOverflowOptions {
  * Positions the floating element such that an inner element inside of it is
  * anchored to the reference element.
  * @see https://floating-ui.com/docs/inner
+ * @deprecated
  */
 export const inner = (
   props: InnerProps | Derivable<InnerProps>,
@@ -228,6 +229,7 @@ export interface UseInnerOffsetProps {
  * Changes the `inner` middleware's `offset` upon a `wheel` event to
  * expand the floating element's height, revealing more list items.
  * @see https://floating-ui.com/docs/inner
+ * @deprecated
  */
 export function useInnerOffset(
   context: FloatingRootContext,
