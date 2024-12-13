@@ -353,8 +353,8 @@ export function FloatingFocusManager(
             ) ||
               getAncestors(tree.nodesRef.current, nodeId).find(
                 (node) =>
-                  node.context?.elements.floating === relatedTarget ||
-                  node.context?.elements.domReference === relatedTarget,
+                  contains(node.context?.elements.floating, relatedTarget) ||
+                  contains(node.context?.elements.domReference, relatedTarget),
               )))
         );
 
