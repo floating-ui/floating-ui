@@ -2,4 +2,4 @@
 '@floating-ui/react': patch
 ---
 
-fix(FloatingFocusManager): check for floating focus root element
+fix(FloatingFocusManager): check for ancestor floating focus element during `closeOnFocusOut`
