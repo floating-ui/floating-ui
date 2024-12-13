@@ -457,9 +457,17 @@ export function FloatingFocusManager(
     );
 
     if (floating) {
+      const ancestorFloatingNodes =
+        tree && !modal
+          ? getAncestors(tree?.nodesRef.current, nodeId).map(
+              (node) => node.context?.elements.floating,
+            )
+          : [];
+
       const insideElements = [
         floating,
         ...portalNodes,
+        ...ancestorFloatingNodes,
         startDismissButtonRef.current,
         endDismissButtonRef.current,
         beforeGuardRef.current,
@@ -490,6 +498,8 @@ export function FloatingFocusManager(
     isUntrappedTypeableCombobox,
     guards,
     useInert,
+    tree,
+    nodeId,
   ]);
 
   useModernLayoutEffect(() => {
