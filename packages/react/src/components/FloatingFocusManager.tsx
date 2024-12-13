@@ -63,7 +63,7 @@ function getFirstTabbableElement(container: Element) {
     return container;
   }
 
-  return tabbable(container, tabbableOptions)[0];
+  return tabbable(container, tabbableOptions)[0] || container;
 }
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
