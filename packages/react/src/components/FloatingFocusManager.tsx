@@ -448,6 +448,7 @@ export function FloatingFocusManager(
 
   React.useEffect(() => {
     if (disabled) return;
+    if (!floating) return;
 
     // Don't hide portals nested within the parent portal.
     const portalNodes = Array.from(
@@ -456,38 +457,36 @@ export function FloatingFocusManager(
       ) || [],
     );
 
-    if (floating) {
-      const ancestorFloatingNodes =
-        tree && !modal
-          ? getAncestors(tree?.nodesRef.current, nodeId).map(
-              (node) => node.context?.elements.floating,
-            )
-          : [];
+    const ancestorFloatingNodes =
+      tree && !modal
+        ? getAncestors(tree?.nodesRef.current, nodeId).map(
+            (node) => node.context?.elements.floating,
+          )
+        : [];
 
-      const insideElements = [
-        floating,
-        ...portalNodes,
-        ...ancestorFloatingNodes,
-        startDismissButtonRef.current,
-        endDismissButtonRef.current,
-        beforeGuardRef.current,
-        afterGuardRef.current,
-        portalContext?.beforeOutsideRef.current,
-        portalContext?.afterOutsideRef.current,
-        orderRef.current.includes('reference') || isUntrappedTypeableCombobox
-          ? domReference
-          : null,
-      ].filter((x): x is Element => x != null);
+    const insideElements = [
+      floating,
+      ...portalNodes,
+      ...ancestorFloatingNodes,
+      startDismissButtonRef.current,
+      endDismissButtonRef.current,
+      beforeGuardRef.current,
+      afterGuardRef.current,
+      portalContext?.beforeOutsideRef.current,
+      portalContext?.afterOutsideRef.current,
+      orderRef.current.includes('reference') || isUntrappedTypeableCombobox
+        ? domReference
+        : null,
+    ].filter((x): x is Element => x != null);
 
-      const cleanup =
-        modal || isUntrappedTypeableCombobox
-          ? markOthers(insideElements, !useInert, useInert)
-          : markOthers(insideElements);
+    const cleanup =
+      modal || isUntrappedTypeableCombobox
+        ? markOthers(insideElements, !useInert, useInert)
+        : markOthers(insideElements);
 
-      return () => {
-        cleanup();
-      };
-    }
+    return () => {
+      cleanup();
+    };
   }, [
     disabled,
     domReference,
