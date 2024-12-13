@@ -1,7 +1,7 @@
 export const FOCUSABLE_ATTRIBUTE = 'data-floating-ui-focusable';
 
 export function getFloatingFocusElement(
-  floatingElement: HTMLElement | null,
+  floatingElement: HTMLElement | null | undefined,
 ): HTMLElement | null {
   if (!floatingElement) {
     return null;

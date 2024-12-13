@@ -340,14 +340,7 @@ export function FloatingFocusManager(
     }
 
     function handleFocusOutside(event: FocusEvent) {
-      const relatedTarget = event.relatedTarget as Element | null;
-
-      function nodeContainsRelatedTarget(node: FloatingNodeType) {
-        return (
-          contains(node.context?.elements.floating, relatedTarget) ||
-          contains(node.context?.elements.domReference, relatedTarget)
-        );
-      }
+      const relatedTarget = event.relatedTarget as HTMLElement | null;
 
       queueMicrotask(() => {
         const movedToUnrelatedNode = !(
@@ -358,10 +351,17 @@ export function FloatingFocusManager(
           relatedTarget?.hasAttribute(createAttribute('focus-guard')) ||
           (tree &&
             (getChildren(tree.nodesRef.current, nodeId).find(
-              nodeContainsRelatedTarget,
+              (node) =>
+                contains(node.context?.elements.floating, relatedTarget) ||
+                contains(node.context?.elements.domReference, relatedTarget),
             ) ||
               getAncestors(tree.nodesRef.current, nodeId).find(
-                nodeContainsRelatedTarget,
+                (node) =>
+                  [
+                    node.context?.elements.floating,
+                    getFloatingFocusElement(node.context?.elements.floating),
+                  ].includes(relatedTarget) ||
+                  node.context?.elements.domReference === relatedTarget,
               )))
         );
 
