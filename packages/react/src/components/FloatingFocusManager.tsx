@@ -16,7 +16,11 @@ import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
 import {useMergeRefs} from '../hooks/useMergeRefs';
-import {type FloatingContext, type OpenChangeReason} from '../types';
+import {
+  type FloatingNodeType,
+  type FloatingContext,
+  type OpenChangeReason,
+} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
@@ -338,6 +342,13 @@ export function FloatingFocusManager(
     function handleFocusOutside(event: FocusEvent) {
       const relatedTarget = event.relatedTarget as Element | null;
 
+      function nodeContainsRelatedTarget(node: FloatingNodeType) {
+        return (
+          contains(node.context?.elements.floating, relatedTarget) ||
+          contains(node.context?.elements.domReference, relatedTarget)
+        );
+      }
+
       queueMicrotask(() => {
         const movedToUnrelatedNode = !(
           contains(domReference, relatedTarget) ||
@@ -347,14 +358,10 @@ export function FloatingFocusManager(
           relatedTarget?.hasAttribute(createAttribute('focus-guard')) ||
           (tree &&
             (getChildren(tree.nodesRef.current, nodeId).find(
-              (node) =>
-                contains(node.context?.elements.floating, relatedTarget) ||
-                contains(node.context?.elements.domReference, relatedTarget),
+              nodeContainsRelatedTarget,
             ) ||
               getAncestors(tree.nodesRef.current, nodeId).find(
-                (node) =>
-                  node.context?.elements.floating === relatedTarget ||
-                  node.context?.elements.domReference === relatedTarget,
+                nodeContainsRelatedTarget,
               )))
         );
 
