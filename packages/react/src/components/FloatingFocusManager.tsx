@@ -448,6 +448,7 @@ export function FloatingFocusManager(
 
   React.useEffect(() => {
     if (disabled) return;
+    if (!floating) return;
 
     // Don't hide portals nested within the parent portal.
     const portalNodes = Array.from(
@@ -456,30 +457,36 @@ export function FloatingFocusManager(
       ) || [],
     );
 
-    if (floating) {
-      const insideElements = [
-        floating,
-        ...portalNodes,
-        startDismissButtonRef.current,
-        endDismissButtonRef.current,
-        beforeGuardRef.current,
-        afterGuardRef.current,
-        portalContext?.beforeOutsideRef.current,
-        portalContext?.afterOutsideRef.current,
-        orderRef.current.includes('reference') || isUntrappedTypeableCombobox
-          ? domReference
-          : null,
-      ].filter((x): x is Element => x != null);
+    const ancestorFloatingNodes =
+      tree && !modal
+        ? getAncestors(tree?.nodesRef.current, nodeId).map(
+            (node) => node.context?.elements.floating,
+          )
+        : [];
 
-      const cleanup =
-        modal || isUntrappedTypeableCombobox
-          ? markOthers(insideElements, !useInert, useInert)
-          : markOthers(insideElements);
+    const insideElements = [
+      floating,
+      ...portalNodes,
+      ...ancestorFloatingNodes,
+      startDismissButtonRef.current,
+      endDismissButtonRef.current,
+      beforeGuardRef.current,
+      afterGuardRef.current,
+      portalContext?.beforeOutsideRef.current,
+      portalContext?.afterOutsideRef.current,
+      orderRef.current.includes('reference') || isUntrappedTypeableCombobox
+        ? domReference
+        : null,
+    ].filter((x): x is Element => x != null);
 
-      return () => {
-        cleanup();
-      };
-    }
+    const cleanup =
+      modal || isUntrappedTypeableCombobox
+        ? markOthers(insideElements, !useInert, useInert)
+        : markOthers(insideElements);
+
+    return () => {
+      cleanup();
+    };
   }, [
     disabled,
     domReference,
@@ -490,6 +497,8 @@ export function FloatingFocusManager(
     isUntrappedTypeableCombobox,
     guards,
     useInert,
+    tree,
+    nodeId,
   ]);
 
   useModernLayoutEffect(() => {
