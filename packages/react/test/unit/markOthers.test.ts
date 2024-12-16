@@ -82,3 +82,31 @@ test('out of order cleanup', () => {
   expect(other.getAttribute('aria-hidden')).toBe(null);
   expect(target.getAttribute('aria-hidden')).toBe(null);
 });
+
+test('out of order cleanup with differing controlAttribute', () => {
+  const other = document.createElement('div');
+  document.body.appendChild(other);
+  const target = document.createElement('div');
+  target.setAttribute('data-testid', '1');
+  document.body.appendChild(target);
+
+  const cleanup = markOthers([target], true);
+
+  expect(other.getAttribute('aria-hidden')).toBe('true');
+
+  const target2 = document.createElement('div');
+  target.setAttribute('data-testid', '2');
+  document.body.appendChild(target2);
+
+  const cleanup2 = markOthers([target2]);
+
+  expect(target.getAttribute('aria-hidden')).not.toBe('true');
+
+  cleanup();
+
+  expect(other.getAttribute('aria-hidden')).toBe(null);
+
+  cleanup2();
+
+  expect(target.getAttribute('data-floating-ui-inert')).toBe(null);
+});
