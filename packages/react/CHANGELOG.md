@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.27.2
+
+### Patch Changes
+
+- fix(FloatingFocusManager): prevent stale `inert`/`aria-hidden` attributes from being left on outside elements
+
 ## 0.27.1
 
 ### Patch Changes
