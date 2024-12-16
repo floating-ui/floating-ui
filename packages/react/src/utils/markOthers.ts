@@ -80,7 +80,10 @@ function applyAttributeToOthers(
           ? node.getAttribute(controlAttribute)
           : null;
         const alreadyHidden = attr !== null && attr !== 'false';
-        const counterValue = (counterMap.get(node) || 0) + 1;
+        const currentCounterValue = counterMap.get(node) || 0;
+        const counterValue = controlAttribute
+          ? currentCounterValue + 1
+          : currentCounterValue;
         const markerValue = (markerCounter.get(node) || 0) + 1;
 
         counterMap.set(node, counterValue);
@@ -106,7 +109,10 @@ function applyAttributeToOthers(
 
   return () => {
     hiddenElements.forEach((element) => {
-      const counterValue = (counterMap.get(element) || 0) - 1;
+      const currentCounterValue = counterMap.get(element) || 0;
+      const counterValue = controlAttribute
+        ? currentCounterValue - 1
+        : currentCounterValue;
       const markerValue = (markerCounter.get(element) || 0) - 1;
 
       counterMap.set(element, counterValue);
