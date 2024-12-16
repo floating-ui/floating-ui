@@ -83,7 +83,7 @@ test('out of order cleanup', () => {
   expect(target.getAttribute('aria-hidden')).toBe(null);
 });
 
-test('out of order cleanup with differing controlAttribute', () => {
+test('multiple cleanups with differing controlAttribute', () => {
   const other = document.createElement('div');
   document.body.appendChild(other);
   const target = document.createElement('div');
@@ -101,6 +101,7 @@ test('out of order cleanup with differing controlAttribute', () => {
   const cleanup2 = markOthers([target2]);
 
   expect(target.getAttribute('aria-hidden')).not.toBe('true');
+  expect(target.getAttribute('data-floating-ui-inert')).toBe('');
 
   cleanup();
 
