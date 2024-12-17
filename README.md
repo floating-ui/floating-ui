@@ -20,7 +20,7 @@ It offers two main features:
 2. **User interactions for React**: Hooks and components for composing
    interactions to create accessible floating UI components.
 
-## README Sponsors
+## README Contributors
 
 <table>
   <tr>
@@ -33,7 +33,7 @@ It offers two main features:
   </tr>
 </table>
 
-You can sponsor Floating UI in a variety of ways on
+You can support Floating UI in a variety of ways on
 [Open Collective](https://opencollective.com/floating-ui).
 
 ## Why
