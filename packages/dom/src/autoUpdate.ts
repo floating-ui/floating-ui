@@ -211,13 +211,7 @@ export function autoUpdate(
   function frameLoop() {
     const nextRefRect = getBoundingClientRect(reference);
 
-    if (
-      prevRefRect &&
-      (nextRefRect.x !== prevRefRect.x ||
-        nextRefRect.y !== prevRefRect.y ||
-        nextRefRect.width !== prevRefRect.width ||
-        nextRefRect.height !== prevRefRect.height)
-    ) {
+    if (prevRefRect && !rectsAreEqual(prevRefRect, nextRefRect)) {
       update();
     }
 
