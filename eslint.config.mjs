@@ -22,9 +22,7 @@ export default tseslint.config(
       },
     },
     plugins: {
-      react: react,
       'react-hooks': reactHooks,
-      '@typescript-eslint': tseslint.plugin,
     },
     rules: {
       'no-undef': 'off',
