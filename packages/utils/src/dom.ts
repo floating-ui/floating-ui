@@ -92,13 +92,17 @@ export function isContainingBlock(
     : elementOrCss;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
+  // https://drafts.csswg.org/css-transforms-2/#individual-transforms
   return (
     css.transform !== 'none' ||
+    css.translate !== 'none' ||
+    css.scale !== 'none' ||
+    css.rotate !== 'none' ||
     css.perspective !== 'none' ||
     (css.containerType ? css.containerType !== 'normal' : false) ||
     (!webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
     (!webkit && (css.filter ? css.filter !== 'none' : false)) ||
-    ['transform', 'perspective', 'filter'].some((value) =>
+    ['transform', 'translate', 'scale', 'rotate', 'perspective', 'filter'].some((value) =>
       (css.willChange || '').includes(value),
     ) ||
     ['paint', 'layout', 'strict', 'content'].some((value) =>

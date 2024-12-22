@@ -36,7 +36,7 @@ export function ContainingBlock() {
 
       <h2>willChange</h2>
       <Controls>
-        {['transform', 'perspective', 'transform, perspective', 'opacity'].map(
+        {['transform', 'translate', 'scale', 'rotate', 'perspective', 'transform, perspective', 'opacity'].map(
           (localWillChange) => (
             <button
               key={localWillChange}
