@@ -11,12 +11,10 @@ export default tseslint.config(
   {
     languageOptions: {
       globals: {
-        ...globals.browser,
-        ...globals.commonjs,
-        ...globals.es2021,
         ...globals.node,
+        ...globals.browser,
+        ...globals.es2021,
       },
-      parser: tseslint.parser,
       parserOptions: {
         ecmaVersion: 'latest',
       },
