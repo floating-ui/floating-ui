@@ -83,21 +83,6 @@ export function isTopLayer(element: Element): boolean {
   });
 }
 
-const isEmptyCSSValue = (css: CSSStyleDeclaration, property: keyof CSSStyleDeclaration): boolean => {
-  const value = css[property];
-  return value === 'none' || value === undefined;
-};
-
-const hasNonEmptyCSSValue = (css: CSSStyleDeclaration, properties: Array<keyof CSSStyleDeclaration>): boolean => {
-  for (let i = 0; i < properties.length; i++) {
-    if (!isEmptyCSSValue(css, properties[i])) {
-      return true;
-    }
-  }
-
-  return false;
-};
-
 export function isContainingBlock(
   elementOrCss: Element | CSSStyleDeclaration,
 ): boolean {
@@ -109,7 +94,9 @@ export function isContainingBlock(
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   // https://drafts.csswg.org/css-transforms-2/#individual-transforms
   return (
-    hasNonEmptyCSSValue(css, ['transform', 'translate', 'scale', 'rotate', 'perspective']) ||
+    ['transform', 'translate', 'scale', 'rotate', 'perspective'].some((value) =>
+      css[value as keyof CSSStyleDeclaration] ? css[value as keyof CSSStyleDeclaration] !== 'none' : false
+    ) ||
     (css.containerType ? css.containerType !== 'normal' : false) ||
     (!webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
     (!webkit && (css.filter ? css.filter !== 'none' : false)) ||
