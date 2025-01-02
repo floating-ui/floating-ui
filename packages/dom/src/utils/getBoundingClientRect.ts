@@ -8,7 +8,7 @@ import {isElement} from '../platform/isElement';
 import {getVisualOffsets, shouldAddVisualOffsets} from './getVisualOffsets';
 import {unwrapElement} from './unwrapElement';
 import type {VirtualElement} from '../types';
-import { getFrameElement } from '@floating-ui/utils/dom';
+import {getFrameElement} from '@floating-ui/utils/dom';
 
 export function getBoundingClientRect(
   element: Element | VirtualElement,

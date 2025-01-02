@@ -1,4 +1,9 @@
-import {computePosition, flip, offset, shift} from '@floating-ui/react';
+import {
+  computePosition,
+  flip,
+  offset,
+  shift,
+} from '@floating-ui/react';
 import {useCallback, useEffect, useRef, useState} from 'react';
 
 const reference = {width: 150, height: 100, x: 5, y: 5};
@@ -10,7 +15,8 @@ function getCanvasData(canvas) {
   return {
     rect,
     ctx,
-    clear: () => ctx.clearRect(0, 0, canvas.width, canvas.height),
+    clear: () =>
+      ctx.clearRect(0, 0, canvas.width, canvas.height),
   };
 }
 
@@ -29,12 +35,21 @@ export function Canvas() {
         getClippingRect: () => ({x: 0, y: 0, width, height}),
       },
       placement: 'top-start',
-      middleware: [offset(5), flip({padding: 5}), shift({padding: 5})],
+      middleware: [
+        offset(5),
+        flip({padding: 5}),
+        shift({padding: 5}),
+      ],
     }).then(({x, y}) => {
       const {ctx} = getCanvasData(canvasRef.current);
 
       ctx.beginPath();
-      ctx.rect(reference.x, reference.y, reference.width, reference.height);
+      ctx.rect(
+        reference.x,
+        reference.y,
+        reference.width,
+        reference.height,
+      );
       ctx.fillStyle = 'royalblue';
       ctx.fill();
 
@@ -53,7 +68,11 @@ export function Canvas() {
 
       ctx.font = '16px Arial';
       ctx.fillStyle = 'white';
-      ctx.fillText('Floating', x + 100, y + floating.height / 2 + 5);
+      ctx.fillText(
+        'Floating',
+        x + 100,
+        y + floating.height / 2 + 5,
+      );
     });
   }, [width, height]);
 
@@ -152,9 +171,15 @@ export function Canvas() {
     window.addEventListener('pointermove', handlePointerMove);
 
     return () => {
-      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener(
+        'pointerdown',
+        handlePointerDown,
+      );
       window.removeEventListener('pointerup', handlePointerUp);
-      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener(
+        'pointermove',
+        handlePointerMove,
+      );
     };
   }, [position]);
 

@@ -1,6 +1,4 @@
-import type {
-  FluentProviderProps as FluentProviderInternalProps,
-} from '@fluentui/react-components';
+import type {FluentProviderProps as FluentProviderInternalProps} from '@fluentui/react-components';
 import {
   FluentProvider as FluentProviderInternal,
   webDarkTheme,
@@ -30,10 +28,7 @@ export const FluentProvider = React.memo((props: FluentProviderProps) => {
   const styles = useStyles();
   return (
     <FluentProviderInternal
-      className={mergeClasses(
-        styles.common,
-        props.className,
-      )}
+      className={mergeClasses(styles.common, props.className)}
       applyStylesToPortals={false}
       theme={
         props.theme ?? devtools.theme === 'dark' ? webDarkTheme : webLightTheme
