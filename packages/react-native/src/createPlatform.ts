@@ -39,7 +39,10 @@ export const createPlatform = ({
             if (isView(reference)) {
               reference[method](
                 (x: number, y: number, width: number, height: number) => {
-                  y = isAndroid && !sameScrollView && StatusBar.currentHeight ? y + StatusBar.currentHeight : y;
+                  y =
+                    isAndroid && !sameScrollView && StatusBar.currentHeight
+                      ? y + StatusBar.currentHeight
+                      : y;
                   const referenceRect = {
                     width,
                     height,

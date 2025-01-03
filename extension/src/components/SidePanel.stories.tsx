@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react';
 
-import { SidePanel as SidePanelComponent } from "./SidePanel";
+import {SidePanel as SidePanelComponent} from './SidePanel';
 
 export default {
   title: 'Components/SidePanel',
@@ -9,5 +9,4 @@ export default {
 
 type Story = StoryObj<typeof SidePanelComponent>;
 
-export const SidePanel: Story = {
-};
+export const SidePanel: Story = {};
