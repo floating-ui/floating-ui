@@ -186,7 +186,7 @@ export const MINI_SPONSORS = [
   {
     logo: '/sponsors/automatio.svg',
     label: 'Automatio - No code Web Scraping & Automation.',
-    url: 'https://automatio.co/',
+    url: 'https://automatio.ai/',
     MemberId: 595794,
   },
   {

@@ -1,22 +1,8 @@
-import {useEffect, useState} from 'react';
+import {SPONSORS} from '../../data';
 
-import {getTierSponsors} from '../utils/openCollective';
-
-export function Cards({items, tier}) {
-  const [activeMembers, setActiveMembers] = useState([]);
-
-  useEffect(() => {
-    getTierSponsors('floating-ui', tier).then(
-      (activeMembers) => {
-        setActiveMembers(activeMembers);
-      },
-    );
-  }, [tier]);
-
-  const activeItems = items.filter((item) =>
-    activeMembers.some(
-      (member) => member.MemberId === item.MemberId,
-    ),
+export function Cards({items}) {
+  const activeItems = SPONSORS.filter((item) =>
+    items.some((member) => member.MemberId === item.MemberId),
   );
 
   return (
@@ -26,7 +12,7 @@ export function Cards({items, tier}) {
           rel="noopener noreferrer"
           target="_blank"
           href={item.url}
-          key={item.url}
+          key={item.title}
         >
           <div className="flex flex-col items-center transition-transform">
             <img

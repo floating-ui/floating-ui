@@ -1,28 +1,15 @@
 import {FloatingDelayGroup} from '@floating-ui/react';
-import {useEffect, useState} from 'react';
 
-import {getTierSponsors} from '../utils/openCollective';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from './Tooltip';
+import {MINI_SPONSORS} from '../../data';
 
-export function Logos({items, tier}) {
-  const [activeMembers, setActiveMembers] = useState([]);
-
-  useEffect(() => {
-    getTierSponsors('floating-ui', tier).then(
-      (activeMembers) => {
-        setActiveMembers(activeMembers);
-      },
-    );
-  }, [tier]);
-
-  const activeItems = items.filter((item) =>
-    activeMembers.some(
-      (member) => member.MemberId === item.MemberId,
-    ),
+export function Logos({items}) {
+  const activeItems = MINI_SPONSORS.filter((item) =>
+    items.some((member) => member.MemberId === item.MemberId),
   );
 
   return (
