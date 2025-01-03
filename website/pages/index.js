@@ -12,7 +12,6 @@ import {
 } from 'react-feather';
 
 import Text from '../assets/text.svg';
-import {MINI_SPONSORS, SPONSORS} from '../data';
 import {Button} from '../lib/components/Button';
 import {Cards} from '../lib/components/Cards';
 import {
