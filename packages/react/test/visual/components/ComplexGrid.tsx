@@ -28,7 +28,11 @@ interface Props {
  * 36   36
  */
 
-export const Main = ({orientation = 'horizontal', loop = false, rtl = false}: Props) => {
+export const Main = ({
+  orientation = 'horizontal',
+  loop = false,
+  rtl = false,
+}: Props) => {
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 

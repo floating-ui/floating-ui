@@ -1,4 +1,4 @@
-import type { Middleware, Placement} from '@floating-ui/react';
+import type {Middleware, Placement} from '@floating-ui/react';
 import {hide} from '@floating-ui/react';
 import {autoPlacement, shift} from '@floating-ui/react';
 import {
@@ -34,7 +34,13 @@ function Demo({
 
   const arrowRef = useRef<SVGSVGElement>(null);
 
-  const {floatingStyles, placement: finalPlacement, middlewareData, refs, context} = useFloating({
+  const {
+    floatingStyles,
+    placement: finalPlacement,
+    middlewareData,
+    refs,
+    context,
+  } = useFloating({
     placement: placementProp,
     open: isOpen,
     onOpenChange: setIsOpen,
@@ -193,9 +199,7 @@ export const Main = () => {
           />
         ))}
       </div>
-      <h2 className="text-xl font-bold mb-6 mt-10">
-        Arrow with shift()
-      </h2>
+      <h2 className="text-xl font-bold mb-6 mt-10">Arrow with shift()</h2>
       <div className="grid grid-cols-1 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[130rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
@@ -211,7 +215,7 @@ export const Main = () => {
             middleware={[
               shift(),
               // Use hide() so the examples are not shifted onto the screen while we're not looking at this section
-              hide()
+              hide(),
             ]}
           >
             {'0123456789 '.repeat(40)}
@@ -228,9 +232,7 @@ export const Main = () => {
             arrowProps={{
               fill: 'rgba(255,0,0)',
             }}
-            middleware={[
-              autoPlacement({allowedPlacements: [placement]})
-            ]}
+            middleware={[autoPlacement({allowedPlacements: [placement]})]}
           />
         ))}
       </div>
