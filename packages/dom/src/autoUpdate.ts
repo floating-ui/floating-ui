@@ -4,6 +4,7 @@ import {getDocumentElement, getOverflowAncestors} from '@floating-ui/utils/dom';
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {unwrapElement} from './utils/unwrapElement';
+import {rectsAreEqual} from './utils/rectsAreEqual';
 
 export interface AutoUpdateOptions {
   /**
@@ -53,7 +54,8 @@ function observeMove(element: Element, onMove: () => void) {
   function refresh(skip = false, threshold = 1) {
     cleanup();
 
-    const {left, top, width, height} = element.getBoundingClientRect();
+    const elementRectForRootMargin = element.getBoundingClientRect();
+    const {left, top, width, height} = elementRectForRootMargin;
 
     if (!skip) {
       onMove();
@@ -93,6 +95,23 @@ function observeMove(element: Element, onMove: () => void) {
         } else {
           refresh(false, ratio);
         }
+      }
+
+      if (
+        ratio === 1 &&
+        !rectsAreEqual(
+          elementRectForRootMargin,
+          element.getBoundingClientRect(),
+        )
+      ) {
+        // It's possible that even though the ratio is reported as 1, the
+        // element is not actually fully within the IntersectionObserver's root
+        // area anymore. This can happen under performance constraints. This may
+        // be a bug in the browser's IntersectionObserver implementation. To
+        // work around this, we compare the element's bounding rect now with
+        // what it was at the time we created the IntersectionObserver. If they
+        // are not equal then the element moved, so we refresh.
+        refresh();
       }
 
       isFirstUpdate = false;
@@ -192,13 +211,7 @@ export function autoUpdate(
   function frameLoop() {
     const nextRefRect = getBoundingClientRect(reference);
 
-    if (
-      prevRefRect &&
-      (nextRefRect.x !== prevRefRect.x ||
-        nextRefRect.y !== prevRefRect.y ||
-        nextRefRect.width !== prevRefRect.width ||
-        nextRefRect.height !== prevRefRect.height)
-    ) {
+    if (prevRefRect && !rectsAreEqual(prevRefRect, nextRefRect)) {
       update();
     }
 
