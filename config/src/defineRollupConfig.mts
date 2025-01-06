@@ -64,7 +64,7 @@ export const defineRollupConfig = (
               __DEV__: 'process.env.NODE_ENV !== "production"',
               preventAssignment: true,
             }),
-            ...commonPlugins(configOptions),
+            ...commonPlugins({...configOptions, jsxRuntime: true}),
           ],
         },
         mjs: {
@@ -79,7 +79,7 @@ export const defineRollupConfig = (
               __DEV__: 'process.env.NODE_ENV !== "production"',
               preventAssignment: true,
             }),
-            ...commonPlugins(configOptions),
+            ...commonPlugins({...configOptions, jsxRuntime: true}),
           ],
         },
         cjs: {
@@ -177,6 +177,7 @@ export const defineRollupConfig = (
           },
         ],
       };
+
       return strictlyTypedEntries(rollupOptionsByOutputFormat).flatMap(
         ([key, value]) => (outputOptions[key].skip ? [] : value),
       );
@@ -191,7 +192,9 @@ const strictlyTypedEntries = Object.entries as <T extends object>(
   o: T,
 ) => {[K in keyof T]: [K, T[K]]}[keyof T][];
 
-const commonPlugins = (configOptions: RollupConfigOptions): Plugin[] => {
+const commonPlugins = (
+  configOptions: RollupConfigOptions & {jsxRuntime?: boolean},
+): Plugin[] => {
   const {
     nodeResolve: nodeResolveOverride,
     babel: babelOverride,
@@ -207,6 +210,9 @@ const commonPlugins = (configOptions: RollupConfigOptions): Plugin[] => {
       babel({
         babelHelpers: 'bundled',
         extensions: ['.ts', '.tsx'],
+        presets: configOptions.jsxRuntime
+          ? [['@babel/react', {runtime: 'automatic'}]]
+          : [],
         plugins: ['annotate-pure-calls'],
       }),
   ];
