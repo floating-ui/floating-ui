@@ -2,7 +2,7 @@ import {expect, test} from '@playwright/test';
 
 import {click} from './utils/click';
 
-['transform', 'perspective', 'transform, perspective', 'opacity'].forEach(
+['transform', 'translate', 'scale', 'rotate', 'perspective', 'transform, perspective', 'opacity'].forEach(
   (willChange) => {
     test(`should be positioned on bottom ${willChange}`, async ({page}) => {
       await page.goto('http://localhost:1234/containing-block');
