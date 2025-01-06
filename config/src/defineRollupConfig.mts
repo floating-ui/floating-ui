@@ -1,7 +1,6 @@
 import babel from '@rollup/plugin-babel';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import commonjs from '@rollup/plugin-commonjs';
 import terser from '@rollup/plugin-terser';
 import type {
   ExternalOption,
@@ -204,7 +203,6 @@ const commonPlugins = (
     ...Object.values(rest).filter((plugin): plugin is Plugin =>
       Boolean(plugin),
     ),
-    commonjs(),
     nodeResolveOverride ?? nodeResolve({extensions: ['.ts', '.tsx']}),
     babelOverride ??
       babel({
