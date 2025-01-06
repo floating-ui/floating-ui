@@ -26,6 +26,7 @@ export default defineRollupConfig({
     '@floating-ui/utils': 'FloatingUIUtils',
     '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
     '@floating-ui/react/utils': 'FloatingUIReactUtils',
+    'react/jsx-runtime': 'jsxRuntime',
   },
   outputs: {
     cjs: false,
@@ -37,6 +38,7 @@ export default defineRollupConfig({
         '@floating-ui/core': 'FloatingUICore',
         '@floating-ui/dom': 'FloatingUIDOM',
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
+        'react/jsx-runtime': 'jsxRuntime',
       },
     },
   },

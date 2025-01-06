@@ -6,7 +6,8 @@
     "emitDeclarationOnly": false,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "jsx": "react-jsx"
   },
   "include": ["src"]
 }
