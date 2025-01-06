@@ -16,11 +16,7 @@ import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
 import {useMergeRefs} from '../hooks/useMergeRefs';
-import {
-  type FloatingNodeType,
-  type FloatingContext,
-  type OpenChangeReason,
-} from '../types';
+import type {FloatingRootContext, OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
@@ -88,9 +84,9 @@ const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
 export interface FloatingFocusManagerProps {
   children: React.JSX.Element;
   /**
-   * The floating context returned from `useFloating`.
+   * The floating context returned from `useFloatingRootContext`.
    */
-  context: FloatingContext;
+  context: FloatingRootContext;
   /**
    * Whether or not the focus manager should be disabled. Useful to delay focus
    * management until after a transition completes or some other conditional
@@ -186,13 +182,15 @@ export function FloatingFocusManager(
   } = props;
   const {
     open,
-    refs,
-    nodeId,
     onOpenChange,
     events,
     dataRef,
     elements: {domReference, floating},
   } = context;
+
+  const getNodeId = useEffectEvent(
+    () => dataRef.current.floatingContext?.nodeId,
+  );
 
   const ignoreInitialFocus =
     typeof initialFocus === 'number' && initialFocus < 0;
@@ -343,6 +341,7 @@ export function FloatingFocusManager(
       const relatedTarget = event.relatedTarget as HTMLElement | null;
 
       queueMicrotask(() => {
+        const nodeId = getNodeId();
         const movedToUnrelatedNode = !(
           contains(domReference, relatedTarget) ||
           contains(floating, relatedTarget) ||
@@ -424,7 +423,6 @@ export function FloatingFocusManager(
     floating,
     floatingFocusElement,
     modal,
-    nodeId,
     tree,
     portalContext,
     onOpenChange,
@@ -432,6 +430,7 @@ export function FloatingFocusManager(
     restoreFocus,
     getTabbableContent,
     isUntrappedTypeableCombobox,
+    getNodeId,
   ]);
 
   const beforeGuardRef = React.useRef<HTMLSpanElement | null>(null);
@@ -459,7 +458,7 @@ export function FloatingFocusManager(
 
     const ancestorFloatingNodes =
       tree && !modal
-        ? getAncestors(tree?.nodesRef.current, nodeId).map(
+        ? getAncestors(tree?.nodesRef.current, getNodeId()).map(
             (node) => node.context?.elements.floating,
           )
         : [];
@@ -498,7 +497,7 @@ export function FloatingFocusManager(
     guards,
     useInert,
     tree,
-    nodeId,
+    getNodeId,
   ]);
 
   useModernLayoutEffect(() => {
@@ -564,8 +563,8 @@ export function FloatingFocusManager(
         openEvent = event;
       }
 
-      if (reason === 'escape-key' && refs.domReference.current) {
-        addPreviouslyFocusedElement(refs.domReference.current);
+      if (reason === 'escape-key' && domReference) {
+        addPreviouslyFocusedElement(domReference);
       }
 
       if (
@@ -614,15 +613,15 @@ export function FloatingFocusManager(
       const isFocusInsideFloatingTree =
         contains(floating, activeEl) ||
         (tree &&
-          getChildren(tree.nodesRef.current, nodeId).some((node) =>
+          getChildren(tree.nodesRef.current, getNodeId()).some((node) =>
             contains(node.context?.elements.floating, activeEl),
           ));
       const shouldFocusReference =
         isFocusInsideFloatingTree ||
         (openEvent && ['click', 'mousedown'].includes(openEvent.type));
 
-      if (shouldFocusReference && refs.domReference.current) {
-        addPreviouslyFocusedElement(refs.domReference.current);
+      if (shouldFocusReference && domReference) {
+        addPreviouslyFocusedElement(domReference);
       }
 
       const returnElement = getReturnElement();
@@ -656,12 +655,11 @@ export function FloatingFocusManager(
     floatingFocusElement,
     returnFocusRef,
     dataRef,
-    refs,
     events,
     tree,
-    nodeId,
     isInsidePortal,
     domReference,
+    getNodeId,
   ]);
 
   React.useEffect(() => {
@@ -683,7 +681,7 @@ export function FloatingFocusManager(
       closeOnFocusOut,
       open,
       onOpenChange,
-      refs,
+      domReference,
     });
 
     return () => {
@@ -695,8 +693,8 @@ export function FloatingFocusManager(
     modal,
     open,
     onOpenChange,
-    refs,
     closeOnFocusOut,
+    domReference,
   ]);
 
   useModernLayoutEffect(() => {
@@ -717,7 +715,7 @@ export function FloatingFocusManager(
 
       if (
         orderRef.current.includes('floating') ||
-        (activeEl !== refs.domReference.current && tabbableContent.length === 0)
+        (activeEl !== domReference && tabbableContent.length === 0)
       ) {
         if (tabIndex !== '0') {
           floatingFocusElement.setAttribute('tabindex', '0');
@@ -743,7 +741,7 @@ export function FloatingFocusManager(
     disabled,
     floating,
     floatingFocusElement,
-    refs,
+    domReference,
     orderRef,
     getTabbableContent,
     ignoreInitialFocus,

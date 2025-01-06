@@ -19,7 +19,7 @@ type FocusManagerState = {
   modal: boolean;
   open: boolean;
   onOpenChange(open: boolean, event?: Event, reason?: OpenChangeReason): void;
-  refs: ExtendedRefs<any>;
+  domReference: Element | null;
   closeOnFocusOut: boolean;
 } | null;
 
@@ -225,8 +225,7 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
               beforeInsideRef.current?.focus();
             } else {
               const prevTabbable =
-                getPreviousTabbable() ||
-                focusManagerState?.refs.domReference.current;
+                getPreviousTabbable() || focusManagerState?.domReference;
               prevTabbable?.focus();
             }
           }}
@@ -245,8 +244,7 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
               afterInsideRef.current?.focus();
             } else {
               const nextTabbable =
-                getNextTabbable() ||
-                focusManagerState?.refs.domReference.current;
+                getNextTabbable() || focusManagerState?.domReference;
               nextTabbable?.focus();
 
               focusManagerState?.closeOnFocusOut &&
