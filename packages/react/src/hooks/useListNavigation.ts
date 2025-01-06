@@ -951,6 +951,7 @@ export function useListNavigation(
         }
       },
       onPointerDown: checkVirtualPointer,
+      onPointerEnter: checkVirtualPointer,
       onMouseDown: checkVirtualMouse,
       onClick: checkVirtualMouse,
     };
