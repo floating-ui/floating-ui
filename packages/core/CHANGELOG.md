@@ -1,5 +1,11 @@
 # @floating-ui/core
 
+## 1.6.9
+
+### Patch Changes
+
+- Update dependencies: `@floating-ui/utils@0.2.9`
+
 ## 1.6.8
 
 ### Patch Changes
