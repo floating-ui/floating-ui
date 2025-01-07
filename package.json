@@ -8,6 +8,11 @@
     "node": ">=18.19.0",
     "pnpm": ">=8.13.1"
   },
+  "workspaces": [
+    "./packages/*",
+    "extension",
+    "config"
+  ],
   "scripts": {
     "lint": "turbo lint",
     "format": "turbo format",
