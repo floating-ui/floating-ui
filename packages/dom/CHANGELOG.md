@@ -1,5 +1,12 @@
 # @floating-ui/dom
 
+## 1.6.13
+
+### Patch Changes
+
+- fix(autoUpdate): work around `IntersectionObserver` issue that sometimes fails to detect movement of reference element
+- Update dependencies: `@floating-ui/utils@0.2.9`
+
 ## 1.6.12
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @floating-ui/react
 
+## 0.27.3
+
+### Patch Changes
+
+- feat(FloatingFocusManager): accept `FloatingRootContext` as the `context` prop
+- fix(useListNavigation): check for virtual pointer on pointerenter
+- refactor: use jsx runtime
+- Update dependencies: `@floating-ui/utils@0.2.9`
+
 ## 0.27.2
 
 ### Patch Changes

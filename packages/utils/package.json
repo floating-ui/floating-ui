@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/utils",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Utilities for Floating UI",
   "publishConfig": {
     "access": "public"

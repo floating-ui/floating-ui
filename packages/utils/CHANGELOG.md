@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.2.9
+
+### Patch Changes
+
+- fix(getContainingBlock): detect `translate`, `rotate`, `scale` shorthand properties
+
 ## 0.2.8
 
 ### Patch Changes
