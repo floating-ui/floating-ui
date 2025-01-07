@@ -36,20 +36,26 @@ export function ContainingBlock() {
 
       <h2>willChange</h2>
       <Controls>
-        {['transform', 'translate', 'scale', 'rotate', 'perspective', 'transform, perspective', 'opacity'].map(
-          (localWillChange) => (
-            <button
-              key={localWillChange}
-              data-testid={`willchange-${localWillChange}`}
-              onClick={() => setWillChange(localWillChange)}
-              style={{
-                backgroundColor: localWillChange === willChange ? 'black' : '',
-              }}
-            >
-              {localWillChange}
-            </button>
-          ),
-        )}
+        {[
+          'transform',
+          'translate',
+          'scale',
+          'rotate',
+          'perspective',
+          'transform, perspective',
+          'opacity',
+        ].map((localWillChange) => (
+          <button
+            key={localWillChange}
+            data-testid={`willchange-${localWillChange}`}
+            onClick={() => setWillChange(localWillChange)}
+            style={{
+              backgroundColor: localWillChange === willChange ? 'black' : '',
+            }}
+          >
+            {localWillChange}
+          </button>
+        ))}
       </Controls>
 
       <h2>contain</h2>
