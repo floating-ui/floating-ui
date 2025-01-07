@@ -2,4 +2,3 @@ packages:
   - packages/*
   - extension
   - config
-  - website
