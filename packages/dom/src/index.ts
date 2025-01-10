@@ -1,5 +1,10 @@
 import {computePosition as computePositionCore} from '@floating-ui/core';
 
+/**
+ * Exports below are here to expose these useful utilities to the users
+ * but are not part of the official API and might be subject to change with future releases.
+ * See more: https://github.com/floating-ui/floating-ui/discussions/3181
+ */
 export {getBoundingClientRect} from './utils/getBoundingClientRect';
 export {getCssDimensions} from './utils/getCssDimensions';
 export {getDocumentRect} from './utils/getDocumentRect';
