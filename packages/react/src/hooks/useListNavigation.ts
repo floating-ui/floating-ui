@@ -15,7 +15,12 @@ import {
   useFloatingParentNodeId,
   useFloatingTree,
 } from '../components/FloatingTree';
-import type {Dimensions, ElementProps, FloatingRootContext, Orientation} from '../types';
+import type {
+  Dimensions,
+  ElementProps,
+  FloatingRootContext,
+  Orientation,
+} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
@@ -294,8 +299,7 @@ export function useListNavigation(
 
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
-  let parentOrientation: Orientation | undefined =
-    undefined;
+  let parentOrientation: Orientation | undefined = undefined;
   const parentNode = tree?.nodesRef.current.find(
     (node) => node.id === parentId,
   );
@@ -499,7 +503,7 @@ export function useListNavigation(
     if (parent && !treeContainsActiveEl && isPointerModalityRef.current) {
       parent.focus({preventScroll: true});
     }
-  }, [enabled, elements.floating, tree, parentId, virtual]);
+  }, [enabled, elements.floating, tree, parentId, virtual, parentNode]);
 
   useModernLayoutEffect(() => {
     if (!enabled) return;
@@ -995,6 +999,7 @@ export function useListNavigation(
     tree,
     virtual,
     virtualItemRef,
+    parentOrientation,
   ]);
 
   return React.useMemo(

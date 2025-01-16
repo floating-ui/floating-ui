@@ -29,7 +29,7 @@ export function useFloatingRootContext(
     open = false,
     onOpenChange: onOpenChangeProp,
     elements: elementsProp,
-    orientation,
+    orientation = 'vertical',
   } = options;
 
   const floatingId = useId();

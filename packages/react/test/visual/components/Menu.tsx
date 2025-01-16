@@ -22,8 +22,8 @@ import {
   useMergeRefs,
   useRole,
   useTypeahead,
-  Orientation,
 } from '@floating-ui/react';
+import type {Orientation} from '@floating-ui/react';
 import {ChevronRightIcon} from '@radix-ui/react-icons';
 import c from 'clsx';
 import * as React from 'react';
@@ -85,7 +85,7 @@ export const MenuComponent = React.forwardRef<
   const nodeId = useFloatingNodeId();
   const parentId = useFloatingParentNodeId();
   const isNested = parentId != null;
-  const orientation = orientationOption ?? (!!cols ? 'both' : 'vertical');
+  const orientation = orientationOption ?? (cols ? 'both' : 'vertical');
 
   const parent = React.useContext(MenuContext);
   const item = useListItem();
