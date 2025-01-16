@@ -305,7 +305,7 @@ export function useListNavigation(
 
   React.useEffect(() => {
     context.dataRef.current.orientation = orientation;
-  }, [context]);
+  }, [context, orientation]);
 
   const onNavigate = useEffectEvent(() => {
     unstable_onNavigate(indexRef.current === -1 ? null : indexRef.current);
