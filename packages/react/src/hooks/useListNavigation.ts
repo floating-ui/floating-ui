@@ -201,7 +201,7 @@ export interface UseListNavigationProps {
    * The orientation in which navigation occurs.
    * @default 'vertical'
    */
-  orientation?: 'horizontal' | 'vertical' | 'both';
+  orientation?: 'vertical' | 'horizontal' | 'both';
   /**
    * Specifies how many columns the list has (i.e., it’s a grid). Use an
    * orientation of 'horizontal' (e.g. for an emoji picker/date picker, where
