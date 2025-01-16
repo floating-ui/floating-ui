@@ -99,8 +99,6 @@ type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};
 
-export type Orientation = 'horizontal' | 'vertical' | 'both';
-
 export type OpenChangeReason =
   | 'outside-press'
   | 'escape-key'
@@ -170,7 +168,6 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
 > & {
   open: boolean;
   onOpenChange(open: boolean, event?: Event, reason?: OpenChangeReason): void;
-  orientation?: Orientation;
   events: FloatingEvents;
   dataRef: React.MutableRefObject<ContextData>;
   nodeId: string | undefined;

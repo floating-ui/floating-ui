@@ -151,9 +151,5 @@ export type UseFloatingOptions<RT extends ReferenceType = ReferenceType> =
        * @default false
        */
       transform?: boolean;
-      /**
-       * The orientation of the list navigation.
-       */
-      orientation?: 'horizontal' | 'vertical' | 'both';
     }
   >;

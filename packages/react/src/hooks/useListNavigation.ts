@@ -15,12 +15,7 @@ import {
   useFloatingParentNodeId,
   useFloatingTree,
 } from '../components/FloatingTree';
-import type {
-  Dimensions,
-  ElementProps,
-  FloatingRootContext,
-  Orientation,
-} from '../types';
+import type {Dimensions, ElementProps, FloatingRootContext} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
@@ -206,7 +201,7 @@ export interface UseListNavigationProps {
    * The orientation in which navigation occurs.
    * @default 'vertical'
    */
-  orientation?: Orientation;
+  orientation?: 'horizontal' | 'vertical' | 'both';
   /**
    * Specifies how many columns the list has (i.e., it’s a grid). Use an
    * orientation of 'horizontal' (e.g. for an emoji picker/date picker, where
@@ -251,7 +246,7 @@ export function useListNavigation(
   context: FloatingRootContext,
   props: UseListNavigationProps,
 ): ElementProps {
-  const {open, onOpenChange, elements} = context;
+  const {open, onOpenChange, elements, dataRef} = context;
   const {
     listRef,
     activeIndex,
@@ -299,14 +294,18 @@ export function useListNavigation(
 
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
-  let parentOrientation: Orientation | undefined = undefined;
+  let parentOrientation: UseListNavigationProps['orientation'] = undefined;
   const parentNode = tree?.nodesRef.current.find(
     (node) => node.id === parentId,
   );
 
   if (parentNode) {
-    parentOrientation = parentNode.context?.orientation;
+    parentOrientation = parentNode.context?.dataRef?.current.orientation;
   }
+
+  React.useEffect(() => {
+    context.dataRef.current.orientation = orientation;
+  }, [context]);
 
   const onNavigate = useEffectEvent(() => {
     unstable_onNavigate(indexRef.current === -1 ? null : indexRef.current);

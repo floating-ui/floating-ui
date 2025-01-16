@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {isElement} from '@floating-ui/utils/dom';
 import type {FloatingRootContext, ReferenceElement} from '../types';
-import type {ContextData, OpenChangeReason, Orientation} from '../types';
+import type {ContextData, OpenChangeReason} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {createPubSub} from '../utils/createPubSub';
 import {useId} from './useId';
@@ -15,7 +15,6 @@ export interface UseFloatingRootContextOptions {
     event?: Event,
     reason?: OpenChangeReason,
   ) => void;
-  orientation?: Orientation;
   elements: {
     reference: Element | null;
     floating: HTMLElement | null;
@@ -29,7 +28,6 @@ export function useFloatingRootContext(
     open = false,
     onOpenChange: onOpenChangeProp,
     elements: elementsProp,
-    orientation = 'vertical',
   } = options;
 
   const floatingId = useId();
@@ -83,9 +81,8 @@ export function useFloatingRootContext(
       elements,
       events,
       floatingId,
-      orientation,
       refs,
     }),
-    [open, onOpenChange, elements, events, floatingId, refs, orientation],
+    [open, onOpenChange, elements, events, floatingId, refs],
   );
 }

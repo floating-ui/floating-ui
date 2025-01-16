@@ -23,7 +23,6 @@ import {
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
-import type {Orientation} from '@floating-ui/react';
 import {ChevronRightIcon} from '@radix-ui/react-icons';
 import c from 'clsx';
 import * as React from 'react';
@@ -55,7 +54,7 @@ interface MenuProps {
   nested?: boolean;
   children?: React.ReactNode;
   keepMounted?: boolean;
-  orientation?: Orientation;
+  orientation?: 'vertical' | 'horizontal' | 'both';
   cols?: number;
 }
 
@@ -95,7 +94,6 @@ export const MenuComponent = React.forwardRef<
     open: isOpen,
     onOpenChange: setIsOpen,
     placement: isNested ? 'right-start' : 'bottom-start',
-    orientation,
     middleware: [
       offset({mainAxis: isNested ? 0 : 4, alignmentAxis: isNested ? -4 : 0}),
       flip(),
@@ -268,9 +266,13 @@ export const MenuComponent = React.forwardRef<
                 <div
                   ref={refs.setFloating}
                   className={c(
-                    'flex flex-col rounded bg-white shadow-lg outline-none p-1 border border-slate-900/10 bg-clip-padding',
+                    'rounded bg-white shadow-lg outline-none p-1 border border-slate-900/10 bg-clip-padding',
                     {
-                      [`grid grid-cols-${cols} gap-3`]: cols,
+                      'flex flex-col': !cols,
+                    },
+                    {
+                      [`grid grid-cols-[repeat(var(--cols),_minmax(0,_1fr))] gap-3`]:
+                        cols,
                     },
                   )}
                   style={{
