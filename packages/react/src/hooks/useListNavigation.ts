@@ -989,6 +989,7 @@ export function useListNavigation(
     open,
     openOnArrowKeyDown,
     orientation,
+    parentId,
     rtl,
     selectedIndex,
     tree,
