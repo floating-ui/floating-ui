@@ -294,16 +294,8 @@ export function useListNavigation(
 
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
-  let parentOrientation: UseListNavigationProps['orientation'] = undefined;
-  const parentNode = tree?.nodesRef.current.find(
-    (node) => node.id === parentId,
-  );
 
-  if (parentNode) {
-    parentOrientation = parentNode.context?.dataRef?.current.orientation;
-  }
-
-  React.useEffect(() => {
+  useModernLayoutEffect(() => {
     context.dataRef.current.orientation = orientation;
   }, [context, orientation]);
 
@@ -492,7 +484,8 @@ export function useListNavigation(
     }
 
     const nodes = tree.nodesRef.current;
-    const parent = parentNode?.context?.elements.floating;
+    const parent = nodes.find((node) => node.id === parentId)?.context?.elements
+      .floating;
     const activeEl = activeElement(getDocument(elements.floating));
     const treeContainsActiveEl = nodes.some(
       (node) =>
@@ -502,7 +495,7 @@ export function useListNavigation(
     if (parent && !treeContainsActiveEl && isPointerModalityRef.current) {
       parent.focus({preventScroll: true});
     }
-  }, [enabled, elements.floating, tree, parentId, virtual, parentNode]);
+  }, [enabled, elements.floating, tree, parentId, virtual]);
 
   useModernLayoutEffect(() => {
     if (!enabled) return;
@@ -914,6 +907,9 @@ export function useListNavigation(
           return commonOnKeyDown(event);
         }
 
+        const parentOrientation = tree?.nodesRef.current.find(
+          (node) => node.id === parentId,
+        )?.context?.dataRef?.current.orientation;
         // If a floating element should not open on arrow key down, avoid
         // setting `activeIndex` while it's closed.
         if (!open && !openOnArrowKeyDown && isArrowKey) {
@@ -998,7 +994,6 @@ export function useListNavigation(
     tree,
     virtual,
     virtualItemRef,
-    parentOrientation,
   ]);
 
   return React.useMemo(
