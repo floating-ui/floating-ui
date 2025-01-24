@@ -195,4 +195,16 @@ export const MINI_SPONSORS = [
     url: 'https://www.wordhint.net/connections/hint/today/',
     MemberId: 607663,
   },
+  {
+    logo: '/sponsors/strandsgame.svg',
+    label: 'Strands Game',
+    url: 'https://strandsgame.me/',
+    MemberId: 651664,
+  },
+  {
+    logo: '/sponsors/wordle-solver.svg',
+    label: 'Wordle Solver',
+    url: 'https://wordlesolverx.com',
+    MemberId: 652449,
+  },
 ];
