@@ -30,8 +30,8 @@ importers:
         specifier: ^7.43.1
         version: 7.43.1(@types/node@20.10.6)
       '@playwright/test':
-        specifier: ^1.40.1
-        version: 1.40.1
+        specifier: ^1.50.0
+        version: 1.50.0
       '@rollup/plugin-alias':
         specifier: ^5.1.0
         version: 5.1.0(rollup@4.9.2)
@@ -2718,10 +2718,9 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@playwright/test@1.40.1':
-    resolution: {integrity: sha512-EaaawMTOeEItCRvfmkI9v6rBkF1svM8wjl/YPRrg2N2Wmp+4qJYkWtJsbew1szfKKDm6fPLy4YAanBhIlf9dWw==}
-    engines: {node: '>=16'}
-    deprecated: Please update to the latest version of Playwright to test up-to-date browsers.
+  '@playwright/test@1.50.0':
+    resolution: {integrity: sha512-ZGNXbt+d65EGjBORQHuYKj+XhCewlwpnSd/EDuLPZGSiEWmgOJB5RmMCCYGy5aMfTs9wx61RivfDKi8H/hcMvw==}
+    engines: {node: '>=18'}
     hasBin: true
 
   '@radix-ui/number@1.0.1':
@@ -4446,8 +4445,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
-  browserslist@4.24.3:
-    resolution: {integrity: sha512-1CPmv8iobE2fyRMV97dAcMVegvvWKxmq94hkLiAkUGwKVTyDLw33K+ZxiFrREKmmps4rIw6grcCFCnTMSZ/YiA==}
+  browserslist@4.24.4:
+    resolution: {integrity: sha512-KDi1Ny1gSePi1vm0q4oxSF8b4DR44GF4BbmS2YdhPLOEqd8pDviZOGH/GsmRwoWJ2+5Lr085X7naowMwKHDG1A==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
@@ -4522,8 +4521,8 @@ packages:
   caniuse-lite@1.0.30001572:
     resolution: {integrity: sha512-1Pbh5FLmn5y4+QhNyJE9j3/7dK44dGB83/ZMjv/qJk86TvDbjk0LosiZo0i0WB0Vx607qMX9jYrn1VLHCkN4rw==}
 
-  caniuse-lite@1.0.30001690:
-    resolution: {integrity: sha512-5ExiE3qQN6oF8Clf8ifIDcMRCRE/dMGcETG/XGMD8/XiXm6HXQgQTh1yZYLXXpSOsEUlJm1Xr7kGULZTuGtP/w==}
+  caniuse-lite@1.0.30001696:
+    resolution: {integrity: sha512-pDCPkvzfa39ehJtJ+OwGT/2yvT2SbjfHhiIW2LWOAcMQ7BzwxT/XuyUp4OTOd0XFWA6BKw0JalnBHgSi5DGJBQ==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -5249,8 +5248,8 @@ packages:
   electron-to-chromium@1.4.617:
     resolution: {integrity: sha512-sYNE3QxcDS4ANW1k4S/wWYMXjCVcFSOX3Bg8jpuMFaXt/x8JCmp0R1Xe1ZXDX4WXnSRBf+GJ/3eGWicUuQq5cg==}
 
-  electron-to-chromium@1.5.76:
-    resolution: {integrity: sha512-CjVQyG7n7Sr+eBXE86HIulnL5N8xZY1sgmOPGuq/F0Rr0FJq63lg0kEtOIDfZBk44FnDLf6FUJ+dsJcuiUDdDQ==}
+  electron-to-chromium@1.5.88:
+    resolution: {integrity: sha512-K3C2qf1o+bGzbilTDCTBhTQcMS9KW60yTAaTeeXsfvQuTDDwlokLam/AdqlqcSy9u4UainDgsHV23ksXAOgamw==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -5564,8 +5563,8 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fast-uri@3.0.4:
-    resolution: {integrity: sha512-G3iTQw1DizJQ5eEqj1CbFCWhq+pzum7qepkxU7rS1FGZDqjYKcrguo9XDRbV7EgPnn8CgaPigTq+NEjyioeYZQ==}
+  fast-uri@3.0.6:
+    resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
 
   fast-xml-parser@4.3.2:
     resolution: {integrity: sha512-rmrXUXwbJedoXkStenj1kkljNF7ugn5ZjR9FJcwmCfcCbtOMDghPajbc+Tck6vE6F5XsDmx+Pr2le9fw8+pXBg==}
@@ -6625,9 +6624,11 @@ packages:
 
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
   lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
   lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
@@ -7574,14 +7575,14 @@ packages:
   pkg-types@1.0.3:
     resolution: {integrity: sha512-nN7pYi0AQqJnoLPC9eHFQ8AcyaixBUOwvqc5TDnIKCMEE6I0y8P7OKA7fPexsXGCGxQDl/cmrLAp26LhcwxZ4A==}
 
-  playwright-core@1.40.1:
-    resolution: {integrity: sha512-+hkOycxPiV534c4HhpfX6yrlawqVUzITRKwHAmYfmsVreltEl6fAZJ3DPfLMOODw0H3s1Itd6MDCWmP1fl/QvQ==}
-    engines: {node: '>=16'}
+  playwright-core@1.50.0:
+    resolution: {integrity: sha512-CXkSSlr4JaZs2tZHI40DsZUN/NIwgaUPsyLuOAaIZp2CyF2sN5MM5NJsyB188lFSSozFxQ5fPT4qM+f0tH/6wQ==}
+    engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.40.1:
-    resolution: {integrity: sha512-2eHI7IioIpQ0bS1Ovg/HszsN/XKNwEG1kbzSDDmADpclKc7CyqkHw7Mg2JCz/bbCxg25QUPcjksoMW7JcIFQmw==}
-    engines: {node: '>=16'}
+  playwright@1.50.0:
+    resolution: {integrity: sha512-+GinGfGTrd2IfX1TA4N2gNmeIksSb+IAe589ZH+FlmpV3MYTx6+buChGIuDLQwrGNCw2lWibqV50fU510N7S+w==}
+    engines: {node: '>=18'}
     hasBin: true
 
   polished@4.2.2:
@@ -9102,8 +9103,8 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
-  update-browserslist-db@1.1.1:
-    resolution: {integrity: sha512-R8UzCaa9Az+38REPiJ1tXlImTJXlVfgHZsglwBD/k6nj76ctsH1E3q4doGrukiLQd3sGQYu56r5+lo5r94l29A==}
+  update-browserslist-db@1.1.2:
+    resolution: {integrity: sha512-PPypAm5qvlD7XMZC3BujecnaOxwhrtoFR+Dqkk5Aa/6DssiH0ibKoketaj9w8LP7Bont1rYeoV5plxD7RTEPRg==}
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
@@ -12297,7 +12298,7 @@ snapshots:
       '@parcel/workers': 2.10.3(@parcel/core@2.10.3)
       abortcontroller-polyfill: 1.7.8
       base-x: 3.0.10
-      browserslist: 4.24.3
+      browserslist: 4.24.4
       clone: 2.1.2
       dotenv: 7.0.0
       dotenv-expand: 5.1.0
@@ -12537,9 +12538,9 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@playwright/test@1.40.1':
+  '@playwright/test@1.50.0':
     dependencies:
-      playwright: 1.40.1
+      playwright: 1.50.0
 
   '@radix-ui/number@1.0.1':
     dependencies:
@@ -14651,7 +14652,7 @@ snapshots:
   ajv@8.17.1:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.0.4
+      fast-uri: 3.0.6
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -15017,12 +15018,12 @@ snapshots:
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.2)
 
-  browserslist@4.24.3:
+  browserslist@4.24.4:
     dependencies:
-      caniuse-lite: 1.0.30001690
-      electron-to-chromium: 1.5.76
+      caniuse-lite: 1.0.30001696
+      electron-to-chromium: 1.5.88
       node-releases: 2.0.19
-      update-browserslist-db: 1.1.1(browserslist@4.24.3)
+      update-browserslist-db: 1.1.2(browserslist@4.24.4)
 
   bser@2.1.1:
     dependencies:
@@ -15083,7 +15084,7 @@ snapshots:
 
   caniuse-lite@1.0.30001572: {}
 
-  caniuse-lite@1.0.30001690: {}
+  caniuse-lite@1.0.30001696: {}
 
   ccount@2.0.1: {}
 
@@ -15650,7 +15651,7 @@ snapshots:
 
   electron-to-chromium@1.4.617: {}
 
-  electron-to-chromium@1.5.76: {}
+  electron-to-chromium@1.5.88: {}
 
   emoji-regex@8.0.0: {}
 
@@ -16154,7 +16155,7 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
-  fast-uri@3.0.4: {}
+  fast-uri@3.0.6: {}
 
   fast-xml-parser@4.3.2:
     dependencies:
@@ -18597,11 +18598,11 @@ snapshots:
       mlly: 1.4.2
       pathe: 1.1.1
 
-  playwright-core@1.40.1: {}
+  playwright-core@1.50.0: {}
 
-  playwright@1.40.1:
+  playwright@1.50.0:
     dependencies:
-      playwright-core: 1.40.1
+      playwright-core: 1.50.0
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -20357,9 +20358,9 @@ snapshots:
       escalade: 3.1.1
       picocolors: 1.0.0
 
-  update-browserslist-db@1.1.1(browserslist@4.24.3):
+  update-browserslist-db@1.1.2(browserslist@4.24.4):
     dependencies:
-      browserslist: 4.24.3
+      browserslist: 4.24.4
       escalade: 3.2.0
       picocolors: 1.1.1
 
@@ -20629,7 +20630,7 @@ snapshots:
       '@webassemblyjs/wasm-parser': 1.14.1
       acorn: 8.14.0
       acorn-import-assertions: 1.9.0(acorn@8.14.0)
-      browserslist: 4.24.3
+      browserslist: 4.24.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.18.0
       es-module-lexer: 1.6.0
