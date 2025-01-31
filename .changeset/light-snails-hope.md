@@ -2,4 +2,4 @@
 "@floating-ui/react": patch
 ---
 
-FloatingList: Ensure items are registered/unregistered after indices are set
+FloatingList: fix race condition between registering/unregistering nodes and setting indices
