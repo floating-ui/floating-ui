@@ -148,7 +148,7 @@ export function useListItem(props: UseListItemProps = {}): {
     [index, elementsRef, labelsRef, label],
   );
 
-  useModernLayoutEffect(() => {
+  React.useEffect(() => {
     const node = componentRef.current;
     if (node) {
       register(node);

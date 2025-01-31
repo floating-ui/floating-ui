@@ -2,4 +2,4 @@
 "@floating-ui/react": patch
 ---
 
-Ensure register/unregister is called with same node identity
+FloatingList: Ensure items are registered/unregistered after indices are set
