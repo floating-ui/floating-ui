@@ -21,21 +21,6 @@ function sortByDocumentPosition(a: Node, b: Node) {
   return 0;
 }
 
-function areMapsEqual(
-  map1: Map<Node, number | null>,
-  map2: Map<Node, number | null>,
-) {
-  if (map1.size !== map2.size) {
-    return false;
-  }
-  for (const [key, value] of map1.entries()) {
-    if (value !== map2.get(key)) {
-      return false;
-    }
-  }
-  return true;
-}
-
 export const FloatingListContext = React.createContext<{
   register: (node: Node) => void;
   unregister: (node: Node) => void;
