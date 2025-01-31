@@ -129,11 +129,11 @@ export function useListItem(props: UseListItemProps = {}): {
 
   const [index, setIndex] = React.useState<number | null>(null);
 
-  const [componentRef, setComponentRef] = React.useState<Node | null>(null);
+  const componentRef = React.useRef<Node | null>(null);
 
   const ref = React.useCallback(
     (node: HTMLElement | null) => {
-      setComponentRef(node);
+      componentRef.current = node;
 
       if (index !== null) {
         elementsRef.current[index] = node;
@@ -149,21 +149,21 @@ export function useListItem(props: UseListItemProps = {}): {
   );
 
   useModernLayoutEffect(() => {
-    const node = componentRef;
+    const node = componentRef.current;
     if (node) {
       register(node);
       return () => {
         unregister(node);
       };
     }
-  }, [componentRef, register, unregister]);
+  }, [register, unregister]);
 
   useModernLayoutEffect(() => {
-    const index = componentRef ? map.get(componentRef) : null;
+    const index = componentRef.current ? map.get(componentRef.current) : null;
     if (index != null) {
       setIndex(index);
     }
-  }, [map, componentRef]);
+  }, [map]);
 
   return React.useMemo(
     () => ({
