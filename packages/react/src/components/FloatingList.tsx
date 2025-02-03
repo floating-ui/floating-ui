@@ -58,12 +58,12 @@ export function FloatingList(props: FloatingListProps): React.JSX.Element {
   const [nodes, setNodes] = React.useState(() => new Set<Node>());
 
   const register = React.useCallback((node: Node) => {
-    setNodes((prevMap) => new Set(prevMap).add(node));
+    setNodes((prevSet) => new Set(prevSet).add(node));
   }, []);
 
   const unregister = React.useCallback((node: Node) => {
-    setNodes((prevMap) => {
-      const map = new Set(prevMap);
+    setNodes((prevSet) => {
+      const map = new Set(prevSet);
       map.delete(node);
       return map;
     });
