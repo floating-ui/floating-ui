@@ -392,13 +392,36 @@ export const Menu = React.forwardRef<
 export const Main = () => {
   return (
     <>
-      <h1 className="text-5xl font-bold mb-8">Menu</h1>
+      <h1 className="text-5xl font-bold mb-8">Horizontal menu</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <Menu label="Edit" orientation="horizontal">
           <MenuItem label="Undo" onClick={() => console.log('Undo')} />
           <MenuItem label="Redo" />
           <MenuItem label="Cut" disabled />
           <Menu label="Copy as" keepMounted>
+            <MenuItem label="Text" />
+            <MenuItem label="Video" />
+            <Menu label="Image" keepMounted cols={2}>
+              <MenuItem label=".png" />
+              <MenuItem label=".jpg" />
+              <MenuItem label=".svg" />
+              <MenuItem label=".gif" />
+            </Menu>
+            <MenuItem label="Audio" />
+          </Menu>
+          <Menu label="Share">
+            <MenuItem label="Mail" />
+            <MenuItem label="Instagram" />
+          </Menu>
+        </Menu>
+      </div>
+      <h1 className="text-5xl font-bold mb-8">Vertical menu</h1>
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
+        <Menu label="Edit">
+          <MenuItem label="Undo" onClick={() => console.log('Undo')} />
+          <MenuItem label="Redo" />
+          <MenuItem label="Cut" disabled />
+          <Menu label="Copy as" keepMounted orientation="horizontal">
             <MenuItem label="Text" />
             <MenuItem label="Video" />
             <Menu label="Image" keepMounted cols={2}>
