@@ -449,7 +449,7 @@ export const Main = () => {
           <Menu label="Copy as" keepMounted orientation="horizontal">
             <MenuItem label="Text" />
             <MenuItem label="Video" />
-            <Menu label="Image" keepMounted cols={2} orientation="horizontal">
+            <Menu label="Image" keepMounted cols={2}>
               <MenuItem label=".png" />
               <MenuItem label=".jpg" />
               <MenuItem label=".svg" />
