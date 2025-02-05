@@ -246,7 +246,7 @@ export function useListNavigation(
   context: FloatingRootContext,
   props: UseListNavigationProps,
 ): ElementProps {
-  const {open, onOpenChange, elements, dataRef} = context;
+  const {open, onOpenChange, elements} = context;
   const {
     listRef,
     activeIndex,
@@ -839,6 +839,9 @@ export function useListNavigation(
         const isArrowKey = event.key.startsWith('Arrow');
         const isHomeOrEndKey = ['Home', 'End'].includes(event.key);
         const isMoveKey = isArrowKey || isHomeOrEndKey;
+        const parentOrientation = tree?.nodesRef.current.find(
+          (node) => node.id === parentId,
+        )?.context?.dataRef?.current.orientation;
         const isCrossOpenKey = isCrossOrientationOpenKey(
           event.key,
           orientation,
@@ -849,9 +852,14 @@ export function useListNavigation(
           orientation,
           rtl,
         );
+        const isParentCrossOpenKey = isCrossOrientationOpenKey(
+          event.key,
+          parentOrientation,
+          rtl,
+        );
         const isMainKey = isMainOrientationKey(event.key, orientation);
         const isNavigationKey =
-          (nested ? isCrossOpenKey : isMainKey) ||
+          (nested ? isParentCrossOpenKey : isMainKey) ||
           event.key === 'Enter' ||
           event.key.trim() === '';
 
@@ -906,10 +914,6 @@ export function useListNavigation(
 
           return commonOnKeyDown(event);
         }
-
-        const parentOrientation = tree?.nodesRef.current.find(
-          (node) => node.id === parentId,
-        )?.context?.dataRef?.current.orientation;
         // If a floating element should not open on arrow key down, avoid
         // setting `activeIndex` while it's closed.
         if (!open && !openOnArrowKeyDown && isArrowKey) {
@@ -925,11 +929,6 @@ export function useListNavigation(
         }
 
         if (nested) {
-          const isParentCrossOpenKey = isCrossOrientationOpenKey(
-            event.key,
-            parentOrientation,
-            rtl,
-          );
           if (isParentCrossOpenKey) {
             stopEvent(event);
 
