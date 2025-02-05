@@ -93,10 +93,14 @@ function isCrossOrientationCloseKey(
   key: string,
   orientation: UseListNavigationProps['orientation'],
   rtl: boolean,
+  cols?: number,
 ) {
   const vertical = rtl ? key === ARROW_RIGHT : key === ARROW_LEFT;
   const horizontal = key === ARROW_UP;
-  if (orientation === 'both') {
+  if (
+    orientation === 'both' ||
+    (orientation === 'horizontal' && cols && cols > 1)
+  ) {
     return key === ESCAPE;
   }
   return doSwitch(orientation, vertical, horizontal);
@@ -601,7 +605,10 @@ export function useListNavigation(
       return;
     }
 
-    if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
+    if (
+      nested &&
+      isCrossOrientationCloseKey(event.key, orientation, rtl, cols)
+    ) {
       stopEvent(event);
       onOpenChange(false, event.nativeEvent, 'list-navigation');
 
@@ -851,6 +858,7 @@ export function useListNavigation(
           event.key,
           orientation,
           rtl,
+          cols,
         );
         const isParentCrossOpenKey = isCrossOrientationOpenKey(
           event.key,
