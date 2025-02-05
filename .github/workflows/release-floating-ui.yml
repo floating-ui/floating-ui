@@ -8,13 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-      - uses: ./.github/actions/typescript
-      - uses: ./.github/actions/unit
-      - uses: ./.github/actions/functional
+    uses: ./.github/workflows/ci.yml
 
   release:
     name: Release
