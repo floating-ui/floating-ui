@@ -63,9 +63,9 @@ export function FloatingList(props: FloatingListProps): React.JSX.Element {
 
   const unregister = React.useCallback((node: Node) => {
     setNodes((prevSet) => {
-      const map = new Set(prevSet);
-      map.delete(node);
-      return map;
+      const set = new Set(prevSet);
+      set.delete(node);
+      return set;
     });
   }, []);
 
