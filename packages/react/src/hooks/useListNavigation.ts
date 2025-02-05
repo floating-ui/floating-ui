@@ -986,6 +986,7 @@ export function useListNavigation(
   }, [
     activeId,
     ariaActiveDescendantProp,
+    cols,
     commonOnKeyDown,
     disabledIndicesRef,
     focusItemOnOpen,
