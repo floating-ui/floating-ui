@@ -16,6 +16,7 @@ import {Main as EmojiPicker} from './components/EmojiPicker';
 import {Main as Grid} from './components/Grid';
 import {Main as MacSelect} from './components/MacSelect';
 import {Main as Menu} from './components/Menu';
+import {Main as MenuOrientation} from './components/MenuOrientation';
 import {Main as Menubar} from './components/Menubar';
 import {Main as MenuVirtual} from './components/MenuVirtual';
 import {Main as Navigation} from './components/Navigation';
@@ -29,6 +30,7 @@ const ROUTES = [
   {path: 'tooltip', component: Tooltip},
   {path: 'popover', component: Popover},
   {path: 'menu', component: Menu},
+  {path: 'menu-orientation', component: MenuOrientation},
   {path: 'select', component: Select},
   {path: 'mac-select', component: MacSelect},
   {path: 'emoji-picker', component: EmojiPicker},

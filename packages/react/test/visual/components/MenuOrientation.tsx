@@ -23,7 +23,7 @@ import {
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
-import {ChevronRightIcon} from '@radix-ui/react-icons';
+import {ChevronRightIcon, ChevronDownIcon} from '@radix-ui/react-icons';
 import c from 'clsx';
 import * as React from 'react';
 
@@ -36,6 +36,7 @@ type MenuContextType = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   parent: MenuContextType | null;
+  orientation: 'vertical' | 'horizontal' | 'both';
 };
 
 const MenuContext = React.createContext<MenuContextType>({
@@ -47,6 +48,7 @@ const MenuContext = React.createContext<MenuContextType>({
   isOpen: false,
   setIsOpen: () => {},
   parent: null,
+  orientation: 'vertical',
 });
 
 interface MenuProps {
@@ -252,6 +254,7 @@ export const MenuComponent = React.forwardRef<
           isOpen,
           setIsOpen,
           parent,
+          orientation,
         }}
       >
         <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
@@ -268,7 +271,10 @@ export const MenuComponent = React.forwardRef<
                   className={c(
                     'rounded bg-white shadow-lg outline-none p-1 border border-slate-900/10 bg-clip-padding',
                     {
-                      'flex flex-col': !cols,
+                      'flex flex-col': !cols && orientation !== 'horizontal',
+                    },
+                    {
+                      'flex flex-row': orientation === 'horizontal',
                     },
                     {
                       [`grid grid-cols-[repeat(var(--cols),_minmax(0,_1fr))] gap-3`]:
@@ -386,16 +392,64 @@ export const Menu = React.forwardRef<
 export const Main = () => {
   return (
     <>
-      <h1 className="text-5xl font-bold mb-8">Menu</h1>
+      <h1 className="text-5xl font-bold mb-8">Horizontal menu</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
-        <Menu label="Edit">
+        <Menu label="Edit" orientation="horizontal">
           <MenuItem label="Undo" onClick={() => console.log('Undo')} />
           <MenuItem label="Redo" />
           <MenuItem label="Cut" disabled />
           <Menu label="Copy as" keepMounted>
             <MenuItem label="Text" />
             <MenuItem label="Video" />
-            <Menu label="Image" keepMounted cols={2} orientation="horizontal">
+            <Menu label="Image" keepMounted cols={2}>
+              <MenuItem label=".png" />
+              <MenuItem label=".jpg" />
+              <MenuItem label=".svg" />
+              <MenuItem label=".gif" />
+            </Menu>
+            <MenuItem label="Audio" />
+          </Menu>
+          <Menu label="Share">
+            <MenuItem label="Mail" />
+            <MenuItem label="Instagram" />
+          </Menu>
+        </Menu>
+      </div>
+      <h1 className="text-5xl font-bold mb-8">Vertical menu</h1>
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
+        <Menu label="Edit">
+          <MenuItem label="Undo" onClick={() => console.log('Undo')} />
+          <MenuItem label="Redo" />
+          <MenuItem label="Cut" disabled />
+          <Menu label="Copy as" keepMounted orientation="horizontal">
+            <MenuItem label="Text" />
+            <MenuItem label="Video" />
+            <Menu label="Image" keepMounted cols={2}>
+              <MenuItem label=".png" />
+              <MenuItem label=".jpg" />
+              <MenuItem label=".svg" />
+              <MenuItem label=".gif" />
+            </Menu>
+            <MenuItem label="Audio" />
+          </Menu>
+          <Menu label="Share">
+            <MenuItem label="Mail" />
+            <MenuItem label="Instagram" />
+          </Menu>
+        </Menu>
+      </div>
+      <h1 className="text-5xl font-bold mb-8">
+        Horizontal menu with horizontal submenus
+      </h1>
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
+        <Menu label="Edit" orientation="horizontal">
+          <MenuItem label="Undo" onClick={() => console.log('Undo')} />
+          <MenuItem label="Redo" />
+          <MenuItem label="Cut" disabled />
+          <Menu label="Copy as" keepMounted orientation="horizontal">
+            <MenuItem label="Text" />
+            <MenuItem label="Video" />
+            <Menu label="Image" keepMounted cols={2}>
               <MenuItem label=".png" />
               <MenuItem label=".jpg" />
               <MenuItem label=".svg" />

@@ -38,6 +38,8 @@ import {useLatestRef} from './utils/useLatestRef';
 import {warn} from '../utils/log';
 import {getFloatingFocusElement} from '../utils/getFloatingFocusElement';
 
+export const ESCAPE = 'Escape';
+
 function doSwitch(
   orientation: UseListNavigationProps['orientation'],
   vertical: boolean,
@@ -91,9 +93,16 @@ function isCrossOrientationCloseKey(
   key: string,
   orientation: UseListNavigationProps['orientation'],
   rtl: boolean,
+  cols?: number,
 ) {
   const vertical = rtl ? key === ARROW_RIGHT : key === ARROW_LEFT;
   const horizontal = key === ARROW_UP;
+  if (
+    orientation === 'both' ||
+    (orientation === 'horizontal' && cols && cols > 1)
+  ) {
+    return key === ESCAPE;
+  }
   return doSwitch(orientation, vertical, horizontal);
 }
 
@@ -289,6 +298,10 @@ export function useListNavigation(
 
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
+
+  useModernLayoutEffect(() => {
+    context.dataRef.current.orientation = orientation;
+  }, [context, orientation]);
 
   const onNavigate = useEffectEvent(() => {
     unstable_onNavigate(indexRef.current === -1 ? null : indexRef.current);
@@ -592,7 +605,10 @@ export function useListNavigation(
       return;
     }
 
-    if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
+    if (
+      nested &&
+      isCrossOrientationCloseKey(event.key, orientation, rtl, cols)
+    ) {
       stopEvent(event);
       onOpenChange(false, event.nativeEvent, 'list-navigation');
 
@@ -830,6 +846,9 @@ export function useListNavigation(
         const isArrowKey = event.key.startsWith('Arrow');
         const isHomeOrEndKey = ['Home', 'End'].includes(event.key);
         const isMoveKey = isArrowKey || isHomeOrEndKey;
+        const parentOrientation = tree?.nodesRef.current.find(
+          (node) => node.id === parentId,
+        )?.context?.dataRef?.current.orientation;
         const isCrossOpenKey = isCrossOrientationOpenKey(
           event.key,
           orientation,
@@ -839,10 +858,16 @@ export function useListNavigation(
           event.key,
           orientation,
           rtl,
+          cols,
+        );
+        const isParentCrossOpenKey = isCrossOrientationOpenKey(
+          event.key,
+          parentOrientation,
+          rtl,
         );
         const isMainKey = isMainOrientationKey(event.key, orientation);
         const isNavigationKey =
-          (nested ? isCrossOpenKey : isMainKey) ||
+          (nested ? isParentCrossOpenKey : isMainKey) ||
           event.key === 'Enter' ||
           event.key.trim() === '';
 
@@ -897,7 +922,6 @@ export function useListNavigation(
 
           return commonOnKeyDown(event);
         }
-
         // If a floating element should not open on arrow key down, avoid
         // setting `activeIndex` while it's closed.
         if (!open && !openOnArrowKeyDown && isArrowKey) {
@@ -905,11 +929,15 @@ export function useListNavigation(
         }
 
         if (isNavigationKey) {
-          keyRef.current = nested && isMainKey ? null : event.key;
+          const isParentMainKey = isMainOrientationKey(
+            event.key,
+            parentOrientation,
+          );
+          keyRef.current = nested && isParentMainKey ? null : event.key;
         }
 
         if (nested) {
-          if (isCrossOpenKey) {
+          if (isParentCrossOpenKey) {
             stopEvent(event);
 
             if (open) {
@@ -958,6 +986,7 @@ export function useListNavigation(
   }, [
     activeId,
     ariaActiveDescendantProp,
+    cols,
     commonOnKeyDown,
     disabledIndicesRef,
     focusItemOnOpen,
@@ -968,6 +997,7 @@ export function useListNavigation(
     open,
     openOnArrowKeyDown,
     orientation,
+    parentId,
     rtl,
     selectedIndex,
     tree,
