@@ -1,5 +1,12 @@
 # @floating-ui/react
 
+## 0.27.4
+
+### Patch Changes
+
+- fix(useListNavigation): use parent's orientation when opening/closing nested menus, correctly supporting grid submenus
+- fix(FloatingList): avoid race condition between registering/unregistering nodes and setting indices
+
 ## 0.27.3
 
 ### Patch Changes
