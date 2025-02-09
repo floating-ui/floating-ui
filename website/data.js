@@ -204,7 +204,13 @@ export const MINI_SPONSORS = [
   {
     logo: '/sponsors/wordle-solver.svg',
     label: 'Wordle Solver',
-    url: 'https://wordlesolverx.com',
+    url: 'https://wordlesolverx.com/',
     MemberId: 652449,
+  },
+  {
+    logo: '/sponsors/strands-hint.svg',
+    label: 'Strands Hint',
+    url: 'https://strands-hint.net/',
+    MemberId: 656348,
   },
 ];
