@@ -1,4 +1,5 @@
 import {
+  clearTimeoutIfSet,
   contains,
   getDocument,
   isMouseLikePointerType,
@@ -139,8 +140,8 @@ export function useHover(
 
     function onOpenChange({open}: {open: boolean}) {
       if (!open) {
-        clearTimeout(timeoutRef.current);
-        clearTimeout(restTimeoutRef.current);
+        clearTimeoutIfSet(timeoutRef);
+        clearTimeoutIfSet(restTimeoutRef);
         blockMouseMoveRef.current = true;
         restTimeoutPendingRef.current = false;
       }
@@ -189,13 +190,13 @@ export function useHover(
         pointerTypeRef.current,
       );
       if (closeDelay && !handlerRef.current) {
-        clearTimeout(timeoutRef.current);
+        clearTimeoutIfSet(timeoutRef);
         timeoutRef.current = window.setTimeout(
           () => onOpenChange(false, event, reason),
           closeDelay,
         );
       } else if (runElseBranch) {
-        clearTimeout(timeoutRef.current);
+        clearTimeoutIfSet(timeoutRef);
         onOpenChange(false, event, reason);
       }
     },
@@ -229,7 +230,7 @@ export function useHover(
     if (!enabled) return;
 
     function onMouseEnter(event: MouseEvent) {
-      clearTimeout(timeoutRef.current);
+      clearTimeoutIfSet(timeoutRef);
       blockMouseMoveRef.current = false;
 
       if (
@@ -262,13 +263,13 @@ export function useHover(
       unbindMouseMoveRef.current();
 
       const doc = getDocument(elements.floating);
-      clearTimeout(restTimeoutRef.current);
+      clearTimeoutIfSet(restTimeoutRef);
       restTimeoutPendingRef.current = false;
 
       if (handleCloseRef.current && dataRef.current.floatingContext) {
         // Prevent clearing `onScrollMouseLeave` timeout.
         if (!open) {
-          clearTimeout(timeoutRef.current);
+          clearTimeoutIfSet(timeoutRef);
         }
 
         handlerRef.current = handleCloseRef.current({
@@ -423,8 +424,8 @@ export function useHover(
   React.useEffect(() => {
     return () => {
       cleanupMouseMoveHandler();
-      clearTimeout(timeoutRef.current);
-      clearTimeout(restTimeoutRef.current);
+      clearTimeoutIfSet(timeoutRef);
+      clearTimeoutIfSet(restTimeoutRef);
       clearPointerEvents();
     };
   }, [
@@ -467,7 +468,7 @@ export function useHover(
           return;
         }
 
-        clearTimeout(restTimeoutRef.current);
+        clearTimeoutIfSet(restTimeoutRef);
 
         if (pointerTypeRef.current === 'touch') {
           handleMouseMove();
@@ -482,7 +483,7 @@ export function useHover(
   const floating: ElementProps['floating'] = React.useMemo(
     () => ({
       onMouseEnter() {
-        clearTimeout(timeoutRef.current);
+        clearTimeoutIfSet(timeoutRef);
       },
       onMouseLeave(event) {
         if (!isClickLikeOpenEvent()) {
