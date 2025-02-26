@@ -1,10 +1,11 @@
-import {clearTimeoutIfSet, stopEvent} from '@floating-ui/react/utils';
+import {stopEvent} from '@floating-ui/react/utils';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {ElementProps, FloatingRootContext} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
+import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 export interface UseTypeaheadProps {
   /**

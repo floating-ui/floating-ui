@@ -197,10 +197,3 @@ export function isTypeableCombobox(element: Element | null) {
     element.getAttribute('role') === 'combobox' && isTypeableElement(element)
   );
 }
-
-export function clearTimeoutIfSet(timeoutRef: React.MutableRefObject<number>) {
-  if (timeoutRef.current !== -1) {
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = -1;
-  }
-}

@@ -1,6 +1,5 @@
 import {
   activeElement,
-  clearTimeoutIfSet,
   contains,
   getDocument,
   getTarget,
@@ -18,6 +17,7 @@ import type {
   OpenChangeReason,
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 export interface UseFocusProps {
   /**

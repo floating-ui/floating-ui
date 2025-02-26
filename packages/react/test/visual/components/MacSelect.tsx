@@ -24,7 +24,7 @@ import {flushSync} from 'react-dom';
 
 import {FloatingPortal} from '../../../src';
 import {Button} from '../lib/Button';
-import {clearTimeoutIfSet} from '@floating-ui/react/utils';
+import {clearTimeoutIfSet} from '../../../src/utils/clearTimeoutIfSet';
 
 const fruits = [
   '🍒 Cherry',

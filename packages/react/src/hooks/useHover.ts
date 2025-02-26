@@ -1,5 +1,4 @@
 import {
-  clearTimeoutIfSet,
   contains,
   getDocument,
   isMouseLikePointerType,
@@ -20,6 +19,7 @@ import type {
   OpenChangeReason,
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 import {useLatestRef} from './utils/useLatestRef';
 import {useEffectEvent} from './utils/useEffectEvent';
 
