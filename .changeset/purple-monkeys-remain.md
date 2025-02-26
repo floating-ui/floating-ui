@@ -2,4 +2,4 @@
 "@floating-ui/react": patch
 ---
 
-Improve performance by only clearing used timeouts
+perf: improve performance by only clearing used timeouts
