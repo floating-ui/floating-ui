@@ -538,6 +538,7 @@ export function FloatingFocusManager(
     if (disabled || !floatingFocusElement) return;
 
     let preventReturnFocusScroll = false;
+    let focusReference = false;
 
     const doc = getDocument(floatingFocusElement);
     const previouslyFocusedElement = activeElement(doc);
@@ -563,8 +564,8 @@ export function FloatingFocusManager(
         openEvent = event;
       }
 
-      if (reason === 'escape-key' && domReference) {
-        addPreviouslyFocusedElement(domReference);
+      if (reason === 'escape-key') {
+        focusReference = true;
       }
 
       if (
@@ -615,7 +616,9 @@ export function FloatingFocusManager(
 
     function getReturnElement() {
       if (typeof returnFocusRef.current === 'boolean') {
-        return getPreviouslyFocusedElement() || fallbackEl;
+        return focusReference && domReference
+          ? domReference
+          : getPreviouslyFocusedElement() || fallbackEl;
       }
 
       return returnFocusRef.current.current || fallbackEl;
@@ -631,12 +634,12 @@ export function FloatingFocusManager(
           getChildren(tree.nodesRef.current, getNodeId()).some((node) =>
             contains(node.context?.elements.floating, activeEl),
           ));
-      const shouldFocusReference =
-        isFocusInsideFloatingTree ||
-        (openEvent && ['click', 'mousedown'].includes(openEvent.type));
 
-      if (shouldFocusReference && domReference) {
-        addPreviouslyFocusedElement(domReference);
+      if (
+        isFocusInsideFloatingTree ||
+        (!!openEvent && ['click', 'mousedown'].includes(openEvent.type))
+      ) {
+        focusReference = true;
       }
 
       const returnElement = getReturnElement();
