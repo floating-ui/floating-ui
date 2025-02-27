@@ -24,6 +24,7 @@ import {flushSync} from 'react-dom';
 
 import {FloatingPortal} from '../../../src';
 import {Button} from '../lib/Button';
+import {clearTimeoutIfSet} from '../../../src/utils/clearTimeoutIfSet';
 
 const fruits = [
   '🍒 Cherry',
@@ -203,7 +204,7 @@ export function Main() {
   const overflowRef = useRef<SideObject>(null);
   const allowSelectRef = useRef(false);
   const allowMouseUpRef = useRef(true);
-  const selectTimeoutRef = useRef<any>();
+  const selectTimeoutRef = useRef(-1);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
@@ -282,12 +283,12 @@ export function Main() {
 
   useLayoutEffect(() => {
     if (open) {
-      selectTimeoutRef.current = setTimeout(() => {
+      selectTimeoutRef.current = window.setTimeout(() => {
         allowSelectRef.current = true;
       }, 300);
 
       return () => {
-        clearTimeout(selectTimeoutRef.current);
+        clearTimeoutIfSet(selectTimeoutRef);
       };
     }
 
@@ -311,9 +312,9 @@ export function Main() {
 
   const handleArrowHide = () => {
     if (touch) {
-      clearTimeout(selectTimeoutRef.current);
+      clearTimeoutIfSet(selectTimeoutRef);
       setBlockSelection(true);
-      selectTimeoutRef.current = setTimeout(() => {
+      selectTimeoutRef.current = window.setTimeout(() => {
         setBlockSelection(false);
       }, 400);
     }
@@ -415,10 +416,12 @@ export function Main() {
 
                               // On touch devices, prevent the element from
                               // immediately closing `onClick` by deferring it
-                              clearTimeout(selectTimeoutRef.current);
-                              selectTimeoutRef.current = setTimeout(() => {
-                                allowSelectRef.current = true;
-                              });
+                              clearTimeoutIfSet(selectTimeoutRef);
+                              selectTimeoutRef.current = window.setTimeout(
+                                () => {
+                                  allowSelectRef.current = true;
+                                },
+                              );
                             },
                           })}
                         >

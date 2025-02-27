@@ -5,6 +5,7 @@ import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
+import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 export interface UseTypeaheadProps {
   /**
@@ -81,7 +82,7 @@ export function useTypeahead(
     selectedIndex = null,
   } = props;
 
-  const timeoutIdRef = React.useRef<any>();
+  const timeoutIdRef = React.useRef(-1);
   const stringRef = React.useRef('');
   const prevIndexRef = React.useRef<number | null>(
     selectedIndex ?? activeIndex ?? -1,
@@ -96,7 +97,7 @@ export function useTypeahead(
 
   useModernLayoutEffect(() => {
     if (open) {
-      clearTimeout(timeoutIdRef.current);
+      clearTimeoutIfSet(timeoutIdRef);
       matchIndexRef.current = null;
       stringRef.current = '';
     }
@@ -186,8 +187,8 @@ export function useTypeahead(
     }
 
     stringRef.current += event.key;
-    clearTimeout(timeoutIdRef.current);
-    timeoutIdRef.current = setTimeout(() => {
+    clearTimeoutIfSet(timeoutIdRef);
+    timeoutIdRef.current = window.setTimeout(() => {
       stringRef.current = '';
       prevIndexRef.current = matchIndexRef.current;
       setTypingChange(false);

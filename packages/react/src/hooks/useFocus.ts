@@ -17,6 +17,7 @@ import type {
   OpenChangeReason,
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 export interface UseFocusProps {
   /**
@@ -46,7 +47,7 @@ export function useFocus(
   const {enabled = true, visibleOnly = true} = props;
 
   const blockFocusRef = React.useRef(false);
-  const timeoutRef = React.useRef<number>();
+  const timeoutRef = React.useRef(-1);
   const keyboardModalityRef = React.useRef(true);
 
   React.useEffect(() => {
@@ -97,7 +98,7 @@ export function useFocus(
 
   React.useEffect(() => {
     return () => {
-      clearTimeout(timeoutRef.current);
+      clearTimeoutIfSet(timeoutRef);
     };
   }, []);
 
