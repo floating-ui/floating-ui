@@ -579,11 +579,26 @@ export function FloatingFocusManager(
       if (nested) {
         preventReturnFocusRef.current = false;
         preventReturnFocusScroll = true;
+      } else if (
+        isVirtualClick(event as MouseEvent) ||
+        isVirtualPointerEvent(event as PointerEvent)
+      ) {
+        preventReturnFocusRef.current = false;
       } else {
-        preventReturnFocusRef.current = !(
-          isVirtualClick(event as MouseEvent) ||
-          isVirtualPointerEvent(event as PointerEvent)
-        );
+        let isPreventScrollSupported = false;
+        document.createElement('div').focus({
+          get preventScroll() {
+            isPreventScrollSupported = true;
+            return false;
+          },
+        });
+
+        if (isPreventScrollSupported) {
+          preventReturnFocusRef.current = false;
+          preventReturnFocusScroll = true;
+        } else {
+          preventReturnFocusRef.current = true;
+        }
       }
     }
 
