@@ -580,10 +580,28 @@ export function FloatingFocusManager(
         preventReturnFocusRef.current = false;
         preventReturnFocusScroll = true;
       } else {
-        preventReturnFocusRef.current = !(
+        const isVirtualEvent =
           isVirtualClick(event as MouseEvent) ||
-          isVirtualPointerEvent(event as PointerEvent)
-        );
+          isVirtualPointerEvent(event as PointerEvent);
+
+        if (!isVirtualEvent) {
+          let isPreventScrollSupported = false;
+          document.createElement('div').focus({
+            get preventScroll() {
+              isPreventScrollSupported = true;
+              return false;
+            },
+          });
+
+          if (isPreventScrollSupported) {
+            preventReturnFocusRef.current = false;
+            preventReturnFocusScroll = true;
+          } else {
+            preventReturnFocusRef.current = true;
+          }
+        } else {
+          preventReturnFocusRef.current = false;
+        }
       }
     }
 

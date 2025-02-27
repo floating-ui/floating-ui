@@ -390,6 +390,112 @@ describe('returnFocus', () => {
 
     expect(screen.getByTestId('fallback')).toHaveFocus();
   });
+
+  test('does not return focus to reference on outside press when preventScroll is not supported', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const click = useClick(context);
+      const dismiss = useDismiss(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([
+        click,
+        dismiss,
+      ]);
+
+      return (
+        <>
+          <button ref={refs.setReference} {...getReferenceProps()}>
+            reference
+          </button>
+          {isOpen && (
+            <FloatingFocusManager context={context}>
+              <div
+                ref={refs.setFloating}
+                {...getFloatingProps()}
+                data-testid="floating"
+              />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByText('reference'));
+    await act(async () => {});
+
+    expect(screen.getByTestId('floating')).toHaveFocus();
+
+    await userEvent.click(document.body);
+    await act(async () => {});
+
+    expect(screen.getByText('reference')).not.toHaveFocus();
+  });
+
+  test('returns focus to reference on outside press when preventScroll is supported', async () => {
+    const originalFocus = HTMLElement.prototype.focus;
+    HTMLElement.prototype.focus = function (options) {
+      // options.preventScroll needs to be accessed for the getter to be called
+      if (options && options.preventScroll) {
+      }
+      return originalFocus.call(this, options);
+    };
+
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const click = useClick(context);
+      const dismiss = useDismiss(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([
+        click,
+        dismiss,
+      ]);
+
+      return (
+        <>
+          <button ref={refs.setReference} {...getReferenceProps()}>
+            reference
+          </button>
+          {isOpen && (
+            <FloatingFocusManager context={context}>
+              <div
+                ref={refs.setFloating}
+                {...getFloatingProps()}
+                data-testid="floating"
+              />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByText('reference'));
+    await act(async () => {});
+
+    expect(screen.getByTestId('floating')).toHaveFocus();
+
+    await userEvent.click(document.body);
+    await act(async () => {});
+
+    expect(screen.getByText('reference')).toHaveFocus();
+
+    HTMLElement.prototype.focus = originalFocus;
+  });
 });
 
 describe('guards', () => {
