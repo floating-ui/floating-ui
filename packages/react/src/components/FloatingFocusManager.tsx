@@ -128,7 +128,7 @@ export interface FloatingFocusManagerProps {
    */
   restoreFocus?: boolean;
   /**
-   * Determines if focus is “modal”, meaning focus is fully trapped inside the
+   * Determines if focus is "modal", meaning focus is fully trapped inside the
    * floating element and outside content cannot be accessed. This includes
    * screen reader virtual cursors.
    * @default true
@@ -564,7 +564,17 @@ export function FloatingFocusManager(
       }
 
       if (reason === 'escape-key' && domReference) {
-        addPreviouslyFocusedElement(domReference);
+        // Only store the domReference when the escape key was pressed while
+        // focus was inside this own floating element, not parent floating
+        // elements
+        const isEventFromThisFloatingElement = contains(
+          floating,
+          getTarget(event) as Element | null,
+        );
+
+        if (isEventFromThisFloatingElement) {
+          addPreviouslyFocusedElement(domReference);
+        }
       }
 
       if (
