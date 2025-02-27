@@ -442,9 +442,7 @@ describe('returnFocus', () => {
   test('returns focus to reference on outside press when preventScroll is supported', async () => {
     const originalFocus = HTMLElement.prototype.focus;
     HTMLElement.prototype.focus = function (options) {
-      // options.preventScroll needs to be accessed for the getter to be called
-      if (options && options.preventScroll) {
-      }
+      options && options.preventScroll;
       return originalFocus.call(this, options);
     };
 
