@@ -50,7 +50,7 @@
     "@changesets/types": "^6.0.0",
     "@eslint/js": "^9.17.0",
     "@microsoft/api-extractor": "^7.43.1",
-    "@playwright/test": "^1.40.1",
+    "@playwright/test": "^1.50.0",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-node-resolve": "^15.2.3",

@@ -25,8 +25,7 @@ jobs:
 
   functional-tests:
     name: Functional tests
-    # Pin to Ubuntu 22.04 to avoid Playwright installation issues
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
