@@ -33,6 +33,7 @@ import {useFloatingTree} from './FloatingTree';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 import {useEffectEvent} from '../hooks/utils/useEffectEvent';
 import {getFloatingFocusElement} from '../utils/getFloatingFocusElement';
+import {useLiteMergeRefs} from '../utils/useLiteMergeRefs';
 
 const LIST_LIMIT = 20;
 let previouslyFocusedElements: Element[] = [];
@@ -436,11 +437,11 @@ export function FloatingFocusManager(
   const beforeGuardRef = React.useRef<HTMLSpanElement | null>(null);
   const afterGuardRef = React.useRef<HTMLSpanElement | null>(null);
 
-  const mergedBeforeGuardRef = useMergeRefs([
+  const mergedBeforeGuardRef = useLiteMergeRefs([
     beforeGuardRef,
     portalContext?.beforeInsideRef,
   ]);
-  const mergedAfterGuardRef = useMergeRefs([
+  const mergedAfterGuardRef = useLiteMergeRefs([
     afterGuardRef,
     portalContext?.afterInsideRef,
   ]);
