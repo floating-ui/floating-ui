@@ -63,3 +63,54 @@ test('conditional refs', () => {
   expect(callbackSpy2.mock.calls.length).toBe(1);
   expect(callbackSpy3.mock.calls[0][0]?.id).toBe('test');
 });
+
+test('calls clean up function if it exists', () => {
+  const cleanUp = vi.fn();
+  const setup = vi.fn();
+  const setup2 = vi.fn();
+  const nullHandler = vi.fn();
+
+  function onRefChangeWithCleanup(ref: HTMLDivElement | null) {
+    if (ref) {
+      setup(ref.id);
+    } else {
+      nullHandler();
+    }
+    return cleanUp;
+  }
+
+  function onRefChangeWithoutCleanup(ref: HTMLDivElement | null) {
+    if (ref) {
+      setup2(ref.id);
+    } else {
+      nullHandler();
+    }
+  }
+
+  function App() {
+    const ref = useMergeRefs([
+      onRefChangeWithCleanup,
+      onRefChangeWithoutCleanup,
+    ]);
+    return <div id="test" ref={ref} />;
+  }
+
+  const {unmount} = render(<App />);
+
+  expect(setup).toHaveBeenCalledWith('test');
+  expect(setup).toHaveBeenCalledTimes(1);
+  expect(cleanUp).toHaveBeenCalledTimes(0);
+
+  expect(setup2).toHaveBeenCalledWith('test');
+  expect(setup2).toHaveBeenCalledTimes(1);
+
+  unmount();
+
+  expect(setup).toHaveBeenCalledTimes(1);
+  expect(cleanUp).toHaveBeenCalledTimes(1);
+
+  // Setup was not called again
+  expect(setup2).toHaveBeenCalledTimes(1);
+  // Null handler hit because no cleanup is returned
+  expect(nullHandler).toHaveBeenCalledTimes(1);
+});

@@ -6,20 +6,53 @@ import * as React from 'react';
  */
 export function useMergeRefs<Instance>(
   refs: Array<React.Ref<Instance> | undefined>,
-): React.RefCallback<Instance> | null {
+): null | React.RefCallback<Instance> {
+  const cleanupRef = React.useRef<void | (() => void)>(undefined);
+
+  const refEffect = React.useCallback((instance: Instance | null) => {
+    const cleanups = refs.map((ref) => {
+      if (ref == null) {
+        return;
+      }
+
+      if (typeof ref === 'function') {
+        const refCallback = ref;
+        const refCleanup: void | (() => void) = refCallback(instance);
+        return typeof refCleanup === 'function'
+          ? refCleanup
+          : () => {
+              refCallback(null);
+            };
+      }
+
+      (ref as React.MutableRefObject<Instance | null>).current = instance;
+      return () => {
+        (ref as React.MutableRefObject<Instance | null>).current = null;
+      };
+    });
+
+    return () => {
+      cleanups.forEach((refCleanup) => refCleanup?.());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
+
   return React.useMemo(() => {
     if (refs.every((ref) => ref == null)) {
       return null;
     }
 
     return (value) => {
-      refs.forEach((ref) => {
-        if (typeof ref === 'function') {
-          ref(value);
-        } else if (ref != null) {
-          (ref as React.MutableRefObject<Instance | null>).current = value;
-        }
-      });
+      if (cleanupRef.current) {
+        cleanupRef.current();
+        (cleanupRef as React.MutableRefObject<void | (() => void)>).current =
+          undefined;
+      }
+
+      if (value != null) {
+        (cleanupRef as React.MutableRefObject<void | (() => void)>).current =
+          refEffect(value);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, refs);
