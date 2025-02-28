@@ -1,5 +1,14 @@
 # @floating-ui/react
 
+## 0.27.5
+
+### Patch Changes
+
+- fix(FloatingFocusManager): return focus on outside press if possible for non-context nested floating elements
+- perf: improve performance by only clearing used timeouts
+- fix(useMergeRefs): support React 19 ref cleanup
+- fix(FloatingFocusManager): avoid returning to unrelated references
+
 ## 0.27.4
 
 ### Patch Changes
