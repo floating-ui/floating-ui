@@ -125,7 +125,7 @@ function observeMove(element: Element, onMove: () => void) {
         // Handle <iframe>s
         root: root.ownerDocument,
       });
-    } catch (e) {
+    } catch (_e) {
       io = new IntersectionObserver(handleObserve, options);
     }
 

@@ -220,3 +220,5 @@ function Root() {
     overflowRef: {current: null},
   });
 }
+
+Root;

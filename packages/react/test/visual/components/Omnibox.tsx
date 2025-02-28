@@ -15,14 +15,7 @@ import {
 } from '@floating-ui/react';
 import {Cross1Icon} from '@radix-ui/react-icons';
 import cn from 'clsx';
-import {
-  createContext,
-  useContext,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import {createContext, useContext, useId, useRef, useState} from 'react';
 
 interface SelectContextValue {
   activeIndex: number | null;

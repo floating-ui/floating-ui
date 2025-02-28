@@ -15,7 +15,6 @@ import {tabbable, isTabbable} from 'tabbable';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
-import {useMergeRefs} from '../hooks/useMergeRefs';
 import type {FloatingRootContext, OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';

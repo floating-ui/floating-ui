@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
-import type {ExtendedRefs, OpenChangeReason} from '../types';
+import type {OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {
   disableFocusInside,

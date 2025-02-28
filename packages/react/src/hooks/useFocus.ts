@@ -123,7 +123,7 @@ export function useFocus(
             // instead.
             if (isSafari() && isMac()) throw Error();
             if (!target.matches(':focus-visible')) return;
-          } catch (e) {
+          } catch (_e) {
             // Old browsers will throw an error when using `:focus-visible`.
             if (!keyboardModalityRef.current && !isTypeableElement(target)) {
               return;

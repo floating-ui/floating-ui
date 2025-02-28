@@ -15,7 +15,7 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
-import {cloneElement, isValidElement, useId, useState} from 'react';
+import {cloneElement, isValidElement, useState} from 'react';
 
 import {Button} from '../lib/Button';
 

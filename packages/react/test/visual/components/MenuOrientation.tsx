@@ -23,7 +23,7 @@ import {
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
-import {ChevronRightIcon, ChevronDownIcon} from '@radix-ui/react-icons';
+import {ChevronRightIcon} from '@radix-ui/react-icons';
 import c from 'clsx';
 import * as React from 'react';
 

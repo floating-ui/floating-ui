@@ -21,16 +21,6 @@ export const HIDDEN_STYLES: React.CSSProperties = {
   left: 0,
 };
 
-let activeElement: HTMLElement | undefined;
-let timeoutId: number | undefined;
-
-function setActiveElementOnTab(event: KeyboardEvent) {
-  if (event.key === 'Tab') {
-    activeElement = event.target as typeof activeElement;
-    clearTimeout(timeoutId);
-  }
-}
-
 export const FocusGuard = React.forwardRef(function FocusGuard(
   props: React.ComponentPropsWithoutRef<'span'>,
   ref: React.ForwardedRef<HTMLSpanElement>,
@@ -46,11 +36,6 @@ export const FocusGuard = React.forwardRef(function FocusGuard(
       // button role.
       setRole('button');
     }
-
-    document.addEventListener('keydown', setActiveElementOnTab);
-    return () => {
-      document.removeEventListener('keydown', setActiveElementOnTab);
-    };
   }, []);
 
   const restProps = {
