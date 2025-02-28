@@ -2,4 +2,4 @@
 "@floating-ui/react": patch
 ---
 
-Support Ref Cleanup in `useMergeRefs`
+fix(useMergeRefs): support React 19 ref cleanup
