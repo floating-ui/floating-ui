@@ -1,5 +1,5 @@
 import {activeElement, contains, getDocument} from '@floating-ui/react/utils';
-import {tabbable} from 'tabbable';
+import {tabbable, type FocusableElement} from 'tabbable';
 
 export const getTabbableOptions = () =>
   ({
@@ -31,12 +31,22 @@ export function getTabbableIn(
   return nextTabbableElements[0];
 }
 
-export function getNextTabbable() {
-  return getTabbableIn(document.body, 'next');
+export function getNextTabbable(
+  referenceElement: Element | null,
+): FocusableElement | null {
+  return (
+    getTabbableIn(getDocument(referenceElement).body, 'next') ||
+    referenceElement
+  );
 }
 
-export function getPreviousTabbable() {
-  return getTabbableIn(document.body, 'prev');
+export function getPreviousTabbable(
+  referenceElement: Element | null,
+): FocusableElement | null {
+  return (
+    getTabbableIn(getDocument(referenceElement).body, 'prev') ||
+    referenceElement
+  );
 }
 
 export function isOutsideEvent(
