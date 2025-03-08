@@ -227,10 +227,7 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
               const domReference = focusManagerState
                 ? focusManagerState.domReference
                 : null;
-              const prevTabbable = getPreviousTabbable(
-                domReference,
-                domReference,
-              );
+              const prevTabbable = getPreviousTabbable(domReference);
               prevTabbable?.focus();
             }
           }}
@@ -251,7 +248,7 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
               const domReference = focusManagerState
                 ? focusManagerState.domReference
                 : null;
-              const nextTabbable = getNextTabbable(domReference, domReference);
+              const nextTabbable = getNextTabbable(domReference);
               nextTabbable?.focus();
 
               focusManagerState?.closeOnFocusOut &&

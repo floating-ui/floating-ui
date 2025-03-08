@@ -33,19 +33,19 @@ export function getTabbableIn(
 
 export function getNextTabbable(
   referenceElement: Element | null,
-  fallbackElement: Element | null,
 ): FocusableElement | null {
   return (
-    getTabbableIn(getDocument(referenceElement).body, 'next') || fallbackElement
+    getTabbableIn(getDocument(referenceElement).body, 'next') ||
+    referenceElement
   );
 }
 
 export function getPreviousTabbable(
   referenceElement: Element | null,
-  fallbackElement: Element | null,
 ): FocusableElement | null {
   return (
-    getTabbableIn(getDocument(referenceElement).body, 'prev') || fallbackElement
+    getTabbableIn(getDocument(referenceElement).body, 'prev') ||
+    referenceElement
   );
 }
 

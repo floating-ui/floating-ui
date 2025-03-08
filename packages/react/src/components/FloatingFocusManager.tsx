@@ -806,7 +806,7 @@ export function FloatingFocusManager(
             ) {
               preventReturnFocusRef.current = false;
               if (isOutsideEvent(event, portalContext.portalNode)) {
-                const nextTabbable = getNextTabbable(floating, domReference);
+                const nextTabbable = getNextTabbable(domReference);
                 nextTabbable?.focus();
               } else {
                 portalContext.beforeOutsideRef.current?.focus();
@@ -838,10 +838,7 @@ export function FloatingFocusManager(
               }
 
               if (isOutsideEvent(event, portalContext.portalNode)) {
-                const prevTabbable = getPreviousTabbable(
-                  floating,
-                  domReference,
-                );
+                const prevTabbable = getPreviousTabbable(domReference);
                 prevTabbable?.focus();
               } else {
                 portalContext.afterOutsideRef.current?.focus();
