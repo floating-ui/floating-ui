@@ -3,13 +3,15 @@ description: Setup node and install dependencies
 runs:
   using: composite
   steps:
-    - name: Checkout
+    - name: Setup Pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Install Node.js
       uses: actions/setup-node@v4
       with:
         node-version-file: '.nvmrc'
+        cache: 'pnpm'
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install dependencies
-      uses: pnpm/action-setup@v4
-      with:
-        run_install: true
+      run: pnpm install
