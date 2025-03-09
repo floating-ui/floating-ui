@@ -94,7 +94,7 @@ export const MenuComponent = React.forwardRef<
     delay: {open: 75},
     handleClose: safePolygon({blockPointerEvents: true}),
   });
-  const role = useRole(context, {role: 'listbox'});
+  const role = useRole(context, {role: 'menu'});
   const dismiss = useDismiss(context, {bubbles: true});
   const listNavigation = useListNavigation(context, {
     listRef: elementsRef,

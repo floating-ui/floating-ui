@@ -157,6 +157,11 @@ export interface FloatingFocusManagerProps {
    * @default false
    */
   outsideElementsInert?: boolean;
+  /**
+   * Returns a list of elements that should be considered part of the
+   * floating element.
+   */
+  getInsideElements?: () => Element[];
 }
 
 /**
@@ -179,6 +184,7 @@ export function FloatingFocusManager(
     visuallyHiddenDismiss = false,
     closeOnFocusOut = true,
     outsideElementsInert = false,
+    getInsideElements: _getInsideElements = () => [],
   } = props;
   const {
     open,
@@ -191,6 +197,7 @@ export function FloatingFocusManager(
   const getNodeId = useEffectEvent(
     () => dataRef.current.floatingContext?.nodeId,
   );
+  const getInsideElements = useEffectEvent(_getInsideElements);
 
   const ignoreInitialFocus =
     typeof initialFocus === 'number' && initialFocus < 0;
@@ -456,17 +463,23 @@ export function FloatingFocusManager(
       ) || [],
     );
 
+    const ancestors = tree
+      ? getAncestors(tree.nodesRef.current, getNodeId())
+      : [];
     const ancestorFloatingNodes =
       tree && !modal
-        ? getAncestors(tree?.nodesRef.current, getNodeId()).map(
-            (node) => node.context?.elements.floating,
-          )
+        ? ancestors.map((node) => node.context?.elements.floating)
         : [];
+    const rootAncestorComboboxDomReference = ancestors.find((node) =>
+      isTypeableCombobox(node.context?.elements.domReference || null),
+    )?.context?.elements.domReference;
 
     const insideElements = [
       floating,
+      rootAncestorComboboxDomReference,
       ...portalNodes,
       ...ancestorFloatingNodes,
+      ...getInsideElements(),
       startDismissButtonRef.current,
       endDismissButtonRef.current,
       beforeGuardRef.current,
@@ -498,6 +511,7 @@ export function FloatingFocusManager(
     useInert,
     tree,
     getNodeId,
+    getInsideElements,
   ]);
 
   useModernLayoutEffect(() => {
