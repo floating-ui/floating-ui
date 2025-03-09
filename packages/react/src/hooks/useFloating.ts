@@ -1,4 +1,7 @@
-import {useFloating as usePosition} from '@floating-ui/react-dom';
+import {
+  useFloating as usePosition,
+  type VirtualElement,
+} from '@floating-ui/react-dom';
 import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
@@ -63,10 +66,11 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const setPositionReference = React.useCallback(
     (node: ReferenceType | null) => {
       const computedPositionReference = isElement(node)
-        ? {
+        ? ({
             getBoundingClientRect: () => node.getBoundingClientRect(),
+            getClientRects: () => node.getClientRects(),
             contextElement: node,
-          }
+          } satisfies VirtualElement)
         : node;
       // Store the positionReference in state if the DOM reference is specified externally via the
       // `elements.reference` option. This ensures that it won't be overridden on future renders.
