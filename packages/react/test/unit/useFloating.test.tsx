@@ -5,6 +5,7 @@ import {useCallback, useLayoutEffect, useState} from 'react';
 import {vi} from 'vitest';
 
 import {
+  inline,
   useClick,
   useDismiss,
   useFloating,
@@ -125,6 +126,25 @@ describe('positionReference', () => {
 
     expect(getByTestId('reference-text').textContent).toBe('reference');
     expect(getByTestId('position-reference-text').textContent).toBe('218');
+  });
+
+  test('does not error when using `inline` middleware and setting the position reference to a real element', async () => {
+    function App() {
+      const {refs} = useFloating({
+        middleware: [inline()],
+      });
+
+      return (
+        <>
+          <div ref={refs.setReference} />
+          <div ref={refs.setPositionReference} />
+          <div ref={refs.setFloating} />
+        </>
+      );
+    }
+
+    render(<App />);
+    await act(async () => {});
   });
 });
 
