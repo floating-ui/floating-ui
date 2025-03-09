@@ -1,5 +1,12 @@
 # @floating-ui/react
 
+## 0.27.6
+
+### Patch Changes
+
+- fix(useFloating): prevent error when using `inline` middleware when passing a real DOM element to `refs.setPositionReference` due to `element.getClientRects()` not being handled
+- fix(FloatingFocusManager): correct tabbing to different document contexts
+
 ## 0.27.5
 
 ### Patch Changes
