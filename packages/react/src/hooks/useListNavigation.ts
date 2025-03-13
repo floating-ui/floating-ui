@@ -1,5 +1,14 @@
 import {
   activeElement,
+  compositeBuildCellMap,
+  compositeFindNonDisabledIndex,
+  compositeGetCellIndexOfCorner,
+  compositeGetCellIndices,
+  compositeGetGridNavigatedIndex,
+  compositeGetMaxIndex,
+  compositeGetMinIndex,
+  compositeIsDisabled,
+  compositeIsIndexOutOfBounds,
   contains,
   getDocument,
   isTypeableCombobox,
@@ -21,15 +30,6 @@ import {
   ARROW_LEFT,
   ARROW_RIGHT,
   ARROW_UP,
-  buildCellMap,
-  findNonDisabledIndex,
-  getCellIndexOfCorner,
-  getCellIndices,
-  getGridNavigatedIndex,
-  getMaxIndex,
-  getMinIndex,
-  isDisabled,
-  isIndexOutOfBounds,
 } from '../utils/composite';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getDeepestNode} from '../utils/getChildren';
@@ -445,8 +445,14 @@ export function useListNavigation(
               keyRef.current == null ||
               isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
               nested
-                ? getMinIndex(listRef, disabledIndicesRef.current)
-                : getMaxIndex(listRef, disabledIndicesRef.current);
+                ? compositeGetMinIndex(
+                    listRef.current,
+                    disabledIndicesRef.current,
+                  )
+                : compositeGetMaxIndex(
+                    listRef.current,
+                    disabledIndicesRef.current,
+                  );
             keyRef.current = null;
             onNavigate();
           }
@@ -454,7 +460,7 @@ export function useListNavigation(
 
         waitForListPopulated();
       }
-    } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
+    } else if (!compositeIsIndexOutOfBounds(listRef.current, activeIndex)) {
       indexRef.current = activeIndex;
       focusItem();
       forceScrollIntoViewRef.current = false;
@@ -624,8 +630,9 @@ export function useListNavigation(
     }
 
     const currentIndex = indexRef.current;
-    const minIndex = getMinIndex(listRef, disabledIndices);
-    const maxIndex = getMaxIndex(listRef, disabledIndices);
+    const list = listRef.current;
+    const minIndex = compositeGetMinIndex(list, disabledIndices);
+    const maxIndex = compositeGetMaxIndex(list, disabledIndices);
 
     if (!typeableComboboxReference) {
       if (event.key === 'Home') {
@@ -645,21 +652,21 @@ export function useListNavigation(
     if (cols > 1) {
       const sizes =
         itemSizes ||
-        Array.from({length: listRef.current.length}, () => ({
+        Array.from({length: list.length}, () => ({
           width: 1,
           height: 1,
         }));
       // To calculate movements on the grid, we use hypothetical cell indices
       // as if every item was 1x1, then convert back to real indices.
-      const cellMap = buildCellMap(sizes, cols, dense);
+      const cellMap = compositeBuildCellMap(sizes, cols, dense);
       const minGridIndex = cellMap.findIndex(
         (index) =>
-          index != null && !isDisabled(listRef.current, index, disabledIndices),
+          index != null && !compositeIsDisabled(list, index, disabledIndices),
       );
       // last enabled index
       const maxGridIndex = cellMap.reduce(
         (foundIndex: number, index, cellIndex) =>
-          index != null && !isDisabled(listRef.current, index, disabledIndices)
+          index != null && !compositeIsDisabled(list, index, disabledIndices)
             ? cellIndex
             : foundIndex,
         -1,
@@ -667,12 +674,10 @@ export function useListNavigation(
 
       const index =
         cellMap[
-          getGridNavigatedIndex(
-            {
-              current: cellMap.map((itemIndex) =>
-                itemIndex != null ? listRef.current[itemIndex] : null,
-              ),
-            },
+          compositeGetGridNavigatedIndex(
+            cellMap.map((itemIndex) =>
+              itemIndex != null ? list[itemIndex] : null,
+            ),
             {
               event,
               orientation,
@@ -681,11 +686,11 @@ export function useListNavigation(
               cols,
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
-              disabledIndices: getCellIndices(
+              disabledIndices: compositeGetCellIndices(
                 [
                   ...(disabledIndices ||
-                    listRef.current.map((_, index) =>
-                      isDisabled(listRef.current, index) ? index : undefined,
+                    list.map((_, index) =>
+                      compositeIsDisabled(list, index) ? index : undefined,
                     )),
                   undefined,
                 ],
@@ -693,7 +698,7 @@ export function useListNavigation(
               ),
               minIndex: minGridIndex,
               maxIndex: maxGridIndex,
-              prevIndex: getCellIndexOfCorner(
+              prevIndex: compositeGetCellIndexOfCorner(
                 indexRef.current > maxIndex ? minIndex : indexRef.current,
                 sizes,
                 cellMap,
@@ -746,17 +751,17 @@ export function useListNavigation(
         if (loop) {
           indexRef.current =
             currentIndex >= maxIndex
-              ? allowEscape && currentIndex !== listRef.current.length
+              ? allowEscape && currentIndex !== list.length
                 ? -1
                 : minIndex
-              : findNonDisabledIndex(listRef, {
+              : compositeFindNonDisabledIndex(list, {
                   startingIndex: currentIndex,
                   disabledIndices,
                 });
         } else {
           indexRef.current = Math.min(
             maxIndex,
-            findNonDisabledIndex(listRef, {
+            compositeFindNonDisabledIndex(list, {
               startingIndex: currentIndex,
               disabledIndices,
             }),
@@ -767,9 +772,9 @@ export function useListNavigation(
           indexRef.current =
             currentIndex <= minIndex
               ? allowEscape && currentIndex !== -1
-                ? listRef.current.length
+                ? list.length
                 : maxIndex
-              : findNonDisabledIndex(listRef, {
+              : compositeFindNonDisabledIndex(list, {
                   startingIndex: currentIndex,
                   decrement: true,
                   disabledIndices,
@@ -777,7 +782,7 @@ export function useListNavigation(
         } else {
           indexRef.current = Math.max(
             minIndex,
-            findNonDisabledIndex(listRef, {
+            compositeFindNonDisabledIndex(list, {
               startingIndex: currentIndex,
               decrement: true,
               disabledIndices,
@@ -786,7 +791,7 @@ export function useListNavigation(
         }
       }
 
-      if (isIndexOutOfBounds(listRef, indexRef.current)) {
+      if (compositeIsIndexOutOfBounds(list, indexRef.current)) {
         indexRef.current = -1;
       }
 
@@ -941,8 +946,8 @@ export function useListNavigation(
             stopEvent(event);
 
             if (open) {
-              indexRef.current = getMinIndex(
-                listRef,
+              indexRef.current = compositeGetMinIndex(
+                listRef.current,
                 disabledIndicesRef.current,
               );
               onNavigate();
