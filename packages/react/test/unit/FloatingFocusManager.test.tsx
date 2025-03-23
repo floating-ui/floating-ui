@@ -8,6 +8,7 @@ import {
   within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {test} from 'vitest';
 import {cloneElement, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Context as ResponsiveContext} from 'react-responsive';
@@ -28,6 +29,7 @@ import {
 import type {FloatingFocusManagerProps} from '../../src/components/FloatingFocusManager';
 import {Main as Drawer} from '../visual/components/Drawer';
 import {Main as Navigation} from '../visual/components/Navigation';
+import {isJSDOM} from '../../src/utils';
 
 function App(
   props: Partial<
@@ -69,7 +71,7 @@ function App(
         </FloatingFocusManager>
       )}
       <div tabIndex={0} data-testid="last">
-        x
+        outside
       </div>
     </>
   );
@@ -399,53 +401,56 @@ describe('returnFocus', () => {
     expect(screen.getByTestId('fallback')).toHaveFocus();
   });
 
-  test('does not return focus to reference on outside press when preventScroll is not supported', async () => {
-    function App() {
-      const [isOpen, setIsOpen] = useState(false);
+  test.skipIf(!isJSDOM())(
+    'does not return focus to reference on outside press when preventScroll is not supported',
+    async () => {
+      function App() {
+        const [isOpen, setIsOpen] = useState(false);
 
-      const {refs, context} = useFloating({
-        open: isOpen,
-        onOpenChange: setIsOpen,
-      });
+        const {refs, context} = useFloating({
+          open: isOpen,
+          onOpenChange: setIsOpen,
+        });
 
-      const click = useClick(context);
-      const dismiss = useDismiss(context);
+        const click = useClick(context);
+        const dismiss = useDismiss(context);
 
-      const {getReferenceProps, getFloatingProps} = useInteractions([
-        click,
-        dismiss,
-      ]);
+        const {getReferenceProps, getFloatingProps} = useInteractions([
+          click,
+          dismiss,
+        ]);
 
-      return (
-        <>
-          <button ref={refs.setReference} {...getReferenceProps()}>
-            reference
-          </button>
-          {isOpen && (
-            <FloatingFocusManager context={context}>
-              <div
-                ref={refs.setFloating}
-                {...getFloatingProps()}
-                data-testid="floating"
-              />
-            </FloatingFocusManager>
-          )}
-        </>
-      );
-    }
+        return (
+          <>
+            <button ref={refs.setReference} {...getReferenceProps()}>
+              reference
+            </button>
+            {isOpen && (
+              <FloatingFocusManager context={context}>
+                <div
+                  ref={refs.setFloating}
+                  {...getFloatingProps()}
+                  data-testid="floating"
+                />
+              </FloatingFocusManager>
+            )}
+          </>
+        );
+      }
 
-    render(<App />);
+      render(<App />);
 
-    await userEvent.click(screen.getByText('reference'));
-    await act(async () => {});
+      await userEvent.click(screen.getByText('reference'));
+      await act(async () => {});
 
-    expect(screen.getByTestId('floating')).toHaveFocus();
+      expect(screen.getByTestId('floating')).toHaveFocus();
 
-    await userEvent.click(document.body);
-    await act(async () => {});
+      await userEvent.click(document.body);
+      await act(async () => {});
 
-    expect(screen.getByText('reference')).not.toHaveFocus();
-  });
+      expect(screen.getByText('reference')).not.toHaveFocus();
+    },
+  );
 
   test('returns focus to reference on outside press when preventScroll is supported', async () => {
     const originalFocus = HTMLElement.prototype.focus;
@@ -518,7 +523,7 @@ describe('guards', () => {
     expect(document.body).not.toHaveFocus();
   });
 
-  test('false', async () => {
+  test.skipIf(!isJSDOM())('false', async () => {
     render(<App guards={false} />);
 
     fireEvent.click(screen.getByTestId('reference'));
@@ -528,7 +533,7 @@ describe('guards', () => {
     await userEvent.tab();
     await userEvent.tab();
 
-    expect(document.activeElement).toHaveAttribute('data-floating-ui-inert');
+    expect(document.activeElement).toHaveAttribute('inert');
   });
 });
 

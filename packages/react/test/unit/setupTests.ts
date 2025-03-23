@@ -14,8 +14,13 @@ vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
   },
 );
 
-HTMLElement.prototype.inert = true;
-global.ResizeObserver = ResizeObserverPolyfill;
+Object.defineProperty(HTMLElement.prototype, 'inert', {
+  configurable: true,
+  enumerable: false,
+  writable: true,
+  value: true,
+});
+globalThis.ResizeObserver = ResizeObserverPolyfill;
 
 class PointerEvent extends MouseEvent {
   public isPrimary: boolean;
@@ -47,5 +52,5 @@ class PointerEvent extends MouseEvent {
   }
 }
 
-global.PointerEvent =
-  global.PointerEvent ?? (PointerEvent as typeof globalThis.PointerEvent);
+globalThis.PointerEvent =
+  globalThis.PointerEvent ?? (PointerEvent as typeof globalThis.PointerEvent);

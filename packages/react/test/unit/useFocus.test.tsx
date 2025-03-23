@@ -9,7 +9,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {cloneElement, useState} from 'react';
-import {vi} from 'vitest';
+import {vi, test} from 'vitest';
 
 import {
   FloatingFocusManager,
@@ -21,6 +21,7 @@ import {
   useInteractions,
 } from '../../src';
 import type {UseFocusProps} from '../../src/hooks/useFocus';
+import {isJSDOM} from '../../src/utils';
 
 vi.useFakeTimers();
 
@@ -82,33 +83,36 @@ test('closes on blur', () => {
   cleanup();
 });
 
-test('stays open when focus moves to tooltip rendered inside a shadow root', async () => {
-  const container = document.body.appendChild(
-    document.createElement('render-root'),
-  );
-  const renderRoot = container.shadowRoot?.firstElementChild as HTMLElement;
+test.skipIf(!isJSDOM())(
+  'stays open when focus moves to tooltip rendered inside a shadow root',
+  async () => {
+    const container = document.body.appendChild(
+      document.createElement('render-root'),
+    );
+    const renderRoot = container.shadowRoot?.firstElementChild as HTMLElement;
 
-  render(<App />, {container: renderRoot});
+    render(<App />, {container: renderRoot});
 
-  const root = within(renderRoot);
+    const root = within(renderRoot);
 
-  // Open the tooltip by focusing the reference
-  const button = root.getByRole('button');
-  await fireEvent.focusIn(button);
+    // Open the tooltip by focusing the reference
+    const button = root.getByRole('button');
+    fireEvent.focusIn(button);
 
-  // Move focus to the tooltip
-  const tooltip = root.getByRole('tooltip');
-  tooltip.focus();
+    // Move focus to the tooltip
+    const tooltip = root.getByRole('tooltip');
+    tooltip.focus();
 
-  // trigger the blur event caused by the focus move, note relatedTarget points to the shadow root here
-  fireEvent.focusOut(button, {relatedTarget: container});
+    // trigger the blur event caused by the focus move, note relatedTarget points to the shadow root here
+    fireEvent.focusOut(button, {relatedTarget: container});
 
-  act(() => {
-    vi.runAllTimers();
-  });
-  expect(root.getByRole('tooltip')).toBeInTheDocument();
-  cleanup();
-});
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(root.getByRole('tooltip')).toBeInTheDocument();
+    cleanup();
+  },
+);
 
 test('stays open when focus moves to element inside reference that is rendered inside a shadow root', async () => {
   const container = document.body.appendChild(
@@ -122,7 +126,7 @@ test('stays open when focus moves to element inside reference that is rendered i
 
   // Open the tooltip by focusing the reference
   const button = root.getByRole('button');
-  await fireEvent.focusIn(button);
+  fireEvent.focusIn(button);
 
   // Move focus to an element inside the reference
   const insideReference = root.getByTestId('inside-reference');
@@ -256,6 +260,7 @@ test('reason string', async () => {
   fireEvent.focusIn(button);
   await act(async () => {});
   fireEvent.focusOut(button);
+  cleanup();
 });
 
 describe('visibleOnly prop', () => {
@@ -272,7 +277,10 @@ describe('visibleOnly prop', () => {
 
     return (
       <>
-        <button ref={refs.setReference} {...getReferenceProps()} />
+        <button>initial</button>
+        <button ref={refs.setReference} {...getReferenceProps()}>
+          reference
+        </button>
         {isOpen && (
           <div role="tooltip" ref={refs.setFloating} {...getFloatingProps()} />
         )}
@@ -282,15 +290,17 @@ describe('visibleOnly prop', () => {
 
   test('true', async () => {
     render(<App visibleOnly />);
-    const button = screen.getByRole('button');
-    await userEvent.click(button);
+    const initial = screen.getByRole('button', {name: 'initial'});
+    fireEvent.pointerDown(initial);
+    fireEvent.mouseDown(initial);
+    await userEvent.tab();
     await act(async () => {});
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
   test('false', async () => {
     render(<App visibleOnly={false} />);
-    const button = screen.getByRole('button');
+    const button = screen.getByRole('button', {name: 'reference'});
     await userEvent.click(button);
     await act(async () => {});
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
