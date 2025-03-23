@@ -1,6 +1,7 @@
 import type {Coords} from '@floating-ui/react-dom';
 import {act, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
+import {test} from 'vitest';
 
 import {useClientPoint, useFloating, useInteractions} from '../../src';
 
@@ -40,6 +41,7 @@ function App({
         data-testid="reference"
         ref={refs.setReference}
         {...getReferenceProps()}
+        style={{width: 0, height: 0}}
       >
         Reference
       </div>

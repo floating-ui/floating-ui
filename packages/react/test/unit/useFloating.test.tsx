@@ -148,7 +148,7 @@ describe('positionReference', () => {
   });
 });
 
-test('#2129: interactions.getFloatingProps as a dep does not cause setState loop', () => {
+test('#2129: interactions.getFloatingProps as a dep does not cause setState loop', async () => {
   function App() {
     const {refs, context} = useFloating({
       open: true,
@@ -180,6 +180,7 @@ test('#2129: interactions.getFloatingProps as a dep does not cause setState loop
   }
 
   render(<App />);
+  await act(async () => {});
 
   expect(screen.queryByTestId('floating')).toBeInTheDocument();
 });

@@ -76,6 +76,8 @@ describe('true', () => {
 
     fireEvent.focus(textbox);
 
+    await act(async () => {});
+
     // Simulate behavior when "あ" (Japanese) is entered and Esc is pressed for IME
     // cancellation.
     fireEvent.change(textbox, {target: {value: 'あ'}});

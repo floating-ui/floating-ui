@@ -8,6 +8,7 @@ import {
   within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {test} from 'vitest';
 import {cloneElement, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Context as ResponsiveContext} from 'react-responsive';
@@ -28,6 +29,7 @@ import {
 import type {FloatingFocusManagerProps} from '../../src/components/FloatingFocusManager';
 import {Main as Drawer} from '../visual/components/Drawer';
 import {Main as Navigation} from '../visual/components/Navigation';
+import {isJSDOM} from '../../src/utils';
 
 function App(
   props: Partial<
@@ -69,7 +71,7 @@ function App(
         </FloatingFocusManager>
       )}
       <div tabIndex={0} data-testid="last">
-        x
+        outside
       </div>
     </>
   );
@@ -399,60 +401,67 @@ describe('returnFocus', () => {
     expect(screen.getByTestId('fallback')).toHaveFocus();
   });
 
-  test('does not return focus to reference on outside press when preventScroll is not supported', async () => {
-    function App() {
-      const [isOpen, setIsOpen] = useState(false);
+  test.skipIf(!isJSDOM())(
+    'does not return focus to reference on outside press when preventScroll is not supported',
+    async () => {
+      function App() {
+        const [isOpen, setIsOpen] = useState(false);
 
-      const {refs, context} = useFloating({
-        open: isOpen,
-        onOpenChange: setIsOpen,
-      });
+        const {refs, context} = useFloating({
+          open: isOpen,
+          onOpenChange: setIsOpen,
+        });
 
-      const click = useClick(context);
-      const dismiss = useDismiss(context);
+        const click = useClick(context);
+        const dismiss = useDismiss(context);
 
-      const {getReferenceProps, getFloatingProps} = useInteractions([
-        click,
-        dismiss,
-      ]);
+        const {getReferenceProps, getFloatingProps} = useInteractions([
+          click,
+          dismiss,
+        ]);
 
-      return (
-        <>
-          <button ref={refs.setReference} {...getReferenceProps()}>
-            reference
-          </button>
-          {isOpen && (
-            <FloatingFocusManager context={context}>
-              <div
-                ref={refs.setFloating}
-                {...getFloatingProps()}
-                data-testid="floating"
-              />
-            </FloatingFocusManager>
-          )}
-        </>
-      );
-    }
+        return (
+          <>
+            <button ref={refs.setReference} {...getReferenceProps()}>
+              reference
+            </button>
+            {isOpen && (
+              <FloatingFocusManager context={context}>
+                <div
+                  ref={refs.setFloating}
+                  {...getFloatingProps()}
+                  data-testid="floating"
+                />
+              </FloatingFocusManager>
+            )}
+          </>
+        );
+      }
 
-    render(<App />);
+      render(<App />);
 
-    await userEvent.click(screen.getByText('reference'));
-    await act(async () => {});
+      await userEvent.click(screen.getByText('reference'));
+      await act(async () => {});
 
-    expect(screen.getByTestId('floating')).toHaveFocus();
+      expect(screen.getByTestId('floating')).toHaveFocus();
 
-    await userEvent.click(document.body);
-    await act(async () => {});
+      await userEvent.click(document.body);
+      await act(async () => {});
 
-    expect(screen.getByText('reference')).not.toHaveFocus();
-  });
+      expect(screen.getByText('reference')).not.toHaveFocus();
+    },
+  );
 
   test('returns focus to reference on outside press when preventScroll is supported', async () => {
     const originalFocus = HTMLElement.prototype.focus;
-    HTMLElement.prototype.focus = function (options) {
-      options && options.preventScroll;
-      return originalFocus.call(this, options);
-    };
+    Object.defineProperty(HTMLElement.prototype, 'focus', {
+      configurable: true,
+      writable: true,
+      value(options: any) {
+        options && options.preventScroll;
+        return originalFocus.call(this, options);
+      },
+    });
 
     function App() {
       const [isOpen, setIsOpen] = useState(false);
@@ -518,7 +527,7 @@ describe('guards', () => {
     expect(document.body).not.toHaveFocus();
   });
 
-  test('false', async () => {
+  test.skipIf(!isJSDOM())('false', async () => {
     render(<App guards={false} />);
 
     fireEvent.click(screen.getByTestId('reference'));
@@ -528,7 +537,7 @@ describe('guards', () => {
     await userEvent.tab();
     await userEvent.tab();
 
-    expect(document.activeElement).toHaveAttribute('data-floating-ui-inert');
+    expect(document.activeElement).toHaveAttribute('inert');
   });
 });
 
@@ -639,42 +648,54 @@ describe('iframe focus navigation', () => {
     );
   }
 
-  test('tabs from the popover to the next element in the iframe', async () => {
-    render(<IframeApp />);
+  // "Should not already be working"(?) when trying to click within the iframe
+  // https://github.com/facebook/react/pull/32441
+  test.skipIf(!isJSDOM())(
+    'tabs from the popover to the next element in the iframe',
+    async () => {
+      render(<IframeApp />);
 
-    const iframe: HTMLIFrameElement = await screen.findByTestId('iframe');
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-    const iframeWithin = iframeDoc ? within(iframeDoc.body) : screen;
+      const iframe: HTMLIFrameElement = await screen.findByTestId('iframe');
+      const iframeDoc =
+        iframe.contentDocument || iframe.contentWindow?.document;
+      const iframeWithin = iframeDoc ? within(iframeDoc.body) : screen;
 
-    const user = userEvent.setup({document: iframeDoc});
+      const user = userEvent.setup({document: iframeDoc});
 
-    await user.click(iframeWithin.getByRole('button', {name: 'Open'}));
+      await user.click(iframeWithin.getByRole('button', {name: 'Open'}));
 
-    expect(iframeWithin.getByTestId('popover')).toBeInTheDocument();
+      expect(iframeWithin.getByTestId('popover')).toBeInTheDocument();
 
-    await user.tab();
-    await user.tab();
+      await user.tab();
+      await user.tab();
 
-    expect(iframeWithin.getByText('next iframe link')).toHaveFocus();
-  });
+      expect(iframeWithin.getByText('next iframe link')).toHaveFocus();
+    },
+  );
 
-  test('shift+tab from the popover to the previous element in the iframe', async () => {
-    render(<IframeApp />);
+  // "Should not already be working"(?) when trying to click within the iframe
+  // https://github.com/facebook/react/pull/32441
+  test.skipIf(!isJSDOM())(
+    'shift+tab from the popover to the previous element in the iframe',
+    async () => {
+      render(<IframeApp />);
 
-    const iframe: HTMLIFrameElement = await screen.findByTestId('iframe');
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-    const iframeWithin = iframeDoc ? within(iframeDoc.body) : screen;
+      const iframe: HTMLIFrameElement = await screen.findByTestId('iframe');
+      const iframeDoc =
+        iframe.contentDocument || iframe.contentWindow?.document;
+      const iframeWithin = iframeDoc ? within(iframeDoc.body) : screen;
 
-    const user = userEvent.setup({document: iframeDoc});
+      const user = userEvent.setup({document: iframeDoc});
 
-    await user.click(iframeWithin.getByRole('button', {name: 'Open'}));
+      await user.click(iframeWithin.getByRole('button', {name: 'Open'}));
 
-    expect(iframeWithin.getByTestId('popover')).toBeInTheDocument();
+      expect(iframeWithin.getByTestId('popover')).toBeInTheDocument();
 
-    await user.tab({shift: true});
+      await user.tab({shift: true});
 
-    expect(iframeWithin.getByRole('button', {name: 'Open'})).toHaveFocus();
-  });
+      expect(iframeWithin.getByRole('button', {name: 'Open'})).toHaveFocus();
+    },
+  );
 });
 
 describe('modal', () => {
@@ -1610,6 +1631,7 @@ describe('Navigation', () => {
   test('returns focus to reference when floating element was opened by hover but is closed by esc key', async () => {
     render(<Navigation />);
     await userEvent.hover(screen.getByText('Product'));
+    await act(async () => {});
     await userEvent.keyboard('{Escape}');
     expect(screen.getByText('Product')).toHaveFocus();
   });
@@ -1617,6 +1639,7 @@ describe('Navigation', () => {
   test('returns focus to reference when floating element was opened by hover but is closed by an explicit close button', async () => {
     render(<Navigation />);
     await userEvent.hover(screen.getByText('Product'));
+    await act(async () => {});
     await userEvent.click(screen.getByText('Close').parentElement!);
     await userEvent.keyboard('{Tab}');
     expect(screen.getByText('Close')).toHaveFocus();
