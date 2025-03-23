@@ -1615,6 +1615,7 @@ describe('Navigation', () => {
   test('returns focus to reference when floating element was opened by hover but is closed by esc key', async () => {
     render(<Navigation />);
     await userEvent.hover(screen.getByText('Product'));
+    await act(async () => {});
     await userEvent.keyboard('{Escape}');
     expect(screen.getByText('Product')).toHaveFocus();
   });
@@ -1622,6 +1623,7 @@ describe('Navigation', () => {
   test('returns focus to reference when floating element was opened by hover but is closed by an explicit close button', async () => {
     render(<Navigation />);
     await userEvent.hover(screen.getByText('Product'));
+    await act(async () => {});
     await userEvent.click(screen.getByText('Close').parentElement!);
     await userEvent.keyboard('{Tab}');
     expect(screen.getByText('Close')).toHaveFocus();
