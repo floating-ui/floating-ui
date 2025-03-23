@@ -7,6 +7,13 @@ expect.extend(matchers);
 
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
+// Wait for https://github.com/vitest-dev/vitest/issues/7675
+// Since we mock requestAnimationFrame to be sync to make testing easier,
+// the guard to prevent the ResizeObserver error in the browser doesn't work
+globalThis.addEventListener('error', (error) => {
+  throw error;
+});
+
 vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
   (callback: FrameRequestCallback): number => {
     callback(0);
