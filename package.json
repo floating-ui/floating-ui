@@ -73,7 +73,7 @@
     "prettier": "^3.1.1",
     "publint": "^0.2.7",
     "rimraf": "^5.0.5",
-    "rollup": "^4.9.2",
+    "rollup": "^4.36.0",
     "rollup-plugin-copy": "^3.5.0",
     "tailwindcss": "^3.4.0",
     "turbo": "^2.3.3",

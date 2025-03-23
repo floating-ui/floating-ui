@@ -36,7 +36,7 @@
     "@types/react": "^18.3.19",
     "@types/react-dom": "^18.3.1",
     "@types/scheduler": "^0.16.8",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "config": "workspace:*",
     "postcss-nested": "^6.0.1",
     "storybook": "^7.6.7",
