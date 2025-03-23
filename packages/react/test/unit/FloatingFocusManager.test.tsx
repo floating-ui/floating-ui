@@ -650,42 +650,52 @@ describe('iframe focus navigation', () => {
 
   // "Should not already be working"(?) when trying to click within the iframe
   // https://github.com/facebook/react/pull/32441
-  test.skip('tabs from the popover to the next element in the iframe', async () => {
-    render(<IframeApp />);
+  test.skipIf(!isJSDOM())(
+    'tabs from the popover to the next element in the iframe',
+    async () => {
+      render(<IframeApp />);
 
-    const iframe: HTMLIFrameElement = await screen.findByTestId('iframe');
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-    const iframeWithin = iframeDoc ? within(iframeDoc.body) : screen;
+      const iframe: HTMLIFrameElement = await screen.findByTestId('iframe');
+      const iframeDoc =
+        iframe.contentDocument || iframe.contentWindow?.document;
+      const iframeWithin = iframeDoc ? within(iframeDoc.body) : screen;
 
-    const user = userEvent.setup({document: iframeDoc});
+      const user = userEvent.setup({document: iframeDoc});
 
-    await user.click(iframeWithin.getByRole('button', {name: 'Open'}));
+      await user.click(iframeWithin.getByRole('button', {name: 'Open'}));
 
-    expect(iframeWithin.getByTestId('popover')).toBeInTheDocument();
+      expect(iframeWithin.getByTestId('popover')).toBeInTheDocument();
 
-    await user.tab();
-    await user.tab();
+      await user.tab();
+      await user.tab();
 
-    expect(iframeWithin.getByText('next iframe link')).toHaveFocus();
-  });
+      expect(iframeWithin.getByText('next iframe link')).toHaveFocus();
+    },
+  );
 
-  test.skip('shift+tab from the popover to the previous element in the iframe', async () => {
-    render(<IframeApp />);
+  // "Should not already be working"(?) when trying to click within the iframe
+  // https://github.com/facebook/react/pull/32441
+  test.skipIf(!isJSDOM())(
+    'shift+tab from the popover to the previous element in the iframe',
+    async () => {
+      render(<IframeApp />);
 
-    const iframe: HTMLIFrameElement = await screen.findByTestId('iframe');
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-    const iframeWithin = iframeDoc ? within(iframeDoc.body) : screen;
+      const iframe: HTMLIFrameElement = await screen.findByTestId('iframe');
+      const iframeDoc =
+        iframe.contentDocument || iframe.contentWindow?.document;
+      const iframeWithin = iframeDoc ? within(iframeDoc.body) : screen;
 
-    const user = userEvent.setup({document: iframeDoc});
+      const user = userEvent.setup({document: iframeDoc});
 
-    await user.click(iframeWithin.getByRole('button', {name: 'Open'}));
+      await user.click(iframeWithin.getByRole('button', {name: 'Open'}));
 
-    expect(iframeWithin.getByTestId('popover')).toBeInTheDocument();
+      expect(iframeWithin.getByTestId('popover')).toBeInTheDocument();
 
-    await user.tab({shift: true});
+      await user.tab({shift: true});
 
-    expect(iframeWithin.getByRole('button', {name: 'Open'})).toHaveFocus();
-  });
+      expect(iframeWithin.getByRole('button', {name: 'Open'})).toHaveFocus();
+    },
+  );
 });
 
 describe('modal', () => {

@@ -148,7 +148,7 @@ test('does not open when window blurs then receives focus', async () => {
   // TODO — not sure how to test this in JSDOM
 });
 
-test.skip('blurs when hitting an "inside" focus guard', async () => {
+test('blurs when hitting an "inside" focus guard', async () => {
   function Tooltip({children}: {children: React.JSX.Element}) {
     const [open, setOpen] = useState(false);
 
