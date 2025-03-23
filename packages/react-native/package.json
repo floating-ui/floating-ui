@@ -49,7 +49,7 @@
     "@floating-ui/core": "^1.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.46",
+    "@types/react": "^18.3.19",
     "@types/react-native": "^0.72.8",
     "config": "workspace:*",
     "react": "^18.2.0",

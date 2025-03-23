@@ -79,12 +79,7 @@
     "turbo": "^2.3.3",
     "typescript": "~5.2.2",
     "typescript-eslint": "^8.17.0",
-    "vite": "^5.0.10",
+    "vite": "^6.2.2",
     "vitest": "^3.0.9"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "^5.0.2"
-    }
   }
 }
