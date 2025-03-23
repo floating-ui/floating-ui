@@ -3,9 +3,12 @@ import '@testing-library/jest-dom';
 import * as matchers from '@testing-library/jest-dom/matchers';
 import {expect, vi} from 'vitest';
 
+import ResizeObserverPolyfill from 'resize-observer-polyfill';
+
 expect.extend(matchers);
 
-import ResizeObserverPolyfill from 'resize-observer-polyfill';
+// https://github.com/testing-library/react-testing-library/issues/1197#issuecomment-2619825237
+(globalThis as any).jest = vi;
 
 // Wait for https://github.com/vitest-dev/vitest/issues/7675
 // Since we mock requestAnimationFrame to be sync to make testing easier,

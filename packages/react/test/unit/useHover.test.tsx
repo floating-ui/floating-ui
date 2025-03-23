@@ -1,6 +1,6 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
-import {vi} from 'vitest';
+import {vi, test} from 'vitest';
 
 import {useFloating, useHover, useInteractions} from '../../src';
 import type {UseHoverProps} from '../../src/hooks/useHover';
