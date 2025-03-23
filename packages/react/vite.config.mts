@@ -11,6 +11,11 @@ export default defineViteConfig({
     environment: 'jsdom',
     root: './test/unit',
     setupFiles: ['./setupTests.ts'],
+    browser: {
+      provider: 'playwright',
+      enabled: true,
+      instances: [{browser: 'chromium'}],
+    },
   },
   define: {
     __DEV__: true,

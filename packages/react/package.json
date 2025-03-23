@@ -40,7 +40,7 @@
     "format": "prettier --write .",
     "clean": "rimraf dist out-tsc utils",
     "test": "vitest watch",
-    "test:browser": "TEST_ENV=browser vitest --browser .test",
+    "test:browser": "TEST_ENV=browser vitest --browser",
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor.json --aec api-extractor.utils.json",
     "dev": "vite",
