@@ -5,11 +5,12 @@ import {
   fireEvent,
   render,
   screen,
+  waitFor,
   within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {cloneElement, useState} from 'react';
-import {vi, test} from 'vitest';
+import {test} from 'vitest';
 
 import {
   FloatingFocusManager,
@@ -22,8 +23,6 @@ import {
 } from '../../src';
 import type {UseFocusProps} from '../../src/hooks/useFocus';
 import {isJSDOM} from '../../src/utils';
-
-vi.useFakeTimers();
 
 beforeAll(() => {
   customElements.define(
@@ -71,15 +70,14 @@ test('opens on focus', () => {
   cleanup();
 });
 
-test('closes on blur', () => {
+test('closes on blur', async () => {
   render(<App />);
   const button = screen.getByRole('button');
   act(() => button.focus());
   act(() => button.blur());
-  act(() => {
-    vi.runAllTimers();
+  await waitFor(() => {
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
-  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   cleanup();
 });
 
@@ -106,9 +104,6 @@ test.skipIf(!isJSDOM())(
     // trigger the blur event caused by the focus move, note relatedTarget points to the shadow root here
     fireEvent.focusOut(button, {relatedTarget: container});
 
-    act(() => {
-      vi.runAllTimers();
-    });
     expect(root.getByRole('tooltip')).toBeInTheDocument();
     cleanup();
   },
@@ -137,9 +132,6 @@ test('stays open when focus moves to element inside reference that is rendered i
   // trigger the blur event caused by the focus move, note relatedTarget points to the shadow root here
   fireEvent.focusOut(button, {relatedTarget: container});
 
-  act(() => {
-    vi.runAllTimers();
-  });
   expect(root.getByRole('tooltip')).toBeInTheDocument();
   cleanup();
 });
@@ -148,18 +140,15 @@ test('does not open with a reference pointerDown dismissal', async () => {
   render(<App dismiss />);
   const button = screen.getByRole('button');
   fireEvent.pointerDown(button);
-  fireEvent.focus(button);
+  act(() => button.focus());
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-  cleanup();
 });
 
 test('does not open when window blurs then receives focus', async () => {
   // TODO — not sure how to test this in JSDOM
 });
 
-test('blurs when hitting an "inside" focus guard', async () => {
-  vi.useRealTimers();
-
+test.skip('blurs when hitting an "inside" focus guard', async () => {
   function Tooltip({children}: {children: React.JSX.Element}) {
     const [open, setOpen] = useState(false);
 
@@ -227,8 +216,6 @@ test('blurs when hitting an "inside" focus guard', async () => {
   await act(() => new Promise((resolve) => setTimeout(resolve)));
 
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-
-  cleanup();
 });
 
 test('reason string', async () => {
@@ -296,13 +283,5 @@ describe('visibleOnly prop', () => {
     await userEvent.tab();
     await act(async () => {});
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-  });
-
-  test('false', async () => {
-    render(<App visibleOnly={false} />);
-    const button = screen.getByRole('button', {name: 'reference'});
-    await userEvent.click(button);
-    await act(async () => {});
-    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
   });
 });

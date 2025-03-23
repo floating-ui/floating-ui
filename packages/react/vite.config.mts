@@ -13,7 +13,7 @@ export default defineViteConfig({
     setupFiles: ['./setupTests.ts'],
     browser: {
       provider: 'playwright',
-      enabled: true,
+      enabled: process.env.TEST_ENV === 'browser',
       instances: [{browser: 'chromium'}],
     },
   },

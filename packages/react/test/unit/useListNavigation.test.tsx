@@ -1,4 +1,11 @@
-import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useLayoutEffect, useRef, useState} from 'react';
 import {vi, test} from 'vitest';
@@ -230,6 +237,7 @@ test('resets indexRef to -1 upon close', async () => {
 
   act(() => screen.getByTestId('reference').focus());
   await userEvent.keyboard('a');
+  await act(async () => {});
 
   expect(screen.getByTestId('floating')).toBeInTheDocument();
   expect(screen.getByTestId('active-index').textContent).toBe('');
@@ -1252,6 +1260,7 @@ test('virtual nested Home or End key press', async () => {
   await userEvent.keyboard('{ArrowDown}');
   await userEvent.keyboard('{ArrowDown}'); // focus Copy as menu
   await userEvent.keyboard('{ArrowRight}'); // open Copy as submenu
+  await act(async () => {});
   await userEvent.keyboard('{End}');
 
   expect(screen.getByText('Audio')).toHaveAttribute('aria-selected', 'true');
@@ -1297,6 +1306,7 @@ test('domReference trigger in nested virtual menu is set as virtual item', async
   await userEvent.keyboard('{ArrowDown}');
   await userEvent.keyboard('{ArrowDown}'); // focus Copy as menu
   await userEvent.keyboard('{ArrowRight}'); // open Copy as submenu
+  await act(async () => {});
 
   expect(screen.getByText('Text')).toHaveAttribute('aria-selected', 'true');
 
@@ -1365,9 +1375,9 @@ test('Home or End key press is ignored for typeable combobox reference', async (
 
   await userEvent.keyboard('{ArrowDown}');
 
-  await act(async () => {});
-
-  expect(screen.getByTestId('item-0')).toHaveFocus();
+  await waitFor(() => {
+    expect(screen.getByTestId('item-0')).toHaveFocus();
+  });
 
   await userEvent.keyboard('{End}');
 
@@ -1376,5 +1386,7 @@ test('Home or End key press is ignored for typeable combobox reference', async (
   await userEvent.keyboard('{ArrowDown}');
   await userEvent.keyboard('{Home}');
 
-  expect(screen.getByTestId('item-1')).toHaveFocus();
+  await waitFor(() => {
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+  });
 });
