@@ -1,0 +1,75 @@
+{
+  "name": "@floating-ui/solid",
+  "version": "1.0.53",
+  "type": "module",
+  "source": ".dist/source/index.jsx",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "solid": "./dist/source/index.jsx",
+      "node": "./dist/cjs/index.cjs",
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "rollup -c --no-sourcemap",
+    "build:prod": "rollup -c --no-sourcemap",
+    "prepublishOnly": "npm run build:prod",
+    "test": "vitest",
+    "lint": "biome lint"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "solid",
+    "solidjs",
+    "solid-js",
+    "positioning",
+    "tooltip",
+    "floating-ui"
+  ],
+  "author": "rainyEra",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rainyEra/floating-ui-solid"
+  },
+  "license": "MIT",
+  "description": "Floating UI Primitives for SolidJS",
+  "peerDependencies": {
+    "solid-js": "^1.8.18"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@eslint/js": "^9.23.0",
+    "@solidjs/testing-library": "^0.8.10",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/user-event": "^14.6.1",
+    "eslint": "^9.23.0",
+    "eslint-plugin-solid": "^0.14.5",
+    "globals": "^16.0.0",
+    "jsdom": "^26.0.0",
+    "rollup": "^3.29.4",
+    "rollup-preset-solid": "^3.0.0",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.28.0",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-solid": "^2.11.6",
+    "vitest": "^3.0.9"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.6.7"
+  },
+  "browser": {},
+  "typesVersions": {}
+}
