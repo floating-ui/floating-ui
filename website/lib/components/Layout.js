@@ -1,4 +1,4 @@
-import { DocSearch } from '@docsearch/react';
+import {DocSearch} from '@docsearch/react';
 import {
 	autoUpdate,
 	FloatingFocusManager,
@@ -10,16 +10,16 @@ import {
 	useInteractions,
 	useTransitionStyles,
 } from '@floating-ui/react';
-import { MDXProvider } from '@mdx-js/react';
+import {MDXProvider} from '@mdx-js/react';
 import cn from 'classnames';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { ChevronDown, ExternalLink, GitHub, Menu } from 'react-feather';
+import {useRouter} from 'next/router';
+import {Fragment, useEffect, useRef, useState} from 'react';
+import {ChevronDown, ExternalLink, GitHub, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 import Logo from '../../assets/logo.svg';
-import { useAppContext } from '../../pages/_app';
+import {useAppContext} from '../../pages/_app';
 import ArrowIcon from '../../public/icons/arrow.svg';
 import AutoPlacementIcon from '../../public/icons/autoPlacement.svg';
 import AutoUpdateIcon from '../../public/icons/autoUpdate.svg';
@@ -56,23 +56,23 @@ import UseRoleIcon from '../../public/icons/useRole.svg';
 import UseTransitionIcon from '../../public/icons/useTransition.svg';
 import UseTypeaheadIcon from '../../public/icons/useTypeahead.svg';
 import VirtualElementsIcon from '../../public/icons/virtual-elements.svg';
-import { getPackageContext } from '../utils/getPackageContext';
-import { remToPx } from '../utils/remToPx';
-import { Chrome } from './Chrome';
-import { CircleImage } from './CircleImage';
+import {getPackageContext} from '../utils/getPackageContext';
+import {remToPx} from '../utils/remToPx';
+import {Chrome} from './Chrome';
+import {CircleImage} from './CircleImage';
 import Collapsible from './Collapsible';
-import { Floating } from './Floating';
-import { Link } from './Link';
-import { MiddlewareBadge, MiddlewareContainer } from './MiddlewareBadge';
+import {Floating} from './Floating';
+import {Link} from './Link';
+import {MiddlewareBadge, MiddlewareContainer} from './MiddlewareBadge';
 import Navigation from './Navigation';
 import Notice from './Notice';
-import { PackageLimited } from './PackageLimited';
-import { PackageSelect } from './PackageSelect';
-import { PageCard } from './PageCard';
-import { SkipNavContent, SkipNavLink } from './ReachSkipNav';
-import { Required } from './Required';
-import { ShowFor } from './ShowFor';
-import { WordHighlight } from './WordHighlight';
+import {PackageLimited} from './PackageLimited';
+import {PackageSelect} from './PackageSelect';
+import {PageCard} from './PageCard';
+import {SkipNavContent, SkipNavLink} from './ReachSkipNav';
+import {Required} from './Required';
+import {ShowFor} from './ShowFor';
+import {WordHighlight} from './WordHighlight';
 
 const middleware = [
 	{
@@ -314,7 +314,7 @@ const nav = [
 	},
 	{
 		url: '/docs/solid',
-		title: 'Solid'
+		title: 'Solid',
 	},
 	{
 		url: '/docs/migration',
@@ -322,7 +322,7 @@ const nav = [
 	},
 ];
 
-function Heading({ level, children, ...props }) {
+function Heading({level, children, ...props}) {
 	const Tag = `h${level}`;
 	return (
 		<Tag {...props}>
@@ -391,16 +391,16 @@ const components = {
 	},
 };
 
-function TableOfContents({ anchors, hash }) {
+function TableOfContents({anchors, hash}) {
 	const isTopLevelAnchor = anchors
-		.filter(({ depth }) => depth === 2)
-		.find(({ url }) => hash === url);
+		.filter(({depth}) => depth === 2)
+		.find(({url}) => hash === url);
 	const isSecondLevelAnchor = anchors
-		.filter(({ depth }) => depth === 3)
-		.find(({ url }) => hash === url);
+		.filter(({depth}) => depth === 3)
+		.find(({url}) => hash === url);
 	const renderCircle = isTopLevelAnchor || isSecondLevelAnchor;
 
-	const { floatingStyles, refs, context } = useFloating({
+	const {floatingStyles, refs, context} = useFloating({
 		open: renderCircle,
 		placement: 'left',
 		strategy: 'fixed',
@@ -414,7 +414,7 @@ function TableOfContents({ anchors, hash }) {
 		],
 	});
 
-	const { isMounted, styles } = useTransitionStyles(context, {
+	const {isMounted, styles} = useTransitionStyles(context, {
 		initial: {
 			transform: 'scale(0) translateX(50px)',
 		},
@@ -427,13 +427,13 @@ function TableOfContents({ anchors, hash }) {
 					<div
 						className="h-2 w-2 rounded-full bg-gradient-to-br from-red-500 to-pink-500 shadow"
 						ref={refs.setFloating}
-						style={{ ...floatingStyles, ...styles }}
+						style={{...floatingStyles, ...styles}}
 					/>
 				</FloatingPortal>
 			)}
 			{anchors
-				.filter(({ depth }) => depth === 2)
-				.map(({ url, title }) => (
+				.filter(({depth}) => depth === 2)
+				.map(({url, title}) => (
 					<li key={url}>
 						<Link
 							ref={hash === url ? refs.setReference : null}
@@ -450,10 +450,10 @@ function TableOfContents({ anchors, hash }) {
 						<ul>
 							{anchors
 								.filter(
-									({ depth, parentTitle }) =>
+									({depth, parentTitle}) =>
 										depth === 3 && parentTitle === title,
 								)
-								.map(({ url, title }) => (
+								.map(({url, title}) => (
 									<li key={url}>
 										<Link
 											ref={hash === url ? refs.setReference : null}
@@ -488,10 +488,10 @@ function NavbarItem({
 	parent,
 	collapse,
 }) {
-	const { pathname } = useRouter();
-	const { packageContext } = useAppContext();
+	const {pathname} = useRouter();
+	const {packageContext} = useAppContext();
 
-	const children = nav.filter(({ parent: p }) => p === title);
+	const children = nav.filter(({parent: p}) => p === title);
 
 	const isReactContext = ['react', 'react-dom'].includes(packageContext);
 	const isReact = title === 'React';
@@ -505,7 +505,7 @@ function NavbarItem({
 			return;
 		}
 
-		const activeChildItem = nav.find(({ url: u }) => u === pathname);
+		const activeChildItem = nav.find(({url: u}) => u === pathname);
 
 		setChildrenCollapsed(pathname !== url && activeChildItem?.parent !== title);
 	}, [shouldCollapse, pathname, url, title, parent, packageContext]);
@@ -575,9 +575,9 @@ function NavbarItem({
 	);
 }
 
-function Navbar({ activeLinkRef, parent, collapsed }) {
+function Navbar({activeLinkRef, parent, collapsed}) {
 	const ref = useRef(null);
-	const items = nav.filter(({ parent: p }) => p === parent);
+	const items = nav.filter(({parent: p}) => p === parent);
 	const [height, setHeight] = useState('auto');
 	const naturalHeightRef = useRef(null);
 	const [transition, setTransition] = useState(false);
@@ -623,9 +623,9 @@ function Navbar({ activeLinkRef, parent, collapsed }) {
 	);
 }
 
-export default function Layout({ children, className }) {
-	const { pathname, events, asPath } = useRouter();
-	const index = nav.findIndex(({ url }) => url === pathname) ?? 0;
+export default function Layout({children, className}) {
+	const {pathname, events, asPath} = useRouter();
+	const index = nav.findIndex(({url}) => url === pathname) ?? 0;
 	const [navOpen, setNavOpen] = useState(false);
 	const [anchors, setAnchors] = useState([]);
 	const activeLinkRef = useRef(null);
@@ -676,22 +676,23 @@ export default function Layout({ children, className }) {
 		}
 	});
 
-	const title = `${nav.find(({ url }) => url === pathname)?.title ?? 'Docs'
-		} | Floating UI`;
+	const title = `${
+		nav.find(({url}) => url === pathname)?.title ?? 'Docs'
+	} | Floating UI`;
 
-	const { refs, context } = useFloating({
+	const {refs, context} = useFloating({
 		open: navOpen,
 		onOpenChange: setNavOpen,
 	});
 	const click = useClick(context);
 	const dismiss = useDismiss(context);
-	const { getReferenceProps, getFloatingProps } = useInteractions([
+	const {getReferenceProps, getFloatingProps} = useInteractions([
 		click,
 		dismiss,
 	]);
 
-	const { isMounted, styles } = useTransitionStyles(context, {
-		duration: { open: 400, close: 100 },
+	const {isMounted, styles} = useTransitionStyles(context, {
+		duration: {open: 400, close: 100},
 		initial: {
 			transform: 'translateX(-100%)',
 		},
@@ -705,7 +706,7 @@ export default function Layout({ children, className }) {
 	const isDrawer = navOpen && window.matchMedia('(max-width: 768px)').matches;
 	const NavWrapper = isDrawer ? FloatingFocusManager : Fragment;
 	const wrapperProps = isDrawer
-		? { context, modal: false, initialFocus: refs.floating }
+		? {context, modal: false, initialFocus: refs.floating}
 		: {};
 
 	useIsomorphicLayoutEffect(() => {
@@ -722,7 +723,7 @@ export default function Layout({ children, className }) {
 		// Only scroll if it's not in view
 		if (linkBottom <= 0 || linkTop >= scrollTop + height - remToPx(10)) {
 			requestAnimationFrame(() => {
-				activeLinkRef.current.scrollIntoView({ block: 'center' });
+				activeLinkRef.current.scrollIntoView({block: 'center'});
 			});
 		}
 	}, [asPath, isDrawer, isMounted]);
@@ -775,7 +776,7 @@ export default function Layout({ children, className }) {
 						ref={refs.setFloating}
 						className={cn(
 							'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 font-variable shadow-lg outline-none will-change-transform motion-reduce:!transition-none dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 md:!transform-none md:shadow lg:w-72 xl:w-[22rem]',
-							{ hidden: !isMounted },
+							{hidden: !isMounted},
 						)}
 						style={styles}
 						{...getFloatingProps()}
