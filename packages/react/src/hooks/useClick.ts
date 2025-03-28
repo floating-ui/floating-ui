@@ -11,6 +11,10 @@ function isButtonTarget(event: React.KeyboardEvent<Element>) {
   return isHTMLElement(event.target) && event.target.tagName === 'BUTTON';
 }
 
+function isAnchorTarget(event: React.KeyboardEvent<Element>) {
+  return isHTMLElement(event.target) && event.target.tagName === 'A';
+}
+
 function isSpaceIgnored(element: Element | null) {
   return isTypeableElement(element);
 }
@@ -146,6 +150,10 @@ export function useClick(
           // Prevent scrolling
           event.preventDefault();
           didKeyDownRef.current = true;
+        }
+
+        if (isAnchorTarget(event)) {
+          return;
         }
 
         if (event.key === 'Enter') {
