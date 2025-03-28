@@ -1,16 +1,18 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
+import userEvent from '@testing-library/user-event';
+
 import {useClick, useFloating, useHover, useInteractions} from '../../src';
 import type {UseClickProps} from '../../src/hooks/useClick';
 
 function App({
-  button = true,
+  referenceElement = 'button',
   typeable = false,
   initialOpen = false,
   ...props
 }: UseClickProps & {
-  button?: boolean;
+  referenceElement?: string;
   typeable?: boolean;
   initialOpen?: boolean;
 }) {
@@ -23,13 +25,15 @@ function App({
     useClick(context, props),
   ]);
 
-  const Tag = typeable ? 'input' : button ? 'button' : 'div';
+  const Tag = typeable ? 'input' : referenceElement;
 
   return (
     <>
       <Tag
         {...getReferenceProps({ref: refs.setReference})}
         data-testid="reference"
+        // @ts-expect-error
+        href={referenceElement === 'a' ? '#' : undefined}
       />
       {open && (
         <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
@@ -210,7 +214,7 @@ describe('`stickIfOpen` prop', async () => {
 
 describe('non-buttons', () => {
   test('adds Enter keydown', () => {
-    render(<App button={false} />);
+    render(<App referenceElement="div" />);
 
     const button = screen.getByTestId('reference');
     fireEvent.keyDown(button, {key: 'Enter'});
@@ -219,8 +223,24 @@ describe('non-buttons', () => {
     cleanup();
   });
 
+  test('anchor does not add Enter keydown', async () => {
+    render(<App referenceElement="a" />);
+
+    const button = screen.getByTestId('reference');
+
+    button.focus();
+    await userEvent.keyboard('{Enter}');
+
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Enter}');
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    cleanup();
+  });
+
   test('adds Space keyup', () => {
-    render(<App button={false} />);
+    render(<App referenceElement="div" />);
 
     const button = screen.getByTestId('reference');
     fireEvent.keyDown(button, {key: ' '});
