@@ -1,6 +1,6 @@
-# floating-ui-solid
+# @floating-ui/solid
 
-[![NPM](https://img.shields.io/npm/v/floating-ui-solid)](https://www.npmjs.com/package/floating-ui-solid)
+[![NPM](https://img.shields.io/npm/v/@floating-ui/solid)](https://www.npmjs.com/package/@floating-ui/solid)
 <p align="center">
   <img src="https://i.imgur.com/l8VYgtb.png" alt="Floating UI Solid">
 <p>
@@ -14,22 +14,22 @@ A lightweight SolidJS bindings for Floating UI.
 Choose your preferred package manager:
 
 ```bash
-npm install floating-ui-solid
+npm install @floating-ui/solid
 # or
-yarn add floating-ui-solid
+yarn add @floating-ui/solid
 # or
-pnpm add floating-ui-solid
+pnpm add @floating-ui/solid
 # or
-bun add floating-ui-solid
+bun add @floating-ui/solid
 ```
 
 ## Usage
 
-Here's a basic example of how to use floating-ui-solid:
+Here's a basic example of how to use @floating-ui/solid:
 
 ```jsx
 import { createSignal } from 'solid-js';
-import { createFloating } from 'floating-ui-solid';
+import { createFloating } from '@floating-ui/solid';
 
 export default function App() {
   const [isOpen, setIsOpen] = createSignal(false);
@@ -68,7 +68,7 @@ export default function App() {
 To keep the floating element positioned correctly when the reference element changes, use the `autoUpdate` function:
 
 ```jsx
-import { autoUpdate, createFloating } from 'floating-ui-solid';
+import { autoUpdate, createFloating } from '@floating-ui/solid';
 
 const { refs, floatingStyles } = createFloating({
   placement: "bottom",
@@ -88,7 +88,7 @@ const { refs, floatingStyles } = createFloating({
 You can apply custom styles to the floating element using middleware:
 
 ```jsx
-import { autoUpdate, createFloating, size, offset } from 'floating-ui-solid';
+import { autoUpdate, createFloating, size, offset } from '@floating-ui/solid';
 
 const [reactiveMiddleware, setReactiveMiddleware] = createSignal([
     offset(10),
@@ -109,7 +109,7 @@ const { refs, floatingStyles, setFloatingStyles } = createFloating({
 ### Arrow Element
 
 ```jsx
-import { autoUpdate, createFloating, arrow } from 'floating-ui-solid';
+import { autoUpdate, createFloating, arrow } from '@floating-ui/solid';
 const [reactiveMiddleware, setReactiveMiddleware] = createSignal([]);
 const { refs, floatingStyles, setFloatingStyles } = createFloating({
   placement: "bottom",

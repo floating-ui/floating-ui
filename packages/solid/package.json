@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/solid",
-  "version": "1.0.53",
+  "version": "1.0.55",
   "type": "module",
   "source": ".dist/source/index.jsx",
   "main": "./dist/cjs/index.cjs",
@@ -38,18 +38,18 @@
     "tooltip",
     "floating-ui"
   ],
-  "author": "rainyEra",
+  "author": "ptrtorain",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rainyEra/floating-ui-solid"
+    "url": "https://github.com/ptrtorain/floating-ui-solid"
   },
   "license": "MIT",
-  "description": "Floating UI Primitives for SolidJS",
+  "description": "SolidJS bindings for Floating UI",
   "peerDependencies": {
-    "solid-js": "^1.8.18"
+    "solid-js": "^1.9.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
+    "@biomejs/biome": "^1.9.4",
     "@eslint/js": "^9.23.0",
     "@solidjs/testing-library": "^0.8.10",
     "@testing-library/jest-dom": "^6.6.3",
@@ -58,17 +58,17 @@
     "eslint-plugin-solid": "^0.14.5",
     "globals": "^16.0.0",
     "jsdom": "^26.0.0",
-    "rollup": "^3.29.4",
+    "rollup": "^4.37.0",
     "rollup-preset-solid": "^3.0.0",
-    "tslib": "^2.6.3",
-    "typescript": "^5.5.3",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2",
     "typescript-eslint": "^8.28.0",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-solid": "^2.11.6",
     "vitest": "^3.0.9"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.6.7"
+    "@floating-ui/dom": "^1.6.13"
   },
   "browser": {},
   "typesVersions": {}
