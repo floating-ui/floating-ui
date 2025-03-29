@@ -14,7 +14,8 @@ export const createFloating = (props: useFloatingProps) => {
 
 	const strategyProps = () => props.strategy ?? 'absolute';
 	const placementProps = () => props.placement ?? 'bottom';
-	const transformProps = () => props.transform === undefined ? true :  props.transform;
+	const transformProps = () =>
+		props.transform === undefined ? true : props.transform;
 
 	const mainReference = () => props.elements?.reference() || _reference();
 	const mainFloating = () => props.elements?.floating() || _floating();
@@ -81,8 +82,8 @@ export const createFloating = (props: useFloatingProps) => {
 	}
 
 	createEffect(() => {
-		const floatingEl = mainReference();
-		const refrenceEl = mainFloating();
+		const refrenceEl = mainReference();
+		const floatingEl = mainFloating();
 		props?.whileElementsMounted;
 		strategyProps();
 		placementProps();
