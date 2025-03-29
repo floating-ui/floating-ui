@@ -313,6 +313,10 @@ const nav = [
 		title: 'Vue',
 	},
 	{
+		url: '/docs/solid',
+		title: 'Solid',
+	},
+	{
 		url: '/docs/migration',
 		title: 'Migration',
 	},
