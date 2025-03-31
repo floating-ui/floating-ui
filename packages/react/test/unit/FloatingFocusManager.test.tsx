@@ -537,7 +537,7 @@ describe('guards', () => {
     await userEvent.tab();
     await userEvent.tab();
 
-    expect(document.activeElement).toHaveAttribute('inert');
+    expect(document.activeElement).toHaveAttribute('inert', '');
   });
 });
 
