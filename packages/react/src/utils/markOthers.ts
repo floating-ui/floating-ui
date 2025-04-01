@@ -99,7 +99,10 @@ function applyAttributeToOthers(
         }
 
         if (!alreadyHidden && controlAttribute) {
-          node.setAttribute(controlAttribute, 'true');
+          node.setAttribute(
+            controlAttribute,
+            controlAttribute === 'inert' ? '' : 'true',
+          );
         }
       }
     });
