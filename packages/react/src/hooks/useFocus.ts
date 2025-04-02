@@ -19,6 +19,10 @@ import {createAttribute} from '../utils/createAttribute';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 import {matchesFocusVisible} from '../utils/matchesFocusVisible';
 
+function isMacSafari() {
+  return isMac() && isSafari();
+}
+
 export interface UseFocusProps {
   /**
    * Whether the Hook is enabled, including all internal Effects and event
@@ -48,6 +52,7 @@ export function useFocus(
 
   const blockFocusRef = React.useRef(false);
   const timeoutRef = React.useRef(-1);
+  const keyboardModalityRef = React.useRef(false);
 
   React.useEffect(() => {
     if (!enabled) return;
@@ -68,9 +73,28 @@ export function useFocus(
       }
     }
 
+    function onKeyDown() {
+      keyboardModalityRef.current = true;
+    }
+
+    function onPointerDown() {
+      keyboardModalityRef.current = false;
+    }
+
     win.addEventListener('blur', onBlur);
+
+    if (isMacSafari()) {
+      win.addEventListener('keydown', onKeyDown, true);
+      win.addEventListener('pointerdown', onPointerDown, true);
+    }
+
     return () => {
       win.removeEventListener('blur', onBlur);
+
+      if (isMacSafari()) {
+        win.removeEventListener('keydown', onKeyDown, true);
+        win.removeEventListener('pointerdown', onPointerDown, true);
+      }
     };
   }, [elements.domReference, open, enabled]);
 
@@ -106,15 +130,15 @@ export function useFocus(
         const target = getTarget(event.nativeEvent);
 
         if (visibleOnly && isElement(target)) {
-          if (isSafari() && isMac()) {
+          try {
             // Safari fails to match `:focus-visible` if focus was initially
-            // outside the document
-            if (blockFocusRef.current && !isTypeableElement(target)) {
-              blockFocusRef.current = false;
+            // outside the document.
+            if (isMacSafari() && !event.relatedTarget) throw Error();
+            if (!matchesFocusVisible(target)) return;
+          } catch (_e) {
+            if (!keyboardModalityRef.current && !isTypeableElement(target)) {
               return;
             }
-          } else if (!matchesFocusVisible(target)) {
-            return;
           }
         }
 
