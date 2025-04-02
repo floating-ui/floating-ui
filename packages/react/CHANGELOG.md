@@ -1,5 +1,17 @@
 # @floating-ui/react
 
+## 0.27.6
+
+### Patch Changes
+
+- fix(useFloating): prevent error when using `inline` middleware when passing a real DOM element to `refs.setPositionReference` due to `element.getClientRects()` not being handled
+- fix: avoid marking root ancestor combobox with `aria-hidden` when nested virtual floating element opens
+- fix(FloatingFocusManager): set `inert` attribute value to empty string instead of `"true"`
+- fix(FloatingFocusManager): correct tabbing to different document contexts
+- fix(useClick): fix toggle behavior with Enter key when reference element is anchor
+- feat(FloatingFocusManager): `getInsideElements` prop. Allows you to specify elements that are considered as "inside" the floating element. These will avoid being marked with `aria-hidden` and `data-floating-ui-inert` attributes.
+- fix(useFocus): improve `:focus-visible` checks
+
 ## 0.27.5
 
 ### Patch Changes
