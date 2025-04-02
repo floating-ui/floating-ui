@@ -29,6 +29,7 @@ import {
 import type {FloatingFocusManagerProps} from '../../src/components/FloatingFocusManager';
 import {Main as Drawer} from '../visual/components/Drawer';
 import {Main as Navigation} from '../visual/components/Navigation';
+import {Main as MenuVirtual} from '../visual/components/MenuVirtual';
 import {isJSDOM} from '../../src/utils';
 
 function App(
@@ -2183,4 +2184,78 @@ test('uses aria-hidden instead of inert on outside nodes if opened with hover an
 
   expect(screen.getByText('outside')).not.toHaveAttribute('inert');
   expect(screen.getByText('outside')).toHaveAttribute('aria-hidden', 'true');
+});
+
+test('aria-hidden is not applied on root combobox with virtual nested menu', async () => {
+  render(<MenuVirtual />);
+
+  await userEvent.click(screen.getByRole('combobox'));
+  await act(async () => {});
+
+  await userEvent.keyboard('{ArrowDown}'); // undo
+  await userEvent.keyboard('{ArrowDown}'); // redo
+  await userEvent.keyboard('{ArrowDown}'); // copy as
+  await userEvent.keyboard('{ArrowRight}'); // submenu -> text
+
+  expect(screen.queryByRole('combobox')).not.toBe(null);
+
+  await userEvent.keyboard('{ArrowDown}'); // video
+  await userEvent.keyboard('{ArrowDown}'); // image
+  await userEvent.keyboard('{ArrowRight}'); // submenu -> .png
+
+  expect(screen.queryByRole('combobox')).not.toBe(null);
+});
+
+describe('getInsideElements', () => {
+  test('returns a list of elements that should be considered part of the floating element', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const click = useClick(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([click]);
+
+      return (
+        <>
+          <button
+            ref={refs.setReference}
+            {...getReferenceProps()}
+            data-testid="reference"
+          />
+          <div data-testid="inside" />
+          {isOpen && (
+            <FloatingFocusManager
+              context={context}
+              getInsideElements={() => {
+                const inside = document.querySelector<HTMLElement>(
+                  '[data-testid="inside"]',
+                );
+                return inside ? [inside] : [];
+              }}
+            >
+              <div
+                ref={refs.setFloating}
+                data-testid="floating"
+                {...getFloatingProps()}
+              />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    expect(screen.getByTestId('inside')).not.toHaveAttribute(
+      'data-floating-ui-inert',
+    );
+  });
 });
