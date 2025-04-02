@@ -52,7 +52,7 @@ export function useFocus(
 
   const blockFocusRef = React.useRef(false);
   const timeoutRef = React.useRef(-1);
-  const keyboardModalityRef = React.useRef(false);
+  const keyboardModalityRef = React.useRef(true);
 
   React.useEffect(() => {
     if (!enabled) return;
@@ -130,15 +130,14 @@ export function useFocus(
         const target = getTarget(event.nativeEvent);
 
         if (visibleOnly && isElement(target)) {
-          try {
-            // Safari fails to match `:focus-visible` if focus was initially
-            // outside the document.
-            if (isMacSafari() && !event.relatedTarget) throw Error();
-            if (!matchesFocusVisible(target)) return;
-          } catch (_e) {
+          // Safari fails to match `:focus-visible` if focus was initially
+          // outside the document.
+          if (isMacSafari() && !event.relatedTarget) {
             if (!keyboardModalityRef.current && !isTypeableElement(target)) {
               return;
             }
+          } else if (!matchesFocusVisible(target)) {
+            return;
           }
         }
 
