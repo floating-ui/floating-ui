@@ -59,6 +59,7 @@ interface FloatingFocusManagerProps {
   visuallyHiddenDismiss?: boolean | string;
   closeOnFocusOut?: boolean;
   outsideElementsInert?: boolean;
+  getInsideElements?: () => Element[];
   order?: Array<'reference' | 'floating' | 'content'>;
 }
 ```
@@ -67,7 +68,8 @@ interface FloatingFocusManagerProps {
 
 <Required />
 
-The `context{:.const}` object returned from `useFloating(){:js}`.
+The `context{:.const}` object returned from `useFloating(){:js}`
+or `useFloatingRootContext(){:js}`.
 
 ```js
 <FloatingFocusManager context={context}>
@@ -277,6 +279,29 @@ default: `false{:js}`
 Determines whether outside elements are `inert` when
 `modal{:.keyword}` is enabled. This enables pointer modality
 without a backdrop.
+
+```js
+<FloatingFocusManager context={context} outsideElementsInert>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### `getInsideElements{:.keyword}`
+
+Determines which elements are considered inside the floating
+element when it's rendered. Such elements will avoid being marked
+with `aria-hidden` and `data-floating-ui-inert` attributes.
+
+```js
+<FloatingFocusManager
+  context={context}
+  getInsideElements={() =>
+    Array.from(document.querySelectorAll('.inside'))
+  }
+>
+  {/* floating element */}
+</FloatingFocusManager>
+```
 
 ### `order{:.keyword}`
 
