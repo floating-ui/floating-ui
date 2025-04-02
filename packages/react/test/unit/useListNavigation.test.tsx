@@ -1,7 +1,14 @@
-import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useLayoutEffect, useRef, useState} from 'react';
-import {vi} from 'vitest';
+import {vi, test} from 'vitest';
 
 import {
   FloatingFocusManager,
@@ -20,6 +27,7 @@ import {Main as EmojiPicker} from '../visual/components/EmojiPicker';
 import {Main as ListboxFocus} from '../visual/components/ListboxFocus';
 import {Main as NestedMenu} from '../visual/components/Menu';
 import {Menu, MenuItem} from '../visual/components/MenuVirtual';
+import {isJSDOM} from '../../src/utils';
 
 function App(props: Omit<Partial<UseListNavigationProps>, 'listRef'>) {
   const [open, setOpen] = useState(false);
@@ -229,6 +237,7 @@ test('resets indexRef to -1 upon close', async () => {
 
   act(() => screen.getByTestId('reference').focus());
   await userEvent.keyboard('a');
+  await act(async () => {});
 
   expect(screen.getByTestId('floating')).toBeInTheDocument();
   expect(screen.getByTestId('active-index').textContent).toBe('');
@@ -1167,7 +1176,8 @@ test('selectedIndex changing does not steal focus', async () => {
   expect(screen.getByTestId('reference')).toHaveFocus();
 });
 
-test('focus management in nested lists', async () => {
+// In JSDOM it will not focus the first item, but will in the browser
+test.skipIf(!isJSDOM())('focus management in nested lists', async () => {
   render(<NestedMenu />);
   await userEvent.click(screen.getByRole('button', {name: 'Edit'}));
   await userEvent.keyboard('{ArrowDown}');
@@ -1178,37 +1188,45 @@ test('focus management in nested lists', async () => {
   expect(screen.getByText('Text')).toHaveFocus();
 });
 
-test('keyboard navigation in nested menus lists', async () => {
-  render(<NestedMenu />);
-  await userEvent.click(screen.getByRole('button', {name: 'Edit'}));
-  await userEvent.keyboard('{ArrowDown}');
-  await userEvent.keyboard('{ArrowDown}');
-  await userEvent.keyboard('{ArrowDown}');
-  await userEvent.keyboard('{ArrowRight}'); // opens first submenu
+// In JSDOM it will not focus the first item, but will in the browser
+test.skipIf(!isJSDOM())(
+  'keyboard navigation in nested menus lists',
+  async () => {
+    render(<NestedMenu />);
 
-  await userEvent.keyboard('{ArrowDown}');
-  await userEvent.keyboard('{ArrowDown}');
-  await userEvent.keyboard('{ArrowRight}'); // opens second submenu
+    await userEvent.click(screen.getByRole('button', {name: 'Edit'}));
+    await act(async () => {});
+    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.keyboard('{ArrowRight}'); // opens first submenu
+    await act(async () => {});
 
-  expect(screen.getByText('.png')).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.keyboard('{ArrowRight}'); // opens second submenu
+    await act(async () => {});
 
-  // test navigation with orientation = 'both'
-  await userEvent.keyboard('{ArrowRight}');
-  expect(screen.getByText('.jpg')).toHaveFocus();
+    expect(screen.getByText('.png')).toHaveFocus();
 
-  await userEvent.keyboard('{ArrowDown}');
-  expect(screen.getByText('.gif')).toHaveFocus();
+    // test navigation with orientation = 'both'
+    await userEvent.keyboard('{ArrowRight}');
+    expect(screen.getByText('.jpg')).toHaveFocus();
 
-  await userEvent.keyboard('{ArrowLeft}');
-  expect(screen.getByText('.svg')).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    expect(screen.getByText('.gif')).toHaveFocus();
 
-  await userEvent.keyboard('{ArrowUp}');
-  expect(screen.getByText('.png')).toHaveFocus();
+    await userEvent.keyboard('{ArrowLeft}');
+    expect(screen.getByText('.svg')).toHaveFocus();
 
-  // escape closes the submenu
-  await userEvent.keyboard('{Escape}');
-  expect(screen.getByText('Image')).toHaveFocus();
-});
+    await userEvent.keyboard('{ArrowUp}');
+    expect(screen.getByText('.png')).toHaveFocus();
+
+    // escape closes the submenu
+    await userEvent.keyboard('{Escape}');
+    expect(screen.getByText('Image')).toHaveFocus();
+  },
+);
 
 test('virtual nested Home or End key press', async () => {
   const ref = {current: null};
@@ -1242,6 +1260,7 @@ test('virtual nested Home or End key press', async () => {
   await userEvent.keyboard('{ArrowDown}');
   await userEvent.keyboard('{ArrowDown}'); // focus Copy as menu
   await userEvent.keyboard('{ArrowRight}'); // open Copy as submenu
+  await act(async () => {});
   await userEvent.keyboard('{End}');
 
   expect(screen.getByText('Audio')).toHaveAttribute('aria-selected', 'true');
@@ -1287,6 +1306,7 @@ test('domReference trigger in nested virtual menu is set as virtual item', async
   await userEvent.keyboard('{ArrowDown}');
   await userEvent.keyboard('{ArrowDown}'); // focus Copy as menu
   await userEvent.keyboard('{ArrowRight}'); // open Copy as submenu
+  await act(async () => {});
 
   expect(screen.getByText('Text')).toHaveAttribute('aria-selected', 'true');
 
@@ -1355,9 +1375,9 @@ test('Home or End key press is ignored for typeable combobox reference', async (
 
   await userEvent.keyboard('{ArrowDown}');
 
-  await act(async () => {});
-
-  expect(screen.getByTestId('item-0')).toHaveFocus();
+  await waitFor(() => {
+    expect(screen.getByTestId('item-0')).toHaveFocus();
+  });
 
   await userEvent.keyboard('{End}');
 
@@ -1366,5 +1386,7 @@ test('Home or End key press is ignored for typeable combobox reference', async (
   await userEvent.keyboard('{ArrowDown}');
   await userEvent.keyboard('{Home}');
 
-  expect(screen.getByTestId('item-1')).toHaveFocus();
+  await waitFor(() => {
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+  });
 });

@@ -3,9 +3,19 @@ import '@testing-library/jest-dom';
 import * as matchers from '@testing-library/jest-dom/matchers';
 import {expect, vi} from 'vitest';
 
+import ResizeObserverPolyfill from 'resize-observer-polyfill';
+
 expect.extend(matchers);
 
-import ResizeObserverPolyfill from 'resize-observer-polyfill';
+// https://github.com/testing-library/react-testing-library/issues/1197#issuecomment-2619825237
+(globalThis as any).jest = vi;
+
+// Wait for https://github.com/vitest-dev/vitest/issues/7675
+// Since we mock requestAnimationFrame to be sync to make testing easier,
+// the guard to prevent the ResizeObserver error in the browser doesn't work
+globalThis.addEventListener('error', (error) => {
+  throw error;
+});
 
 vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
   (callback: FrameRequestCallback): number => {
@@ -14,8 +24,13 @@ vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
   },
 );
 
-HTMLElement.prototype.inert = true;
-global.ResizeObserver = ResizeObserverPolyfill;
+Object.defineProperty(HTMLElement.prototype, 'inert', {
+  configurable: true,
+  enumerable: false,
+  writable: true,
+  value: true,
+});
+globalThis.ResizeObserver = ResizeObserverPolyfill;
 
 class PointerEvent extends MouseEvent {
   public isPrimary: boolean;
@@ -47,5 +62,5 @@ class PointerEvent extends MouseEvent {
   }
 }
 
-global.PointerEvent =
-  global.PointerEvent ?? (PointerEvent as typeof globalThis.PointerEvent);
+globalThis.PointerEvent =
+  globalThis.PointerEvent ?? (PointerEvent as typeof globalThis.PointerEvent);

@@ -6,7 +6,6 @@ import {
   isMac,
   isSafari,
   isTypeableElement,
-  isVirtualPointerEvent,
 } from '@floating-ui/react/utils';
 import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
@@ -18,6 +17,11 @@ import type {
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
+import {matchesFocusVisible} from '../utils/matchesFocusVisible';
+
+function isMacSafari() {
+  return isMac() && isSafari();
+}
 
 export interface UseFocusProps {
   /**
@@ -73,11 +77,24 @@ export function useFocus(
       keyboardModalityRef.current = true;
     }
 
+    function onPointerDown() {
+      keyboardModalityRef.current = false;
+    }
+
     win.addEventListener('blur', onBlur);
-    win.addEventListener('keydown', onKeyDown, true);
+
+    if (isMacSafari()) {
+      win.addEventListener('keydown', onKeyDown, true);
+      win.addEventListener('pointerdown', onPointerDown, true);
+    }
+
     return () => {
       win.removeEventListener('blur', onBlur);
-      win.removeEventListener('keydown', onKeyDown, true);
+
+      if (isMacSafari()) {
+        win.removeEventListener('keydown', onKeyDown, true);
+        win.removeEventListener('pointerdown', onPointerDown, true);
+      }
     };
   }, [elements.domReference, open, enabled]);
 
@@ -104,10 +121,6 @@ export function useFocus(
 
   const reference: ElementProps['reference'] = React.useMemo(
     () => ({
-      onPointerDown(event) {
-        if (isVirtualPointerEvent(event.nativeEvent)) return;
-        keyboardModalityRef.current = false;
-      },
       onMouseLeave() {
         blockFocusRef.current = false;
       },
@@ -117,17 +130,14 @@ export function useFocus(
         const target = getTarget(event.nativeEvent);
 
         if (visibleOnly && isElement(target)) {
-          try {
-            // Mac Safari unreliably matches `:focus-visible` on the reference
-            // if focus was outside the page initially - use the fallback
-            // instead.
-            if (isSafari() && isMac()) throw Error();
-            if (!target.matches(':focus-visible')) return;
-          } catch (_e) {
-            // Old browsers will throw an error when using `:focus-visible`.
+          // Safari fails to match `:focus-visible` if focus was initially
+          // outside the document.
+          if (isMacSafari() && !event.relatedTarget) {
             if (!keyboardModalityRef.current && !isTypeableElement(target)) {
               return;
             }
+          } else if (!matchesFocusVisible(target)) {
+            return;
           }
         }
 

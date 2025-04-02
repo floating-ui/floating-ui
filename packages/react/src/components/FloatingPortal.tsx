@@ -224,8 +224,10 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
             if (isOutsideEvent(event, portalNode)) {
               beforeInsideRef.current?.focus();
             } else {
-              const prevTabbable =
-                getPreviousTabbable() || focusManagerState?.domReference;
+              const domReference = focusManagerState
+                ? focusManagerState.domReference
+                : null;
+              const prevTabbable = getPreviousTabbable(domReference);
               prevTabbable?.focus();
             }
           }}
@@ -243,8 +245,10 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
             if (isOutsideEvent(event, portalNode)) {
               afterInsideRef.current?.focus();
             } else {
-              const nextTabbable =
-                getNextTabbable() || focusManagerState?.domReference;
+              const domReference = focusManagerState
+                ? focusManagerState.domReference
+                : null;
+              const nextTabbable = getNextTabbable(domReference);
               nextTabbable?.focus();
 
               focusManagerState?.closeOnFocusOut &&

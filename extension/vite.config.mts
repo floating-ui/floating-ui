@@ -10,7 +10,7 @@ export default defineViteConfig({
   plugins: [react()],
   build: {
     // minification is discouraged for extensions as the code will be reviewed before publishing
-    minify: false
+    minify: false,
   },
   define: {
     // This is only used in storybook
