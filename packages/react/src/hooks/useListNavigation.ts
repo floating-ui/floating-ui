@@ -583,6 +583,10 @@ export function useListNavigation(
     virtual,
   ]);
 
+  const parentOrientation: UseListNavigationProps['orientation'] =
+    tree?.nodesRef.current.find((node) => node.id === parentId)?.context
+      ?.dataRef?.current.orientation;
+
   const commonOnKeyDown = useEffectEvent((event: React.KeyboardEvent) => {
     isPointerModalityRef.current = false;
     forceSyncFocusRef.current = true;
@@ -609,6 +613,12 @@ export function useListNavigation(
       nested &&
       isCrossOrientationCloseKey(event.key, orientation, rtl, cols)
     ) {
+      if (isMainOrientationKey(event.key, parentOrientation)) {
+        // If the nested list's close key is also the parent navigation key,
+        // let the parent navigate - this will close the nested list with from focusout.
+        return;
+      }
+
       stopEvent(event);
       onOpenChange(false, event.nativeEvent, 'list-navigation');
 
@@ -846,9 +856,6 @@ export function useListNavigation(
         const isArrowKey = event.key.startsWith('Arrow');
         const isHomeOrEndKey = ['Home', 'End'].includes(event.key);
         const isMoveKey = isArrowKey || isHomeOrEndKey;
-        const parentOrientation = tree?.nodesRef.current.find(
-          (node) => node.id === parentId,
-        )?.context?.dataRef?.current.orientation;
         const isCrossOpenKey = isCrossOrientationOpenKey(
           event.key,
           orientation,
@@ -997,7 +1004,7 @@ export function useListNavigation(
     open,
     openOnArrowKeyDown,
     orientation,
-    parentId,
+    parentOrientation,
     rtl,
     selectedIndex,
     tree,
