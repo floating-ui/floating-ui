@@ -47,5 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
+      - name: Build packages
+        run: pnpm prepack
       - name: Publish canary packages
         run: pnpm dlx pkg-pr-new publish './packages/core' './packages/dom' './packages/react' './packages/react-dom' './packages/utils' --compact --pnpm
