@@ -26,6 +26,7 @@ import {Main as Grid} from '../visual/components/Grid';
 import {Main as EmojiPicker} from '../visual/components/EmojiPicker';
 import {Main as ListboxFocus} from '../visual/components/ListboxFocus';
 import {Main as NestedMenu} from '../visual/components/Menu';
+import {HorizontalMenu} from '../visual/components/MenuOrientation';
 import {Menu, MenuItem} from '../visual/components/MenuVirtual';
 import {isJSDOM} from '../../src/utils';
 
@@ -1225,6 +1226,31 @@ test.skipIf(!isJSDOM())(
     // escape closes the submenu
     await userEvent.keyboard('{Escape}');
     expect(screen.getByText('Image')).toHaveFocus();
+  },
+);
+
+// In JSDOM it will not focus the first item, but will in the browser
+test.skipIf(!isJSDOM())(
+  'keyboard navigation in nested menus with different orientation',
+  async () => {
+    render(<HorizontalMenu />);
+
+    await userEvent.click(screen.getByRole('button', {name: 'Edit'}));
+    await act(async () => {});
+    await userEvent.keyboard('{ArrowRight}');
+    await userEvent.keyboard('{ArrowRight}');
+    await userEvent.keyboard('{ArrowRight}');
+    await userEvent.keyboard('{ArrowDown}'); // opens the Copy as submenu
+    await act(async () => {});
+
+    await userEvent.keyboard('{ArrowRight}');
+    await userEvent.keyboard('{ArrowDown}'); // opens the Share submenu
+    await act(async () => {});
+
+    expect(screen.getByText('Mail')).toHaveFocus();
+
+    await userEvent.keyboard('{ArrowLeft}');
+    expect(screen.getByText('Copy as')).toHaveFocus();
   },
 );
 
