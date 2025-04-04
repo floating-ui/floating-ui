@@ -48,4 +48,4 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - name: Publish canary packages
-        run: pnpm dlx pkg-pr-new publish './packages/*' --compact --pnpm
+        run: pnpm dlx pkg-pr-new publish './packages/core' './packages/dom' './packages/react' './packages/react-dom' './packages/react-native' './packages/utils' './packages/vue' --compact --pnpm
