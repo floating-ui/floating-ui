@@ -614,15 +614,13 @@ export function useListNavigation(
       nested &&
       isCrossOrientationCloseKey(event.key, orientation, rtl, cols)
     ) {
-      onOpenChange(false, event.nativeEvent, 'list-navigation');
-
-      if (isMainOrientationKey(event.key, getParentOrientation())) {
-        // If the nested list's close key is also the parent navigation key,
-        // let the parent navigate.
-        return;
+      // If the nested list's close key is also the parent navigation key,
+      // let the parent navigate. Otherwise, stop propagating the event.
+      if (!isMainOrientationKey(event.key, getParentOrientation())) {
+        stopEvent(event);
       }
 
-      stopEvent(event);
+      onOpenChange(false, event.nativeEvent, 'list-navigation');
 
       if (isHTMLElement(elements.domReference)) {
         if (virtual) {
