@@ -1,0 +1,11 @@
+name: Canary publish
+description: Publishes canary packages to pkg.pr.new
+runs:
+  using: composite
+  steps:
+    - name: Build packages
+      shell: sh
+      run: pnpm prepack
+    - name: Publish to pkg-pr-new
+      shell: sh
+      run: pnpm dlx pkg-pr-new publish './packages/core' './packages/dom' './packages/react' './packages/react-dom' './packages/react-native' './packages/utils' './packages/vue' --compact --pnpm

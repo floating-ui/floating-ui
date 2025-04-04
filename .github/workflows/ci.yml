@@ -40,3 +40,11 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Run browser tests for @floating-ui/react
         run: pnpm --filter @floating-ui/react run test:browser
+
+  canary-publish:
+    name: Publish canary packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/canary-publish
