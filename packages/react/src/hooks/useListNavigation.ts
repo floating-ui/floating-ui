@@ -583,9 +583,10 @@ export function useListNavigation(
     virtual,
   ]);
 
-  const parentOrientation: UseListNavigationProps['orientation'] =
-    tree?.nodesRef.current.find((node) => node.id === parentId)?.context
-      ?.dataRef?.current.orientation;
+  const getParentOrientation = React.useCallback(() => {
+    return tree?.nodesRef.current.find((node) => node.id === parentId)?.context
+      ?.dataRef?.current.orientation as UseListNavigationProps['orientation'];
+  }, [parentId, tree]);
 
   const commonOnKeyDown = useEffectEvent((event: React.KeyboardEvent) => {
     isPointerModalityRef.current = false;
@@ -613,14 +614,15 @@ export function useListNavigation(
       nested &&
       isCrossOrientationCloseKey(event.key, orientation, rtl, cols)
     ) {
-      if (isMainOrientationKey(event.key, parentOrientation)) {
+      onOpenChange(false, event.nativeEvent, 'list-navigation');
+
+      if (isMainOrientationKey(event.key, getParentOrientation())) {
         // If the nested list's close key is also the parent navigation key,
-        // let the parent navigate - this will close the nested list with from focusout.
+        // let the parent navigate.
         return;
       }
 
       stopEvent(event);
-      onOpenChange(false, event.nativeEvent, 'list-navigation');
 
       if (isHTMLElement(elements.domReference)) {
         if (virtual) {
@@ -869,7 +871,7 @@ export function useListNavigation(
         );
         const isParentCrossOpenKey = isCrossOrientationOpenKey(
           event.key,
-          parentOrientation,
+          getParentOrientation(),
           rtl,
         );
         const isMainKey = isMainOrientationKey(event.key, orientation);
@@ -938,7 +940,7 @@ export function useListNavigation(
         if (isNavigationKey) {
           const isParentMainKey = isMainOrientationKey(
             event.key,
-            parentOrientation,
+            getParentOrientation(),
           );
           keyRef.current = nested && isParentMainKey ? null : event.key;
         }
@@ -1004,7 +1006,7 @@ export function useListNavigation(
     open,
     openOnArrowKeyDown,
     orientation,
-    parentOrientation,
+    getParentOrientation,
     rtl,
     selectedIndex,
     tree,
