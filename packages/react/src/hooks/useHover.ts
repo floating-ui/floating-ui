@@ -330,22 +330,41 @@ export function useHover(
       })(event);
     }
 
+    function onFloatingMouseEnter() {
+      clearTimeoutIfSet(timeoutRef);
+    }
+
+    function onFloatingMouseLeave(event: MouseEvent) {
+      if (!isClickLikeOpenEvent()) {
+        closeWithDelay(event, false);
+      }
+    }
+
     if (isElement(elements.domReference)) {
-      const ref = elements.domReference as unknown as HTMLElement;
-      open && ref.addEventListener('mouseleave', onScrollMouseLeave);
-      elements.floating?.addEventListener('mouseleave', onScrollMouseLeave);
-      move && ref.addEventListener('mousemove', onMouseEnter, {once: true});
-      ref.addEventListener('mouseenter', onMouseEnter);
-      ref.addEventListener('mouseleave', onMouseLeave);
+      const reference = elements.domReference as unknown as HTMLElement;
+      const floating = elements.floating;
+
+      reference.addEventListener('mouseenter', onMouseEnter);
+      reference.addEventListener('mouseleave', onMouseLeave);
+      open && reference.addEventListener('mouseleave', onScrollMouseLeave);
+      move &&
+        reference.addEventListener('mousemove', onMouseEnter, {once: true});
+
+      if (floating) {
+        floating.addEventListener('mouseleave', onFloatingMouseLeave);
+        floating.addEventListener('mouseenter', onFloatingMouseEnter);
+      }
+
       return () => {
-        open && ref.removeEventListener('mouseleave', onScrollMouseLeave);
-        elements.floating?.removeEventListener(
-          'mouseleave',
-          onScrollMouseLeave,
-        );
-        move && ref.removeEventListener('mousemove', onMouseEnter);
-        ref.removeEventListener('mouseenter', onMouseEnter);
-        ref.removeEventListener('mouseleave', onMouseLeave);
+        reference.removeEventListener('mouseenter', onMouseEnter);
+        reference.removeEventListener('mouseleave', onMouseLeave);
+        open && reference.removeEventListener('mouseleave', onScrollMouseLeave);
+        move && reference.removeEventListener('mousemove', onMouseEnter);
+
+        if (floating) {
+          floating.removeEventListener('mouseleave', onFloatingMouseLeave);
+          floating.removeEventListener('mouseenter', onFloatingMouseEnter);
+        }
       };
     }
   }, [
@@ -480,22 +499,8 @@ export function useHover(
     };
   }, [mouseOnly, onOpenChange, open, openRef, restMs]);
 
-  const floating: ElementProps['floating'] = React.useMemo(
-    () => ({
-      onMouseEnter() {
-        clearTimeoutIfSet(timeoutRef);
-      },
-      onMouseLeave(event) {
-        if (!isClickLikeOpenEvent()) {
-          closeWithDelay(event.nativeEvent, false);
-        }
-      },
-    }),
-    [closeWithDelay, isClickLikeOpenEvent],
-  );
-
   return React.useMemo(
-    () => (enabled ? {reference, floating} : {}),
-    [enabled, reference, floating],
+    () => (enabled ? {reference} : {}),
+    [enabled, reference],
   );
 }
