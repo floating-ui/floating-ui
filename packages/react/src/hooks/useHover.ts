@@ -344,13 +344,18 @@ export function useHover(
       const reference = elements.domReference as unknown as HTMLElement;
       const floating = elements.floating;
 
-      reference.addEventListener('mouseenter', onReferenceMouseEnter);
-      reference.addEventListener('mouseleave', onReferenceMouseLeave);
-      open && reference.addEventListener('mouseleave', onScrollMouseLeave);
-      move &&
+      if (open) {
+        reference.addEventListener('mouseleave', onScrollMouseLeave);
+      }
+
+      if (move) {
         reference.addEventListener('mousemove', onReferenceMouseEnter, {
           once: true,
         });
+      }
+
+      reference.addEventListener('mouseenter', onReferenceMouseEnter);
+      reference.addEventListener('mouseleave', onReferenceMouseLeave);
 
       if (floating) {
         floating.addEventListener('mouseenter', onFloatingMouseEnter);
@@ -358,11 +363,16 @@ export function useHover(
       }
 
       return () => {
+        if (open) {
+          reference.removeEventListener('mouseleave', onScrollMouseLeave);
+        }
+
+        if (move) {
+          reference.removeEventListener('mousemove', onReferenceMouseEnter);
+        }
+
         reference.removeEventListener('mouseenter', onReferenceMouseEnter);
         reference.removeEventListener('mouseleave', onReferenceMouseLeave);
-        open && reference.removeEventListener('mouseleave', onScrollMouseLeave);
-        move &&
-          reference.removeEventListener('mousemove', onReferenceMouseEnter);
 
         if (floating) {
           floating.removeEventListener('mouseenter', onFloatingMouseEnter);
