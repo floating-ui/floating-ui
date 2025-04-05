@@ -229,7 +229,7 @@ export function useHover(
   React.useEffect(() => {
     if (!enabled) return;
 
-    function onMouseEnter(event: MouseEvent) {
+    function onReferenceMouseEnter(event: MouseEvent) {
       clearTimeoutIfSet(timeoutRef);
       blockMouseMoveRef.current = false;
 
@@ -257,7 +257,7 @@ export function useHover(
       }
     }
 
-    function onMouseLeave(event: MouseEvent) {
+    function onReferenceMouseLeave(event: MouseEvent) {
       if (isClickLikeOpenEvent()) return;
 
       unbindMouseMoveRef.current();
@@ -344,26 +344,29 @@ export function useHover(
       const reference = elements.domReference as unknown as HTMLElement;
       const floating = elements.floating;
 
-      reference.addEventListener('mouseenter', onMouseEnter);
-      reference.addEventListener('mouseleave', onMouseLeave);
+      reference.addEventListener('mouseenter', onReferenceMouseEnter);
+      reference.addEventListener('mouseleave', onReferenceMouseLeave);
       open && reference.addEventListener('mouseleave', onScrollMouseLeave);
       move &&
-        reference.addEventListener('mousemove', onMouseEnter, {once: true});
+        reference.addEventListener('mousemove', onReferenceMouseEnter, {
+          once: true,
+        });
 
       if (floating) {
-        floating.addEventListener('mouseleave', onFloatingMouseLeave);
         floating.addEventListener('mouseenter', onFloatingMouseEnter);
+        floating.addEventListener('mouseleave', onFloatingMouseLeave);
       }
 
       return () => {
-        reference.removeEventListener('mouseenter', onMouseEnter);
-        reference.removeEventListener('mouseleave', onMouseLeave);
+        reference.removeEventListener('mouseenter', onReferenceMouseEnter);
+        reference.removeEventListener('mouseleave', onReferenceMouseLeave);
         open && reference.removeEventListener('mouseleave', onScrollMouseLeave);
-        move && reference.removeEventListener('mousemove', onMouseEnter);
+        move &&
+          reference.removeEventListener('mousemove', onReferenceMouseEnter);
 
         if (floating) {
-          floating.removeEventListener('mouseleave', onFloatingMouseLeave);
           floating.removeEventListener('mouseenter', onFloatingMouseEnter);
+          floating.removeEventListener('mouseleave', onFloatingMouseLeave);
         }
       };
     }
