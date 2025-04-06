@@ -4,6 +4,8 @@ import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 import {useLatestRef} from './utils/useLatestRef';
 
+type Duration = number | {open?: number; close?: number};
+
 // Converts a JS style key like `backgroundColor` to a CSS transition-property
 // like `background-color`.
 const camelCaseToKebabCase = (str: string): string =>
@@ -41,7 +43,7 @@ export interface UseTransitionStatusProps {
    * The duration of the transition in milliseconds, or an object containing
    * `open` and `close` keys for different durations.
    */
-  duration?: number | {open?: number; close?: number};
+  duration?: Duration | (() => Duration);
 }
 
 type TransitionStatus = 'unmounted' | 'initial' | 'open' | 'close';
@@ -64,8 +66,10 @@ export function useTransitionStatus(
   } = context;
   const {duration = 250} = props;
 
-  const isNumberDuration = typeof duration === 'number';
-  const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
+  const durationResult = typeof duration === 'function' ? duration() : duration;
+  const isNumberDuration = typeof durationResult === 'number';
+  const closeDuration =
+    (isNumberDuration ? durationResult : durationResult.close) || 0;
 
   const [status, setStatus] = React.useState<TransitionStatus>('unmounted');
   const isMounted = useDelayUnmount(open, closeDuration);
@@ -146,9 +150,12 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   const placement = context.placement;
   const side = placement.split('-')[0] as Side;
   const fnArgs = React.useMemo(() => ({side, placement}), [side, placement]);
-  const isNumberDuration = typeof duration === 'number';
-  const openDuration = (isNumberDuration ? duration : duration.open) || 0;
-  const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
+  const durationResult = typeof duration === 'function' ? duration() : duration;
+  const isNumberDuration = typeof durationResult === 'number';
+  const openDuration =
+    (isNumberDuration ? durationResult : durationResult.open) || 0;
+  const closeDuration =
+    (isNumberDuration ? durationResult : durationResult.close) || 0;
 
   const [styles, setStyles] = React.useState<React.CSSProperties>(() => ({
     ...execWithArgsOrReturn(unstable_common, fnArgs),

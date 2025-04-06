@@ -5,6 +5,10 @@ export {
   useDelayGroup,
   useDelayGroupContext,
 } from './components/FloatingDelayGroup';
+export {
+  FloatingDelayGroupOptimized,
+  useDelayGroupOptimized,
+} from './components/FloatingDelayGroupOptimized';
 export {FloatingFocusManager} from './components/FloatingFocusManager';
 export {FloatingList, useListItem} from './components/FloatingList';
 export {FloatingOverlay} from './components/FloatingOverlay';

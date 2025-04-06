@@ -43,7 +43,7 @@ const FloatingDelayGroupContext = React.createContext<
 export const useDelayGroupContext = (): GroupContext =>
   React.useContext(FloatingDelayGroupContext);
 
-interface FloatingDelayGroupProps {
+export interface FloatingDelayGroupProps {
   children?: React.ReactNode;
   /**
    * The delay to use for the group.
