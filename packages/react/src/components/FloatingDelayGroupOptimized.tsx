@@ -41,7 +41,8 @@ export interface FloatingDelayGroupOptimizedProps {
 
 /**
  * Provides context for a group of floating elements that should share a
- * `delay`.
+ * `delay`. Unlike `FloatingDelayGroup`, this component does not cause a re-render
+ * of unrelated consumers of the context when the delay changes.
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
 export function FloatingDelayGroupOptimized(
@@ -85,8 +86,8 @@ interface UseGroupOptions {
 
 /**
  * Enables grouping when called inside a component that's a child of a
- * `FloatingDelayGroup`. Unlike `useDelayGroup`, this hook does not cause
- * a re-render of all consumers of the context when the delay changes.
+ * `FloatingDelayGroupOptimized`. Unlike `useDelayGroup`, this hook does not
+ * cause a re-render of unrelated consumers of the context when the delay changes.
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
 export function useDelayGroupOptimized(
