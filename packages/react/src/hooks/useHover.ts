@@ -229,7 +229,7 @@ export function useHover(
   React.useEffect(() => {
     if (!enabled) return;
 
-    function onMouseEnter(event: MouseEvent) {
+    function onReferenceMouseEnter(event: MouseEvent) {
       clearTimeoutIfSet(timeoutRef);
       blockMouseMoveRef.current = false;
 
@@ -257,7 +257,7 @@ export function useHover(
       }
     }
 
-    function onMouseLeave(event: MouseEvent) {
+    function onReferenceMouseLeave(event: MouseEvent) {
       if (isClickLikeOpenEvent()) return;
 
       unbindMouseMoveRef.current();
@@ -330,22 +330,56 @@ export function useHover(
       })(event);
     }
 
+    function onFloatingMouseEnter() {
+      clearTimeoutIfSet(timeoutRef);
+    }
+
+    function onFloatingMouseLeave(event: MouseEvent) {
+      if (!isClickLikeOpenEvent()) {
+        closeWithDelay(event, false);
+      }
+    }
+
     if (isElement(elements.domReference)) {
-      const ref = elements.domReference as unknown as HTMLElement;
-      open && ref.addEventListener('mouseleave', onScrollMouseLeave);
-      elements.floating?.addEventListener('mouseleave', onScrollMouseLeave);
-      move && ref.addEventListener('mousemove', onMouseEnter, {once: true});
-      ref.addEventListener('mouseenter', onMouseEnter);
-      ref.addEventListener('mouseleave', onMouseLeave);
+      const reference = elements.domReference as unknown as HTMLElement;
+      const floating = elements.floating;
+
+      if (open) {
+        reference.addEventListener('mouseleave', onScrollMouseLeave);
+      }
+
+      if (move) {
+        reference.addEventListener('mousemove', onReferenceMouseEnter, {
+          once: true,
+        });
+      }
+
+      reference.addEventListener('mouseenter', onReferenceMouseEnter);
+      reference.addEventListener('mouseleave', onReferenceMouseLeave);
+
+      if (floating) {
+        floating.addEventListener('mouseleave', onScrollMouseLeave);
+        floating.addEventListener('mouseenter', onFloatingMouseEnter);
+        floating.addEventListener('mouseleave', onFloatingMouseLeave);
+      }
+
       return () => {
-        open && ref.removeEventListener('mouseleave', onScrollMouseLeave);
-        elements.floating?.removeEventListener(
-          'mouseleave',
-          onScrollMouseLeave,
-        );
-        move && ref.removeEventListener('mousemove', onMouseEnter);
-        ref.removeEventListener('mouseenter', onMouseEnter);
-        ref.removeEventListener('mouseleave', onMouseLeave);
+        if (open) {
+          reference.removeEventListener('mouseleave', onScrollMouseLeave);
+        }
+
+        if (move) {
+          reference.removeEventListener('mousemove', onReferenceMouseEnter);
+        }
+
+        reference.removeEventListener('mouseenter', onReferenceMouseEnter);
+        reference.removeEventListener('mouseleave', onReferenceMouseLeave);
+
+        if (floating) {
+          floating.removeEventListener('mouseleave', onScrollMouseLeave);
+          floating.removeEventListener('mouseenter', onFloatingMouseEnter);
+          floating.removeEventListener('mouseleave', onFloatingMouseLeave);
+        }
       };
     }
   }, [
@@ -480,22 +514,8 @@ export function useHover(
     };
   }, [mouseOnly, onOpenChange, open, openRef, restMs]);
 
-  const floating: ElementProps['floating'] = React.useMemo(
-    () => ({
-      onMouseEnter() {
-        clearTimeoutIfSet(timeoutRef);
-      },
-      onMouseLeave(event) {
-        if (!isClickLikeOpenEvent()) {
-          closeWithDelay(event.nativeEvent, false);
-        }
-      },
-    }),
-    [closeWithDelay, isClickLikeOpenEvent],
-  );
-
   return React.useMemo(
-    () => (enabled ? {reference, floating} : {}),
-    [enabled, reference, floating],
+    () => (enabled ? {reference} : {}),
+    [enabled, reference],
   );
 }
