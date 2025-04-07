@@ -3,6 +3,7 @@ import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {getDelay} from '../hooks/useHover';
 import type {FloatingRootContext, Delay} from '../types';
+import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 interface GroupContext {
   hasProvider: boolean;
@@ -10,8 +11,11 @@ interface GroupContext {
   delayRef: React.MutableRefObject<Delay>;
   initialDelayRef: React.MutableRefObject<Delay>;
   currentIdRef: React.MutableRefObject<any>;
-  currentContextRef: React.MutableRefObject<FloatingRootContext | null>;
-  instantPhaseRef: React.MutableRefObject<boolean>;
+  currentContextRef: React.MutableRefObject<{
+    onOpenChange: (open: boolean) => void;
+    setIsInstantPhase: (value: boolean) => void;
+  } | null>;
+  timeoutIdRef: React.MutableRefObject<number>;
 }
 
 const FloatingDelayGroupContext = React.createContext<GroupContext>({
@@ -21,7 +25,7 @@ const FloatingDelayGroupContext = React.createContext<GroupContext>({
   initialDelayRef: {current: 0},
   currentIdRef: {current: null},
   currentContextRef: {current: null},
-  instantPhaseRef: {current: false},
+  timeoutIdRef: {current: -1},
 });
 
 export interface FloatingDelayGroupOptimizedProps {
@@ -53,8 +57,8 @@ export function FloatingDelayGroupOptimized(
   const delayRef = React.useRef(delay);
   const initialDelayRef = React.useRef(delay);
   const currentIdRef = React.useRef<string | null>(null);
-  const currentContextRef = React.useRef<FloatingRootContext | null>(null);
-  const instantPhaseRef = React.useRef(false);
+  const currentContextRef = React.useRef(null);
+  const timeoutIdRef = React.useRef(-1);
 
   return (
     <FloatingDelayGroupContext.Provider
@@ -66,7 +70,7 @@ export function FloatingDelayGroupOptimized(
           currentIdRef,
           timeoutMs,
           currentContextRef,
-          instantPhaseRef,
+          timeoutIdRef,
         }),
         [timeoutMs],
       )}
@@ -84,6 +88,21 @@ interface UseGroupOptions {
   enabled?: boolean;
 }
 
+interface UseGroupReturn {
+  /**
+   * The delay reference object.
+   */
+  delayRef: React.MutableRefObject<Delay>;
+  /**
+   * Whether animations should be removed.
+   */
+  isInstantPhase: boolean;
+  /**
+   * Whether a `<FloatingDelayGroupOptimized>` provider is present.
+   */
+  hasProvider: boolean;
+}
+
 /**
  * Enables grouping when called inside a component that's a child of a
  * `FloatingDelayGroupOptimized`. Unlike `useDelayGroup`, this hook does not
@@ -93,7 +112,7 @@ interface UseGroupOptions {
 export function useDelayGroupOptimized(
   context: FloatingRootContext,
   options: UseGroupOptions = {},
-): GroupContext {
+): UseGroupReturn {
   const {open, onOpenChange, floatingId} = context;
   const {enabled = true} = options;
 
@@ -104,25 +123,31 @@ export function useDelayGroupOptimized(
     timeoutMs,
     initialDelayRef,
     currentContextRef,
-    instantPhaseRef,
+    hasProvider,
+    timeoutIdRef,
   } = groupContext;
+
+  const [isInstantPhase, setIsInstantPhase] = React.useState(false);
 
   useModernLayoutEffect(() => {
     function unset() {
-      onOpenChange(false);
+      setIsInstantPhase(false);
+      currentContextRef.current?.setIsInstantPhase(false);
       currentIdRef.current = null;
+      currentContextRef.current = null;
       delayRef.current = initialDelayRef.current;
-      instantPhaseRef.current = false;
     }
 
     if (!enabled) return;
     if (!currentIdRef.current) return;
 
     if (!open && currentIdRef.current === floatingId) {
+      setIsInstantPhase(false);
+
       if (timeoutMs) {
-        const timeout = window.setTimeout(unset, timeoutMs);
+        timeoutIdRef.current = window.setTimeout(unset, timeoutMs);
         return () => {
-          clearTimeout(timeout);
+          clearTimeout(timeoutIdRef.current);
         };
       }
 
@@ -132,12 +157,12 @@ export function useDelayGroupOptimized(
     enabled,
     open,
     floatingId,
-    onOpenChange,
     currentIdRef,
     delayRef,
-    instantPhaseRef,
     timeoutMs,
     initialDelayRef,
+    currentContextRef,
+    timeoutIdRef,
   ]);
 
   useModernLayoutEffect(() => {
@@ -147,6 +172,7 @@ export function useDelayGroupOptimized(
     const prevContext = currentContextRef.current;
     const prevId = currentIdRef.current;
 
+    currentContextRef.current = {onOpenChange, setIsInstantPhase};
     currentIdRef.current = floatingId;
     delayRef.current = {
       open: 0,
@@ -154,30 +180,26 @@ export function useDelayGroupOptimized(
     };
 
     if (prevId !== null && prevId !== floatingId) {
-      instantPhaseRef.current = true;
+      clearTimeoutIfSet(timeoutIdRef);
+      setIsInstantPhase(true);
+      prevContext?.setIsInstantPhase(true);
       prevContext?.onOpenChange(false);
+    } else {
+      setIsInstantPhase(false);
+      prevContext?.setIsInstantPhase(false);
     }
   }, [
     enabled,
     open,
-    currentIdRef,
     floatingId,
+    onOpenChange,
+    currentIdRef,
     delayRef,
+    timeoutMs,
     initialDelayRef,
     currentContextRef,
-    instantPhaseRef,
+    timeoutIdRef,
   ]);
-
-  useModernLayoutEffect(() => {
-    if (!enabled) return;
-    if (!open) return;
-    currentContextRef.current = context;
-    return () => {
-      if (currentContextRef.current === context) {
-        currentContextRef.current = null;
-      }
-    };
-  }, [enabled, open, currentContextRef, context]);
 
   useModernLayoutEffect(() => {
     return () => {
@@ -185,5 +207,12 @@ export function useDelayGroupOptimized(
     };
   }, [currentContextRef]);
 
-  return groupContext;
+  return React.useMemo(
+    () => ({
+      hasProvider,
+      delayRef,
+      isInstantPhase,
+    }),
+    [hasProvider, delayRef, isInstantPhase],
+  );
 }

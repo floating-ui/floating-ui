@@ -43,7 +43,7 @@ export interface UseTransitionStatusProps {
    * The duration of the transition in milliseconds, or an object containing
    * `open` and `close` keys for different durations.
    */
-  duration?: Duration | (() => Duration);
+  duration?: Duration;
 }
 
 type TransitionStatus = 'unmounted' | 'initial' | 'open' | 'close';
@@ -66,10 +66,8 @@ export function useTransitionStatus(
   } = context;
   const {duration = 250} = props;
 
-  const durationResult = typeof duration === 'function' ? duration() : duration;
-  const isNumberDuration = typeof durationResult === 'number';
-  const closeDuration =
-    (isNumberDuration ? durationResult : durationResult.close) || 0;
+  const isNumberDuration = typeof duration === 'number';
+  const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
   const [status, setStatus] = React.useState<TransitionStatus>('unmounted');
   const isMounted = useDelayUnmount(open, closeDuration);
@@ -150,12 +148,9 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   const placement = context.placement;
   const side = placement.split('-')[0] as Side;
   const fnArgs = React.useMemo(() => ({side, placement}), [side, placement]);
-  const durationResult = typeof duration === 'function' ? duration() : duration;
-  const isNumberDuration = typeof durationResult === 'number';
-  const openDuration =
-    (isNumberDuration ? durationResult : durationResult.open) || 0;
-  const closeDuration =
-    (isNumberDuration ? durationResult : durationResult.close) || 0;
+  const isNumberDuration = typeof duration === 'number';
+  const openDuration = (isNumberDuration ? duration : duration.open) || 0;
+  const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
   const [styles, setStyles] = React.useState<React.CSSProperties>(() => ({
     ...execWithArgsOrReturn(unstable_common, fnArgs),

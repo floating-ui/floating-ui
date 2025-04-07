@@ -33,11 +33,6 @@ export const Main = () => {
     <>
       <h1 className="text-5xl font-bold mb-8">Tooltip</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
-        <Tooltip label="My tooltip">
-          <Button>My button</Button>
-        </Tooltip>
-      </div>
-      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <div className="flex gap-1">
           <FloatingDelayGroupOptimized
             delay={{open: 500, close: 200}}
@@ -97,16 +92,12 @@ export function Tooltip({
   const closeDuration = 250;
 
   const {isMounted, styles} = useTransitionStyles(context, {
-    duration: () =>
-      delayGroup.instantPhaseRef.current
-        ? {
-            open: instantDuration,
-            close:
-              delayGroup.currentIdRef.current === context.floatingId
-                ? closeDuration
-                : instantDuration,
-          }
-        : {open: openDuration, close: closeDuration},
+    duration: delayGroup.isInstantPhase
+      ? instantDuration
+      : {
+          open: openDuration,
+          close: closeDuration,
+        },
     initial: {
       opacity: 0,
       scale: '0.925',

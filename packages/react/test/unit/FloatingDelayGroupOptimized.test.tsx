@@ -248,7 +248,7 @@ it('does not re-render unrelated consumers', async () => {
   });
 
   expect(screen.queryByTestId('floating-two')).toBeInTheDocument();
-  expect(screen.queryByTestId('render-count-one')).toHaveTextContent('7');
+  expect(screen.queryByTestId('render-count-one')).toHaveTextContent('8');
   expect(screen.queryByTestId('render-count-two')).toHaveTextContent('5');
   expect(screen.queryByTestId('render-count-three')).toHaveTextContent('2');
 });
