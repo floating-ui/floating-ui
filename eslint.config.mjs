@@ -12,6 +12,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   react.configs.flat.recommended,
   tseslint.configs.recommended,
+  reactHooks.configs['recommended-latest'],
   {
     languageOptions: {
       globals: {
@@ -22,9 +23,6 @@ export default tseslint.config(
       parserOptions: {
         ecmaVersion: 'latest',
       },
-    },
-    plugins: {
-      'react-hooks': reactHooks,
     },
     rules: {
       'no-undef': 'off',
@@ -45,7 +43,6 @@ export default tseslint.config(
       ],
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': [
         'error',
         {
