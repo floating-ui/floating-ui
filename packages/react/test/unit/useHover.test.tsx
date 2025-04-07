@@ -4,6 +4,9 @@ import {vi, test} from 'vitest';
 
 import {useFloating, useHover, useInteractions} from '../../src';
 import type {UseHoverProps} from '../../src/hooks/useHover';
+import {Popover} from '../visual/components/Popover';
+import {Button} from '../visual/lib/Button';
+import userEvent from '@testing-library/user-event';
 
 vi.useFakeTimers();
 
@@ -303,4 +306,66 @@ test('reason string', async () => {
   fireEvent.mouseEnter(button);
   await act(async () => {});
   fireEvent.mouseLeave(button);
+});
+
+test('cleans up blockPointerEvents if trigger changes', async () => {
+  vi.useRealTimers();
+  const user = userEvent.setup();
+  render(
+    <Popover
+      hover={false}
+      modal={false}
+      bubbles={true}
+      render={({labelId, descriptionId, close}) => (
+        <>
+          <h2 id={labelId} className="text-2xl font-bold mb-2">
+            Parent title
+          </h2>
+          <p id={descriptionId} className="mb-2">
+            Description
+          </p>
+          <Popover
+            hover={true}
+            modal={false}
+            bubbles={true}
+            render={({labelId, descriptionId, close}) => (
+              <>
+                <h2 id={labelId} className="text-2xl font-bold mb-2">
+                  Child title
+                </h2>
+                <p id={descriptionId} className="mb-2">
+                  Description
+                </p>
+                <button onClick={close} className="font-bold">
+                  Close
+                </button>
+              </>
+            )}
+          >
+            <Button>Open child</Button>
+          </Popover>
+          <button onClick={close} className="font-bold">
+            Close
+          </button>
+        </>
+      )}
+    >
+      <Button>Open parent</Button>
+    </Popover>,
+  );
+
+  await user.click(screen.getByText('Open parent'));
+  expect(screen.getByText('Parent title')).toBeInTheDocument();
+  await user.click(screen.getByText('Open child'));
+  expect(screen.getByText('Child title')).toBeInTheDocument();
+  await user.click(screen.getByText('Child title'));
+  // clean up blockPointerEvents
+  // userEvent.unhover does not work because of the pointer-events
+  fireEvent.mouseLeave(screen.getByRole('dialog', {name: 'Child title'}));
+  expect(screen.getByText('Child title')).toBeInTheDocument();
+  await user.click(screen.getByText('Parent title'));
+  // screen.debug();
+  expect(screen.getByText('Parent title')).toBeInTheDocument();
+
+  vi.useFakeTimers();
 });

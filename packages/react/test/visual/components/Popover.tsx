@@ -7,12 +7,14 @@ import {
   FloatingPortal,
   FloatingTree,
   offset,
+  safePolygon,
   shift,
   useClick,
   useDismiss,
   useFloating,
   useFloatingNodeId,
   useFloatingParentNodeId,
+  useHover,
   useId,
   useInteractions,
   useRole,
@@ -116,6 +118,7 @@ interface Props {
   modal?: boolean;
   children?: React.ReactElement<HTMLElement>;
   bubbles?: boolean;
+  hover?: boolean;
 }
 
 function PopoverComponent({
@@ -124,6 +127,7 @@ function PopoverComponent({
   placement,
   modal = true,
   bubbles = true,
+  hover = false,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -142,6 +146,10 @@ function PopoverComponent({
   const descriptionId = `${id}-description`;
 
   const {getReferenceProps, getFloatingProps} = useInteractions([
+    useHover(context, {
+      enabled: hover,
+      handleClose: safePolygon({blockPointerEvents: true}),
+    }),
     useClick(context),
     useRole(context),
     useDismiss(context, {
