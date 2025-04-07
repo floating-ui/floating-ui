@@ -258,7 +258,10 @@ export function useHover(
     }
 
     function onReferenceMouseLeave(event: MouseEvent) {
-      if (isClickLikeOpenEvent()) return;
+      if (isClickLikeOpenEvent()) {
+        clearPointerEvents();
+        return;
+      }
 
       unbindMouseMoveRef.current();
 
