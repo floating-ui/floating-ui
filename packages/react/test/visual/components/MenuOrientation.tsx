@@ -389,7 +389,7 @@ export const Menu = React.forwardRef<
   return <MenuComponent {...props} ref={ref} />;
 });
 
-export const Main = () => {
+export const HorizontalMenu = () => {
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Horizontal menu</h1>
@@ -415,6 +415,13 @@ export const Main = () => {
           </Menu>
         </Menu>
       </div>
+    </>
+  );
+};
+
+export const VerticalMenu = () => {
+  return (
+    <>
       <h1 className="text-5xl font-bold mb-8">Vertical menu</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <Menu label="Edit">
@@ -438,6 +445,13 @@ export const Main = () => {
           </Menu>
         </Menu>
       </div>
+    </>
+  );
+};
+
+export const HorizontalMenuWithHorizontalSubmenus = () => {
+  return (
+    <>
       <h1 className="text-5xl font-bold mb-8">
         Horizontal menu with horizontal submenus
       </h1>
@@ -463,6 +477,16 @@ export const Main = () => {
           </Menu>
         </Menu>
       </div>
+    </>
+  );
+};
+
+export const Main = () => {
+  return (
+    <>
+      <HorizontalMenu />
+      <VerticalMenu />
+      <HorizontalMenuWithHorizontalSubmenus />
     </>
   );
 };
