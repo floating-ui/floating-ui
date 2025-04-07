@@ -358,6 +358,7 @@ export function useHover(
       reference.addEventListener('mouseleave', onReferenceMouseLeave);
 
       if (floating) {
+        floating.addEventListener('mouseleave', onScrollMouseLeave);
         floating.addEventListener('mouseenter', onFloatingMouseEnter);
         floating.addEventListener('mouseleave', onFloatingMouseLeave);
       }
@@ -375,6 +376,7 @@ export function useHover(
         reference.removeEventListener('mouseleave', onReferenceMouseLeave);
 
         if (floating) {
+          floating.removeEventListener('mouseleave', onScrollMouseLeave);
           floating.removeEventListener('mouseenter', onFloatingMouseEnter);
           floating.removeEventListener('mouseleave', onFloatingMouseLeave);
         }
