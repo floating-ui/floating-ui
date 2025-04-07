@@ -36,7 +36,7 @@ export const Main = () => {
         <div className="flex gap-1">
           <FloatingDelayGroupOptimized
             delay={{open: 500, close: 200}}
-            timeoutMs={200}
+            timeoutMs={400}
           >
             <Tooltip label="My tooltip">
               <Button>My button</Button>
@@ -87,17 +87,8 @@ export function Tooltip({
     dismiss,
   ]);
 
-  const instantDuration = 0;
-  const openDuration = 750;
-  const closeDuration = 250;
-
   const {isMounted, styles} = useTransitionStyles(context, {
-    duration: delayGroup.isInstantPhase
-      ? instantDuration
-      : {
-          open: openDuration,
-          close: closeDuration,
-        },
+    duration: delayGroup.isInstantPhase ? 0 : 250,
     initial: {
       opacity: 0,
       scale: '0.925',

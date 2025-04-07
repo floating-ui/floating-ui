@@ -5,33 +5,33 @@ import {getDelay} from '../hooks/useHover';
 import type {FloatingRootContext, Delay} from '../types';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
-interface GroupContext {
+interface ContextValue {
   hasProvider: boolean;
   timeoutMs: number;
   delayRef: React.MutableRefObject<Delay>;
   initialDelayRef: React.MutableRefObject<Delay>;
+  timeoutIdRef: React.MutableRefObject<number>;
   currentIdRef: React.MutableRefObject<any>;
   currentContextRef: React.MutableRefObject<{
     onOpenChange: (open: boolean) => void;
     setIsInstantPhase: (value: boolean) => void;
   } | null>;
-  timeoutIdRef: React.MutableRefObject<number>;
 }
 
-const FloatingDelayGroupContext = React.createContext<GroupContext>({
+const FloatingDelayGroupOptimizedContext = React.createContext<ContextValue>({
   hasProvider: false,
   timeoutMs: 0,
   delayRef: {current: 0},
   initialDelayRef: {current: 0},
+  timeoutIdRef: {current: -1},
   currentIdRef: {current: null},
   currentContextRef: {current: null},
-  timeoutIdRef: {current: -1},
 });
 
 export interface FloatingDelayGroupOptimizedProps {
   children?: React.ReactNode;
   /**
-   * The delay to use for the group.
+   * The delay to use for the group when it's not in the instant phase.
    */
   delay: Delay;
   /**
@@ -61,7 +61,7 @@ export function FloatingDelayGroupOptimized(
   const timeoutIdRef = React.useRef(-1);
 
   return (
-    <FloatingDelayGroupContext.Provider
+    <FloatingDelayGroupOptimizedContext.Provider
       value={React.useMemo(
         () => ({
           hasProvider: true,
@@ -76,11 +76,11 @@ export function FloatingDelayGroupOptimized(
       )}
     >
       {children}
-    </FloatingDelayGroupContext.Provider>
+    </FloatingDelayGroupOptimizedContext.Provider>
   );
 }
 
-interface UseGroupOptions {
+interface UseDelayGroupOptimizedOptions {
   /**
    * Whether delay grouping should be enabled.
    * @default true
@@ -88,7 +88,7 @@ interface UseGroupOptions {
   enabled?: boolean;
 }
 
-interface UseGroupReturn {
+interface UseDelayGroupOptimizedReturn {
   /**
    * The delay reference object.
    */
@@ -111,12 +111,12 @@ interface UseGroupReturn {
  */
 export function useDelayGroupOptimized(
   context: FloatingRootContext,
-  options: UseGroupOptions = {},
-): UseGroupReturn {
+  options: UseDelayGroupOptimizedOptions = {},
+): UseDelayGroupOptimizedReturn {
   const {open, onOpenChange, floatingId} = context;
   const {enabled = true} = options;
 
-  const groupContext = React.useContext(FloatingDelayGroupContext);
+  const groupContext = React.useContext(FloatingDelayGroupOptimizedContext);
   const {
     currentIdRef,
     delayRef,
