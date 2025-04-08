@@ -733,7 +733,7 @@ export function FloatingFocusManager(
     if (disabled) return;
     if (!floatingFocusElement) return;
     if (typeof MutationObserver !== 'function') return;
-    if (ignoreInitialFocus) return;
+    if (floatingFocusElement.getAttribute('role') === 'listbox') return;
 
     const handleMutation = () => {
       const tabIndex = floatingFocusElement.getAttribute('tabindex');
@@ -747,7 +747,7 @@ export function FloatingFocusManager(
 
       if (
         orderRef.current.includes('floating') ||
-        (activeEl !== domReference && tabbableContent.length === 0)
+        tabbableContent.length === 0
       ) {
         if (tabIndex !== '0') {
           floatingFocusElement.setAttribute('tabindex', '0');
