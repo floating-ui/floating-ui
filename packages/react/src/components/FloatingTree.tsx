@@ -3,7 +3,7 @@ import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
 import type {FloatingNodeType, FloatingTreeType, ReferenceType} from '../types';
-import {createPubSub} from '../utils/createPubSub';
+import {createEventEmitter} from '../utils/createEventEmitter';
 
 const FloatingNodeContext = React.createContext<FloatingNodeType | null>(null);
 const FloatingTreeContext = React.createContext<FloatingTreeType | null>(null);
@@ -95,7 +95,7 @@ export function FloatingTree(props: FloatingTreeProps): React.JSX.Element {
     nodesRef.current = nodesRef.current.filter((n) => n !== node);
   }, []);
 
-  const events = React.useState(() => createPubSub())[0];
+  const [events] = React.useState(() => createEventEmitter());
 
   return (
     <FloatingTreeContext.Provider

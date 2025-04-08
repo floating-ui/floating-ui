@@ -3,7 +3,7 @@ import {isElement} from '@floating-ui/utils/dom';
 import type {FloatingRootContext, ReferenceElement} from '../types';
 import type {ContextData, OpenChangeReason} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
-import {createPubSub} from '../utils/createPubSub';
+import {createEventEmitter} from '../utils/createEventEmitter';
 import {useId} from './useId';
 import {useFloatingParentNodeId} from '../components/FloatingTree';
 import {error} from '../utils/log';
@@ -32,7 +32,7 @@ export function useFloatingRootContext(
 
   const floatingId = useId();
   const dataRef = React.useRef<ContextData>({});
-  const [events] = React.useState(() => createPubSub());
+  const [events] = React.useState(() => createEventEmitter());
   const nested = useFloatingParentNodeId() != null;
 
   if (__DEV__) {
