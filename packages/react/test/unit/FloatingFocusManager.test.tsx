@@ -2075,6 +2075,7 @@ test('floating element closes upon tabbing out of modal combobox', async () => {
               ref={refs.setFloating}
               {...getFloatingProps()}
               data-testid="floating"
+              role="listbox"
             >
               <button tabIndex={-1}>one</button>
             </div>
@@ -2258,4 +2259,89 @@ describe('getInsideElements', () => {
       'data-floating-ui-inert',
     );
   });
+});
+
+test('floating element with no focusable elements and no listbox role gets tabIndex=0 when initialFocus is -1', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    return (
+      <>
+        <button
+          data-testid="reference"
+          ref={refs.setReference}
+          onClick={() => setIsOpen(true)}
+        />
+        {isOpen && (
+          <FloatingFocusManager
+            context={context}
+            initialFocus={-1}
+            modal={false}
+          >
+            <div ref={refs.setFloating} data-testid="floating" />
+          </FloatingFocusManager>
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+  await userEvent.click(screen.getByTestId('reference'));
+  await act(async () => {});
+
+  expect(screen.getByTestId('floating')).toHaveAttribute('tabindex', '0');
+});
+
+test('floating element with listbox role ignores tabIndex setting', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const click = useClick(context);
+    const {getReferenceProps, getFloatingProps} = useInteractions([click]);
+
+    return (
+      <>
+        <button
+          data-testid="reference"
+          ref={refs.setReference}
+          onClick={() => setIsOpen(true)}
+          {...getReferenceProps()}
+        >
+          ref
+        </button>
+        {isOpen && (
+          <FloatingFocusManager
+            context={context}
+            initialFocus={-1}
+            modal={false}
+          >
+            <div
+              ref={refs.setFloating}
+              role="listbox"
+              data-testid="floating"
+              {...getFloatingProps()}
+            >
+              floating
+            </div>
+          </FloatingFocusManager>
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+  await userEvent.click(screen.getByTestId('reference'));
+  await act(async () => {});
+
+  expect(screen.getByTestId('floating')).toHaveAttribute('tabindex', '-1');
 });
