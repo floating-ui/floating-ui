@@ -18,7 +18,7 @@ interface ContextValue {
   } | null>;
 }
 
-const FloatingDelayGroupOptimizedContext = React.createContext<ContextValue>({
+const NextFloatingDelayGroupContext = React.createContext<ContextValue>({
   hasProvider: false,
   timeoutMs: 0,
   delayRef: {current: 0},
@@ -28,7 +28,7 @@ const FloatingDelayGroupOptimizedContext = React.createContext<ContextValue>({
   currentContextRef: {current: null},
 });
 
-export interface FloatingDelayGroupOptimizedProps {
+export interface NextFloatingDelayGroupProps {
   children?: React.ReactNode;
   /**
    * The delay to use for the group when it's not in the instant phase.
@@ -44,13 +44,16 @@ export interface FloatingDelayGroupOptimizedProps {
 }
 
 /**
+ * Experimental next version of `FloatingDelayGroup` to become the default
+ * in the future. This component is not yet stable.
  * Provides context for a group of floating elements that should share a
- * `delay`. Unlike `FloatingDelayGroup`, this component does not cause a re-render
- * of unrelated consumers of the context when the delay changes.
+ * `delay`. Unlike `FloatingDelayGroup`, `useNextDelayGroup` with this
+ * component does not cause a re-render of unrelated consumers of the
+ * context when the delay changes.
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
-export function FloatingDelayGroupOptimized(
-  props: FloatingDelayGroupOptimizedProps,
+export function NextFloatingDelayGroup(
+  props: NextFloatingDelayGroupProps,
 ): React.JSX.Element {
   const {children, delay, timeoutMs = 0} = props;
 
@@ -61,7 +64,7 @@ export function FloatingDelayGroupOptimized(
   const timeoutIdRef = React.useRef(-1);
 
   return (
-    <FloatingDelayGroupOptimizedContext.Provider
+    <NextFloatingDelayGroupContext.Provider
       value={React.useMemo(
         () => ({
           hasProvider: true,
@@ -76,11 +79,11 @@ export function FloatingDelayGroupOptimized(
       )}
     >
       {children}
-    </FloatingDelayGroupOptimizedContext.Provider>
+    </NextFloatingDelayGroupContext.Provider>
   );
 }
 
-interface UseDelayGroupOptimizedOptions {
+interface UseNextDelayGroupOptions {
   /**
    * Whether delay grouping should be enabled.
    * @default true
@@ -88,7 +91,7 @@ interface UseDelayGroupOptimizedOptions {
   enabled?: boolean;
 }
 
-interface UseDelayGroupOptimizedReturn {
+interface UseNextDelayGroupReturn {
   /**
    * The delay reference object.
    */
@@ -98,25 +101,24 @@ interface UseDelayGroupOptimizedReturn {
    */
   isInstantPhase: boolean;
   /**
-   * Whether a `<FloatingDelayGroupOptimized>` provider is present.
+   * Whether a `<NextFloatingDelayGroup>` provider is present.
    */
   hasProvider: boolean;
 }
 
 /**
  * Enables grouping when called inside a component that's a child of a
- * `FloatingDelayGroupOptimized`. Unlike `useDelayGroup`, this hook does not
- * cause a re-render of unrelated consumers of the context when the delay changes.
+ * `NextFloatingDelayGroup`.
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
-export function useDelayGroupOptimized(
+export function useNextDelayGroup(
   context: FloatingRootContext,
-  options: UseDelayGroupOptimizedOptions = {},
-): UseDelayGroupOptimizedReturn {
+  options: UseNextDelayGroupOptions = {},
+): UseNextDelayGroupReturn {
   const {open, onOpenChange, floatingId} = context;
   const {enabled = true} = options;
 
-  const groupContext = React.useContext(FloatingDelayGroupOptimizedContext);
+  const groupContext = React.useContext(NextFloatingDelayGroupContext);
   const {
     currentIdRef,
     delayRef,

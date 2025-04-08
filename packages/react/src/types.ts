@@ -10,7 +10,7 @@ import type {ExtendedUserProps} from './hooks/useInteractions';
 export * from '.';
 export type {FloatingArrowProps} from './components/FloatingArrow';
 export type {FloatingDelayGroupProps} from './components/FloatingDelayGroup';
-export type {FloatingDelayGroupOptimizedProps} from './components/FloatingDelayGroupOptimized';
+export type {NextFloatingDelayGroupProps} from './components/NextFloatingDelayGroup';
 export type {FloatingFocusManagerProps} from './components/FloatingFocusManager';
 export type {FloatingOverlayProps} from './components/FloatingOverlay';
 export type {

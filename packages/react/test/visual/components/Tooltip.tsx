@@ -2,11 +2,11 @@ import type {Placement} from '@floating-ui/react';
 import {
   autoUpdate,
   flip,
-  FloatingDelayGroupOptimized,
+  NextFloatingDelayGroup,
   FloatingPortal,
   offset,
   shift,
-  useDelayGroupOptimized,
+  useNextDelayGroup,
   useDismiss,
   useFloating,
   useFocus,
@@ -34,7 +34,7 @@ export const Main = () => {
       <h1 className="text-5xl font-bold mb-8">Tooltip</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <div className="flex gap-1">
-          <FloatingDelayGroupOptimized
+          <NextFloatingDelayGroup
             delay={{open: 500, close: 200}}
             timeoutMs={400}
           >
@@ -47,7 +47,7 @@ export const Main = () => {
             <Tooltip label="My tooltip 3">
               <Button>My button</Button>
             </Tooltip>
-          </FloatingDelayGroupOptimized>
+          </NextFloatingDelayGroup>
         </div>
       </div>
     </>
@@ -70,7 +70,7 @@ export function Tooltip({
     whileElementsMounted: autoUpdate,
   });
 
-  const delayGroup = useDelayGroupOptimized(context);
+  const delayGroup = useNextDelayGroup(context);
 
   const hover = useHover(context, {
     delay: delayGroup.hasProvider ? () => delayGroup.delayRef.current : delay,

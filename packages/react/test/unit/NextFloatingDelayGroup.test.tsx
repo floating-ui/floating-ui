@@ -4,8 +4,8 @@ import {cloneElement, useState} from 'react';
 import {vi} from 'vitest';
 
 import {
-  FloatingDelayGroupOptimized,
-  useDelayGroupOptimized,
+  NextFloatingDelayGroup,
+  useNextDelayGroup,
   useFloating,
   useHover,
   useInteractions,
@@ -26,7 +26,7 @@ export const Tooltip = ({children, label}: Props) => {
     onOpenChange: setOpen,
   });
 
-  const {delayRef} = useDelayGroupOptimized(context);
+  const {delayRef} = useNextDelayGroup(context);
   const hover = useHover(context, {delay: () => delayRef.current});
   const {getReferenceProps} = useInteractions([hover]);
 
@@ -69,7 +69,7 @@ export const Tooltip = ({children, label}: Props) => {
 
 function App() {
   return (
-    <FloatingDelayGroupOptimized delay={{open: 1000, close: 200}}>
+    <NextFloatingDelayGroup delay={{open: 1000, close: 200}}>
       <Tooltip label="one">
         <button data-testid="reference-one" />
       </Tooltip>
@@ -79,7 +79,7 @@ function App() {
       <Tooltip label="three">
         <button data-testid="reference-three" />
       </Tooltip>
-    </FloatingDelayGroupOptimized>
+    </NextFloatingDelayGroup>
   );
 }
 
@@ -136,10 +136,7 @@ test('groups delays correctly', async () => {
 test('timeoutMs', async () => {
   function App() {
     return (
-      <FloatingDelayGroupOptimized
-        delay={{open: 1000, close: 100}}
-        timeoutMs={500}
-      >
+      <NextFloatingDelayGroup delay={{open: 1000, close: 100}} timeoutMs={500}>
         <Tooltip label="one">
           <button data-testid="reference-one" />
         </Tooltip>
@@ -149,7 +146,7 @@ test('timeoutMs', async () => {
         <Tooltip label="three">
           <button data-testid="reference-three" />
         </Tooltip>
-      </FloatingDelayGroupOptimized>
+      </NextFloatingDelayGroup>
     );
   }
 
@@ -206,10 +203,7 @@ test('timeoutMs', async () => {
 it('does not re-render unrelated consumers', async () => {
   function App() {
     return (
-      <FloatingDelayGroupOptimized
-        delay={{open: 1000, close: 100}}
-        timeoutMs={500}
-      >
+      <NextFloatingDelayGroup delay={{open: 1000, close: 100}} timeoutMs={500}>
         <Tooltip label="one">
           <button data-testid="reference-one" />
         </Tooltip>
@@ -219,7 +213,7 @@ it('does not re-render unrelated consumers', async () => {
         <Tooltip label="three">
           <button data-testid="reference-three" />
         </Tooltip>
-      </FloatingDelayGroupOptimized>
+      </NextFloatingDelayGroup>
     );
   }
 
