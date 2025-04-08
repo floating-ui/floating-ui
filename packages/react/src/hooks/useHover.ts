@@ -12,6 +12,7 @@ import {
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {
+  Delay,
   ElementProps,
   FloatingContext,
   FloatingRootContext,
@@ -51,7 +52,22 @@ export function getDelay(
     return value;
   }
 
+  if (typeof value === 'function') {
+    const result = value();
+    if (typeof result === 'number') {
+      return result;
+    }
+    return result?.[prop];
+  }
+
   return value?.[prop];
+}
+
+function getRestMs(value: number | (() => number)) {
+  if (typeof value === 'function') {
+    return value();
+  }
+  return value;
 }
 
 export interface UseHoverProps {
@@ -70,16 +86,16 @@ export interface UseHoverProps {
   handleClose?: HandleCloseFn | null;
   /**
    * Waits until the user’s cursor is at “rest” over the reference element
-   *  before changing the `open` state.
+   * before changing the `open` state.
    * @default 0
    */
-  restMs?: number;
+  restMs?: number | (() => number);
   /**
    * Waits for the specified time when the event listener runs before changing
    * the `open` state.
    * @default 0
    */
-  delay?: number | {open?: number; close?: number};
+  delay?: Delay | (() => Delay);
   /**
    * Whether the logic only runs for mouse input, ignoring touch input.
    * Note: due to a bug with Linux Chrome, "pen" inputs are considered "mouse".
@@ -118,6 +134,7 @@ export function useHover(
   const handleCloseRef = useLatestRef(handleClose);
   const delayRef = useLatestRef(delay);
   const openRef = useLatestRef(open);
+  const restMsRef = useLatestRef(restMs);
 
   const pointerTypeRef = React.useRef<string>();
   const timeoutRef = React.useRef(-1);
@@ -235,7 +252,8 @@ export function useHover(
 
       if (
         (mouseOnly && !isMouseLikePointerType(pointerTypeRef.current)) ||
-        (restMs > 0 && !getDelay(delayRef.current, 'open'))
+        (getRestMs(restMsRef.current) > 0 &&
+          !getDelay(delayRef.current, 'open'))
       ) {
         return;
       }
@@ -390,7 +408,6 @@ export function useHover(
     enabled,
     context,
     mouseOnly,
-    restMs,
     move,
     closeWithDelay,
     cleanupMouseMoveHandler,
@@ -403,6 +420,7 @@ export function useHover(
     handleCloseRef,
     dataRef,
     isClickLikeOpenEvent,
+    restMsRef,
   ]);
 
   // Block pointer-events of every element other than the reference and floating
@@ -493,7 +511,7 @@ export function useHover(
           return;
         }
 
-        if (open || restMs === 0) {
+        if (open || getRestMs(restMsRef.current) === 0) {
           return;
         }
 
@@ -511,11 +529,14 @@ export function useHover(
           handleMouseMove();
         } else {
           restTimeoutPendingRef.current = true;
-          restTimeoutRef.current = window.setTimeout(handleMouseMove, restMs);
+          restTimeoutRef.current = window.setTimeout(
+            handleMouseMove,
+            getRestMs(restMsRef.current),
+          );
         }
       },
     };
-  }, [mouseOnly, onOpenChange, open, openRef, restMs]);
+  }, [mouseOnly, onOpenChange, open, openRef, restMsRef]);
 
   return React.useMemo(
     () => (enabled ? {reference} : {}),

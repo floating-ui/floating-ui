@@ -9,6 +9,8 @@ import type {ExtendedUserProps} from './hooks/useInteractions';
 
 export * from '.';
 export type {FloatingArrowProps} from './components/FloatingArrow';
+export type {FloatingDelayGroupProps} from './components/FloatingDelayGroup';
+export type {NextFloatingDelayGroupProps} from './components/NextFloatingDelayGroup';
 export type {FloatingFocusManagerProps} from './components/FloatingFocusManager';
 export type {FloatingOverlayProps} from './components/FloatingOverlay';
 export type {
@@ -110,6 +112,8 @@ export type OpenChangeReason =
   | 'focus-out'
   | 'list-navigation'
   | 'safe-polygon';
+
+export type Delay = number | Partial<{open: number; close: number}>;
 
 export type NarrowedElement<T> = T extends Element ? T : Element;
 

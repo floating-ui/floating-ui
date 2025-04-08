@@ -2,11 +2,11 @@ import type {Placement} from '@floating-ui/react';
 import {
   autoUpdate,
   flip,
-  FloatingDelayGroup,
+  NextFloatingDelayGroup,
   FloatingPortal,
   offset,
   shift,
-  useDelayGroup,
+  useNextDelayGroup,
   useDismiss,
   useFloating,
   useFocus,
@@ -33,13 +33,11 @@ export const Main = () => {
     <>
       <h1 className="text-5xl font-bold mb-8">Tooltip</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
-        <Tooltip label="My tooltip">
-          <Button>My button</Button>
-        </Tooltip>
-      </div>
-      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <div className="flex gap-1">
-          <FloatingDelayGroup delay={{open: 500, close: 200}} timeoutMs={200}>
+          <NextFloatingDelayGroup
+            delay={{open: 500, close: 200}}
+            timeoutMs={400}
+          >
             <Tooltip label="My tooltip">
               <Button>My button</Button>
             </Tooltip>
@@ -49,7 +47,7 @@ export const Main = () => {
             <Tooltip label="My tooltip 3">
               <Button>My button</Button>
             </Tooltip>
-          </FloatingDelayGroup>
+          </NextFloatingDelayGroup>
         </div>
       </div>
     </>
@@ -72,10 +70,10 @@ export function Tooltip({
     whileElementsMounted: autoUpdate,
   });
 
-  const {delay: groupDelay, currentId, isInstantPhase} = useDelayGroup(context);
+  const delayGroup = useNextDelayGroup(context);
 
   const hover = useHover(context, {
-    delay: groupDelay === 0 ? delay : groupDelay,
+    delay: delayGroup.hasProvider ? () => delayGroup.delayRef.current : delay,
     move: false,
   });
   const focus = useFocus(context);
@@ -89,21 +87,8 @@ export function Tooltip({
     dismiss,
   ]);
 
-  const instantDuration = 0;
-  const openDuration = 750;
-  const closeDuration = 250;
-
   const {isMounted, styles} = useTransitionStyles(context, {
-    duration: isInstantPhase
-      ? {
-          open: instantDuration,
-          close:
-            currentId === context.floatingId ? closeDuration : instantDuration,
-        }
-      : {
-          open: openDuration,
-          close: closeDuration,
-        },
+    duration: delayGroup.isInstantPhase ? 0 : 250,
     initial: {
       opacity: 0,
       scale: '0.925',
@@ -123,8 +108,8 @@ export function Tooltip({
     <>
       {isValidElement(children) &&
         cloneElement(children, getReferenceProps({ref: refs.setReference}))}
-      <FloatingPortal>
-        {isMounted && (
+      {isMounted && (
+        <FloatingPortal>
           <div
             role="presentation"
             ref={refs.setFloating}
@@ -138,8 +123,8 @@ export function Tooltip({
               {label}
             </div>
           </div>
-        )}
-      </FloatingPortal>
+        </FloatingPortal>
+      )}
     </>
   );
 }

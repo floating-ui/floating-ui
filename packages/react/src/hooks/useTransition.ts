@@ -4,6 +4,8 @@ import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 import {useLatestRef} from './utils/useLatestRef';
 
+type Duration = number | {open?: number; close?: number};
+
 // Converts a JS style key like `backgroundColor` to a CSS transition-property
 // like `background-color`.
 const camelCaseToKebabCase = (str: string): string =>
@@ -41,7 +43,7 @@ export interface UseTransitionStatusProps {
    * The duration of the transition in milliseconds, or an object containing
    * `open` and `close` keys for different durations.
    */
-  duration?: number | {open?: number; close?: number};
+  duration?: Duration;
 }
 
 type TransitionStatus = 'unmounted' | 'initial' | 'open' | 'close';
