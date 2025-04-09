@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
@@ -83,7 +84,12 @@ export function useTransitionStatus(
       setStatus('initial');
 
       const frame = requestAnimationFrame(() => {
-        setStatus('open');
+        // Ensure it opens before paint. With `FloatingDelayGroup`,
+        // this avoids a flicker when moving between floating elements
+        // to ensure one is always open with no missing frames.
+        ReactDOM.flushSync(() => {
+          setStatus('open');
+        });
       });
 
       return () => {
