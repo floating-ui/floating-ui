@@ -408,6 +408,32 @@ describe('focusItemOnOpen', () => {
   });
 });
 
+describe('selectedIndex', () => {
+  test('scrollIntoView on open', ({onTestFinished}) => {
+    const origins = {
+      requestAnimationFrame: vi
+        .mocked(requestAnimationFrame)
+        .getMockImplementation() as typeof requestAnimationFrame,
+      scrollIntoView: HTMLElement.prototype.scrollIntoView,
+    };
+    onTestFinished(() => {
+      HTMLElement.prototype.scrollIntoView = origins.scrollIntoView;
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
+        origins.requestAnimationFrame,
+      );
+    });
+    const spy = vi.fn();
+    vi.useFakeTimers({toFake: ['requestAnimationFrame']});
+    HTMLElement.prototype.scrollIntoView = spy;
+    vi.mocked(requestAnimationFrame).mockRestore();
+    render(<App selectedIndex={0} />);
+    fireEvent.click(screen.getByRole('button'));
+    vi.advanceTimersToNextFrame();
+    expect(spy).toHaveBeenCalledTimes(1);
+    cleanup();
+  });
+});
+
 describe('allowEscape + virtual', () => {
   test('true', () => {
     render(<App allowEscape={true} virtual loop />);

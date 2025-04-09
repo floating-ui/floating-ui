@@ -344,6 +344,7 @@ export function useListNavigation(
     }
 
     const initialItem = listRef.current[indexRef.current];
+    const forceScrollIntoView = forceScrollIntoViewRef.current;
 
     if (initialItem) {
       runFocus(initialItem);
@@ -366,7 +367,7 @@ export function useListNavigation(
       const shouldScrollIntoView =
         scrollIntoViewOptions &&
         item &&
-        (forceScrollIntoViewRef.current || !isPointerModalityRef.current);
+        (forceScrollIntoView || !isPointerModalityRef.current);
 
       if (shouldScrollIntoView) {
         // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
