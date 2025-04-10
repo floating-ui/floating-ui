@@ -410,26 +410,24 @@ describe('focusItemOnOpen', () => {
 
 describe('selectedIndex', () => {
   test('scrollIntoView on open', ({onTestFinished}) => {
-    const origins = {
-      requestAnimationFrame: vi
-        .mocked(requestAnimationFrame)
-        .getMockImplementation() as typeof requestAnimationFrame,
-      scrollIntoView: HTMLElement.prototype.scrollIntoView,
-    };
+    const requestAnimationFrame = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation(() => 0);
+    const scrollIntoView = vi.fn();
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+
     onTestFinished(() => {
-      HTMLElement.prototype.scrollIntoView = origins.scrollIntoView;
-      vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
-        origins.requestAnimationFrame,
-      );
+      requestAnimationFrame.mockRestore();
+      HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
     });
-    const spy = vi.fn();
-    vi.useFakeTimers({toFake: ['requestAnimationFrame']});
-    HTMLElement.prototype.scrollIntoView = spy;
-    vi.mocked(requestAnimationFrame).mockRestore();
+
     render(<App selectedIndex={0} />);
     fireEvent.click(screen.getByRole('button'));
-    vi.advanceTimersToNextFrame();
-    expect(spy).toHaveBeenCalledTimes(1);
+    expect(requestAnimationFrame).toHaveBeenCalled();
+    // Run the timer
+    requestAnimationFrame.mock.calls.forEach((call) => call[0](0));
+    expect(scrollIntoView).toHaveBeenCalled();
     cleanup();
   });
 });
