@@ -1,4 +1,4 @@
-import {cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
 import {
@@ -13,7 +13,11 @@ import type {UseRoleProps} from '../../src/hooks/useRole';
 function App({
   initiallyOpen = false,
   ...props
-}: UseRoleProps & {initiallyOpen?: boolean}) {
+}: UseRoleProps & {
+  initiallyOpen?: boolean;
+  referenceId?: string;
+  floatingId?: string;
+}) {
   const [open, setOpen] = useState(initiallyOpen);
   const {refs, context} = useFloating({
     open,
@@ -26,8 +30,9 @@ function App({
   return (
     <>
       <button
+        ref={refs.setReference}
         {...getReferenceProps({
-          ref: refs.setReference,
+          ...(props.referenceId && {id: props.referenceId}),
           onClick() {
             setOpen(!open);
           },
@@ -35,8 +40,9 @@ function App({
       />
       {open && (
         <div
+          ref={refs.setFloating}
           {...getFloatingProps({
-            ref: refs.setFloating,
+            ...(props.floatingId && {id: props.floatingId}),
           })}
         />
       )}
@@ -349,4 +355,14 @@ describe('combobox', () => {
 
     cleanup();
   });
+});
+
+it('automatically handles custom id attributes', async () => {
+  render(<App role="tooltip" floatingId="test" initiallyOpen />);
+  await act(async () => {});
+  expect(screen.getByRole('button')).toHaveAttribute(
+    'aria-describedby',
+    'test',
+  );
+  expect(screen.getByRole('tooltip')).toHaveAttribute('id', 'test');
 });

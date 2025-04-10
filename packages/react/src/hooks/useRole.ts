@@ -52,9 +52,9 @@ export function useRole(
   const {enabled = true, role = 'dialog'} = props;
 
   const defaultReferenceId = useId();
-  const referenceId = elements.domReference?.id ?? defaultReferenceId;
+  const referenceId = elements.domReference?.id || defaultReferenceId;
   const floatingId = React.useMemo(
-    () => getFloatingFocusElement(elements.floating)?.id ?? defaultFloatingId,
+    () => getFloatingFocusElement(elements.floating)?.id || defaultFloatingId,
     [elements.floating, defaultFloatingId],
   );
 
