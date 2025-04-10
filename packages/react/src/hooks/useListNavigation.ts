@@ -250,7 +250,7 @@ export function useListNavigation(
   context: FloatingRootContext,
   props: UseListNavigationProps,
 ): ElementProps {
-  const {open, onOpenChange, elements} = context;
+  const {open, onOpenChange, elements, floatingId} = context;
   const {
     listRef,
     activeIndex,
@@ -330,6 +330,9 @@ export function useListNavigation(
   const focusItem = useEffectEvent(() => {
     function runFocus(item: HTMLElement) {
       if (virtual) {
+        if (item.id?.endsWith('-fui-option')) {
+          item.id = `${floatingId}-${Math.random().toString(16).slice(2, 10)}`;
+        }
         setActiveId(item.id);
         tree?.events.emit('virtualfocus', item);
         if (virtualItemRef) {
