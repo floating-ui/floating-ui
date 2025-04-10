@@ -1217,7 +1217,11 @@ describe('disabled', () => {
           <button data-testid="toggle" onClick={() => setDisabled((v) => !v)} />
           {isOpen && (
             <FloatingFocusManager context={context} disabled={disabled}>
-              <div ref={refs.setFloating} data-testid="floating" />
+              <div
+                ref={refs.setFloating}
+                data-testid="floating"
+                role="dialog"
+              />
             </FloatingFocusManager>
           )}
         </>
@@ -2075,7 +2079,6 @@ test('floating element closes upon tabbing out of modal combobox', async () => {
               ref={refs.setFloating}
               {...getFloatingProps()}
               data-testid="floating"
-              role="listbox"
             >
               <button tabIndex={-1}>one</button>
             </div>
@@ -2283,7 +2286,7 @@ test('floating element with no focusable elements and no listbox role gets tabIn
             initialFocus={-1}
             modal={false}
           >
-            <div ref={refs.setFloating} data-testid="floating" />
+            <div ref={refs.setFloating} data-testid="floating" role="dialog" />
           </FloatingFocusManager>
         )}
       </>

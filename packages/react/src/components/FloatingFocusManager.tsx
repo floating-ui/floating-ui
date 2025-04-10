@@ -733,7 +733,12 @@ export function FloatingFocusManager(
     if (disabled) return;
     if (!floatingFocusElement) return;
     if (typeof MutationObserver !== 'function') return;
-    if (floatingFocusElement.getAttribute('role') === 'listbox') return;
+    if (
+      !orderRef.current.includes('floating') &&
+      !floatingFocusElement.getAttribute('role')?.includes('dialog')
+    ) {
+      return;
+    }
 
     const handleMutation = () => {
       const tabIndex = floatingFocusElement.getAttribute('tabindex');
