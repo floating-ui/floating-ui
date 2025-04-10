@@ -2,4 +2,4 @@
 "@floating-ui/react": patch
 ---
 
-fix(useFloating): correctly scroll to the selected index on open
+fix(useListNavigation): correctly scroll to the selected item on open when using a pointer and `FloatingFocusManager` `initialFocus` is not in use
