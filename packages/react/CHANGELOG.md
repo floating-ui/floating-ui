@@ -1,5 +1,21 @@
 # @floating-ui/react
 
+## 0.27.7
+
+### Patch Changes
+
+- fix(useTransitionStatus): avoid browser from painting before floating element opens. With `FloatingDelayGroup`, this avoids a flicker when moving between floating elements to ensure one is always open with no missing frames.
+- fix(useListNavigation): correctly scroll to the selected item on open when using a pointer and `FloatingFocusManager` `initialFocus` is not in use
+- fix(useHover): clean up blockPointerEvents when opened with click after hover
+- fix(useRole): improve "combobox" role
+- fix(useRole): handle custom id attributes
+- feat: experimental `NextFloatingDelayGroup` (and `useNextFloatingDelayGroup`). Unlike `FloatingDelayGroup`, this component doesn't cause a re-render of unrelated consumers of the context when the delay changes, improving performance. This will eventually become the new default for `FloatingDelayGroup` in v1 (`Next`), as [its API is different](https://github.com/floating-ui/floating-ui/pull/3274).
+- perf(FloatingFocusManager): ignore manual tabindex handling for non-dialog role floating elements
+- fix(useHover): prevent floating element unexpectedly closing when close to reference element when not using `safePolygon()` and a close delay
+- perf(useFloating): refactor `events` emitter
+- fix(FloatingFocusManager): ensure floating elements with no tabbable content are assigned `tabIndex=0` when `initialFocus` is -1
+- fix(useListNavigation): handle list navigation for nested lists with mixed orientation
+
 ## 0.27.6
 
 ### Patch Changes
