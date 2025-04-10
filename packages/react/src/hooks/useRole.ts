@@ -100,7 +100,7 @@ export function useRole(
     ({active, selected}: ExtendedUserProps) => {
       const commonProps = {
         role: 'option',
-        ...(active && {id: `${floatingId}-option`}),
+        ...(active && {id: `${floatingId}-fui-option`}),
       };
 
       // For `menu`, we are unable to tell if the item is a `menuitemradio`
@@ -115,7 +115,7 @@ export function useRole(
         case 'combobox': {
           return {
             ...commonProps,
-            ...(active && {'aria-selected': true}),
+            'aria-selected': selected,
           };
         }
       }
