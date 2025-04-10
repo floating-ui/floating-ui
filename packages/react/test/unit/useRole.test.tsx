@@ -334,7 +334,7 @@ describe('combobox', () => {
     expect(button.getAttribute('aria-expanded')).toBe('true');
     expect(button.getAttribute('aria-autocomplete')).toBe('list');
     expect(screen.getByTestId('item-1').getAttribute('aria-selected')).toBe(
-      null,
+      'false',
     );
     expect(screen.getByTestId('item-2').getAttribute('aria-selected')).toBe(
       'true',
