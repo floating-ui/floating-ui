@@ -1,5 +1,11 @@
 # @floating-ui/devtools
 
+## 0.2.3
+
+### Patch Changes
+
+- chore: add repository info for devtools in package.json
+
 ## 0.2.2
 
 ### Patch Changes
