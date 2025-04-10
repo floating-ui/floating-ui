@@ -4,6 +4,7 @@ import {useFloatingParentNodeId} from '../components/FloatingTree';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {useId} from './useId';
 import type {ExtendedUserProps} from './useInteractions';
+import {getFloatingFocusElement} from '../utils/getFloatingFocusElement';
 
 type AriaRole =
   | 'tooltip'
@@ -47,15 +48,21 @@ export function useRole(
   context: FloatingRootContext,
   props: UseRoleProps = {},
 ): ElementProps {
-  const {open, floatingId} = context;
+  const {open, elements, floatingId: defaultFloatingId} = context;
   const {enabled = true, role = 'dialog'} = props;
+
+  const defaultReferenceId = useId();
+  const referenceId = elements.domReference?.id ?? defaultReferenceId;
+  const floatingId = React.useMemo(
+    () => getFloatingFocusElement(elements.floating)?.id ?? defaultFloatingId,
+    [elements.floating, defaultFloatingId],
+  );
 
   const ariaRole = (componentRoleToAriaRoleMap.get(role) ?? role) as
     | AriaRole
     | false
     | undefined;
 
-  const referenceId = useId();
   const parentId = useFloatingParentNodeId();
   const isNested = parentId != null;
 
