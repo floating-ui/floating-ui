@@ -313,6 +313,7 @@ export function ComboboxDemo() {
                   }}
                   active={activeIndex === index}
                   {...getItemProps({
+                    active: activeIndex === index,
                     onClick() {
                       setInputValue(item);
                       setOpen(false);
