@@ -26,6 +26,12 @@ export function getRectRelativeToOffsetParent(
   let scroll = {scrollLeft: 0, scrollTop: 0};
   const offsets = createCoords(0);
 
+  // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
+  // Firefox with layout.scrollbar.side = 3 in about:config to test this.
+  function setLeftRTLScrollbarOffset() {
+    offsets.x = getWindowScrollBarX(documentElement);
+  }
+
   if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
     if (
       getNodeName(offsetParent) !== 'body' ||
@@ -44,10 +50,12 @@ export function getRectRelativeToOffsetParent(
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     } else if (documentElement) {
-      // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
-      // Firefox with layout.scrollbar.side = 3 in about:config to test this.
-      offsets.x = getWindowScrollBarX(documentElement);
+      setLeftRTLScrollbarOffset();
     }
+  }
+
+  if (isFixed && !isOffsetParentAnElement && documentElement) {
+    setLeftRTLScrollbarOffset();
   }
 
   const htmlOffset =
