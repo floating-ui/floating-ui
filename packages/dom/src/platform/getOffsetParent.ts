@@ -58,7 +58,7 @@ export function getOffsetParent(
   if (!isHTMLElement(element)) {
     let svgOffsetParent = getParentNode(element);
     while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
-      if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
+      if (isElement(svgOffsetParent) && isContainingBlock(svgOffsetParent)) {
         return svgOffsetParent;
       }
       svgOffsetParent = getParentNode(svgOffsetParent);
