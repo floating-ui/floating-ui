@@ -185,6 +185,13 @@ export interface UseListNavigationProps {
    */
   nested?: boolean;
   /**
+   * Allows to specify the orientation of the parent list, which is used to
+   * determine the direction of the navigation.
+   * This is useful when list navigation is used within a Composite,
+   * as the hook can't determine the orientation of the parent list automatically.
+   */
+  parentOrientation?: UseListNavigationProps['orientation'];
+  /**
    * Whether the direction of the floating element’s navigation is in RTL
    * layout.
    * @default false
@@ -267,6 +274,7 @@ export function useListNavigation(
     openOnArrowKeyDown = true,
     disabledIndices = undefined,
     orientation = 'vertical',
+    parentOrientation,
     cols = 1,
     scrollItemIntoView = true,
     virtualItemRef,
@@ -588,9 +596,12 @@ export function useListNavigation(
   ]);
 
   const getParentOrientation = React.useCallback(() => {
-    return tree?.nodesRef.current.find((node) => node.id === parentId)?.context
-      ?.dataRef?.current.orientation as UseListNavigationProps['orientation'];
-  }, [parentId, tree]);
+    return (
+      parentOrientation ??
+      (tree?.nodesRef.current.find((node) => node.id === parentId)?.context
+        ?.dataRef?.current.orientation as UseListNavigationProps['orientation'])
+    );
+  }, [parentId, tree, parentOrientation]);
 
   const commonOnKeyDown = useEffectEvent((event: React.KeyboardEvent) => {
     isPointerModalityRef.current = false;
