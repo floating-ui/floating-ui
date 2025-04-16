@@ -668,12 +668,12 @@ export function useListNavigation(
       const cellMap = buildCellMap(sizes, cols, dense);
       const minGridIndex = cellMap.findIndex(
         (index) =>
-          index != null && !isDisabled(listRef.current, index, disabledIndices),
+          index != null && !isDisabled(listRef, index, disabledIndices),
       );
       // last enabled index
       const maxGridIndex = cellMap.reduce(
         (foundIndex: number, index, cellIndex) =>
-          index != null && !isDisabled(listRef.current, index, disabledIndices)
+          index != null && !isDisabled(listRef, index, disabledIndices)
             ? cellIndex
             : foundIndex,
         -1,
@@ -699,7 +699,7 @@ export function useListNavigation(
                 [
                   ...(disabledIndices ||
                     listRef.current.map((_, index) =>
-                      isDisabled(listRef.current, index) ? index : undefined,
+                      isDisabled(listRef, index) ? index : undefined,
                     )),
                   undefined,
                 ],

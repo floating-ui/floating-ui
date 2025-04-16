@@ -51,15 +51,13 @@ export function findNonDisabledIndex(
     amount?: number;
   } = {},
 ): number {
-  const list = listRef.current;
-
   let index = startingIndex;
   do {
     index += decrement ? -amount : amount;
   } while (
     index >= 0 &&
-    index <= list.length - 1 &&
-    isDisabled(list, index, disabledIndices)
+    index <= listRef.current.length - 1 &&
+    isDisabled(listRef, index, disabledIndices)
   );
 
   return index;
@@ -318,7 +316,7 @@ export function getCellIndices(
 }
 
 export function isDisabled(
-  list: Array<HTMLElement | null>,
+  listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   index: number,
   disabledIndices?: Array<number>,
 ) {
@@ -326,7 +324,7 @@ export function isDisabled(
     return disabledIndices.includes(index);
   }
 
-  const element = list[index];
+  const element = listRef.current[index];
   return (
     element == null ||
     element.hasAttribute('disabled') ||

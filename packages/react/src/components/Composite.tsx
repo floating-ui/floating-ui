@@ -168,14 +168,12 @@ export const Composite = React.forwardRef<
       const cellMap = buildCellMap(sizes, cols, dense);
       const minGridIndex = cellMap.findIndex(
         (index) =>
-          index != null &&
-          !isDisabled(elementsRef.current, index, disabledIndices),
+          index != null && !isDisabled(elementsRef, index, disabledIndices),
       );
       // last enabled index
       const maxGridIndex = cellMap.reduce(
         (foundIndex: number, index, cellIndex) =>
-          index != null &&
-          !isDisabled(elementsRef.current, index, disabledIndices)
+          index != null && !isDisabled(elementsRef, index, disabledIndices)
             ? cellIndex
             : foundIndex,
         -1,
@@ -201,9 +199,7 @@ export const Composite = React.forwardRef<
                 [
                   ...(disabledIndices ||
                     elementsRef.current.map((_, index) =>
-                      isDisabled(elementsRef.current, index)
-                        ? index
-                        : undefined,
+                      isDisabled(elementsRef, index) ? index : undefined,
                     )),
                   undefined,
                 ],
