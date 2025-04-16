@@ -1,8 +1,10 @@
 import {isHTMLElement, isShadowRoot} from '@floating-ui/utils/dom';
 import type * as React from 'react';
 
-export * as composite from './utils/composite';
-export * as tabbable from './utils/tabbable';
+import * as composite from './utils/composite';
+import * as tabbable from './utils/tabbable';
+
+export {composite, tabbable};
 export {FocusGuard} from './components/FocusGuard';
 
 export function activeElement(doc: Document) {
