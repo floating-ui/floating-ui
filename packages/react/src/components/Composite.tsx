@@ -1,23 +1,8 @@
 import * as React from 'react';
+import {useEffectEvent, composite} from '@floating-ui/react/utils';
 
 import {useMergeRefs} from '../hooks/useMergeRefs';
-import {useEffectEvent} from '../hooks/utils/useEffectEvent';
 import type {Dimensions} from '../types';
-import {
-  ARROW_DOWN,
-  ARROW_LEFT,
-  ARROW_RIGHT,
-  ARROW_UP,
-  buildCellMap,
-  findNonDisabledIndex,
-  getCellIndexOfCorner,
-  getCellIndices,
-  getGridNavigatedIndex,
-  getMaxIndex,
-  getMinIndex,
-  isDisabled,
-  isIndexOutOfBounds,
-} from '../utils/composite';
 import {FloatingList, useListItem} from './FloatingList';
 
 function renderJsx(
@@ -100,8 +85,8 @@ export interface CompositeProps {
   dense?: boolean;
 }
 
-const horizontalKeys = [ARROW_LEFT, ARROW_RIGHT];
-const verticalKeys = [ARROW_UP, ARROW_DOWN];
+const horizontalKeys = [composite.ARROW_LEFT, composite.ARROW_RIGHT];
+const verticalKeys = [composite.ARROW_UP, composite.ARROW_DOWN];
 const allKeys = [...horizontalKeys, ...verticalKeys];
 
 /**
@@ -150,11 +135,13 @@ export const Composite = React.forwardRef<
     if (!allKeys.includes(event.key)) return;
 
     let nextIndex = activeIndex;
-    const minIndex = getMinIndex(elementsRef, disabledIndices);
-    const maxIndex = getMaxIndex(elementsRef, disabledIndices);
+    const minIndex = composite.getMinIndex(elementsRef, disabledIndices);
+    const maxIndex = composite.getMaxIndex(elementsRef, disabledIndices);
 
-    const horizontalEndKey = rtl ? ARROW_LEFT : ARROW_RIGHT;
-    const horizontalStartKey = rtl ? ARROW_RIGHT : ARROW_LEFT;
+    const horizontalEndKey = rtl ? composite.ARROW_LEFT : composite.ARROW_RIGHT;
+    const horizontalStartKey = rtl
+      ? composite.ARROW_RIGHT
+      : composite.ARROW_LEFT;
 
     if (isGrid) {
       const sizes =
@@ -165,15 +152,17 @@ export const Composite = React.forwardRef<
         }));
       // To calculate movements on the grid, we use hypothetical cell indices
       // as if every item was 1x1, then convert back to real indices.
-      const cellMap = buildCellMap(sizes, cols, dense);
+      const cellMap = composite.buildCellMap(sizes, cols, dense);
       const minGridIndex = cellMap.findIndex(
         (index) =>
-          index != null && !isDisabled(elementsRef, index, disabledIndices),
+          index != null &&
+          !composite.isDisabled(elementsRef, index, disabledIndices),
       );
       // last enabled index
       const maxGridIndex = cellMap.reduce(
         (foundIndex: number, index, cellIndex) =>
-          index != null && !isDisabled(elementsRef, index, disabledIndices)
+          index != null &&
+          !composite.isDisabled(elementsRef, index, disabledIndices)
             ? cellIndex
             : foundIndex,
         -1,
@@ -181,7 +170,7 @@ export const Composite = React.forwardRef<
 
       const maybeNextIndex =
         cellMap[
-          getGridNavigatedIndex(
+          composite.getGridNavigatedIndex(
             {
               current: cellMap.map((itemIndex) =>
                 itemIndex ? elementsRef.current[itemIndex] : null,
@@ -195,11 +184,13 @@ export const Composite = React.forwardRef<
               cols,
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
-              disabledIndices: getCellIndices(
+              disabledIndices: composite.getCellIndices(
                 [
                   ...(disabledIndices ||
                     elementsRef.current.map((_, index) =>
-                      isDisabled(elementsRef, index) ? index : undefined,
+                      composite.isDisabled(elementsRef, index)
+                        ? index
+                        : undefined,
                     )),
                   undefined,
                 ],
@@ -207,7 +198,7 @@ export const Composite = React.forwardRef<
               ),
               minIndex: minGridIndex,
               maxIndex: maxGridIndex,
-              prevIndex: getCellIndexOfCorner(
+              prevIndex: composite.getCellIndexOfCorner(
                 activeIndex > maxIndex ? minIndex : activeIndex,
                 sizes,
                 cellMap,
@@ -215,7 +206,7 @@ export const Composite = React.forwardRef<
                 // use a corner matching the edge closest to the direction we're
                 // moving in so we don't end up in the same item. Prefer
                 // top/left over bottom/right.
-                event.key === ARROW_DOWN
+                event.key === composite.ARROW_DOWN
                   ? 'bl'
                   : event.key === horizontalEndKey
                     ? 'tr'
@@ -232,14 +223,14 @@ export const Composite = React.forwardRef<
 
     const toEndKeys = {
       horizontal: [horizontalEndKey],
-      vertical: [ARROW_DOWN],
-      both: [horizontalEndKey, ARROW_DOWN],
+      vertical: [composite.ARROW_DOWN],
+      both: [horizontalEndKey, composite.ARROW_DOWN],
     }[orientation];
 
     const toStartKeys = {
       horizontal: [horizontalStartKey],
-      vertical: [ARROW_UP],
-      both: [horizontalStartKey, ARROW_UP],
+      vertical: [composite.ARROW_UP],
+      both: [horizontalStartKey, composite.ARROW_UP],
     }[orientation];
 
     const preventedKeys = isGrid
@@ -263,7 +254,7 @@ export const Composite = React.forwardRef<
       ) {
         nextIndex = maxIndex;
       } else {
-        nextIndex = findNonDisabledIndex(elementsRef, {
+        nextIndex = composite.findNonDisabledIndex(elementsRef, {
           startingIndex: nextIndex,
           decrement: toStartKeys.includes(event.key),
           disabledIndices,
@@ -273,7 +264,7 @@ export const Composite = React.forwardRef<
 
     if (
       nextIndex !== activeIndex &&
-      !isIndexOutOfBounds(elementsRef, nextIndex)
+      !composite.isIndexOutOfBounds(elementsRef, nextIndex)
     ) {
       event.stopPropagation();
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
+import {useModernLayoutEffect} from '@floating-ui/react/utils';
 
 import {getDelay} from '../hooks/useHover';
 import type {FloatingRootContext, Delay} from '../types';

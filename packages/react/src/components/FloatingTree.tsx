@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
+import {useModernLayoutEffect} from '@floating-ui/react/utils';
 
 import {useId} from '../hooks/useId';
 import type {FloatingNodeType, FloatingTreeType, ReferenceType} from '../types';

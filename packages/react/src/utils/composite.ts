@@ -1,7 +1,7 @@
-import {stopEvent} from '@floating-ui/react/utils';
 import {floor} from '@floating-ui/utils';
 
 import type {Dimensions} from '../types';
+import {stopEvent} from '../utils/event';
 
 export const ARROW_UP = 'ArrowUp';
 export const ARROW_DOWN = 'ArrowDown';

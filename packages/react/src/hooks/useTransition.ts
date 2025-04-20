@@ -1,9 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
+import {useLatestRef, useModernLayoutEffect} from '@floating-ui/react/utils';
 
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
-import {useLatestRef} from './utils/useLatestRef';
 
 type Duration = number | {open?: number; close?: number};
 

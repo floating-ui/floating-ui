@@ -1,10 +1,10 @@
 import * as React from 'react';
+import {getFloatingFocusElement} from '@floating-ui/react/utils';
 
 import {useFloatingParentNodeId} from '../components/FloatingTree';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {useId} from './useId';
 import type {ExtendedUserProps} from './useInteractions';
-import {getFloatingFocusElement} from '../utils/getFloatingFocusElement';
 
 type AriaRole =
   | 'tooltip'

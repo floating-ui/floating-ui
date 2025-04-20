@@ -1,6 +1,5 @@
-import {getPlatform} from '@floating-ui/react/utils';
 import * as React from 'react';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
+import {useModernLayoutEffect, getPlatform} from '@floating-ui/react/utils';
 
 let lockCount = 0;
 
