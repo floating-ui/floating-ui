@@ -31,10 +31,11 @@ keyboard usage can navigate the list.
 This Hook returns event handler props and ARIA attribute props.
 
 To use it, pass it the `context{:.const}` object returned from
-`useFloating(){:js}`, and then feed its result into the
-`useInteractions(){:js}` array. The returned prop getters are
-then spread onto the elements for rendering.
-`getItemProps(){:js}` is spread to each list item.
+`useFloating(){:js}` or
+[`useFloatingRootContext`](/docs/useInteractions#external-reference),
+and then feed its result into the `useInteractions(){:js}` array.
+The returned prop getters are then spread onto the elements for
+rendering. `getItemProps(){:js}` is spread to each list item.
 
 The `listRef{:.const}` holds an array of HTML elements. The
 `activeIndex{:.const}` determines which index of the list is

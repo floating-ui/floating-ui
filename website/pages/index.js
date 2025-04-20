@@ -233,31 +233,7 @@ function HomePage({sponsors}) {
             </a>
           </div>
           <p className="z-1 relative mx-auto mt-16 px-4 text-center text-xl leading-relaxed text-purple-200 dark:prose-invert lg:text-2xl">
-            A JavaScript library to position{' '}
-            <Tooltip noRest>
-              <TooltipTrigger asChild>
-                <strong
-                  tabIndex={0}
-                  // VoiceOver
-                  role="button"
-                  className="darkLfrom-blue-500 relative cursor-default font-semibold decoration-purple-300/70"
-                  style={{
-                    textDecorationLine: 'underline',
-                    textUnderlineOffset: 8,
-                    textDecorationThickness: 1,
-                  }}
-                >
-                  floating elements
-                </strong>
-              </TooltipTrigger>
-              <TooltipContent>
-                <div className="p-2 text-lg">
-                  A <strong>floating element</strong> is one that
-                  floats on top of the UI without disrupting the
-                  flow of content, like this one!
-                </div>
-              </TooltipContent>
-            </Tooltip>{' '}
+            A JavaScript library to position floating elements
             and create interactions for them.
           </p>
         </div>
@@ -283,15 +259,55 @@ function HomePage({sponsors}) {
           <Virtual />
         </div>
 
+        <div className="container mx-auto max-w-screen-xl md:p-4">
+          <div className="bg-white py-4 mt-8 dark:mb-8 dark:bg-gray-700 w-full md:rounded-2xl text-center shadow">
+            <div className="font-satoshi container mx-auto max-w-screen-xl px-4 md:px-8 mb-4 mt-12 lg:mt-16">
+              <div className="inline-flex items-center gap-4 mb-4">
+                <svg
+                  className="relative -top-1"
+                  width={17 * 3}
+                  height={24 * 3}
+                  viewBox="0 0 17 24"
+                  fill="currentcolor"
+                  aria-label="Base UI"
+                >
+                  <path d="M9.5001 7.01537C9.2245 6.99837 9 7.22385 9 7.49999V23C13.4183 23 17 19.4183 17 15C17 10.7497 13.6854 7.27351 9.5001 7.01537Z"></path>
+                  <path d="M8 9.8V12V23C3.58172 23 0 19.0601 0 14.2V12V1C4.41828 1 8 4.93989 8 9.8Z"></path>
+                </svg>
+                <h2 className="inline-block py-1 font-extrabold text-6xl">
+                  Base UI
+                </h2>
+              </div>
+              <p className="prose text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed mx-auto max-w-screen-md my-4 px-4 text-pretty">
+                A new headless React component library built on
+                top of Floating UI that provides a set of
+                headless floating components (among others) —
+                tooltips, popovers, menus, selects, preview
+                cards, dialogs, toasts, and more.
+              </p>
+            </div>
+            <div className="container mx-auto mb-12 max-w-screen-xl px-4 md:px-8 lg:mb-16 mt-12">
+              <Link
+                href="https://base-ui.com"
+                className="inline-block rounded-md bg-gray-900 dark:bg-gray-100 dark:hover:bg-white p-6 font-bold text-gray-50 transition-colors hover:bg-gray-700 sm:text-xl dark:text-gray-900"
+              >
+                Start using Base UI{' '}
+                <ArrowRight
+                  className="relative top-[-1px] inline-block"
+                  size={20}
+                />
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <div className="font-satoshi container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-br from-rose-400 via-purple-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:via-purple-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
+          <h2 className="mb-4 inline-block bg-gradient-to-br from-rose-400 via-purple-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:via-purple-400 dark:to-cyan-400 mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Interactions for React
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
-            Build your own floating UI components with React.
-            From simple tooltips to select menus, you have full
-            control while ensuring{' '}
-            <strong>fully accessible</strong> UI experiences.
+            Build advanced floating components using Floating
+            UI's React toolkit of components and hooks.
           </p>
         </div>
 

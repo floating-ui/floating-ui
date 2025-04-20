@@ -6,13 +6,14 @@ export function Cards({items}) {
   );
 
   return (
-    <section className="my-16 flex grid md:grid-cols-3 flex-col justify-center gap-8 md:flex-row md:gap-2">
+    <section className="my-16 flex flex-wrap justify-center gap-2 md:flex-row md:gap-2">
       {activeItems.map((item) => (
         <a
           rel="noopener noreferrer"
           target="_blank"
           href={item.url}
           key={item.title}
+          className="mb-12"
         >
           <div className="flex flex-col items-center transition-transform">
             <img

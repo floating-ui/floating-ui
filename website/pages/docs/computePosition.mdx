@@ -80,8 +80,8 @@ the UI with layout ready for being measured:
 ```
 
 Then, ensuring that these two elements are rendered onto the
-document and can be measured, call `computePosition(){:js}` with
-them as arguments.
+document and **can be measured**, call `computePosition(){:js}`
+with them as arguments.
 
 </ShowFor>
 
@@ -133,6 +133,13 @@ the floating element.
 
 By default, the floating element will be placed at the bottom
 center of the reference element.
+
+### Measurable elements
+
+In order for the floating element to be measured and thus
+correctly positioned, it must be rendered onto the DOM and not
+hidden when `computePosition(){:js}` is called. Ensure CSS like
+`display: none{:sass}` is removed prior to calling the function.
 
 <ShowFor packages={['dom', 'react-dom', 'react', 'vue']}>
 

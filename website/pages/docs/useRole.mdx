@@ -26,9 +26,11 @@ technology, including item elements if narrowly specified.
 This Hook returns ARIA attribute props.
 
 To use it, pass it the `context{:.const}` object returned from
-`useFloating(){:js}`, and then feed its result into the
-`useInteractions(){:js}` array. The returned prop getters are
-then spread onto the elements for rendering.
+`useFloating(){:js}` or
+[`useFloatingRootContext`](/docs/useInteractions#external-reference),
+and then feed its result into the `useInteractions(){:js}` array.
+The returned prop getters are then spread onto the elements for
+rendering.
 
 ```js {4-8} /context/
 function App() {
