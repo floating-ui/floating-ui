@@ -287,8 +287,10 @@ function HomePage({sponsors}) {
               </p>
             </div>
             <div className="container mx-auto mb-12 max-w-screen-xl px-4 md:px-8 lg:mb-16 mt-12">
-              <Link
+              <a
                 href="https://base-ui.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block rounded-md bg-gray-900 dark:bg-gray-100 dark:hover:bg-white p-6 font-bold text-gray-50 transition-colors hover:bg-gray-700 sm:text-xl dark:text-gray-900"
               >
                 Start using Base UI{' '}
@@ -296,7 +298,7 @@ function HomePage({sponsors}) {
                   className="relative top-[-1px] inline-block"
                   size={20}
                 />
-              </Link>
+              </a>
             </div>
           </div>
         </div>
