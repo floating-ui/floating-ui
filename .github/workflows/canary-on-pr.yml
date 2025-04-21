@@ -1,0 +1,20 @@
+name: Canary publish on version PR
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  canary-publish:
+    if: contains(github.event.pull_request.title, 'chore: version packages')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/canary-publish
