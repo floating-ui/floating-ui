@@ -2353,7 +2353,7 @@ test('floating element with listbox role ignores tabIndex setting', async () => 
   expect(screen.getByTestId('floating')).toHaveAttribute('tabindex', '-1');
 });
 
-it('handles manual tabindex on dialog floating element', async () => {
+test('handles manual tabindex on dialog floating element', async () => {
   function App() {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -2388,4 +2388,52 @@ it('handles manual tabindex on dialog floating element', async () => {
   expect(screen.getByTestId('reference')).toHaveFocus();
   await userEvent.tab();
   expect(screen.getByTestId('floating')).toHaveFocus();
+});
+
+test('standard tabbing back and forth of a non-modal floating element', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const click = useClick(context);
+    const {getReferenceProps, getFloatingProps} = useInteractions([click]);
+
+    return (
+      <>
+        <button
+          data-testid="reference"
+          ref={refs.setReference}
+          {...getReferenceProps()}
+        />
+        {isOpen && (
+          <FloatingPortal>
+            <FloatingFocusManager context={context} modal={false}>
+              <div
+                ref={refs.setFloating}
+                data-testid="floating"
+                role="dialog"
+                {...getFloatingProps()}
+              >
+                <button data-testid="inner">inner</button>
+              </div>
+            </FloatingFocusManager>
+          </FloatingPortal>
+        )}
+      </>
+    );
+  }
+  render(<App />);
+
+  await userEvent.click(screen.getByTestId('reference'));
+  await act(async () => {});
+
+  expect(screen.getByTestId('inner')).toHaveFocus();
+  await userEvent.tab({shift: true});
+  expect(screen.getByTestId('reference')).toHaveFocus();
+  await userEvent.tab();
+  expect(screen.getByTestId('inner')).toHaveFocus();
 });

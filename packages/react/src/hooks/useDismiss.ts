@@ -1,11 +1,4 @@
-import {
-  contains,
-  getDocument,
-  getTarget,
-  isEventTargetWithin,
-  isReactEvent,
-  isRootElement,
-} from '@floating-ui/react/utils';
+import * as React from 'react';
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {
   getComputedStyle,
@@ -15,13 +8,20 @@ import {
   isLastTraversableNode,
   isWebKit,
 } from '@floating-ui/utils/dom';
-import * as React from 'react';
+import {
+  contains,
+  getDocument,
+  getTarget,
+  isEventTargetWithin,
+  isReactEvent,
+  isRootElement,
+  useEffectEvent,
+  getNodeChildren,
+} from '@floating-ui/react/utils';
 
 import {useFloatingTree} from '../components/FloatingTree';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {createAttribute} from '../utils/createAttribute';
-import {getChildren} from '../utils/getChildren';
-import {useEffectEvent} from './utils/useEffectEvent';
 
 const bubbleHandlerKeys = {
   pointerdown: 'onPointerDown',
@@ -171,7 +171,9 @@ export function useDismiss(
 
       const nodeId = dataRef.current.floatingContext?.nodeId;
 
-      const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
+      const children = tree
+        ? getNodeChildren(tree.nodesRef.current, nodeId)
+        : [];
 
       if (!escapeKeyBubbles) {
         event.stopPropagation();
@@ -313,7 +315,7 @@ export function useDismiss(
 
     const targetIsInsideChildren =
       tree &&
-      getChildren(tree.nodesRef.current, nodeId).some((node) =>
+      getNodeChildren(tree.nodesRef.current, nodeId).some((node) =>
         isEventTargetWithin(event, node.context?.elements.floating),
       );
 
@@ -325,7 +327,7 @@ export function useDismiss(
       return;
     }
 
-    const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
+    const children = tree ? getNodeChildren(tree.nodesRef.current, nodeId) : [];
     if (children.length > 0) {
       let shouldDismiss = true;
 

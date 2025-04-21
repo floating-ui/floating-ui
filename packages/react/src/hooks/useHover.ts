@@ -1,11 +1,13 @@
+import * as React from 'react';
+import {isElement} from '@floating-ui/utils/dom';
 import {
   contains,
   getDocument,
   isMouseLikePointerType,
+  useLatestRef,
+  useEffectEvent,
+  useModernLayoutEffect,
 } from '@floating-ui/react/utils';
-import {isElement} from '@floating-ui/utils/dom';
-import * as React from 'react';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {
   useFloatingParentNodeId,
@@ -21,8 +23,6 @@ import type {
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
-import {useLatestRef} from './utils/useLatestRef';
-import {useEffectEvent} from './utils/useEffectEvent';
 
 const safePolygonIdentifier = createAttribute('safe-polygon');
 

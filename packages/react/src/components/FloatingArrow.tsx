@@ -1,10 +1,10 @@
-import {getComputedStyle} from '@floating-ui/utils/dom';
 import * as React from 'react';
+import {getComputedStyle} from '@floating-ui/utils/dom';
+import {useModernLayoutEffect} from '@floating-ui/react/utils';
 
 import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';
 import {warn} from '../utils/log';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
   // Omit the original `refs` property from the context to avoid issues with

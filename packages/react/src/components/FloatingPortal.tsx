@@ -1,18 +1,18 @@
-import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
+import {isElement} from '@floating-ui/utils/dom';
+import {
+  useModernLayoutEffect,
+  enableFocusInside,
+  disableFocusInside,
+  getPreviousTabbable,
+  getNextTabbable,
+  isOutsideEvent,
+} from '@floating-ui/react/utils';
 
 import {useId} from '../hooks/useId';
 import type {OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
-import {
-  disableFocusInside,
-  enableFocusInside,
-  getNextTabbable,
-  getPreviousTabbable,
-  isOutsideEvent,
-} from '../utils/tabbable';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 
 type FocusManagerState = {
@@ -197,7 +197,6 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
   React.useEffect(() => {
     if (!portalNode) return;
     if (open) return;
-
     enableFocusInside(portalNode);
   }, [open, portalNode]);
 

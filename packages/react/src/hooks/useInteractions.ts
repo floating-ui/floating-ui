@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import type {ElementProps} from '../types';
-import {FOCUSABLE_ATTRIBUTE} from '../utils/getFloatingFocusElement';
-
-const ACTIVE_KEY = 'active';
-const SELECTED_KEY = 'selected';
+import {
+  ACTIVE_KEY,
+  FOCUSABLE_ATTRIBUTE,
+  SELECTED_KEY,
+} from '../utils/constants';
 
 export type ExtendedUserProps = {
   [ACTIVE_KEY]?: boolean;

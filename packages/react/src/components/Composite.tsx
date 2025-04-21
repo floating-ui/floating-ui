@@ -1,24 +1,26 @@
 import * as React from 'react';
+import {
+  useEffectEvent,
+  createGridCellMap,
+  isListIndexDisabled,
+  getGridNavigatedIndex,
+  getMinListIndex,
+  getMaxListIndex,
+  getGridCellIndexOfCorner,
+  getGridCellIndices,
+  isIndexOutOfListBounds,
+  findNonDisabledListIndex,
+} from '@floating-ui/react/utils';
 
 import {useMergeRefs} from '../hooks/useMergeRefs';
-import {useEffectEvent} from '../hooks/utils/useEffectEvent';
 import type {Dimensions} from '../types';
+import {FloatingList, useListItem} from './FloatingList';
 import {
   ARROW_DOWN,
-  ARROW_LEFT,
   ARROW_RIGHT,
+  ARROW_LEFT,
   ARROW_UP,
-  buildCellMap,
-  findNonDisabledIndex,
-  getCellIndexOfCorner,
-  getCellIndices,
-  getGridNavigatedIndex,
-  getMaxIndex,
-  getMinIndex,
-  isDisabled,
-  isIndexOutOfBounds,
-} from '../utils/composite';
-import {FloatingList, useListItem} from './FloatingList';
+} from '../utils/constants';
 
 function renderJsx(
   render: RenderProp | undefined,
@@ -150,8 +152,8 @@ export const Composite = React.forwardRef<
     if (!allKeys.includes(event.key)) return;
 
     let nextIndex = activeIndex;
-    const minIndex = getMinIndex(elementsRef, disabledIndices);
-    const maxIndex = getMaxIndex(elementsRef, disabledIndices);
+    const minIndex = getMinListIndex(elementsRef, disabledIndices);
+    const maxIndex = getMaxListIndex(elementsRef, disabledIndices);
 
     const horizontalEndKey = rtl ? ARROW_LEFT : ARROW_RIGHT;
     const horizontalStartKey = rtl ? ARROW_RIGHT : ARROW_LEFT;
@@ -165,17 +167,17 @@ export const Composite = React.forwardRef<
         }));
       // To calculate movements on the grid, we use hypothetical cell indices
       // as if every item was 1x1, then convert back to real indices.
-      const cellMap = buildCellMap(sizes, cols, dense);
+      const cellMap = createGridCellMap(sizes, cols, dense);
       const minGridIndex = cellMap.findIndex(
         (index) =>
           index != null &&
-          !isDisabled(elementsRef.current, index, disabledIndices),
+          !isListIndexDisabled(elementsRef, index, disabledIndices),
       );
       // last enabled index
       const maxGridIndex = cellMap.reduce(
         (foundIndex: number, index, cellIndex) =>
           index != null &&
-          !isDisabled(elementsRef.current, index, disabledIndices)
+          !isListIndexDisabled(elementsRef, index, disabledIndices)
             ? cellIndex
             : foundIndex,
         -1,
@@ -197,11 +199,11 @@ export const Composite = React.forwardRef<
               cols,
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
-              disabledIndices: getCellIndices(
+              disabledIndices: getGridCellIndices(
                 [
                   ...(disabledIndices ||
                     elementsRef.current.map((_, index) =>
-                      isDisabled(elementsRef.current, index)
+                      isListIndexDisabled(elementsRef, index)
                         ? index
                         : undefined,
                     )),
@@ -211,7 +213,7 @@ export const Composite = React.forwardRef<
               ),
               minIndex: minGridIndex,
               maxIndex: maxGridIndex,
-              prevIndex: getCellIndexOfCorner(
+              prevIndex: getGridCellIndexOfCorner(
                 activeIndex > maxIndex ? minIndex : activeIndex,
                 sizes,
                 cellMap,
@@ -267,7 +269,7 @@ export const Composite = React.forwardRef<
       ) {
         nextIndex = maxIndex;
       } else {
-        nextIndex = findNonDisabledIndex(elementsRef, {
+        nextIndex = findNonDisabledListIndex(elementsRef, {
           startingIndex: nextIndex,
           decrement: toStartKeys.includes(event.key),
           disabledIndices,
@@ -277,7 +279,7 @@ export const Composite = React.forwardRef<
 
     if (
       nextIndex !== activeIndex &&
-      !isIndexOutOfBounds(elementsRef, nextIndex)
+      !isIndexOutOfListBounds(elementsRef, nextIndex)
     ) {
       event.stopPropagation();
 

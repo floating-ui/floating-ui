@@ -1,8 +1,8 @@
-import {contains, getTarget} from '@floating-ui/react/utils';
 import {isElement} from '@floating-ui/utils/dom';
 import type {Rect, Side} from './types';
 import type {HandleCloseFn} from './hooks/useHover';
-import {getChildren} from './utils/getChildren';
+import {contains, getTarget} from './utils/element';
+import {getNodeChildren} from './utils/nodes';
 
 type Point = [number, number];
 type Polygon = Point[];
@@ -155,7 +155,7 @@ export function safePolygon(options: SafePolygonOptions = {}) {
       // If any nested child is open, abort.
       if (
         tree &&
-        getChildren(tree.nodesRef.current, nodeId).some(
+        getNodeChildren(tree.nodesRef.current, nodeId).some(
           ({context}) => context?.open,
         )
       ) {

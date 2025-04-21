@@ -1,5 +1,5 @@
-import {activeElement, contains, getDocument} from '@floating-ui/react/utils';
 import {tabbable, type FocusableElement} from 'tabbable';
+import {activeElement, contains, getDocument} from './element';
 
 export const getTabbableOptions = () =>
   ({
@@ -14,29 +14,27 @@ export const getTabbableOptions = () =>
         : 'none',
   }) as const;
 
-export function getTabbableIn(
+function getTabbableIn(
   container: HTMLElement,
-  direction: 'next' | 'prev',
-) {
-  const allTabbable = tabbable(container, getTabbableOptions());
+  dir: 1 | -1,
+): FocusableElement | undefined {
+  const list = tabbable(container, getTabbableOptions());
+  const len = list.length;
+  if (len === 0) return;
 
-  if (direction === 'prev') {
-    allTabbable.reverse();
-  }
+  const active = activeElement(getDocument(container)) as FocusableElement;
+  const index = list.indexOf(active);
+  const nextIndex = index === -1 ? (dir === 1 ? 0 : len - 1) : index + dir;
 
-  const activeIndex = allTabbable.indexOf(
-    activeElement(getDocument(container)) as HTMLElement,
-  );
-  const nextTabbableElements = allTabbable.slice(activeIndex + 1);
-  return nextTabbableElements[0];
+  return list[nextIndex];
 }
 
 export function getNextTabbable(
   referenceElement: Element | null,
 ): FocusableElement | null {
   return (
-    getTabbableIn(getDocument(referenceElement).body, 'next') ||
-    referenceElement
+    getTabbableIn(getDocument(referenceElement).body, 1) ||
+    (referenceElement as FocusableElement)
   );
 }
 
@@ -44,8 +42,8 @@ export function getPreviousTabbable(
   referenceElement: Element | null,
 ): FocusableElement | null {
   return (
-    getTabbableIn(getDocument(referenceElement).body, 'prev') ||
-    referenceElement
+    getTabbableIn(getDocument(referenceElement).body, -1) ||
+    (referenceElement as FocusableElement)
   );
 }
 

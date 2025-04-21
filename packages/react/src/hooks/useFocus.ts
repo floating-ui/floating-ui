@@ -1,3 +1,5 @@
+import * as React from 'react';
+import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import {
   activeElement,
   contains,
@@ -6,9 +8,8 @@ import {
   isMac,
   isSafari,
   isTypeableElement,
+  matchesFocusVisible,
 } from '@floating-ui/react/utils';
-import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
-import * as React from 'react';
 
 import type {
   ElementProps,
@@ -17,7 +18,6 @@ import type {
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
-import {matchesFocusVisible} from '../utils/matchesFocusVisible';
 
 function isMacSafari() {
   return isMac() && isSafari();

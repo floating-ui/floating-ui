@@ -1,3 +1,6 @@
+import * as React from 'react';
+import {tabbable, isTabbable, focusable, type FocusableElement} from 'tabbable';
+import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
 import {
   activeElement,
   contains,
@@ -7,31 +10,25 @@ import {
   isVirtualClick,
   isVirtualPointerEvent,
   stopEvent,
+  getNodeAncestors,
+  getNodeChildren,
+  getFloatingFocusElement,
+  useLatestRef,
+  useEffectEvent,
+  useModernLayoutEffect,
+  getTabbableOptions,
+  isOutsideEvent,
+  getNextTabbable,
+  getPreviousTabbable,
 } from '@floating-ui/react/utils';
-import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
-import * as React from 'react';
-import type {FocusableElement} from 'tabbable';
-import {tabbable, isTabbable, focusable} from 'tabbable';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {useLatestRef} from '../hooks/utils/useLatestRef';
 import type {FloatingRootContext, OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
-import {getAncestors} from '../utils/getAncestors';
-import {getChildren} from '../utils/getChildren';
 import {markOthers, supportsInert} from '../utils/markOthers';
-import {
-  getNextTabbable,
-  getPreviousTabbable,
-  getTabbableOptions,
-  isOutsideEvent,
-} from '../utils/tabbable';
 import {usePortalContext} from './FloatingPortal';
 import {useFloatingTree} from './FloatingTree';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
-import {useEffectEvent} from '../hooks/utils/useEffectEvent';
-import {getFloatingFocusElement} from '../utils/getFloatingFocusElement';
 import {useLiteMergeRefs} from '../utils/useLiteMergeRefs';
 
 const LIST_LIMIT = 20;
@@ -79,11 +76,10 @@ function handleTabIndex(
 
   const options = getTabbableOptions();
   const focusableElements = focusable(floatingFocusElement, options);
-  const tabbableContent = focusableElements.filter(
-    (element) =>
-      isTabbable(element, options) ||
-      element.getAttribute('data-tabindex') === '0',
-  );
+  const tabbableContent = focusableElements.filter((element) => {
+    const dataTabIndex = element.getAttribute('data-tabindex') || '';
+    return isTabbable(element, options) || !dataTabIndex.startsWith('-');
+  });
   const tabIndex = floatingFocusElement.getAttribute('tabindex');
 
   if (orderRef.current.includes('floating') || tabbableContent.length === 0) {
@@ -386,12 +382,12 @@ export function FloatingFocusManager(
           contains(portalContext?.portalNode, relatedTarget) ||
           relatedTarget?.hasAttribute(createAttribute('focus-guard')) ||
           (tree &&
-            (getChildren(tree.nodesRef.current, nodeId).find(
+            (getNodeChildren(tree.nodesRef.current, nodeId).find(
               (node) =>
                 contains(node.context?.elements.floating, relatedTarget) ||
                 contains(node.context?.elements.domReference, relatedTarget),
             ) ||
-              getAncestors(tree.nodesRef.current, nodeId).find(
+              getNodeAncestors(tree.nodesRef.current, nodeId).find(
                 (node) =>
                   [
                     node.context?.elements.floating,
@@ -499,7 +495,7 @@ export function FloatingFocusManager(
     );
 
     const ancestors = tree
-      ? getAncestors(tree.nodesRef.current, getNodeId())
+      ? getNodeAncestors(tree.nodesRef.current, getNodeId())
       : [];
     const ancestorFloatingNodes =
       tree && !modal
@@ -667,7 +663,7 @@ export function FloatingFocusManager(
       const isFocusInsideFloatingTree =
         contains(floating, activeEl) ||
         (tree &&
-          getChildren(tree.nodesRef.current, getNodeId()).some((node) =>
+          getNodeChildren(tree.nodesRef.current, getNodeId()).some((node) =>
             contains(node.context?.elements.floating, activeEl),
           ));
 
