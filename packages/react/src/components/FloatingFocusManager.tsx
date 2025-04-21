@@ -16,7 +16,10 @@ import {
   useLatestRef,
   useEffectEvent,
   useModernLayoutEffect,
-  tabbable as tabbableUtils,
+  getTabbableOptions,
+  isOutsideEvent,
+  getNextTabbable,
+  getPreviousTabbable,
 } from '@floating-ui/react/utils';
 
 import type {FloatingRootContext, OpenChangeReason} from '../types';
@@ -52,7 +55,7 @@ function getPreviouslyFocusedElement() {
 }
 
 function getFirstTabbableElement(container: Element) {
-  const tabbableOptions = tabbableUtils.getTabbableOptions();
+  const tabbableOptions = getTabbableOptions();
   if (isTabbable(container, tabbableOptions)) {
     return container;
   }
@@ -226,9 +229,7 @@ export function FloatingFocusManager(
 
   const getTabbableContent = useEffectEvent(
     (container: Element | null = floatingFocusElement) => {
-      return container
-        ? tabbable(container, tabbableUtils.getTabbableOptions())
-        : [];
+      return container ? tabbable(container, getTabbableOptions()) : [];
     },
   );
 
@@ -820,11 +821,8 @@ export function FloatingFocusManager(
               portalContext.portalNode
             ) {
               preventReturnFocusRef.current = false;
-              if (
-                tabbableUtils.isOutsideEvent(event, portalContext.portalNode)
-              ) {
-                const nextTabbable =
-                  tabbableUtils.getNextTabbable(domReference);
+              if (isOutsideEvent(event, portalContext.portalNode)) {
+                const nextTabbable = getNextTabbable(domReference);
                 nextTabbable?.focus();
               } else {
                 portalContext.beforeOutsideRef.current?.focus();
@@ -855,11 +853,8 @@ export function FloatingFocusManager(
                 preventReturnFocusRef.current = true;
               }
 
-              if (
-                tabbableUtils.isOutsideEvent(event, portalContext.portalNode)
-              ) {
-                const prevTabbable =
-                  tabbableUtils.getPreviousTabbable(domReference);
+              if (isOutsideEvent(event, portalContext.portalNode)) {
+                const prevTabbable = getPreviousTabbable(domReference);
                 prevTabbable?.focus();
               } else {
                 portalContext.afterOutsideRef.current?.focus();

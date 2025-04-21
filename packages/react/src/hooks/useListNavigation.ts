@@ -11,9 +11,17 @@ import {
   getDeepestNode,
   useEffectEvent,
   useLatestRef,
-  composite,
   getFloatingFocusElement,
   useModernLayoutEffect,
+  isIndexOutOfListBounds,
+  getMinListIndex,
+  getMaxListIndex,
+  getGridNavigatedIndex,
+  isListIndexDisabled,
+  createGridCellMap,
+  getGridCellIndices,
+  getGridCellIndexOfCorner,
+  findNonDisabledListIndex,
 } from '@floating-ui/react/utils';
 
 import {
@@ -23,6 +31,12 @@ import {
 import type {Dimensions, ElementProps, FloatingRootContext} from '../types';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {warn} from '../utils/log';
+import {
+  ARROW_UP,
+  ARROW_DOWN,
+  ARROW_RIGHT,
+  ARROW_LEFT,
+} from '../utils/constants';
 
 export const ESCAPE = 'Escape';
 
@@ -45,9 +59,8 @@ function isMainOrientationKey(
   key: string,
   orientation: UseListNavigationProps['orientation'],
 ) {
-  const vertical = key === composite.ARROW_UP || key === composite.ARROW_DOWN;
-  const horizontal =
-    key === composite.ARROW_LEFT || key === composite.ARROW_RIGHT;
+  const vertical = key === ARROW_UP || key === ARROW_DOWN;
+  const horizontal = key === ARROW_LEFT || key === ARROW_RIGHT;
   return doSwitch(orientation, vertical, horizontal);
 }
 
@@ -56,10 +69,8 @@ function isMainOrientationToEndKey(
   orientation: UseListNavigationProps['orientation'],
   rtl: boolean,
 ) {
-  const vertical = key === composite.ARROW_DOWN;
-  const horizontal = rtl
-    ? key === composite.ARROW_LEFT
-    : key === composite.ARROW_RIGHT;
+  const vertical = key === ARROW_DOWN;
+  const horizontal = rtl ? key === ARROW_LEFT : key === ARROW_RIGHT;
   return (
     doSwitch(orientation, vertical, horizontal) ||
     key === 'Enter' ||
@@ -73,10 +84,8 @@ function isCrossOrientationOpenKey(
   orientation: UseListNavigationProps['orientation'],
   rtl: boolean,
 ) {
-  const vertical = rtl
-    ? key === composite.ARROW_LEFT
-    : key === composite.ARROW_RIGHT;
-  const horizontal = key === composite.ARROW_DOWN;
+  const vertical = rtl ? key === ARROW_LEFT : key === ARROW_RIGHT;
+  const horizontal = key === ARROW_DOWN;
   return doSwitch(orientation, vertical, horizontal);
 }
 
@@ -86,10 +95,8 @@ function isCrossOrientationCloseKey(
   rtl: boolean,
   cols?: number,
 ) {
-  const vertical = rtl
-    ? key === composite.ARROW_RIGHT
-    : key === composite.ARROW_LEFT;
-  const horizontal = key === composite.ARROW_UP;
+  const vertical = rtl ? key === ARROW_RIGHT : key === ARROW_LEFT;
+  const horizontal = key === ARROW_UP;
   if (
     orientation === 'both' ||
     (orientation === 'horizontal' && cols && cols > 1)
@@ -442,8 +449,8 @@ export function useListNavigation(
               keyRef.current == null ||
               isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
               nested
-                ? composite.getMinIndex(listRef, disabledIndicesRef.current)
-                : composite.getMaxIndex(listRef, disabledIndicesRef.current);
+                ? getMinListIndex(listRef, disabledIndicesRef.current)
+                : getMaxListIndex(listRef, disabledIndicesRef.current);
             keyRef.current = null;
             onNavigate();
           }
@@ -451,7 +458,7 @@ export function useListNavigation(
 
         waitForListPopulated();
       }
-    } else if (!composite.isIndexOutOfBounds(listRef, activeIndex)) {
+    } else if (!isIndexOutOfListBounds(listRef, activeIndex)) {
       indexRef.current = activeIndex;
       focusItem();
       forceScrollIntoViewRef.current = false;
@@ -631,8 +638,8 @@ export function useListNavigation(
     }
 
     const currentIndex = indexRef.current;
-    const minIndex = composite.getMinIndex(listRef, disabledIndices);
-    const maxIndex = composite.getMaxIndex(listRef, disabledIndices);
+    const minIndex = getMinListIndex(listRef, disabledIndices);
+    const maxIndex = getMaxListIndex(listRef, disabledIndices);
 
     if (!typeableComboboxReference) {
       if (event.key === 'Home') {
@@ -658,17 +665,16 @@ export function useListNavigation(
         }));
       // To calculate movements on the grid, we use hypothetical cell indices
       // as if every item was 1x1, then convert back to real indices.
-      const cellMap = composite.buildCellMap(sizes, cols, dense);
+      const cellMap = createGridCellMap(sizes, cols, dense);
       const minGridIndex = cellMap.findIndex(
         (index) =>
           index != null &&
-          !composite.isDisabled(listRef, index, disabledIndices),
+          !isListIndexDisabled(listRef, index, disabledIndices),
       );
       // last enabled index
       const maxGridIndex = cellMap.reduce(
         (foundIndex: number, index, cellIndex) =>
-          index != null &&
-          !composite.isDisabled(listRef, index, disabledIndices)
+          index != null && !isListIndexDisabled(listRef, index, disabledIndices)
             ? cellIndex
             : foundIndex,
         -1,
@@ -676,7 +682,7 @@ export function useListNavigation(
 
       const index =
         cellMap[
-          composite.getGridNavigatedIndex(
+          getGridNavigatedIndex(
             {
               current: cellMap.map((itemIndex) =>
                 itemIndex != null ? listRef.current[itemIndex] : null,
@@ -690,11 +696,11 @@ export function useListNavigation(
               cols,
               // treat undefined (empty grid spaces) as disabled indices so we
               // don't end up in them
-              disabledIndices: composite.getCellIndices(
+              disabledIndices: getGridCellIndices(
                 [
                   ...(disabledIndices ||
                     listRef.current.map((_, index) =>
-                      composite.isDisabled(listRef, index) ? index : undefined,
+                      isListIndexDisabled(listRef, index) ? index : undefined,
                     )),
                   undefined,
                 ],
@@ -702,7 +708,7 @@ export function useListNavigation(
               ),
               minIndex: minGridIndex,
               maxIndex: maxGridIndex,
-              prevIndex: composite.getCellIndexOfCorner(
+              prevIndex: getGridCellIndexOfCorner(
                 indexRef.current > maxIndex ? minIndex : indexRef.current,
                 sizes,
                 cellMap,
@@ -710,10 +716,9 @@ export function useListNavigation(
                 // use a corner matching the edge closest to the direction
                 // we're moving in so we don't end up in the same item. Prefer
                 // top/left over bottom/right.
-                event.key === composite.ARROW_DOWN
+                event.key === ARROW_DOWN
                   ? 'bl'
-                  : event.key ===
-                      (rtl ? composite.ARROW_LEFT : composite.ARROW_RIGHT)
+                  : event.key === (rtl ? ARROW_LEFT : ARROW_RIGHT)
                     ? 'tr'
                     : 'tl',
               ),
@@ -759,14 +764,14 @@ export function useListNavigation(
               ? allowEscape && currentIndex !== listRef.current.length
                 ? -1
                 : minIndex
-              : composite.findNonDisabledIndex(listRef, {
+              : findNonDisabledListIndex(listRef, {
                   startingIndex: currentIndex,
                   disabledIndices,
                 });
         } else {
           indexRef.current = Math.min(
             maxIndex,
-            composite.findNonDisabledIndex(listRef, {
+            findNonDisabledListIndex(listRef, {
               startingIndex: currentIndex,
               disabledIndices,
             }),
@@ -779,7 +784,7 @@ export function useListNavigation(
               ? allowEscape && currentIndex !== -1
                 ? listRef.current.length
                 : maxIndex
-              : composite.findNonDisabledIndex(listRef, {
+              : findNonDisabledListIndex(listRef, {
                   startingIndex: currentIndex,
                   decrement: true,
                   disabledIndices,
@@ -787,7 +792,7 @@ export function useListNavigation(
         } else {
           indexRef.current = Math.max(
             minIndex,
-            composite.findNonDisabledIndex(listRef, {
+            findNonDisabledListIndex(listRef, {
               startingIndex: currentIndex,
               decrement: true,
               disabledIndices,
@@ -796,7 +801,7 @@ export function useListNavigation(
         }
       }
 
-      if (composite.isIndexOutOfBounds(listRef, indexRef.current)) {
+      if (isIndexOutOfListBounds(listRef, indexRef.current)) {
         indexRef.current = -1;
       }
 
@@ -948,7 +953,7 @@ export function useListNavigation(
             stopEvent(event);
 
             if (open) {
-              indexRef.current = composite.getMinIndex(
+              indexRef.current = getMinListIndex(
                 listRef,
                 disabledIndicesRef.current,
               );

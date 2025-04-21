@@ -1,7 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {isElement} from '@floating-ui/utils/dom';
-import {tabbable, useModernLayoutEffect} from '@floating-ui/react/utils';
+import {
+  useModernLayoutEffect,
+  enableFocusInside,
+  disableFocusInside,
+  getPreviousTabbable,
+  getNextTabbable,
+  isOutsideEvent,
+} from '@floating-ui/react/utils';
 
 import {useId} from '../hooks/useId';
 import type {OpenChangeReason} from '../types';
@@ -171,11 +178,9 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
     // portal has already been focused, either by tabbing into a focus trap
     // element outside or using the mouse.
     function onFocus(event: FocusEvent) {
-      if (portalNode && tabbable.isOutsideEvent(event)) {
+      if (portalNode && isOutsideEvent(event)) {
         const focusing = event.type === 'focusin';
-        const manageFocus = focusing
-          ? tabbable.enableFocusInside
-          : tabbable.disableFocusInside;
+        const manageFocus = focusing ? enableFocusInside : disableFocusInside;
         manageFocus(portalNode);
       }
     }
@@ -192,8 +197,7 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
   React.useEffect(() => {
     if (!portalNode) return;
     if (open) return;
-
-    tabbable.enableFocusInside(portalNode);
+    enableFocusInside(portalNode);
   }, [open, portalNode]);
 
   return (
@@ -216,13 +220,13 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
           data-type="outside"
           ref={beforeOutsideRef}
           onFocus={(event) => {
-            if (tabbable.isOutsideEvent(event, portalNode)) {
+            if (isOutsideEvent(event, portalNode)) {
               beforeInsideRef.current?.focus();
             } else {
               const domReference = focusManagerState
                 ? focusManagerState.domReference
                 : null;
-              const prevTabbable = tabbable.getPreviousTabbable(domReference);
+              const prevTabbable = getPreviousTabbable(domReference);
               prevTabbable?.focus();
             }
           }}
@@ -237,13 +241,13 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
           data-type="outside"
           ref={afterOutsideRef}
           onFocus={(event) => {
-            if (tabbable.isOutsideEvent(event, portalNode)) {
+            if (isOutsideEvent(event, portalNode)) {
               afterInsideRef.current?.focus();
             } else {
               const domReference = focusManagerState
                 ? focusManagerState.domReference
                 : null;
-              const nextTabbable = tabbable.getNextTabbable(domReference);
+              const nextTabbable = getNextTabbable(domReference);
               nextTabbable?.focus();
 
               focusManagerState?.closeOnFocusOut &&

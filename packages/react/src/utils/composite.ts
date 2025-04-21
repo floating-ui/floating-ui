@@ -2,42 +2,42 @@ import {floor} from '@floating-ui/utils';
 
 import type {Dimensions} from '../types';
 import {stopEvent} from '../utils/event';
+import {ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP} from './constants';
 
-export const ARROW_UP = 'ArrowUp';
-export const ARROW_DOWN = 'ArrowDown';
-export const ARROW_LEFT = 'ArrowLeft';
-export const ARROW_RIGHT = 'ArrowRight';
-
-export function isDifferentRow(index: number, cols: number, prevRow: number) {
+export function isDifferentGridRow(
+  index: number,
+  cols: number,
+  prevRow: number,
+) {
   return Math.floor(index / cols) !== prevRow;
 }
 
-export function isIndexOutOfBounds(
+export function isIndexOutOfListBounds(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   index: number,
 ) {
   return index < 0 || index >= listRef.current.length;
 }
 
-export function getMinIndex(
+export function getMinListIndex(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   disabledIndices: Array<number> | undefined,
 ) {
-  return findNonDisabledIndex(listRef, {disabledIndices});
+  return findNonDisabledListIndex(listRef, {disabledIndices});
 }
 
-export function getMaxIndex(
+export function getMaxListIndex(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   disabledIndices: Array<number> | undefined,
 ) {
-  return findNonDisabledIndex(listRef, {
+  return findNonDisabledListIndex(listRef, {
     decrement: true,
     startingIndex: listRef.current.length,
     disabledIndices,
   });
 }
 
-export function findNonDisabledIndex(
+export function findNonDisabledListIndex(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   {
     startingIndex = -1,
@@ -57,14 +57,14 @@ export function findNonDisabledIndex(
   } while (
     index >= 0 &&
     index <= listRef.current.length - 1 &&
-    isDisabled(listRef, index, disabledIndices)
+    isListIndexDisabled(listRef, index, disabledIndices)
   );
 
   return index;
 }
 
 export function getGridNavigatedIndex(
-  elementsRef: React.MutableRefObject<Array<HTMLElement | null>>,
+  listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   {
     event,
     orientation,
@@ -97,7 +97,7 @@ export function getGridNavigatedIndex(
     if (prevIndex === -1) {
       nextIndex = maxIndex;
     } else {
-      nextIndex = findNonDisabledIndex(elementsRef, {
+      nextIndex = findNonDisabledListIndex(listRef, {
         startingIndex: nextIndex,
         amount: cols,
         decrement: true,
@@ -117,7 +117,7 @@ export function getGridNavigatedIndex(
       }
     }
 
-    if (isIndexOutOfBounds(elementsRef, nextIndex)) {
+    if (isIndexOutOfListBounds(listRef, nextIndex)) {
       nextIndex = prevIndex;
     }
   }
@@ -128,14 +128,14 @@ export function getGridNavigatedIndex(
     if (prevIndex === -1) {
       nextIndex = minIndex;
     } else {
-      nextIndex = findNonDisabledIndex(elementsRef, {
+      nextIndex = findNonDisabledListIndex(listRef, {
         startingIndex: prevIndex,
         amount: cols,
         disabledIndices,
       });
 
       if (loop && prevIndex + cols > maxIndex) {
-        nextIndex = findNonDisabledIndex(elementsRef, {
+        nextIndex = findNonDisabledListIndex(listRef, {
           startingIndex: (prevIndex % cols) - cols,
           amount: cols,
           disabledIndices,
@@ -143,7 +143,7 @@ export function getGridNavigatedIndex(
       }
     }
 
-    if (isIndexOutOfBounds(elementsRef, nextIndex)) {
+    if (isIndexOutOfListBounds(listRef, nextIndex)) {
       nextIndex = prevIndex;
     }
   }
@@ -156,25 +156,25 @@ export function getGridNavigatedIndex(
       stop && stopEvent(event);
 
       if (prevIndex % cols !== cols - 1) {
-        nextIndex = findNonDisabledIndex(elementsRef, {
+        nextIndex = findNonDisabledListIndex(listRef, {
           startingIndex: prevIndex,
           disabledIndices,
         });
 
-        if (loop && isDifferentRow(nextIndex, cols, prevRow)) {
-          nextIndex = findNonDisabledIndex(elementsRef, {
+        if (loop && isDifferentGridRow(nextIndex, cols, prevRow)) {
+          nextIndex = findNonDisabledListIndex(listRef, {
             startingIndex: prevIndex - (prevIndex % cols) - 1,
             disabledIndices,
           });
         }
       } else if (loop) {
-        nextIndex = findNonDisabledIndex(elementsRef, {
+        nextIndex = findNonDisabledListIndex(listRef, {
           startingIndex: prevIndex - (prevIndex % cols) - 1,
           disabledIndices,
         });
       }
 
-      if (isDifferentRow(nextIndex, cols, prevRow)) {
+      if (isDifferentGridRow(nextIndex, cols, prevRow)) {
         nextIndex = prevIndex;
       }
     }
@@ -183,40 +183,40 @@ export function getGridNavigatedIndex(
       stop && stopEvent(event);
 
       if (prevIndex % cols !== 0) {
-        nextIndex = findNonDisabledIndex(elementsRef, {
+        nextIndex = findNonDisabledListIndex(listRef, {
           startingIndex: prevIndex,
           decrement: true,
           disabledIndices,
         });
 
-        if (loop && isDifferentRow(nextIndex, cols, prevRow)) {
-          nextIndex = findNonDisabledIndex(elementsRef, {
+        if (loop && isDifferentGridRow(nextIndex, cols, prevRow)) {
+          nextIndex = findNonDisabledListIndex(listRef, {
             startingIndex: prevIndex + (cols - (prevIndex % cols)),
             decrement: true,
             disabledIndices,
           });
         }
       } else if (loop) {
-        nextIndex = findNonDisabledIndex(elementsRef, {
+        nextIndex = findNonDisabledListIndex(listRef, {
           startingIndex: prevIndex + (cols - (prevIndex % cols)),
           decrement: true,
           disabledIndices,
         });
       }
 
-      if (isDifferentRow(nextIndex, cols, prevRow)) {
+      if (isDifferentGridRow(nextIndex, cols, prevRow)) {
         nextIndex = prevIndex;
       }
     }
 
     const lastRow = floor(maxIndex / cols) === prevRow;
 
-    if (isIndexOutOfBounds(elementsRef, nextIndex)) {
+    if (isIndexOutOfListBounds(listRef, nextIndex)) {
       if (loop && lastRow) {
         nextIndex =
           event.key === (rtl ? ARROW_RIGHT : ARROW_LEFT)
             ? maxIndex
-            : findNonDisabledIndex(elementsRef, {
+            : findNonDisabledListIndex(listRef, {
                 startingIndex: prevIndex - (prevIndex % cols) - 1,
                 disabledIndices,
               });
@@ -230,7 +230,7 @@ export function getGridNavigatedIndex(
 }
 
 /** For each cell index, gets the item index that occupies that cell */
-export function buildCellMap(
+export function createGridCellMap(
   sizes: Dimensions[],
   cols: number,
   dense: boolean,
@@ -275,7 +275,7 @@ export function buildCellMap(
 }
 
 /** Gets cell index of an item's corner or -1 when index is -1. */
-export function getCellIndexOfCorner(
+export function getGridCellIndexOfCorner(
   index: number,
   sizes: Dimensions[],
   cellMap: (number | undefined)[],
@@ -306,7 +306,7 @@ export function getCellIndexOfCorner(
 }
 
 /** Gets all cell indices that correspond to the specified indices */
-export function getCellIndices(
+export function getGridCellIndices(
   indices: (number | undefined)[],
   cellMap: (number | undefined)[],
 ) {
@@ -315,7 +315,7 @@ export function getCellIndices(
   );
 }
 
-export function isDisabled(
+export function isListIndexDisabled(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   index: number,
   disabledIndices?: Array<number>,

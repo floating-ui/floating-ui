@@ -14,21 +14,26 @@ export const getTabbableOptions = () =>
         : 'none',
   }) as const;
 
-export function getTabbableIn(
+function getTabbableIn(
   container: HTMLElement,
   direction: 'next' | 'prev',
-) {
-  const allTabbable = tabbable(container, getTabbableOptions());
+): FocusableElement | undefined {
+  const doc = getDocument(container);
+  const currentActive = activeElement(doc) as FocusableElement;
+  const tabbableElements = tabbable(container, getTabbableOptions());
+  const n = tabbableElements.length;
 
-  if (direction === 'prev') {
-    allTabbable.reverse();
+  if (n === 0) {
+    return;
   }
 
-  const activeIndex = allTabbable.indexOf(
-    activeElement(getDocument(container)) as HTMLElement,
-  );
-  const nextTabbableElements = allTabbable.slice(activeIndex + 1);
-  return nextTabbableElements[0];
+  const activeIndex = tabbableElements.indexOf(currentActive);
+
+  if (activeIndex === -1) {
+    return;
+  }
+
+  return tabbableElements[activeIndex + (direction === 'next' ? 1 : -1)];
 }
 
 export function getNextTabbable(
@@ -36,7 +41,7 @@ export function getNextTabbable(
 ): FocusableElement | null {
   return (
     getTabbableIn(getDocument(referenceElement).body, 'next') ||
-    referenceElement
+    (referenceElement as FocusableElement)
   );
 }
 
@@ -45,7 +50,7 @@ export function getPreviousTabbable(
 ): FocusableElement | null {
   return (
     getTabbableIn(getDocument(referenceElement).body, 'prev') ||
-    referenceElement
+    (referenceElement as FocusableElement)
   );
 }
 
