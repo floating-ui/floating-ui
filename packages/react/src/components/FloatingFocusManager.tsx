@@ -552,19 +552,15 @@ export function FloatingFocusManager(
     if (disabled || !floatingFocusElement) return;
 
     let preventReturnFocusScroll = false;
-    let focusReference = false;
 
     const doc = getDocument(floatingFocusElement);
     const previouslyFocusedElement = activeElement(doc);
-    const contextData = dataRef.current;
-    let openEvent = contextData.openEvent;
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
     function onOpenChange({
-      open,
       reason,
       event,
       nested,
@@ -574,14 +570,6 @@ export function FloatingFocusManager(
       event: Event;
       nested: boolean;
     }) {
-      if (open) {
-        openEvent = event;
-      }
-
-      if (reason === 'escape-key') {
-        focusReference = true;
-      }
-
       if (
         ['hover', 'safe-polygon'].includes(reason) &&
         event.type === 'mouseleave'
@@ -630,9 +618,8 @@ export function FloatingFocusManager(
 
     function getReturnElement() {
       if (typeof returnFocusRef.current === 'boolean') {
-        return focusReference && domReference
-          ? domReference
-          : getPreviouslyFocusedElement() || fallbackEl;
+        const el = domReference || getPreviouslyFocusedElement();
+        return el && el.isConnected ? el : fallbackEl;
       }
 
       return returnFocusRef.current.current || fallbackEl;
@@ -648,13 +635,6 @@ export function FloatingFocusManager(
           getChildren(tree.nodesRef.current, getNodeId()).some((node) =>
             contains(node.context?.elements.floating, activeEl),
           ));
-
-      if (
-        isFocusInsideFloatingTree ||
-        (!!openEvent && ['click', 'mousedown'].includes(openEvent.type))
-      ) {
-        focusReference = true;
-      }
 
       const returnElement = getReturnElement();
 
