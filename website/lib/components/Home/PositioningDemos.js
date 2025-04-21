@@ -174,7 +174,7 @@ export function Placement() {
           ].map(({placement: p, styles}) => (
             <button
               key={p}
-              className="absolute p-4 transition hover:scale-125"
+              className="absolute p-4 transition hover:scale-125 cursor-default"
               style={styles}
               onClick={() => setPlacement(p)}
               aria-label={p}

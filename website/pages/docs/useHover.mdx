@@ -25,9 +25,11 @@ Includes the ability to enter the floating element
 This Hook returns event handler props.
 
 To use it, pass it the `context{:.const}` object returned from
-`useFloating(){:js}`, and then feed its result into the
-`useInteractions(){:js}` array. The returned prop getters are
-then spread onto the elements for rendering.
+`useFloating(){:js}` or
+[`useFloatingRootContext`](/docs/useInteractions#external-reference),
+and then feed its result into the `useInteractions(){:js}` array.
+The returned prop getters are then spread onto the elements for
+rendering.
 
 ```js {9-13} /context/
 function App() {

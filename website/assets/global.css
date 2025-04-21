@@ -32,12 +32,8 @@ h6 {
   z-index: 2147483647;
 }
 
-::selection {
-  @apply bg-blue-500 text-white;
-}
-
 code ::selection {
-  @apply bg-blue-500/20 text-inherit;
+  @apply bg-blue-500/20;
 }
 
 .not-prose pre {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {tabbable, isTabbable, type FocusableElement} from 'tabbable';
+import {tabbable, isTabbable, focusable, type FocusableElement} from 'tabbable';
 import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
 import {
   activeElement,
@@ -61,6 +61,35 @@ function getFirstTabbableElement(container: Element) {
   }
 
   return tabbable(container, tabbableOptions)[0] || container;
+}
+
+function handleTabIndex(
+  floatingFocusElement: HTMLElement,
+  orderRef: React.MutableRefObject<Array<'reference' | 'floating' | 'content'>>,
+) {
+  if (
+    !orderRef.current.includes('floating') &&
+    !floatingFocusElement.getAttribute('role')?.includes('dialog')
+  ) {
+    return;
+  }
+
+  const options = getTabbableOptions();
+  const focusableElements = focusable(floatingFocusElement, options);
+  const tabbableContent = focusableElements.filter(
+    (element) =>
+      isTabbable(element, options) ||
+      element.getAttribute('data-tabindex') === '0',
+  );
+  const tabIndex = floatingFocusElement.getAttribute('tabindex');
+
+  if (orderRef.current.includes('floating') || tabbableContent.length === 0) {
+    if (tabIndex !== '0') {
+      floatingFocusElement.setAttribute('tabindex', '0');
+    }
+  } else if (tabIndex !== '-1') {
+    floatingFocusElement.setAttribute('tabindex', '-1');
+  }
 }
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
@@ -343,6 +372,7 @@ export function FloatingFocusManager(
 
     function handleFocusOutside(event: FocusEvent) {
       const relatedTarget = event.relatedTarget as HTMLElement | null;
+      const currentTarget = event.currentTarget;
 
       queueMicrotask(() => {
         const nodeId = getNodeId();
@@ -367,6 +397,10 @@ export function FloatingFocusManager(
                   node.context?.elements.domReference === relatedTarget,
               )))
         );
+
+        if (currentTarget === domReference && floatingFocusElement) {
+          handleTabIndex(floatingFocusElement, orderRef);
+        }
 
         // Restore focus to the previous tabbable element index to prevent
         // focus from being lost outside the floating tree.
@@ -435,6 +469,7 @@ export function FloatingFocusManager(
     getTabbableContent,
     isUntrappedTypeableCombobox,
     getNodeId,
+    orderRef,
   ]);
 
   const beforeGuardRef = React.useRef<HTMLSpanElement | null>(null);
@@ -549,19 +584,15 @@ export function FloatingFocusManager(
     if (disabled || !floatingFocusElement) return;
 
     let preventReturnFocusScroll = false;
-    let focusReference = false;
 
     const doc = getDocument(floatingFocusElement);
     const previouslyFocusedElement = activeElement(doc);
-    const contextData = dataRef.current;
-    let openEvent = contextData.openEvent;
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
     function onOpenChange({
-      open,
       reason,
       event,
       nested,
@@ -571,14 +602,6 @@ export function FloatingFocusManager(
       event: Event;
       nested: boolean;
     }) {
-      if (open) {
-        openEvent = event;
-      }
-
-      if (reason === 'escape-key') {
-        focusReference = true;
-      }
-
       if (
         ['hover', 'safe-polygon'].includes(reason) &&
         event.type === 'mouseleave'
@@ -627,9 +650,8 @@ export function FloatingFocusManager(
 
     function getReturnElement() {
       if (typeof returnFocusRef.current === 'boolean') {
-        return focusReference && domReference
-          ? domReference
-          : getPreviouslyFocusedElement() || fallbackEl;
+        const el = domReference || getPreviouslyFocusedElement();
+        return el && el.isConnected ? el : fallbackEl;
       }
 
       return returnFocusRef.current.current || fallbackEl;
@@ -645,13 +667,6 @@ export function FloatingFocusManager(
           getNodeChildren(tree.nodesRef.current, getNodeId()).some((node) =>
             contains(node.context?.elements.floating, activeEl),
           ));
-
-      if (
-        isFocusInsideFloatingTree ||
-        (!!openEvent && ['click', 'mousedown'].includes(openEvent.type))
-      ) {
-        focusReference = true;
-      }
 
       const returnElement = getReturnElement();
 
@@ -729,57 +744,8 @@ export function FloatingFocusManager(
   useModernLayoutEffect(() => {
     if (disabled) return;
     if (!floatingFocusElement) return;
-    if (typeof MutationObserver !== 'function') return;
-    if (
-      !orderRef.current.includes('floating') &&
-      !floatingFocusElement.getAttribute('role')?.includes('dialog')
-    ) {
-      return;
-    }
-
-    const handleMutation = () => {
-      const tabIndex = floatingFocusElement.getAttribute('tabindex');
-      const tabbableContent = getTabbableContent() as Array<Element | null>;
-      const activeEl = activeElement(getDocument(floating));
-      const tabbableIndex = tabbableContent.indexOf(activeEl);
-
-      if (tabbableIndex !== -1) {
-        tabbableIndexRef.current = tabbableIndex;
-      }
-
-      if (
-        orderRef.current.includes('floating') ||
-        tabbableContent.length === 0
-      ) {
-        if (tabIndex !== '0') {
-          floatingFocusElement.setAttribute('tabindex', '0');
-        }
-      } else if (tabIndex !== '-1') {
-        floatingFocusElement.setAttribute('tabindex', '-1');
-      }
-    };
-
-    handleMutation();
-    const observer = new MutationObserver(handleMutation);
-
-    observer.observe(floatingFocusElement, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [
-    disabled,
-    floating,
-    floatingFocusElement,
-    domReference,
-    orderRef,
-    getTabbableContent,
-    ignoreInitialFocus,
-  ]);
+    handleTabIndex(floatingFocusElement, orderRef);
+  }, [disabled, floatingFocusElement, orderRef]);
 
   function renderDismissButton(location: 'start' | 'end') {
     if (disabled || !visuallyHiddenDismiss || !modal) {
