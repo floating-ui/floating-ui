@@ -2294,7 +2294,11 @@ test('floating element with no focusable elements and no listbox role gets tabIn
   }
 
   render(<App />);
-  await userEvent.click(screen.getByTestId('reference'));
+
+  const reference = screen.getByTestId('reference');
+  await userEvent.click(reference);
+  await act(async () => {});
+  fireEvent.focusOut(reference);
   await act(async () => {});
 
   expect(screen.getByTestId('floating')).toHaveAttribute('tabindex', '0');
@@ -2347,4 +2351,41 @@ test('floating element with listbox role ignores tabIndex setting', async () => 
   await act(async () => {});
 
   expect(screen.getByTestId('floating')).toHaveAttribute('tabindex', '-1');
+});
+
+it('handles manual tabindex on dialog floating element', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    return (
+      <>
+        <button
+          data-testid="reference"
+          ref={refs.setReference}
+          onClick={() => setIsOpen(true)}
+        />
+        {isOpen && (
+          <FloatingFocusManager context={context} modal={false}>
+            <div ref={refs.setFloating} data-testid="floating" role="dialog" />
+          </FloatingFocusManager>
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await userEvent.click(screen.getByTestId('reference'));
+  await act(async () => {});
+
+  expect(screen.getByTestId('floating')).toHaveAttribute('tabindex', '0');
+  await userEvent.tab({shift: true});
+  expect(screen.getByTestId('reference')).toHaveFocus();
+  await userEvent.tab();
+  expect(screen.getByTestId('floating')).toHaveFocus();
 });
