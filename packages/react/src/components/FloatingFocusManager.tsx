@@ -11,7 +11,7 @@ import {
 import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import type {FocusableElement} from 'tabbable';
-import {tabbable, isTabbable} from 'tabbable';
+import {tabbable, isTabbable, focusable} from 'tabbable';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
@@ -64,6 +64,35 @@ function getFirstTabbableElement(container: Element) {
   }
 
   return tabbable(container, tabbableOptions)[0] || container;
+}
+
+function handleTabIndex(
+  floatingFocusElement: HTMLElement,
+  orderRef: React.MutableRefObject<Array<'reference' | 'floating' | 'content'>>,
+) {
+  if (
+    !orderRef.current.includes('floating') &&
+    !floatingFocusElement.getAttribute('role')?.includes('dialog')
+  ) {
+    return;
+  }
+
+  const options = getTabbableOptions();
+  const focusableElements = focusable(floatingFocusElement, options);
+  const tabbableContent = focusableElements.filter(
+    (element) =>
+      isTabbable(element, options) ||
+      element.getAttribute('data-tabindex') === '0',
+  );
+  const tabIndex = floatingFocusElement.getAttribute('tabindex');
+
+  if (orderRef.current.includes('floating') || tabbableContent.length === 0) {
+    if (tabIndex !== '0') {
+      floatingFocusElement.setAttribute('tabindex', '0');
+    }
+  } else if (tabIndex !== '-1') {
+    floatingFocusElement.setAttribute('tabindex', '-1');
+  }
 }
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
@@ -346,6 +375,7 @@ export function FloatingFocusManager(
 
     function handleFocusOutside(event: FocusEvent) {
       const relatedTarget = event.relatedTarget as HTMLElement | null;
+      const currentTarget = event.currentTarget;
 
       queueMicrotask(() => {
         const nodeId = getNodeId();
@@ -370,6 +400,10 @@ export function FloatingFocusManager(
                   node.context?.elements.domReference === relatedTarget,
               )))
         );
+
+        if (currentTarget === domReference && floatingFocusElement) {
+          handleTabIndex(floatingFocusElement, orderRef);
+        }
 
         // Restore focus to the previous tabbable element index to prevent
         // focus from being lost outside the floating tree.
@@ -438,6 +472,7 @@ export function FloatingFocusManager(
     getTabbableContent,
     isUntrappedTypeableCombobox,
     getNodeId,
+    orderRef,
   ]);
 
   const beforeGuardRef = React.useRef<HTMLSpanElement | null>(null);
@@ -732,57 +767,8 @@ export function FloatingFocusManager(
   useModernLayoutEffect(() => {
     if (disabled) return;
     if (!floatingFocusElement) return;
-    if (typeof MutationObserver !== 'function') return;
-    if (
-      !orderRef.current.includes('floating') &&
-      !floatingFocusElement.getAttribute('role')?.includes('dialog')
-    ) {
-      return;
-    }
-
-    const handleMutation = () => {
-      const tabIndex = floatingFocusElement.getAttribute('tabindex');
-      const tabbableContent = getTabbableContent() as Array<Element | null>;
-      const activeEl = activeElement(getDocument(floating));
-      const tabbableIndex = tabbableContent.indexOf(activeEl);
-
-      if (tabbableIndex !== -1) {
-        tabbableIndexRef.current = tabbableIndex;
-      }
-
-      if (
-        orderRef.current.includes('floating') ||
-        tabbableContent.length === 0
-      ) {
-        if (tabIndex !== '0') {
-          floatingFocusElement.setAttribute('tabindex', '0');
-        }
-      } else if (tabIndex !== '-1') {
-        floatingFocusElement.setAttribute('tabindex', '-1');
-      }
-    };
-
-    handleMutation();
-    const observer = new MutationObserver(handleMutation);
-
-    observer.observe(floatingFocusElement, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-    });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [
-    disabled,
-    floating,
-    floatingFocusElement,
-    domReference,
-    orderRef,
-    getTabbableContent,
-    ignoreInitialFocus,
-  ]);
+    handleTabIndex(floatingFocusElement, orderRef);
+  }, [disabled, floatingFocusElement, orderRef]);
 
   function renderDismissButton(location: 'start' | 'end') {
     if (disabled || !visuallyHiddenDismiss || !modal) {

@@ -2294,7 +2294,11 @@ test('floating element with no focusable elements and no listbox role gets tabIn
   }
 
   render(<App />);
-  await userEvent.click(screen.getByTestId('reference'));
+
+  const reference = screen.getByTestId('reference');
+  await userEvent.click(reference);
+  await act(async () => {});
+  fireEvent.focusOut(reference);
   await act(async () => {});
 
   expect(screen.getByTestId('floating')).toHaveAttribute('tabindex', '0');
