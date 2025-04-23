@@ -1,5 +1,14 @@
 # @floating-ui/react
 
+## 0.27.8
+
+### Patch Changes
+
+- feat: export most utils under `@floating-ui/react/utils`. This makes it a lot easier to write your own custom interaction hooks, or copy/paste the existing ones to change the way they are implemented yourself without patching or waiting for features/breaking changes.
+- perf(FloatingFocusManager): move manual tabindex handling on floating element to an event. Improves performance when the floating element has a large amount of content or the content changes frequently e.g. virtualized scrolling.
+- fix(FloatingFocusManager): prioritize returning focus to reference if available
+- feat(useListNavigation): add `parentOrientation` prop
+
 ## 0.27.7
 
 ### Patch Changes
