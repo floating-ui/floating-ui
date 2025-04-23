@@ -78,7 +78,10 @@ function handleTabIndex(
   const focusableElements = focusable(floatingFocusElement, options);
   const tabbableContent = focusableElements.filter((element) => {
     const dataTabIndex = element.getAttribute('data-tabindex') || '';
-    return isTabbable(element, options) || !dataTabIndex.startsWith('-');
+    return (
+      isTabbable(element, options) ||
+      (element.hasAttribute('data-tabindex') && !dataTabIndex.startsWith('-'))
+    );
   });
   const tabIndex = floatingFocusElement.getAttribute('tabindex');
 
