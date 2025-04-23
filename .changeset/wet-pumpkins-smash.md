@@ -1,5 +1,5 @@
 ---
-"@floating-ui/react": patch
+'@floating-ui/react': patch
 ---
 
-feat: (useListNavigation): add `parentOrientation` prop
+feat(useListNavigation): add `parentOrientation` prop
