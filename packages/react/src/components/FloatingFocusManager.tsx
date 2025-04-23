@@ -89,8 +89,13 @@ function handleTabIndex(
     if (tabIndex !== '0') {
       floatingFocusElement.setAttribute('tabindex', '0');
     }
-  } else if (tabIndex !== '-1') {
+  } else if (
+    tabIndex !== '-1' ||
+    (floatingFocusElement.hasAttribute('data-tabindex') &&
+      floatingFocusElement.getAttribute('data-tabindex') !== '-1')
+  ) {
     floatingFocusElement.setAttribute('tabindex', '-1');
+    floatingFocusElement.setAttribute('data-tabindex', '-1');
   }
 }
 
