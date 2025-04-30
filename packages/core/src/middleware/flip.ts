@@ -23,9 +23,11 @@ export interface FlipOptions extends DetectOverflowOptions {
   /**
    * The axis that runs along the alignment of the floating element. Determines
    * whether overflow along this axis is checked to perform a flip.
+   * - `boolean`: Whether to check the cross axis for any flipping.
+   * - `'alignment'`: Whether to restrict the cross axis check to the alignment only.
    * @default true
    */
-  crossAxis?: boolean;
+  crossAxis?: boolean | 'alignment';
   /**
    * Placements to try sequentially if the preferred `placement` does not fit.
    * @default [oppositePlacement] (computed)
@@ -137,16 +139,24 @@ export const flip = (
       const nextPlacement = placements[nextIndex];
 
       if (nextPlacement) {
-        // Try next placement and re-run the lifecycle.
-        return {
-          data: {
-            index: nextIndex,
-            overflows: overflowsData,
-          },
-          reset: {
-            placement: nextPlacement,
-          },
-        };
+        const ignoreCrossAxisOverflow =
+          checkCrossAxis === 'alignment'
+            ? initialSideAxis !== getSideAxis(nextPlacement) &&
+              hasFallbackAxisSideDirection
+            : false;
+
+        if (!ignoreCrossAxisOverflow || overflows[0] > 0) {
+          // Try next placement and re-run the lifecycle.
+          return {
+            data: {
+              index: nextIndex,
+              overflows: overflowsData,
+            },
+            reset: {
+              placement: nextPlacement,
+            },
+          };
+        }
       }
 
       // First, find the candidates that fit on the mainAxis side of overflow,
