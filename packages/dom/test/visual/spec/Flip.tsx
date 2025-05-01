@@ -16,12 +16,15 @@ const FALLBACK_STRATEGIES: Array<FlipOptions['fallbackStrategy']> = [
 export function Flip() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [mainAxis, setMainAxis] = useState(true);
-  const [crossAxis, setCrossAxis] = useState(true);
+  const [crossAxis, setCrossAxis] = useState<FlipOptions['crossAxis']>(true);
   const [fallbackPlacements, setFallbackPlacements] = useState<Placement[]>();
   const [fallbackStrategy, setFallbackStrategy] =
     useState<FlipOptions['fallbackStrategy']>('bestFit');
   const [flipAlignment, setFlipAlignment] = useState(true);
   const [addShift, setAddShift] = useState(false);
+  const [fallbackAxisSideDirection, setFallbackAxisSideDirection] =
+    useState<FlipOptions['fallbackAxisSideDirection']>('none');
+
   const {x, y, strategy, update, refs} = useFloating({
     placement,
     whileElementsMounted: autoUpdate,
@@ -29,9 +32,13 @@ export function Flip() {
       flip({
         mainAxis,
         crossAxis,
-        fallbackPlacements: addShift ? ['bottom'] : fallbackPlacements,
+        fallbackPlacements:
+          addShift && fallbackAxisSideDirection === 'none'
+            ? ['bottom']
+            : fallbackPlacements,
         fallbackStrategy,
         flipAlignment,
+        fallbackAxisSideDirection: 'end',
       }),
       addShift && shift(),
     ],
@@ -62,7 +69,8 @@ export function Flip() {
               top: y ?? 0,
               left: x ?? 0,
               ...(addShift && {
-                width: 400,
+                width: fallbackAxisSideDirection === 'none' ? 400 : 200,
+                height: fallbackAxisSideDirection === 'none' ? undefined : 50,
               }),
             }}
           >
@@ -103,14 +111,14 @@ export function Flip() {
 
       <h2>crossAxis</h2>
       <Controls>
-        {BOOLS.map((bool) => (
+        {([...BOOLS, 'alignment'] as const).map((value) => (
           <button
-            key={String(bool)}
-            data-testid={`crossAxis-${bool}`}
-            onClick={() => setCrossAxis(bool)}
-            style={{backgroundColor: crossAxis === bool ? 'black' : ''}}
+            key={String(value)}
+            data-testid={`crossAxis-${value}`}
+            onClick={() => setCrossAxis(value)}
+            style={{backgroundColor: crossAxis === value ? 'black' : ''}}
           >
-            {String(bool)}
+            {String(value)}
           </button>
         ))}
       </Controls>
@@ -200,6 +208,23 @@ export function Flip() {
             }}
           >
             {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>fallbackAxisSideDirection</h2>
+      <Controls>
+        {(['start', 'end', 'none'] as const).map((value) => (
+          <button
+            key={value}
+            data-testid={`fallbackAxisSideDirection-${value}`}
+            onClick={() => setFallbackAxisSideDirection(value)}
+            style={{
+              backgroundColor:
+                value === fallbackAxisSideDirection ? 'black' : '',
+            }}
+          >
+            {String(value)}
           </button>
         ))}
       </Controls>
