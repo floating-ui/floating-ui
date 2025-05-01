@@ -57,7 +57,7 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/core": "^1.6.0",
+    "@floating-ui/core": "workspace:^",
     "@floating-ui/utils": "workspace:^"
   },
   "devDependencies": {

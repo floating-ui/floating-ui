@@ -236,8 +236,8 @@ importers:
   packages/dom:
     dependencies:
       '@floating-ui/core':
-        specifier: ^1.6.0
-        version: 1.6.8
+        specifier: workspace:^
+        version: link:../core
       '@floating-ui/utils':
         specifier: workspace:^
         version: link:../utils
@@ -415,8 +415,8 @@ importers:
         specifier: ^6.6.1
         version: 6.6.1(@vue/compiler-sfc@3.4.4)(@vue/server-renderer@3.4.4(vue@3.4.4(typescript@5.4.2)))(vue@3.4.4(typescript@5.4.2))
       '@vitejs/plugin-vue':
-        specifier: ^5.0.2
-        version: 5.0.2(vite@6.2.2(@types/node@20.10.6)(jiti@1.21.0)(terser@5.39.0))(vue@3.4.4(typescript@5.4.2))
+        specifier: ^5.2.3
+        version: 5.2.3(vite@6.2.2(@types/node@20.10.6)(jiti@1.21.0)(terser@5.39.0))(vue@3.4.4(typescript@5.4.2))
       config:
         specifier: workspace:*
         version: link:../../config
@@ -3996,11 +3996,11 @@ packages:
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0 || ^6.0.0
 
-  '@vitejs/plugin-vue@5.0.2':
-    resolution: {integrity: sha512-kEjJHrLb5ePBvjD0SPZwJlw1QTRcjjCA9sB5VyfonoXVBxTS7TMnqL6EkLt1Eu61RDeiuZ/WN9Hf6PxXhPI2uA==}
+  '@vitejs/plugin-vue@5.2.3':
+    resolution: {integrity: sha512-IYSLEQj4LgZZuoVpdSUCw3dIynTWQgPlaRP6iAvMle4My0HdYwr5g5wQAfwOeHQBmYwEkqF70nRpSilr6PoUDg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^5.0.0
+      vite: ^5.0.0 || ^6.0.0
       vue: ^3.2.25
 
   '@vitest/browser@3.0.9':
@@ -5361,10 +5361,6 @@ packages:
   es-array-method-boxes-properly@1.0.0:
     resolution: {integrity: sha512-wd6JXUmyHmt8T5a2xreUwKcGPq6f1f+WwIJkijUqiGcJz1qqnZgP6XIK+QyIWU5lT7imeNxUll48bziG+TSYcA==}
 
-  es-define-property@1.0.0:
-    resolution: {integrity: sha512-jxayLKShrEqqzJ0eumQbVhTYQM27CfT1T35+gCgDFoL82JLsXqTJ76zv6A0YLOgEnLUMvLzsDsGIrl8NFpT2gQ==}
-    engines: {node: '>= 0.4'}
-
   es-define-property@1.0.1:
     resolution: {integrity: sha512-e3nRfgfUZ4rNGL232gUgX06QNyyez04KdjFrF+LTRoOXmrOgFKDg4BCdsjW8EnT69eqdYGmRpJwiPVYNrCaW3g==}
     engines: {node: '>= 0.4'}
@@ -5386,16 +5382,8 @@ packages:
   es-module-lexer@1.6.0:
     resolution: {integrity: sha512-qqnD1yMU6tk/jnaMosogGySTZP8YtUgAffA9nMN+E/rjxcfRQ6IEk7IiozUjgxKoFHBGjTLnrHB/YC45r/59EQ==}
 
-  es-object-atoms@1.0.0:
-    resolution: {integrity: sha512-MZ4iQ6JwHOBQjahnjwaC1ZtIBH+2ohjamzAO3oaHcXYup7qxjF2fixyH+Q71voWHeOkI2q/TnJao/KfXYIZWbw==}
-    engines: {node: '>= 0.4'}
-
   es-object-atoms@1.1.1:
     resolution: {integrity: sha512-FGgH2h8zKNim9ljj7dankFPcICIK9Cp5bm+c2gQSYePhpaG5+esrLODihIorn+Pe6FGJzWhXQotPv73jTaldXA==}
-    engines: {node: '>= 0.4'}
-
-  es-set-tostringtag@2.0.3:
-    resolution: {integrity: sha512-3T8uNMC3OQTHkFUsFq8r/BwAXLHvU/9O9mE0fBc/MY5iq/8H7ncvO947LmYA6ldWw9Uh8Yhf25zu6n7nML5QWQ==}
     engines: {node: '>= 0.4'}
 
   es-set-tostringtag@2.1.0:
@@ -5738,10 +5726,6 @@ packages:
     resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
     engines: {node: '>=14'}
 
-  form-data@4.0.0:
-    resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
-    engines: {node: '>= 6'}
-
   form-data@4.0.2:
     resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
     engines: {node: '>= 6'}
@@ -5821,10 +5805,6 @@ packages:
   get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
-
-  get-intrinsic@1.2.4:
-    resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
-    engines: {node: '>= 0.4'}
 
   get-intrinsic@1.3.0:
     resolution: {integrity: sha512-9fSjSaos/fRIVIp+xSJlE6lfwhES7LNtKaCBIamHsjr2na1BiABJPo0mOjjz8GJDURarmCPGqaiVg5mfjb98CQ==}
@@ -5930,10 +5910,6 @@ packages:
   globby@13.2.2:
     resolution: {integrity: sha512-Y1zNGV+pzQdh7H39l9zgB4PJqjRNqydvdYCDG4HFXM4XuvSaQQlEc91IU1yALL8gUTDomgBAfz3XJdmUS+oo0w==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
-  gopd@1.1.0:
-    resolution: {integrity: sha512-FQoVQnqcdk4hVM4JN1eromaun4iuS34oStkdlLENLdpULsuQcTyXj8w7ayhuUfPwEYZ1ZOooOTT6fdA9Vmx/RA==}
-    engines: {node: '>= 0.4'}
 
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
@@ -6717,10 +6693,6 @@ packages:
   loupe@3.1.3:
     resolution: {integrity: sha512-kkIp7XSkP78ZxJEsSxW3712C6teJVoeHHwgo9zJ380de7IYyJ2ISlxojcH2pC5OFLewESmnRi/+XCDIEEVyoug==}
 
-  lru-cache@10.1.0:
-    resolution: {integrity: sha512-/1clY/ui8CzjKFyjdvwPWJUYKiFVXG2I2cY0ssG7h4+hwk+XOIX7ZSG9Q7TW8TW3Kp3BUSqgFWBLgL4PJ+Blag==}
-    engines: {node: 14 || >=16.14}
-
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
@@ -7210,6 +7182,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch-native@1.6.1:
     resolution: {integrity: sha512-bW9T/uJDPAJB2YNYEpWzE54U5O3MQidXsOyTfnbKYtTtFexRvGzb1waphBN4ZwP6EcIvYYEOwW0b72BpAqydTw==}
@@ -7531,9 +7504,6 @@ packages:
 
   parse-numeric-range@1.3.0:
     resolution: {integrity: sha512-twN+njEipszzlMJd4ONUYgSfZPDxgHhT9Ahed5uTigpQn90FggW4SA/AIPq/6a149fTbE9qBEcSwE3FAEp6wQQ==}
-
-  parse5@7.1.2:
-    resolution: {integrity: sha512-Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==}
 
   parse5@7.2.1:
     resolution: {integrity: sha512-BuBYQYlv1ckiPdQi/ohiivi9Sagc9JG+Ozs0r7b/0iK3sKmrb0b9FdWdBbOdx6hBCM/F9Ir82ofnBhtZOjCRPQ==}
@@ -12234,7 +12204,7 @@ snapshots:
 
   '@mdx-js/mdx@3.0.0':
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       '@types/estree-jsx': 1.0.3
       '@types/hast': 3.0.3
       '@types/mdx': 2.0.10
@@ -13336,7 +13306,7 @@ snapshots:
 
   '@rollup/pluginutils@5.1.0(rollup@4.36.0)':
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       estree-walker: 2.0.2
       picomatch: 2.3.1
     optionalDependencies:
@@ -14153,7 +14123,7 @@ snapshots:
 
   '@types/acorn@4.0.6':
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
 
   '@types/argparse@1.0.38': {}
 
@@ -14228,7 +14198,7 @@ snapshots:
 
   '@types/estree-jsx@1.0.3':
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
 
   '@types/estree@0.0.51': {}
 
@@ -14332,7 +14302,7 @@ snapshots:
   '@types/node-fetch@2.6.10':
     dependencies:
       '@types/node': 20.10.6
-      form-data: 4.0.0
+      form-data: 4.0.2
 
   '@types/node@12.20.55': {}
 
@@ -14529,7 +14499,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue@5.0.2(vite@6.2.2(@types/node@20.10.6)(jiti@1.21.0)(terser@5.39.0))(vue@3.4.4(typescript@5.4.2))':
+  '@vitejs/plugin-vue@5.2.3(vite@6.2.2(@types/node@20.10.6)(jiti@1.21.0)(terser@5.39.0))(vue@3.4.4(typescript@5.4.2))':
     dependencies:
       vite: 6.2.2(@types/node@20.10.6)(jiti@1.21.0)(terser@5.39.0)
       vue: 3.4.4(typescript@5.4.2)
@@ -14913,8 +14883,8 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.23.5
-      es-object-atoms: 1.0.0
-      get-intrinsic: 1.2.4
+      es-object-atoms: 1.1.1
+      get-intrinsic: 1.3.0
       is-string: 1.1.0
 
   array-iterate@2.0.1: {}
@@ -14927,7 +14897,7 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.5
       es-errors: 1.3.0
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
       es-shim-unscopables: 1.0.2
 
   array.prototype.flat@1.3.2:
@@ -14967,7 +14937,7 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.5
       es-errors: 1.3.0
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       is-array-buffer: 3.0.4
       is-shared-array-buffer: 1.0.3
 
@@ -15221,10 +15191,10 @@ snapshots:
 
   call-bind@1.0.7:
     dependencies:
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
       function-bind: 1.1.2
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       set-function-length: 1.2.2
 
   caller-callsite@2.0.0:
@@ -15631,7 +15601,7 @@ snapshots:
       array-buffer-byte-length: 1.0.1
       call-bind: 1.0.7
       es-get-iterator: 1.1.3
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       is-arguments: 1.1.1
       is-array-buffer: 3.0.4
       is-date-object: 1.0.5
@@ -15664,9 +15634,9 @@ snapshots:
 
   define-data-property@1.1.4:
     dependencies:
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
-      gopd: 1.1.0
+      gopd: 1.2.0
 
   define-lazy-prop@2.0.0: {}
 
@@ -15859,16 +15829,16 @@ snapshots:
       data-view-buffer: 1.0.1
       data-view-byte-length: 1.0.1
       data-view-byte-offset: 1.0.0
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
-      es-object-atoms: 1.0.0
-      es-set-tostringtag: 2.0.3
+      es-object-atoms: 1.1.1
+      es-set-tostringtag: 2.1.0
       es-to-primitive: 1.3.0
       function.prototype.name: 1.1.6
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       get-symbol-description: 1.0.2
       globalthis: 1.0.4
-      gopd: 1.1.0
+      gopd: 1.2.0
       has-property-descriptors: 1.0.2
       has-proto: 1.1.0
       has-symbols: 1.1.0
@@ -15901,10 +15871,6 @@ snapshots:
 
   es-array-method-boxes-properly@1.0.0: {}
 
-  es-define-property@1.0.0:
-    dependencies:
-      get-intrinsic: 1.2.4
-
   es-define-property@1.0.1: {}
 
   es-errors@1.3.0: {}
@@ -15912,7 +15878,7 @@ snapshots:
   es-get-iterator@1.1.3:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       has-symbols: 1.1.0
       is-arguments: 1.1.1
       is-map: 2.0.3
@@ -15927,11 +15893,11 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.5
       es-errors: 1.3.0
-      es-set-tostringtag: 2.0.3
+      es-set-tostringtag: 2.1.0
       function-bind: 1.1.2
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       globalthis: 1.0.4
-      gopd: 1.1.0
+      gopd: 1.2.0
       has-property-descriptors: 1.0.2
       has-proto: 1.1.0
       has-symbols: 1.1.0
@@ -15943,19 +15909,9 @@ snapshots:
 
   es-module-lexer@1.6.0: {}
 
-  es-object-atoms@1.0.0:
-    dependencies:
-      es-errors: 1.3.0
-
   es-object-atoms@1.1.1:
     dependencies:
       es-errors: 1.3.0
-
-  es-set-tostringtag@2.0.3:
-    dependencies:
-      get-intrinsic: 1.2.4
-      has-tostringtag: 1.0.2
-      hasown: 2.0.2
 
   es-set-tostringtag@2.1.0:
     dependencies:
@@ -16120,7 +16076,7 @@ snapshots:
       '@humanfs/node': 0.16.6
       '@humanwhocodes/module-importer': 1.0.1
       '@humanwhocodes/retry': 0.4.1
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       '@types/json-schema': 7.0.15
       ajv: 6.12.6
       chalk: 4.1.2
@@ -16171,7 +16127,7 @@ snapshots:
 
   estree-util-attach-comments@3.0.0:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
 
   estree-util-build-jsx@3.0.1:
     dependencies:
@@ -16197,7 +16153,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
 
   esutils@2.0.3: {}
 
@@ -16473,12 +16429,6 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  form-data@4.0.0:
-    dependencies:
-      asynckit: 0.4.0
-      combined-stream: 1.0.8
-      mime-types: 2.1.35
-
   form-data@4.0.2:
     dependencies:
       asynckit: 0.4.0
@@ -16553,14 +16503,6 @@ snapshots:
 
   get-caller-file@2.0.5: {}
 
-  get-intrinsic@1.2.4:
-    dependencies:
-      es-errors: 1.3.0
-      function-bind: 1.1.2
-      has-proto: 1.1.0
-      has-symbols: 1.1.0
-      hasown: 2.0.2
-
   get-intrinsic@1.3.0:
     dependencies:
       call-bind-apply-helpers: 1.0.2
@@ -16595,7 +16537,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       es-errors: 1.3.0
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
 
   giget@1.2.1:
     dependencies:
@@ -16661,7 +16603,7 @@ snapshots:
   globalthis@1.0.4:
     dependencies:
       define-properties: 1.2.1
-      gopd: 1.1.0
+      gopd: 1.2.0
 
   globby@10.0.1:
     dependencies:
@@ -16690,10 +16632,6 @@ snapshots:
       ignore: 5.3.2
       merge2: 1.4.1
       slash: 4.0.0
-
-  gopd@1.1.0:
-    dependencies:
-      get-intrinsic: 1.2.4
 
   gopd@1.2.0: {}
 
@@ -16733,7 +16671,7 @@ snapshots:
 
   has-property-descriptors@1.0.2:
     dependencies:
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
 
   has-proto@1.1.0:
     dependencies:
@@ -16754,7 +16692,7 @@ snapshots:
       '@types/hast': 3.0.3
       devlop: 1.1.0
       hast-util-from-parse5: 8.0.1
-      parse5: 7.1.2
+      parse5: 7.2.1
       vfile: 6.0.1
       vfile-message: 4.0.2
 
@@ -16779,7 +16717,7 @@ snapshots:
 
   hast-util-to-estree@3.1.0:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       '@types/estree-jsx': 1.0.3
       '@types/hast': 3.0.3
       comma-separated-tokens: 2.0.3
@@ -16800,7 +16738,7 @@ snapshots:
 
   hast-util-to-jsx-runtime@2.3.0:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       '@types/hast': 3.0.3
       '@types/unist': 3.0.2
       comma-separated-tokens: 2.0.3
@@ -16984,7 +16922,7 @@ snapshots:
   is-array-buffer@3.0.4:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
 
   is-arrayish@0.2.1: {}
 
@@ -17099,12 +17037,12 @@ snapshots:
 
   is-reference@3.0.2:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
 
   is-regex@1.2.0:
     dependencies:
       call-bind: 1.0.7
-      gopd: 1.1.0
+      gopd: 1.2.0
       has-tostringtag: 1.0.2
       hasown: 2.0.2
 
@@ -17148,7 +17086,7 @@ snapshots:
   is-weakset@2.0.3:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
 
   is-windows@1.0.2: {}
 
@@ -17181,7 +17119,7 @@ snapshots:
   iterator.prototype@1.1.3:
     dependencies:
       define-properties: 1.2.1
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       has-symbols: 1.1.0
       reflect.getprototypeof: 1.0.7
       set-function-name: 2.0.2
@@ -17570,8 +17508,6 @@ snapshots:
       js-tokens: 4.0.0
 
   loupe@3.1.3: {}
-
-  lru-cache@10.1.0: {}
 
   lru-cache@10.4.3: {}
 
@@ -18039,7 +17975,7 @@ snapshots:
 
   micromark-extension-mdx-expression@3.0.0:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       devlop: 1.1.0
       micromark-factory-mdx-expression: 2.0.1
       micromark-factory-space: 2.0.0
@@ -18051,7 +17987,7 @@ snapshots:
   micromark-extension-mdx-jsx@3.0.0:
     dependencies:
       '@types/acorn': 4.0.6
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       devlop: 1.1.0
       estree-util-is-identifier-name: 3.0.0
       micromark-factory-mdx-expression: 2.0.1
@@ -18067,7 +18003,7 @@ snapshots:
 
   micromark-extension-mdxjs-esm@3.0.0:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.0
       micromark-util-character: 2.0.1
@@ -18103,7 +18039,7 @@ snapshots:
 
   micromark-factory-mdx-expression@2.0.1:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       devlop: 1.1.0
       micromark-util-character: 2.0.1
       micromark-util-events-to-acorn: 2.0.2
@@ -18167,7 +18103,7 @@ snapshots:
   micromark-util-events-to-acorn@2.0.2:
     dependencies:
       '@types/acorn': 4.0.6
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       '@types/unist': 3.0.2
       devlop: 1.1.0
       estree-util-visit: 2.0.0
@@ -18519,14 +18455,14 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   object.fromentries@2.0.8:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.23.5
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   object.getownpropertydescriptors@2.1.7:
     dependencies:
@@ -18540,7 +18476,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   ohash@1.1.3: {}
 
@@ -18674,10 +18610,6 @@ snapshots:
 
   parse-numeric-range@1.3.0: {}
 
-  parse5@7.1.2:
-    dependencies:
-      entities: 4.5.0
-
   parse5@7.2.1:
     dependencies:
       entities: 4.5.0
@@ -18698,7 +18630,7 @@ snapshots:
 
   path-scurry@1.10.1:
     dependencies:
-      lru-cache: 10.1.0
+      lru-cache: 10.4.3
       minipass: 7.0.4
 
   path-to-regexp@0.1.7: {}
@@ -18727,7 +18659,7 @@ snapshots:
 
   periscopic@3.1.0:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
       estree-walker: 3.0.3
       is-reference: 3.0.2
 
@@ -19299,8 +19231,8 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.5
       es-errors: 1.3.0
-      get-intrinsic: 1.2.4
-      gopd: 1.1.0
+      get-intrinsic: 1.3.0
+      gopd: 1.2.0
       which-builtin-type: 1.2.0
 
   regenerate-unicode-properties@10.1.1:
@@ -19551,7 +19483,7 @@ snapshots:
   safe-array-concat@1.1.2:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       has-symbols: 1.1.0
       isarray: 2.0.5
 
@@ -19651,8 +19583,8 @@ snapshots:
       define-data-property: 1.1.4
       es-errors: 1.3.0
       function-bind: 1.1.2
-      get-intrinsic: 1.2.4
-      gopd: 1.1.0
+      get-intrinsic: 1.3.0
+      gopd: 1.2.0
       has-property-descriptors: 1.0.2
 
   set-function-name@2.0.2:
@@ -19707,7 +19639,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       es-errors: 1.3.0
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       object-inspect: 1.13.3
 
   siginfo@2.0.0: {}
@@ -19877,9 +19809,9 @@ snapshots:
       define-properties: 1.2.1
       es-abstract: 1.23.5
       es-errors: 1.3.0
-      es-object-atoms: 1.0.0
-      get-intrinsic: 1.2.4
-      gopd: 1.1.0
+      es-object-atoms: 1.1.1
+      get-intrinsic: 1.3.0
+      gopd: 1.2.0
       has-symbols: 1.1.0
       internal-slot: 1.0.7
       regexp.prototype.flags: 1.5.3
@@ -19896,19 +19828,19 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.23.5
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   string.prototype.trimend@1.0.8:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   string.prototype.trimstart@1.0.8:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   string_decoder@1.1.1:
     dependencies:
@@ -20309,7 +20241,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       for-each: 0.3.3
-      gopd: 1.1.0
+      gopd: 1.2.0
       has-proto: 1.1.0
       is-typed-array: 1.1.13
 
@@ -20318,7 +20250,7 @@ snapshots:
       available-typed-arrays: 1.0.7
       call-bind: 1.0.7
       for-each: 0.3.3
-      gopd: 1.1.0
+      gopd: 1.2.0
       has-proto: 1.1.0
       is-typed-array: 1.1.13
       reflect.getprototypeof: 1.0.7
@@ -20327,7 +20259,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       for-each: 0.3.3
-      gopd: 1.1.0
+      gopd: 1.2.0
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
       reflect.getprototypeof: 1.0.7
@@ -20867,7 +20799,7 @@ snapshots:
       available-typed-arrays: 1.0.7
       call-bind: 1.0.7
       for-each: 0.3.3
-      gopd: 1.1.0
+      gopd: 1.2.0
       has-tostringtag: 1.0.2
 
   which@1.3.1:
