@@ -141,8 +141,7 @@ export const flip = (
       if (nextPlacement) {
         const ignoreCrossAxisOverflow =
           checkCrossAxis === 'alignment'
-            ? initialSideAxis !== getSideAxis(nextPlacement) &&
-              hasFallbackAxisSideDirection
+            ? initialSideAxis !== getSideAxis(nextPlacement)
             : false;
         const hasInitialMaxAxisOverflow = overflowsData[0]?.overflows[0] > 0;
 
