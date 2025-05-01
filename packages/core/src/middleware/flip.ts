@@ -23,8 +23,9 @@ export interface FlipOptions extends DetectOverflowOptions {
   /**
    * The axis that runs along the alignment of the floating element. Determines
    * whether overflow along this axis is checked to perform a flip.
-   * - `boolean`: Whether to check the cross axis for any flipping.
-   * - `'alignment'`: Whether to restrict the cross axis check to the alignment only.
+   * - `true`: Whether to check cross axis overflow for both side and alignment flipping.
+   * - `false`: Whether to disable all cross axis overflow checking.
+   * - `'alignment'`: Whether to check cross axis overflow for alignment flipping only.
    * @default true
    */
   crossAxis?: boolean | 'alignment';
