@@ -143,9 +143,9 @@ export const flip = (
           checkCrossAxis === 'alignment'
             ? initialSideAxis !== getSideAxis(nextPlacement)
             : false;
-        const hasInitialMaxAxisOverflow = overflowsData[0]?.overflows[0] > 0;
+        const hasInitialMainAxisOverflow = overflowsData[0]?.overflows[0] > 0;
 
-        if (!ignoreCrossAxisOverflow || hasInitialMaxAxisOverflow) {
+        if (!ignoreCrossAxisOverflow || hasInitialMainAxisOverflow) {
           // Try next placement and re-run the lifecycle.
           return {
             data: {
