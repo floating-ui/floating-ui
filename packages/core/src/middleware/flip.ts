@@ -144,8 +144,9 @@ export const flip = (
             ? initialSideAxis !== getSideAxis(nextPlacement) &&
               hasFallbackAxisSideDirection
             : false;
+        const hasInitialMaxAxisOverflow = overflowsData[0]?.overflows[0] > 0;
 
-        if (!ignoreCrossAxisOverflow || overflows[0] > 0) {
+        if (!ignoreCrossAxisOverflow || hasInitialMaxAxisOverflow) {
           // Try next placement and re-run the lifecycle.
           return {
             data: {
