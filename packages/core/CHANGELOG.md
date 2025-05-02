@@ -1,5 +1,11 @@
 # @floating-ui/core
 
+## 1.7.0
+
+### Minor Changes
+
+- feat(flip): add `"alignment"` string value for `crossAxis` option. This value determines if cross axis overflow checking is restricted to the `alignment` of the placement only. This prevents `fallbackPlacements`/`fallbackAxisSideDirection` from too eagerly changing to the perpendicular side (thereby preferring `shift()` if overflow is detected along the cross axis, even if `shift()` is placed after `flip()` in the middleware array).
+
 ## 1.6.9
 
 ### Patch Changes
