@@ -162,7 +162,7 @@ export interface UseListNavigationProps {
    * navigating via arrow keys, specify an empty array.
    * @default undefined
    */
-  disabledIndices?: Array<number>;
+  disabledIndices?: Array<number> | ((index: number) => Array<number>);
   /**
    * Determines whether focus can escape the list, such that nothing is selected
    * after navigating beyond the boundary of the list. In some
@@ -709,7 +709,9 @@ export function useListNavigation(
               // don't end up in them
               disabledIndices: getGridCellIndices(
                 [
-                  ...(disabledIndices ||
+                  ...((typeof disabledIndices !== 'function'
+                    ? disabledIndices
+                    : null) ||
                     listRef.current.map((_, index) =>
                       isListIndexDisabled(listRef, index) ? index : undefined,
                     )),
