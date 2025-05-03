@@ -154,42 +154,20 @@ useFloating(reference, floating, {
 
 <ShowFor packages={['react', 'react-dom']}>
 
-1. You can use sync state, and apply using the `style{:.keyword}`
-   prop during render, achieved via `flushSync(){:js}`:
-
-```js
-import {flushSync} from 'react-dom';
-```
-
-```js {6-8}  /maxHeight/
-const [maxHeight, setMaxHeight] = useState(null);
-
-const {refs, floatingStyles} = useFloating({
-  middleware: [
-    size({
-      apply({availableHeight}) {
-        flushSync(() => setMaxHeight(availableHeight));
-      },
-    }),
-  ],
-});
-
-return (
-  <div
-    ref={refs.setFloating}
-    style={{...floatingStyles, maxHeight}}
-  />
-);
-```
-
-2. Or, mutate the style property directly:
-
 ```js
 useFloating({
   middleware: [
     size({
       apply({availableHeight, elements}) {
-        elements.floating.style.maxHeight = `${availableHeight}px`;
+        const value = `${Math.max(0, availableHeight)}px`;
+
+        // 1. Assign directly:
+        elements.floating.style.maxHeight = value;
+        // 2. Or, use a CSS variable:
+        elements.floating.style.setProperty(
+          '--available-height',
+          value,
+        );
       },
     }),
   ],
@@ -377,8 +355,10 @@ size({
 
 ### `maxHeight` style left on floating element
 
-Leaving the `maxHeight` style on the floating element can cause
-issues in certain situations where it can and should expand more.
+Leaving the `maxHeight` style on the floating element that's kept
+mounted in the DOM when closed can cause issues in certain
+situations where it can and should expand more.
+
 By removing the style inside the `apply{:.function}` function
 when the `scrollHeight` is less than the `availableHeight`, you
 can prevent this:
