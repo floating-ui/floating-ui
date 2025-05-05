@@ -22,6 +22,7 @@ import {
   useMergeRefs,
   useRole,
   useTypeahead,
+  useFocus,
 } from '@floating-ui/react';
 import {ChevronRightIcon} from '@radix-ui/react-icons';
 import c from 'clsx';
@@ -56,6 +57,7 @@ interface MenuProps {
   keepMounted?: boolean;
   orientation?: 'vertical' | 'horizontal' | 'both';
   cols?: number;
+  openOnFocus?: boolean;
 }
 
 export const MenuComponent = React.forwardRef<
@@ -68,6 +70,7 @@ export const MenuComponent = React.forwardRef<
     keepMounted = false,
     cols,
     orientation: orientationOption,
+    openOnFocus = false,
     ...props
   },
   forwardedRef,
@@ -112,6 +115,7 @@ export const MenuComponent = React.forwardRef<
     toggle: !isNested || !allowHover,
     ignoreMouse: isNested,
   });
+  const focus = useFocus(context, {enabled: openOnFocus});
   const role = useRole(context, {role: 'menu'});
   const dismiss = useDismiss(context, {bubbles: true});
   const listNavigation = useListNavigation(context, {
@@ -133,6 +137,7 @@ export const MenuComponent = React.forwardRef<
     click,
     role,
     dismiss,
+    focus,
     listNavigation,
     typeahead,
   ]);

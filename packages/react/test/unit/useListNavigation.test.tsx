@@ -8,7 +8,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useLayoutEffect, useRef, useState} from 'react';
-import {vi, test} from 'vitest';
+import {vi, test, describe} from 'vitest';
 
 import {
   FloatingFocusManager,
@@ -28,6 +28,7 @@ import {Main as ListboxFocus} from '../visual/components/ListboxFocus';
 import {Main as NestedMenu} from '../visual/components/Menu';
 import {HorizontalMenu} from '../visual/components/MenuOrientation';
 import {Menu, MenuItem} from '../visual/components/MenuVirtual';
+import {Menubar} from '../visual/components/Menubar';
 import {isJSDOM} from '../../src/utils';
 
 function App(props: Omit<Partial<UseListNavigationProps>, 'listRef'>) {
@@ -405,6 +406,40 @@ describe('focusItemOnOpen', () => {
     fireEvent.click(screen.getByRole('button'));
     expect(screen.getByTestId('item-0')).not.toHaveFocus();
     cleanup();
+  });
+
+  describe.skipIf(isJSDOM())('browser tests', () => {
+    test('does not override "auto" setting when using Enter/Space', async () => {
+      const {userEvent} = await import('@vitest/browser/context');
+      const {render: vbrRender, cleanup} = await import('vitest-browser-react');
+
+      vbrRender(<Menubar />);
+
+      // focusing the trigger will open the menu
+      screen.getByRole('button', {name: 'File'}).focus();
+
+      // close the menu and open it with keyboard
+      await userEvent.keyboard('{Escape}');
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByRole('menuitem', {name: 'Open'})).toHaveFocus();
+      });
+
+      await userEvent.keyboard('{ArrowRight}');
+      await userEvent.keyboard('{ArrowLeft}');
+      await waitFor(() => {
+        expect(screen.getByRole('menuitem', {name: 'Open'})).not.toHaveFocus();
+      });
+
+      await userEvent.keyboard('{ArrowRight}');
+      await userEvent.keyboard('{ArrowLeft}');
+      await waitFor(() => {
+        expect(screen.getByRole('menuitem', {name: 'Open'})).not.toHaveFocus();
+      });
+
+      cleanup();
+    });
   });
 });
 

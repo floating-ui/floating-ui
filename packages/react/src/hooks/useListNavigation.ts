@@ -542,8 +542,9 @@ export function useListNavigation(
   useModernLayoutEffect(() => {
     if (!open) {
       keyRef.current = null;
+      focusItemOnOpenRef.current = focusItemOnOpen;
     }
-  }, [open]);
+  }, [open, focusItemOnOpen]);
 
   const hasActiveIndex = activeIndex != null;
 
