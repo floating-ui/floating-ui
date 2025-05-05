@@ -94,6 +94,7 @@
     "react-responsive": "^9.0.2",
     "react-router-dom": "^6.21.1",
     "resize-observer-polyfill": "^1.5.1",
-    "use-isomorphic-layout-effect": "^1.1.2"
+    "use-isomorphic-layout-effect": "^1.1.2",
+    "vitest-browser-react": "^0.1.1"
   }
 }
