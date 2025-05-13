@@ -322,15 +322,14 @@ export function isListIndexDisabled(
   index: number,
   disabledIndices?: DisabledIndices,
 ) {
-  const isFunction = typeof disabledIndices === 'function';
-  const isDisabled = isFunction ? disabledIndices(index) : false;
-  if (disabledIndices && !isFunction) {
+  if (typeof disabledIndices === 'function') {
+    return disabledIndices(index);
+  } else if (disabledIndices) {
     return disabledIndices.includes(index);
   }
 
   const element = listRef.current[index];
   return (
-    isDisabled ||
     element == null ||
     element.hasAttribute('disabled') ||
     element.getAttribute('aria-disabled') === 'true'
