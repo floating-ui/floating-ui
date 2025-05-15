@@ -14,7 +14,9 @@ assignees: ''
 Please use one of the following CodeSandboxes to reproduce your issue and make sure not to include any external libraries:
 
 - @floating-ui/dom: https://codesandbox.io/s/floating-ui-dom-template-utpx0u
-- @floating-ui/react-dom: https://codesandbox.io/s/floating-ui-react-dom-template-qfufud?file=/src/App.js
+- @floating-ui/react-dom: https://codesandbox.io/s/floating-ui-react-dom-template-4f9gq7
+- @floating-ui/react: https://codesandbox.io/s/floating-ui-react-template-8zqgyh
+- @floating-ui/vue: https://codesandbox.io/s/floating-ui-vue-template-p3m56y?file=%2Fsrc%2FApp.vue%3A19%2C1
 -->
 
 Steps to reproduce the behavior:
