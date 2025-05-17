@@ -435,6 +435,12 @@ export function FloatingFocusManager(
           }
         }
 
+        // https://github.com/floating-ui/floating-ui/issues/3060
+        if (dataRef.current.insideReactTree) {
+          dataRef.current.insideReactTree = false;
+          return;
+        }
+
         // Focus did not move inside the floating tree, and there are no tabbable
         // portal guards to handle closing.
         if (
@@ -477,6 +483,7 @@ export function FloatingFocusManager(
     isUntrappedTypeableCombobox,
     getNodeId,
     orderRef,
+    dataRef,
   ]);
 
   const beforeGuardRef = React.useRef<HTMLSpanElement | null>(null);

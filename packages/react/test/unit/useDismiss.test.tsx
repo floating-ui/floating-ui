@@ -15,6 +15,7 @@ import {
   useFloatingParentNodeId,
   useFocus,
   useInteractions,
+  useClick,
 } from '../../src';
 import type {UseDismissProps} from '../../src/hooks/useDismiss';
 import {normalizeProp} from '../../src/hooks/useDismiss';
@@ -927,4 +928,82 @@ describe('outsidePressEvent click', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     cleanup();
   });
+});
+
+test('nested floating elements with different portal roots', async () => {
+  function ButtonWithFloating({
+    children,
+    portalRoot,
+    triggerText,
+  }: {
+    children?: React.ReactNode;
+    portalRoot?: HTMLElement | null;
+    triggerText: string;
+  }) {
+    const [open, setOpen] = useState(false);
+    const {refs, floatingStyles, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+    });
+
+    const click = useClick(context);
+    const dismiss = useDismiss(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      click,
+      dismiss,
+    ]);
+
+    return (
+      <>
+        <button ref={refs.setReference} {...getReferenceProps()}>
+          {triggerText}
+        </button>
+        {open && (
+          <FloatingPortal root={portalRoot}>
+            <FloatingFocusManager context={context} modal={false}>
+              <div
+                ref={refs.setFloating}
+                style={floatingStyles}
+                {...getFloatingProps()}
+              >
+                {children}
+              </div>
+            </FloatingFocusManager>
+          </FloatingPortal>
+        )}
+      </>
+    );
+  }
+
+  function App() {
+    const [otherContainer, setOtherContainer] =
+      useState<HTMLDivElement | null>();
+
+    const portal1 = undefined;
+    const portal2 = otherContainer;
+
+    return (
+      <>
+        <ButtonWithFloating portalRoot={portal1} triggerText="open 1">
+          <ButtonWithFloating portalRoot={portal2} triggerText="open 2">
+            <button>nested</button>
+          </ButtonWithFloating>
+        </ButtonWithFloating>
+        <div ref={setOtherContainer} />
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await userEvent.click(screen.getByText('open 1'));
+  expect(screen.getByText('open 2')).toBeInTheDocument();
+
+  await userEvent.click(screen.getByText('open 2'));
+  await act(async () => {});
+
+  expect(screen.queryByText('open 1')).toBeInTheDocument();
+  expect(screen.queryByText('open 2')).toBeInTheDocument();
+  expect(screen.queryByText('nested')).toBeInTheDocument();
 });
