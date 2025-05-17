@@ -552,7 +552,7 @@ describe('openOnArrowKeyDown', () => {
 });
 
 describe('disabledIndices', () => {
-  test('indicies are skipped in focus order', () => {
+  test('indices are skipped in focus order', () => {
     render(<App disabledIndices={[0]} />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-1')).toHaveFocus();
