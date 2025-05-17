@@ -220,7 +220,7 @@ function App1(
   );
 }
 
-test('matches when focus is withing reference', async () => {
+test('matches when focus is within reference', async () => {
   const spy = vi.fn();
   render(<App1 onMatch={spy} list={['one', 'two', 'three']} />);
 
@@ -232,7 +232,7 @@ test('matches when focus is withing reference', async () => {
   cleanup();
 });
 
-test('matches when focus is withing floating', async () => {
+test('matches when focus is within floating', async () => {
   const spy = vi.fn();
   render(<App1 onMatch={spy} list={['one', 'two', 'three']} />);
 

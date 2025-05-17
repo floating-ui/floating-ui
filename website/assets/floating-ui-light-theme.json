@@ -648,7 +648,7 @@
       }
     },
     {
-      "name": "CSS psuedo selectors",
+      "name": "CSS pseudo selectors",
       "scope": [
         "entity.other.attribute-name.pseudo-class",
         "entity.other.attribute-name.pseudo-element"
