@@ -3,8 +3,6 @@ import '@testing-library/jest-dom';
 import * as matchers from '@testing-library/jest-dom/matchers';
 import {expect, vi} from 'vitest';
 
-import ResizeObserverPolyfill from 'resize-observer-polyfill';
-
 expect.extend(matchers);
 
 // https://github.com/testing-library/react-testing-library/issues/1197#issuecomment-2619825237
@@ -30,7 +28,6 @@ Object.defineProperty(HTMLElement.prototype, 'inert', {
   writable: true,
   value: true,
 });
-globalThis.ResizeObserver = ResizeObserverPolyfill;
 
 class PointerEvent extends MouseEvent {
   public isPrimary: boolean;

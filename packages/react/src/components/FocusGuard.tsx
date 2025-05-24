@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {isSafari, useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useModernLayoutEffect} from '../utils/hooks';
+import {isSafari} from '../utils/platform';
 
 import {createAttribute} from '../utils/createAttribute';
 

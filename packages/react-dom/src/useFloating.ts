@@ -1,7 +1,6 @@
 import {computePosition} from '@floating-ui/dom';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {
   ComputePositionConfig,
@@ -14,6 +13,7 @@ import {deepEqual} from './utils/deepEqual';
 import {getDPR} from './utils/getDPR';
 import {roundByDPR} from './utils/roundByDPR';
 import {useLatestRef} from './utils/useLatestRef';
+import {useModernLayoutEffect} from './utils/useModernLayoutEffect';
 
 /**
  * Provides data to position a floating element.

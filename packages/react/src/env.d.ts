@@ -1,1 +1,1 @@
-/// <reference types="config/env" />
+declare const __DEV__: boolean;

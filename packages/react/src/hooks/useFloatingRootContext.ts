@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {isElement} from '@floating-ui/utils/dom';
-import {useEffectEvent} from '@floating-ui/react/utils';
-
+import {isElement} from '@floating-ui/dom/utils';
+import {useEffectEvent} from '../utils/hooks';
 import type {FloatingRootContext, ReferenceElement} from '../types';
 import type {ContextData, OpenChangeReason} from '../types';
 import {createEventEmitter} from '../utils/createEventEmitter';

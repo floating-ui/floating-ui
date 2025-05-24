@@ -9,9 +9,7 @@
     "pnpm": ">=8.13.1"
   },
   "workspaces": [
-    "./packages/*",
-    "extension",
-    "config"
+    "./packages/*"
   ],
   "scripts": {
     "lint": "turbo lint",
@@ -19,7 +17,6 @@
     "playwright": "turbo playwright",
     "playwright:update": "turbo playwright -- -u",
     "build": "turbo build",
-    "build:api": "turbo build:api",
     "clean": "turbo clean",
     "publint": "turbo publint",
     "test": "turbo test",
@@ -71,11 +68,13 @@
     "jsdom": "^26.0.0",
     "postcss": "^8.4.32",
     "prettier": "^3.1.1",
-    "publint": "^0.2.7",
+    "publint": "^0.3.12",
     "rimraf": "^5.0.5",
     "rollup": "^4.36.0",
     "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-pure": "^0.4.0",
     "tailwindcss": "^3.4.0",
+    "tsdown": "^0.12.2",
     "turbo": "^2.3.3",
     "typescript": "~5.2.2",
     "typescript-eslint": "^8.17.0",

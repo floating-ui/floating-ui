@@ -1,4 +1,4 @@
-import {getNodeScroll} from '@floating-ui/utils/dom';
+import {getNodeScroll} from '../utils';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';

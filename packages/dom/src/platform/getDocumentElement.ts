@@ -1,1 +1,1 @@
-export {getDocumentElement} from '@floating-ui/utils/dom';
+export {getDocumentElement} from '../utils';

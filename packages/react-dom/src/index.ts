@@ -4,7 +4,6 @@ export {
   autoUpdate,
   computePosition,
   detectOverflow,
-  getOverflowAncestors,
   platform,
 } from '@floating-ui/dom';
 export {

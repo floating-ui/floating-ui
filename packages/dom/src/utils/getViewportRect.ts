@@ -1,6 +1,5 @@
 import type {Rect, Strategy} from '@floating-ui/core';
-import {getWindow, isWebKit} from '@floating-ui/utils/dom';
-
+import {getWindow, isWebKit} from '../utils';
 import {getDocumentElement} from '../platform/getDocumentElement';
 
 export function getViewportRect(element: Element, strategy: Strategy): Rect {

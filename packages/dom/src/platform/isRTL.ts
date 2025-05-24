@@ -1,4 +1,4 @@
-import {getComputedStyle} from '@floating-ui/utils/dom';
+import {getComputedStyle} from '../utils';
 
 export function isRTL(element: Element) {
   return getComputedStyle(element).direction === 'rtl';

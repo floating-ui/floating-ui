@@ -1,24 +1,25 @@
 {
   "name": "@floating-ui/vue",
+  "type": "commonjs",
   "version": "1.1.6",
   "description": "Floating UI for Vue",
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.vue.umd.js",
-  "module": "./dist/floating-ui.vue.esm.js",
-  "unpkg": "./dist/floating-ui.vue.umd.min.js",
-  "types": "./dist/floating-ui.vue.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./dist/floating-ui.vue.d.mts",
-        "default": "./dist/floating-ui.vue.mjs"
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
       },
-      "types": "./dist/floating-ui.vue.d.ts",
-      "module": "./dist/floating-ui.vue.esm.js",
-      "default": "./dist/floating-ui.vue.umd.js"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      }
     }
   },
   "sideEffects": false,
@@ -28,14 +29,13 @@
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --write .",
-    "clean": "rimraf dist out-tsc",
+    "clean": "rimraf dist out-tsc && find . -name '*.d.ts' ! -name 'env.d.ts' -delete",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "build": "rollup -c",
-    "build:api": "build-api --tsc tsconfig.lib.json",
+    "build": "tsdown",
     "dev": "vite",
     "publint": "publint",
-    "prepack": "compat-exports",
+    "prepack": "node ../../config/prepack.mjs vue",
     "typecheck": "tsc -b"
   },
   "author": "lozinsky",
@@ -58,7 +58,6 @@
   ],
   "dependencies": {
     "@floating-ui/dom": "^1.0.0",
-    "@floating-ui/utils": "workspace:^",
     "vue-demi": ">=0.13.0"
   },
   "devDependencies": {
@@ -66,7 +65,6 @@
     "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/vue": "^6.6.1",
     "@vitejs/plugin-vue": "^5.2.3",
-    "config": "workspace:*",
     "vue": "^3.4.4"
   }
 }

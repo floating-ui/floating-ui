@@ -10,7 +10,7 @@ import {
   getGridCellIndices,
   isIndexOutOfListBounds,
   findNonDisabledListIndex,
-} from '@floating-ui/react/utils';
+} from '../utils';
 
 import {useMergeRefs} from '../hooks/useMergeRefs';
 import type {Dimensions} from '../types';
@@ -115,10 +115,10 @@ const allKeys = [...horizontalKeys, ...verticalKeys];
  * element being an item.
  * @see https://floating-ui.com/docs/Composite
  */
-export const Composite = React.forwardRef<
-  HTMLElement,
-  React.HTMLProps<HTMLElement> & CompositeProps
->(function Composite(props, forwardedRef) {
+export const Composite = React.forwardRef(function Composite(
+  props: React.ComponentPropsWithoutRef<any> & CompositeProps,
+  forwardedRef: React.ForwardedRef<any>,
+) {
   const {
     render,
     orientation = 'both',
@@ -328,10 +328,10 @@ export interface CompositeItemProps {
 /**
  * @see https://floating-ui.com/docs/Composite
  */
-export const CompositeItem = React.forwardRef<
-  HTMLElement,
-  React.HTMLProps<HTMLElement> & CompositeItemProps
->(function CompositeItem(props, forwardedRef) {
+export const CompositeItem = React.forwardRef(function CompositeItem(
+  props: React.ComponentPropsWithoutRef<any> & CompositeItemProps,
+  forwardedRef: React.ForwardedRef<any>,
+) {
   const {render, ...domProps} = props;
   const renderElementProps =
     render && typeof render !== 'function' ? render.props : {};

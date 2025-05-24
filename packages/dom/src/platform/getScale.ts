@@ -1,7 +1,6 @@
 import type {Coords} from '@floating-ui/core';
-import {createCoords, round} from '@floating-ui/utils';
-import {isHTMLElement} from '@floating-ui/utils/dom';
-
+import {createCoords, round} from '@floating-ui/core/utils';
+import {isHTMLElement} from '../utils';
 import type {VirtualElement} from '../types';
 import {getCssDimensions} from '../utils/getCssDimensions';
 import {unwrapElement} from '../utils/unwrapElement';

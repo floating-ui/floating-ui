@@ -1,11 +1,8 @@
 {
-  "extends": "config/tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "out-tsc"
-  },
-  "include": [],
+  "extends": "../../config/tsconfig.base.json",
+  "exclude": ["vite.config.*", "*.config.*", "test/**/*"],
   "references": [
     {"path": "./tsconfig.lib.json"},
-    {"path": "./tsconfig.test.json"}
+    {"path": "../core/tsconfig.lib.json"}
   ]
 }

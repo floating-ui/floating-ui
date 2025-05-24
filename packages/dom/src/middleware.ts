@@ -16,7 +16,6 @@ import {
   shift as shiftCore,
   size as sizeCore,
 } from '@floating-ui/core';
-
 import type {
   ArrowOptions,
   AutoPlacementOptions,

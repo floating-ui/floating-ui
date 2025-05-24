@@ -1,4 +1,4 @@
-import {rectToClientRect} from '../../src';
+import {rectToClientRect} from '../../src/utils';
 import {getRectsByLine} from '../../src/middleware/inline';
 
 describe('getRectsByLine', () => {

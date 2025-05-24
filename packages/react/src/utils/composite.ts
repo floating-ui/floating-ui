@@ -1,4 +1,4 @@
-import {floor} from '@floating-ui/utils';
+import {floor} from '@floating-ui/core/utils';
 
 import type {Dimensions} from '../types';
 import {stopEvent} from '../utils/event';

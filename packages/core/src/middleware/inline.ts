@@ -1,4 +1,3 @@
-import type {ClientRectObject, Padding} from '@floating-ui/utils';
 import {
   evaluate,
   getPaddingObject,
@@ -7,8 +6,9 @@ import {
   max,
   min,
   rectToClientRect,
-} from '@floating-ui/utils';
-
+  type ClientRectObject,
+  type Padding,
+} from '../utils';
 import type {Derivable, Middleware} from '../types';
 
 function getBoundingRect(rects: Array<ClientRectObject>) {

@@ -1,33 +1,35 @@
 {
   "name": "@floating-ui/react",
+  "type": "commonjs",
   "version": "0.27.8",
   "description": "Floating UI for React",
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.react.umd.js",
-  "module": "./dist/floating-ui.react.esm.js",
-  "unpkg": "./dist/floating-ui.react.umd.min.js",
-  "types": "./dist/floating-ui.react.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./dist/floating-ui.react.d.mts",
-        "default": "./dist/floating-ui.react.mjs"
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
       },
-      "types": "./dist/floating-ui.react.d.ts",
-      "module": "./dist/floating-ui.react.esm.js",
-      "default": "./dist/floating-ui.react.umd.js"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      }
     },
     "./utils": {
-      "import": {
-        "types": "./dist/floating-ui.react.utils.d.mts",
-        "default": "./dist/floating-ui.react.utils.mjs"
+      "require": {
+        "types": "./dist/cjs/utils/index.d.ts",
+        "default": "./dist/cjs/utils/index.js"
       },
-      "types": "./dist/floating-ui.react.utils.d.ts",
-      "module": "./dist/floating-ui.react.utils.esm.js",
-      "default": "./dist/floating-ui.react.utils.umd.js"
+      "import": {
+        "types": "./dist/esm/utils/index.d.ts",
+        "default": "./dist/esm/utils/index.js"
+      }
     }
   },
   "sideEffects": false,
@@ -38,15 +40,14 @@
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --write .",
-    "clean": "rimraf dist out-tsc utils",
+    "clean": "rimraf dist out-tsc utils && find . -name '*.d.ts' ! -name 'env.d.ts' -delete",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:browser": "TEST_ENV=browser vitest --browser",
-    "build": "rollup -c",
-    "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor.json --aec api-extractor.utils.json",
+    "build": "NODE_OPTIONS=\"--max-old-space-size=8192\" tsdown",
     "dev": "vite",
     "publint": "publint",
-    "prepack": "compat-exports",
+    "prepack": "node ../../config/prepack.mjs react --utils --react-pure",
     "typecheck": "tsc -b"
   },
   "author": "atomiks",
@@ -74,7 +75,6 @@
   },
   "dependencies": {
     "@floating-ui/react-dom": "workspace:^",
-    "@floating-ui/utils": "workspace:^",
     "tabbable": "^6.0.0"
   },
   "devDependencies": {
@@ -88,13 +88,10 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "clsx": "^1.2.1",
-    "config": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-responsive": "^9.0.2",
     "react-router-dom": "^6.21.1",
-    "resize-observer-polyfill": "^1.5.1",
-    "use-isomorphic-layout-effect": "^1.1.2",
-    "vitest-browser-react": "^0.1.1"
+    "vitest-browser-react": "^0.2.0"
   }
 }
