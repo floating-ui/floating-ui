@@ -7,28 +7,22 @@
       "outputs": ["dist/**"],
       "inputs": [
         "packages/**/src/**",
+        "packages/**/utils/**",
         "packages/**/package.json",
         "packages/**/tsconfig.json",
-        "packages/**/rollup.config.mjs",
+        "packages/**/tsdown.config.ts",
         "packages/**/vite.config.ts"
-      ]
-    },
-    "build:api": {
-      "dependsOn": ["^build:api"],
-      "outputs": ["dist/**/*.d{.ts,.mts}"],
-      "inputs": [
-        "src/**",
-        "package.json",
-        "tsconfig.json",
-        "tsconfig.*.json",
-        "api-extractor.json",
-        "api-extractor.*.json"
       ]
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],
-      "outputs": ["out-tsc/**"],
-      "inputs": ["src/**", "test/**", "tsconfig.json", "tsconfig.*.json"]
+      "inputs": [
+        "src/**",
+        "utils/**",
+        "test/**",
+        "tsconfig.json",
+        "tsconfig.*.json"
+      ]
     },
     "publint": {
       "dependsOn": ["prepack"],
@@ -48,11 +42,9 @@
       "cache": false
     },
     "test": {
-      "dependsOn": ["config#build"],
       "cache": false
     },
     "test:watch": {
-      "dependsOn": ["config#build"],
       "cache": false,
       "persistent": true
     },
@@ -61,7 +53,7 @@
       "cache": false
     },
     "prepack": {
-      "dependsOn": ["build", "build:api"],
+      "dependsOn": ["build"],
       "inputs": ["package.json", "dist/**"]
     }
   }

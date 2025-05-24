@@ -1,5 +1,5 @@
 import type {Elements, Rect, Strategy} from '@floating-ui/core';
-import {createCoords} from '@floating-ui/utils';
+import {createCoords} from '@floating-ui/core/utils';
 import {
   getDocumentElement,
   getNodeName,
@@ -7,8 +7,7 @@ import {
   isHTMLElement,
   isOverflowElement,
   isTopLayer,
-} from '@floating-ui/utils/dom';
-
+} from '../utils';
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
 import {getHTMLOffset} from '../utils/getHTMLOffset';

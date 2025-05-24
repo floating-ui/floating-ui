@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {useLatestRef, useModernLayoutEffect} from '@floating-ui/react/utils';
-
+import {useLatestRef, useModernLayoutEffect} from '../utils/hooks';
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 
 type Duration = number | {open?: number; close?: number};

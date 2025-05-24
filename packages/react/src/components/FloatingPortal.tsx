@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {isElement} from '@floating-ui/utils/dom';
+import {isElement} from '@floating-ui/dom/utils';
 import {
   useModernLayoutEffect,
   enableFocusInside,
@@ -8,7 +8,7 @@ import {
   getPreviousTabbable,
   getNextTabbable,
   isOutsideEvent,
-} from '@floating-ui/react/utils';
+} from '../utils';
 
 import {useId} from '../hooks/useId';
 import type {OpenChangeReason} from '../types';

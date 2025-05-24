@@ -1,10 +1,7 @@
 import * as React from 'react';
-import {isHTMLElement} from '@floating-ui/utils/dom';
-import {
-  isMouseLikePointerType,
-  isTypeableElement,
-} from '@floating-ui/react/utils';
-
+import {isHTMLElement} from '@floating-ui/dom/utils';
+import {isMouseLikePointerType} from '../utils/event';
+import {isTypeableElement} from '../utils/element';
 import type {ElementProps, FloatingRootContext} from '../types';
 
 function isButtonTarget(event: React.KeyboardEvent<Element>) {
@@ -27,7 +24,7 @@ export interface UseClickProps {
    */
   enabled?: boolean;
   /**
-   * The type of event to use to determine a “click” with mouse input.
+   * The type of event to use to determine a "click" with mouse input.
    * Keyboard clicks work as normal.
    * @default 'click'
    */
@@ -46,7 +43,7 @@ export interface UseClickProps {
   /**
    * Whether to add keyboard handlers (Enter and Space key functionality) for
    * non-button elements (to open/close the floating element via keyboard
-   * “click”).
+   * "click").
    * @default true
    */
   keyboardHandlers?: boolean;
