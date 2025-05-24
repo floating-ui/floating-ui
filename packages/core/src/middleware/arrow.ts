@@ -1,4 +1,3 @@
-import type {Padding} from '@floating-ui/utils';
 import {
   clamp,
   evaluate,
@@ -7,8 +6,8 @@ import {
   getAxisLength,
   getPaddingObject,
   min as mathMin,
-} from '@floating-ui/utils';
-
+  type Padding,
+} from '../utils';
 import type {Derivable, Middleware} from '../types';
 
 export interface ArrowOptions {

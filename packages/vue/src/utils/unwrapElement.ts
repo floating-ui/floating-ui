@@ -1,4 +1,4 @@
-import {getNodeName, isNode} from '@floating-ui/utils/dom';
+import {getNodeName, isNode} from '@floating-ui/dom/utils';
 import type {ComponentPublicInstance} from 'vue-demi';
 
 import type {MaybeElement} from '../types';

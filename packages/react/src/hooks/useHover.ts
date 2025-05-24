@@ -1,14 +1,12 @@
 import * as React from 'react';
-import {isElement} from '@floating-ui/utils/dom';
+import {isElement} from '@floating-ui/dom/utils';
+import {contains, getDocument} from '../utils/element';
+import {isMouseLikePointerType} from '../utils/event';
 import {
-  contains,
-  getDocument,
-  isMouseLikePointerType,
   useLatestRef,
   useEffectEvent,
   useModernLayoutEffect,
-} from '@floating-ui/react/utils';
-
+} from '../utils/hooks';
 import {
   useFloatingParentNodeId,
   useFloatingTree,
@@ -85,7 +83,7 @@ export interface UseHoverProps {
    */
   handleClose?: HandleCloseFn | null;
   /**
-   * Waits until the user’s cursor is at “rest” over the reference element
+   * Waits until the user's cursor is at "rest" over the reference element
    * before changing the `open` state.
    * @default 0
    */

@@ -1,7 +1,6 @@
 import type {Rect} from '@floating-ui/core';
-import {max} from '@floating-ui/utils';
-import {getComputedStyle, getNodeScroll} from '@floating-ui/utils/dom';
-
+import {max} from '@floating-ui/core/utils';
+import {getComputedStyle, getNodeScroll} from '../utils';
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 

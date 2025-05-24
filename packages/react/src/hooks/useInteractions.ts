@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import type {ElementProps} from '../types';
 import {
   ACTIVE_KEY,

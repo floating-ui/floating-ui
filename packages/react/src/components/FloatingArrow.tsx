@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {getComputedStyle} from '@floating-ui/utils/dom';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {getComputedStyle} from '@floating-ui/dom/utils';
+import {useModernLayoutEffect} from '../utils/hooks';
 
 import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';

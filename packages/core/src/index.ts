@@ -1,16 +1,13 @@
 export {computePosition} from './computePosition';
-export type {DetectOverflowOptions} from './detectOverflow';
-export {detectOverflow} from './detectOverflow';
-export type {ArrowOptions} from './middleware/arrow';
-export {arrow} from './middleware/arrow';
-export type {AutoPlacementOptions} from './middleware/autoPlacement';
-export {autoPlacement} from './middleware/autoPlacement';
-export type {FlipOptions} from './middleware/flip';
-export {flip} from './middleware/flip';
-export type {HideOptions} from './middleware/hide';
-export {hide} from './middleware/hide';
-export type {InlineOptions} from './middleware/inline';
-export {inline} from './middleware/inline';
+export {detectOverflow, type DetectOverflowOptions} from './detectOverflow';
+export {arrow, type ArrowOptions} from './middleware/arrow';
+export {
+  autoPlacement,
+  type AutoPlacementOptions,
+} from './middleware/autoPlacement';
+export {flip, type FlipOptions} from './middleware/flip';
+export {hide, type HideOptions} from './middleware/hide';
+export {inline, type InlineOptions} from './middleware/inline';
 export type {OffsetOptions} from './middleware/offset';
 export {offset} from './middleware/offset';
 export type {LimitShiftOptions, ShiftOptions} from './middleware/shift';
@@ -51,7 +48,4 @@ export type {
   SideObject,
   Strategy,
   VirtualElement,
-} from '@floating-ui/utils';
-// This export exists only for backwards compatibility. It will be removed in
-// the next major version.
-export {rectToClientRect} from '@floating-ui/utils';
+} from './utils';
