@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.27.9
+
+### Patch Changes
+
+- fix(useListNavigation): reset internal `focusItemOnOpen` state when floating element is closed. This prevents the first item being highlighted on open under certain conditions when it shouldn't be.
+
 ## 0.27.8
 
 ### Patch Changes
