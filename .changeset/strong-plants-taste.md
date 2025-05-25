@@ -1,5 +1,5 @@
 ---
-"@floating-ui/react": patch
+'@floating-ui/react': patch
 ---
 
-feat(FloatingOverlay): add `--floating-ui-scrollbar-width` property when using `lockScroll`
+feat(FloatingOverlay): add `lockScroll` scrollbar width CSS variable (`--floating-ui-scrollbar-width`)
