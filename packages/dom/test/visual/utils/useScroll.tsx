@@ -1,9 +1,5 @@
-import {
-  getOverflowAncestors,
-  shift,
-  useFloating,
-  type VirtualElement,
-} from '@floating-ui/react-dom';
+import {shift, useFloating, type VirtualElement} from '@floating-ui/react-dom';
+import {getOverflowAncestors} from '@floating-ui/dom/utils';
 import type {MutableRefObject} from 'react';
 import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';

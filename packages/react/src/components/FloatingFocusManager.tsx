@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {tabbable, isTabbable, focusable, type FocusableElement} from 'tabbable';
-import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
+import {getNodeName, isHTMLElement} from '@floating-ui/dom/utils';
 import {
   activeElement,
   contains,
@@ -20,7 +20,7 @@ import {
   isOutsideEvent,
   getNextTabbable,
   getPreviousTabbable,
-} from '@floating-ui/react/utils';
+} from '../utils';
 
 import type {FloatingRootContext, OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
@@ -161,7 +161,7 @@ export interface FloatingFocusManagerProps {
    */
   restoreFocus?: boolean;
   /**
-   * Determines if focus is “modal”, meaning focus is fully trapped inside the
+   * Determines if focus is "modal", meaning focus is fully trapped inside the
    * floating element and outside content cannot be accessed. This includes
    * screen reader virtual cursors.
    * @default true

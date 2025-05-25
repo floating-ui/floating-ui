@@ -1,11 +1,10 @@
 import {
-  type Coords,
   evaluate,
   getAlignment,
   getSide,
   getSideAxis,
-} from '@floating-ui/utils';
-
+  type Coords,
+} from '../utils';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
 
 type OffsetValue =

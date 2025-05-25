@@ -1,4 +1,4 @@
-import {isHTMLElement, isShadowRoot} from '@floating-ui/utils/dom';
+import {isHTMLElement, isShadowRoot} from '@floating-ui/dom/utils';
 import {isJSDOM} from './platform';
 import {FOCUSABLE_ATTRIBUTE, TYPEABLE_SELECTOR} from './constants';
 

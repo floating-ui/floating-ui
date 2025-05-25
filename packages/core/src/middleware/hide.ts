@@ -1,6 +1,4 @@
-import type {Rect, SideObject} from '@floating-ui/utils';
-import {evaluate, sides} from '@floating-ui/utils';
-
+import {evaluate, sides, type Rect, type SideObject} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware} from '../types';

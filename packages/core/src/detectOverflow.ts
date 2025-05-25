@@ -1,5 +1,10 @@
-import type {Padding, SideObject} from '@floating-ui/utils';
-import {evaluate, getPaddingObject, rectToClientRect} from '@floating-ui/utils';
+import {
+  evaluate,
+  getPaddingObject,
+  rectToClientRect,
+  type Padding,
+  type SideObject,
+} from './utils';
 
 import type {
   Boundary,

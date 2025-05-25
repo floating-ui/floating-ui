@@ -1,16 +1,14 @@
 import * as React from 'react';
-import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
+import {getWindow, isElement, isHTMLElement} from '@floating-ui/dom/utils';
 import {
   activeElement,
   contains,
   getDocument,
   getTarget,
-  isMac,
-  isSafari,
   isTypeableElement,
   matchesFocusVisible,
-} from '@floating-ui/react/utils';
-
+} from '../utils/element';
+import {isMac, isSafari} from '../utils/platform';
 import type {
   ElementProps,
   FloatingRootContext,
