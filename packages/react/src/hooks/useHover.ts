@@ -20,23 +20,22 @@ import type {
   FloatingRootContext,
   FloatingTreeType,
   OpenChangeReason,
+  SafePolygonOptions,
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 const safePolygonIdentifier = createAttribute('safe-polygon');
 
-export interface HandleCloseFn {
-  (
-    context: FloatingContext & {
-      onClose: () => void;
-      tree?: FloatingTreeType | null;
-      leave?: boolean;
-    },
-  ): (event: MouseEvent) => void;
-  __options: {
-    blockPointerEvents: boolean;
-  };
+export interface HandleCloseContext extends FloatingContext {
+  onClose: () => void;
+  tree?: FloatingTreeType | null;
+  leave?: boolean;
+}
+
+export interface HandleClose {
+  (context: HandleCloseContext): (event: MouseEvent) => void;
+  __options?: SafePolygonOptions;
 }
 
 export function getDelay(
@@ -78,12 +77,11 @@ export interface UseHoverProps {
    */
   enabled?: boolean;
   /**
-   * Instead of closing the floating element when the cursor leaves its
-   * reference, we can leave it open until a certain condition is satisfied,
-   * e.g. to let them traverse into the floating element.
+   * Accepts an event handler that runs on `mousemove` to control when the
+   * floating element closes once the cursor leaves the reference element.
    * @default null
    */
-  handleClose?: HandleCloseFn | null;
+  handleClose?: HandleClose | null;
   /**
    * Waits until the user’s cursor is at “rest” over the reference element
    * before changing the `open` state.
@@ -145,10 +143,10 @@ export function useHover(
   const unbindMouseMoveRef = React.useRef(() => {});
   const restTimeoutPendingRef = React.useRef(false);
 
-  const isHoverOpen = React.useCallback(() => {
+  const isHoverOpen = useEffectEvent(() => {
     const type = dataRef.current.openEvent?.type;
     return type?.includes('mouse') && type !== 'mousedown';
-  }, [dataRef]);
+  });
 
   // When closing before opening, clear the delay timeouts to cancel it
   // from showing.
@@ -432,7 +430,7 @@ export function useHover(
 
     if (
       open &&
-      handleCloseRef.current?.__options.blockPointerEvents &&
+      handleCloseRef.current?.__options?.blockPointerEvents &&
       isHoverOpen()
     ) {
       performedPointerEventsMutationRef.current = true;

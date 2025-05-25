@@ -1,8 +1,9 @@
 import {isElement} from '@floating-ui/utils/dom';
 import type {Rect, Side} from './types';
-import type {HandleCloseFn} from './hooks/useHover';
+import type {HandleClose} from './hooks/useHover';
 import {contains, getTarget} from './utils/element';
 import {getNodeChildren} from './utils/nodes';
+import {clearTimeoutIfSet} from './utils/clearTimeoutIfSet';
 
 type Point = [number, number];
 type Polygon = Point[];
@@ -50,7 +51,8 @@ export function safePolygon(options: SafePolygonOptions = {}) {
     requireIntent = true,
   } = options;
 
-  let timeoutId: number;
+  const timeoutRef = {current: -1};
+
   let hasLanded = false;
   let lastX: number | null = null;
   let lastY: number | null = null;
@@ -79,7 +81,7 @@ export function safePolygon(options: SafePolygonOptions = {}) {
     return speed;
   }
 
-  const fn: HandleCloseFn = ({
+  const fn: HandleClose = ({
     x,
     y,
     placement,
@@ -90,11 +92,11 @@ export function safePolygon(options: SafePolygonOptions = {}) {
   }) => {
     return function onMouseMove(event: MouseEvent) {
       function close() {
-        clearTimeout(timeoutId);
+        clearTimeoutIfSet(timeoutRef);
         onClose();
       }
 
-      clearTimeout(timeoutId);
+      clearTimeoutIfSet(timeoutRef);
 
       if (
         !elements.domReference ||
@@ -393,7 +395,7 @@ export function safePolygon(options: SafePolygonOptions = {}) {
       if (!isPointInPolygon([clientX, clientY], getPolygon([x, y]))) {
         close();
       } else if (!hasLanded && requireIntent) {
-        timeoutId = window.setTimeout(close, 40);
+        timeoutRef.current = window.setTimeout(close, 40);
       }
     };
   };

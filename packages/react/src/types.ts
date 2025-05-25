@@ -22,7 +22,11 @@ export type {UseClickProps} from './hooks/useClick';
 export type {UseClientPointProps} from './hooks/useClientPoint';
 export type {UseDismissProps} from './hooks/useDismiss';
 export type {UseFocusProps} from './hooks/useFocus';
-export type {UseHoverProps} from './hooks/useHover';
+export type {
+  UseHoverProps,
+  HandleCloseContext,
+  HandleClose,
+} from './hooks/useHover';
 export type {UseListNavigationProps} from './hooks/useListNavigation';
 export type {UseRoleProps} from './hooks/useRole';
 export type {
