@@ -1,4 +1,3 @@
-import type {Placement} from '@floating-ui/utils';
 import {
   evaluate,
   getAlignmentSides,
@@ -7,8 +6,8 @@ import {
   getOppositePlacement,
   getSide,
   getSideAxis,
-} from '@floating-ui/utils';
-
+  type Placement,
+} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware} from '../types';

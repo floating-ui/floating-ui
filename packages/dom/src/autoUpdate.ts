@@ -1,6 +1,5 @@
-import {floor, max, min} from '@floating-ui/utils';
-import {getDocumentElement, getOverflowAncestors} from '@floating-ui/utils/dom';
-
+import {floor, max, min} from '@floating-ui/core/utils';
+import {getDocumentElement, getOverflowAncestors} from './utils';
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {unwrapElement} from './utils/unwrapElement';
@@ -41,7 +40,7 @@ export interface AutoUpdateOptions {
 // https://samthor.au/2021/observing-dom/
 function observeMove(element: Element, onMove: () => void) {
   let io: IntersectionObserver | null = null;
-  let timeoutId: NodeJS.Timeout;
+  let timeoutId: number;
 
   const root = getDocumentElement(element);
 
@@ -89,7 +88,7 @@ function observeMove(element: Element, onMove: () => void) {
         if (!ratio) {
           // If the reference is clipped, the ratio is 0. Throttle the refresh
           // to prevent an infinite loop of updates.
-          timeoutId = setTimeout(() => {
+          timeoutId = window.setTimeout(() => {
             refresh(false, 1e-7);
           }, 1000);
         } else {

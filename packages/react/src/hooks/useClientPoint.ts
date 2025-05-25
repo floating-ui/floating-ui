@@ -1,13 +1,8 @@
 import * as React from 'react';
-import {getWindow} from '@floating-ui/utils/dom';
-import {
-  contains,
-  getTarget,
-  isMouseLikePointerType,
-  useModernLayoutEffect,
-  useEffectEvent,
-} from '@floating-ui/react/utils';
-
+import {getWindow} from '@floating-ui/dom/utils';
+import {contains, getTarget} from '../utils/element';
+import {isMouseLikePointerType} from '../utils/event';
+import {useModernLayoutEffect, useEffectEvent} from '../utils/hooks';
 import type {ContextData, ElementProps, FloatingRootContext} from '../types';
 
 function createVirtualElement(

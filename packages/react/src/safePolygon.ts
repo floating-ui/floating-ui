@@ -1,4 +1,4 @@
-import {isElement} from '@floating-ui/utils/dom';
+import {isElement} from '@floating-ui/dom/utils';
 import type {Rect, Side} from './types';
 import type {HandleCloseFn} from './hooks/useHover';
 import {contains, getTarget} from './utils/element';

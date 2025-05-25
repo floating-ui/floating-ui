@@ -10,7 +10,7 @@ import {
   getGridCellIndices,
   isIndexOutOfListBounds,
   findNonDisabledListIndex,
-} from '@floating-ui/react/utils';
+} from '../utils';
 
 import {useMergeRefs} from '../hooks/useMergeRefs';
 import type {Dimensions} from '../types';

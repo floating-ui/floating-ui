@@ -8,7 +8,7 @@ import type {
   Rect,
   SideObject,
   Strategy,
-} from '@floating-ui/utils';
+} from './utils';
 
 type Promisable<T> = T | Promise<T>;
 

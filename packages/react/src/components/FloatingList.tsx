@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useModernLayoutEffect} from '../utils/hooks';
 
 function sortByDocumentPosition(a: Node, b: Node) {
   const position = a.compareDocumentPosition(b);

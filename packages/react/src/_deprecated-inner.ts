@@ -1,8 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {detectOverflow, offset, type Derivable} from '@floating-ui/react-dom';
-import {evaluate, max, min, round} from '@floating-ui/utils';
-import {useEffectEvent, getUserAgent} from '@floating-ui/react/utils';
+import {evaluate, max, min, round} from '@floating-ui/core/utils';
+import {useEffectEvent} from './utils/hooks';
+import {getUserAgent} from './utils/platform';
 
 import type {
   DetectOverflowOptions,
