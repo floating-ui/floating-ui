@@ -191,17 +191,16 @@ useHover(context, {
 
 default: `null{:js}`
 
-Instead of closing the floating element when the cursor leaves
-its reference, we can leave it open until a certain condition is
-satisfied.
+Accepts an event handler that runs on `mousemove{:.string}` to
+control when the floating element closes once the cursor leaves
+the reference element.
 
 The package exports a `safePolygon(){:js}` handler which will
 only close the floating element if the pointer is outside a
-dynamically computed polygon area.
-
-This allows the user to move the cursor off the reference element
-and towards the floating element without it closing (e.g. it has
-interactive content inside).
+dynamically computed polygon area. This allows the user to move
+the cursor off the reference element and towards the floating
+element without it closing (e.g. it has interactive content
+inside).
 
 ```js
 import {useHover, safePolygon} from '@floating-ui/react';
