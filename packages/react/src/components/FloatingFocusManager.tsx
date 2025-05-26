@@ -590,8 +590,6 @@ export function FloatingFocusManager(
   useModernLayoutEffect(() => {
     if (disabled || !floatingFocusElement) return;
 
-    let preventReturnFocusScroll = false;
-
     const doc = getDocument(floatingFocusElement);
     const previouslyFocusedElement = activeElement(doc);
 
@@ -620,7 +618,6 @@ export function FloatingFocusManager(
 
       if (nested) {
         preventReturnFocusRef.current = false;
-        preventReturnFocusScroll = true;
       } else if (
         isVirtualClick(event as MouseEvent) ||
         isVirtualPointerEvent(event as PointerEvent)
@@ -637,7 +634,6 @@ export function FloatingFocusManager(
 
         if (isPreventScrollSupported) {
           preventReturnFocusRef.current = false;
-          preventReturnFocusScroll = true;
         } else {
           preventReturnFocusRef.current = true;
         }
@@ -692,9 +688,7 @@ export function FloatingFocusManager(
             ? isFocusInsideFloatingTree
             : true)
         ) {
-          tabbableReturnElement.focus({
-            preventScroll: preventReturnFocusScroll,
-          });
+          tabbableReturnElement.focus({preventScroll: true});
         }
 
         fallbackEl.remove();
