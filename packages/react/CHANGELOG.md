@@ -1,5 +1,18 @@
 # @floating-ui/react
 
+## 0.27.9
+
+### Patch Changes
+
+- fix(useListNavigation): reset internal `focusItemOnOpen` state when floating element is closed. This prevents the first item being highlighted on open under certain conditions when it shouldn't be.
+- fix(FloatingOverlay): `lockScroll` detection on iPad
+- fix(useListNavigation): avoid item rerenders upon open
+- fix(FloatingFocusManager): check for blurring to nested elements inside the React tree without `FloatingTree`
+- fix(FloatingFocusManager): always prevent scroll upon returning focus
+- refactor(useHover): improve `handleClose` option and docs. You can now more easily write a custom event handler function, including exported types.
+- feat(FloatingOverlay): add `lockScroll` scrollbar width CSS variable (`--floating-ui-scrollbar-width`)
+- feat(useListNavigation, Composite): allow `disabledIndices` to be a function
+
 ## 0.27.8
 
 ### Patch Changes
