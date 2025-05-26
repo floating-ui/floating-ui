@@ -587,6 +587,7 @@ export function useListNavigation(
 
     return props;
   }, [
+    latestOpenRef,
     floatingFocusElementRef,
     focusItemOnHover,
     listRef,
