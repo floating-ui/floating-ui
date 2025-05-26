@@ -79,7 +79,7 @@ export interface CompositeProps {
    * Determines which items are disabled. The `disabled` or `aria-disabled`
    * attributes are used by default.
    */
-  disabledIndices?: number[];
+  disabledIndices?: number[] | ((index: number) => boolean);
   /**
    * Determines which item is active. Used to externally control the active
    * item.
@@ -201,9 +201,11 @@ export const Composite = React.forwardRef<
               // don't end up in them
               disabledIndices: getGridCellIndices(
                 [
-                  ...(disabledIndices ||
+                  ...((typeof disabledIndices !== 'function'
+                    ? disabledIndices
+                    : null) ||
                     elementsRef.current.map((_, index) =>
-                      isListIndexDisabled(elementsRef, index)
+                      isListIndexDisabled(elementsRef, index, disabledIndices)
                         ? index
                         : undefined,
                     )),

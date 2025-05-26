@@ -4,6 +4,8 @@ import type {Dimensions} from '../types';
 import {stopEvent} from '../utils/event';
 import {ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP} from './constants';
 
+type DisabledIndices = Array<number> | ((index: number) => boolean);
+
 export function isDifferentGridRow(
   index: number,
   cols: number,
@@ -21,14 +23,14 @@ export function isIndexOutOfListBounds(
 
 export function getMinListIndex(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
-  disabledIndices: Array<number> | undefined,
+  disabledIndices: DisabledIndices | undefined,
 ) {
   return findNonDisabledListIndex(listRef, {disabledIndices});
 }
 
 export function getMaxListIndex(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
-  disabledIndices: Array<number> | undefined,
+  disabledIndices: DisabledIndices | undefined,
 ) {
   return findNonDisabledListIndex(listRef, {
     decrement: true,
@@ -47,7 +49,7 @@ export function findNonDisabledListIndex(
   }: {
     startingIndex?: number;
     decrement?: boolean;
-    disabledIndices?: Array<number>;
+    disabledIndices?: DisabledIndices;
     amount?: number;
   } = {},
 ): number {
@@ -82,7 +84,7 @@ export function getGridNavigatedIndex(
     loop: boolean;
     rtl: boolean;
     cols: number;
-    disabledIndices: Array<number> | undefined;
+    disabledIndices: DisabledIndices | undefined;
     minIndex: number;
     maxIndex: number;
     prevIndex: number;
@@ -318,9 +320,11 @@ export function getGridCellIndices(
 export function isListIndexDisabled(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   index: number,
-  disabledIndices?: Array<number>,
+  disabledIndices?: DisabledIndices,
 ) {
-  if (disabledIndices) {
+  if (typeof disabledIndices === 'function') {
+    return disabledIndices(index);
+  } else if (disabledIndices) {
     return disabledIndices.includes(index);
   }
 
