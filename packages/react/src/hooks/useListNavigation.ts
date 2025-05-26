@@ -550,7 +550,7 @@ export function useListNavigation(
 
   const item = React.useMemo(() => {
     function syncCurrentTarget(currentTarget: HTMLElement | null) {
-      if (!open) return;
+      if (!latestOpenRef.current) return;
       const index = listRef.current.indexOf(currentTarget);
       if (index !== -1 && indexRef.current !== index) {
         indexRef.current = index;
@@ -588,7 +588,7 @@ export function useListNavigation(
 
     return props;
   }, [
-    open,
+    latestOpenRef,
     floatingFocusElementRef,
     focusItemOnHover,
     listRef,
