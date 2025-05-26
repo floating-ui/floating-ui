@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useModernLayoutEffect, getPlatform} from '@floating-ui/react/utils';
 
 let lockCount = 0;
+const scrollbarProperty = '--floating-ui-scrollbar-width';
 
 export interface FloatingOverlayProps {
   /**
@@ -12,7 +13,11 @@ export interface FloatingOverlayProps {
 }
 
 function enableScrollLock() {
-  const isIOS = /iP(hone|ad|od)|iOS/.test(getPlatform());
+  const platform = getPlatform();
+  const isIOS =
+    /iP(hone|ad|od)|iOS/.test(platform) ||
+    // iPads can claim to be MacIntel
+    (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const bodyStyle = document.body.style;
   // RTL <body> scrollbar
   const scrollbarX =
@@ -25,6 +30,7 @@ function enableScrollLock() {
   const scrollY = bodyStyle.top ? parseFloat(bodyStyle.top) : window.scrollY;
 
   bodyStyle.overflow = 'hidden';
+  bodyStyle.setProperty(scrollbarProperty, `${scrollbarWidth}px`);
 
   if (scrollbarWidth) {
     bodyStyle[paddingProp] = `${scrollbarWidth}px`;
@@ -50,6 +56,7 @@ function enableScrollLock() {
       overflow: '',
       [paddingProp]: '',
     });
+    bodyStyle.removeProperty(scrollbarProperty);
 
     if (isIOS) {
       Object.assign(bodyStyle, {
