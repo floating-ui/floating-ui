@@ -22,6 +22,7 @@ import {
 import {useFloatingTree} from '../components/FloatingTree';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 const bubbleHandlerKeys = {
   pointerdown: 'onPointerDown',
@@ -148,7 +149,7 @@ export function useDismiss(
     typeof unstable_outsidePress === 'function'
       ? outsidePressFn
       : unstable_outsidePress;
-  const insideReactTreeRef = React.useRef(false);
+
   const endedOrStartedInsideRef = React.useRef(false);
   const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
     normalizeProp(bubbles);
@@ -156,6 +157,7 @@ export function useDismiss(
     normalizeProp(capture);
 
   const isComposingRef = React.useRef(false);
+  const blurTimeoutRef = React.useRef(-1);
 
   const closeOnEscapeKeyDown = useEffectEvent(
     (event: React.KeyboardEvent<Element> | KeyboardEvent) => {
@@ -216,8 +218,8 @@ export function useDismiss(
   const closeOnPressOutside = useEffectEvent((event: MouseEvent) => {
     // Given developers can stop the propagation of the synthetic event,
     // we can only be confident with a positive value.
-    const insideReactTree = insideReactTreeRef.current;
-    insideReactTreeRef.current = false;
+    const insideReactTree = dataRef.current.insideReactTree;
+    dataRef.current.insideReactTree = false;
 
     // When click outside is lazy (`click` event), handle dragging.
     // Don't close if:
@@ -486,8 +488,8 @@ export function useDismiss(
   ]);
 
   React.useEffect(() => {
-    insideReactTreeRef.current = false;
-  }, [outsidePress, outsidePressEvent]);
+    dataRef.current.insideReactTree = false;
+  }, [dataRef, outsidePress, outsidePressEvent]);
 
   const reference: ElementProps['reference'] = React.useMemo(
     () => ({
@@ -518,10 +520,17 @@ export function useDismiss(
         endedOrStartedInsideRef.current = true;
       },
       [captureHandlerKeys[outsidePressEvent]]: () => {
-        insideReactTreeRef.current = true;
+        dataRef.current.insideReactTree = true;
+      },
+      onBlurCapture() {
+        clearTimeoutIfSet(blurTimeoutRef);
+        dataRef.current.insideReactTree = true;
+        blurTimeoutRef.current = window.setTimeout(() => {
+          dataRef.current.insideReactTree = false;
+        });
       },
     }),
-    [closeOnEscapeKeyDown, outsidePressEvent],
+    [closeOnEscapeKeyDown, outsidePressEvent, dataRef],
   );
 
   return React.useMemo(
