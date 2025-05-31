@@ -36,7 +36,7 @@ function mergeProps<Key extends keyof ElementProps>(
       .map((value) => {
         const propsOrGetProps = value ? value[elementKey] : null;
         if (typeof propsOrGetProps === 'function') {
-          return userProps ? propsOrGetProps(userProps) : null;
+          return propsOrGetProps(userProps || {});
         }
         return propsOrGetProps;
       })

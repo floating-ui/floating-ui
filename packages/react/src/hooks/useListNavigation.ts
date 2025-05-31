@@ -37,6 +37,7 @@ import {
   ARROW_RIGHT,
   ARROW_LEFT,
 } from '../utils/constants';
+import type {ExtendedUserProps} from './useInteractions';
 
 export const ESCAPE = 'Escape';
 
@@ -338,9 +339,6 @@ export function useListNavigation(
   const focusItem = useEffectEvent(() => {
     function runFocus(item: HTMLElement) {
       if (virtual) {
-        if (item.id?.endsWith('-fui-option')) {
-          item.id = `${floatingId}-${Math.random().toString(16).slice(2, 10)}`;
-        }
         setActiveId(item.id);
         tree?.events.emit('virtualfocus', item);
         if (virtualItemRef) {
@@ -377,7 +375,6 @@ export function useListNavigation(
       const scrollIntoViewOptions = scrollItemIntoViewRef.current;
       const shouldScrollIntoView =
         scrollIntoViewOptions &&
-        item &&
         (forceScrollIntoView || !isPointerModalityRef.current);
 
       if (shouldScrollIntoView) {
@@ -548,53 +545,65 @@ export function useListNavigation(
 
   const hasActiveIndex = activeIndex != null;
 
-  const item = React.useMemo(() => {
-    function syncCurrentTarget(currentTarget: HTMLElement | null) {
-      if (!latestOpenRef.current) return;
-      const index = listRef.current.indexOf(currentTarget);
-      if (index !== -1 && indexRef.current !== index) {
-        indexRef.current = index;
-        onNavigate();
+  const item = React.useCallback(
+    ({active}: ExtendedUserProps) => {
+      function syncCurrentTarget(currentTarget: HTMLElement | null) {
+        if (!latestOpenRef.current) return;
+        const index = listRef.current.indexOf(currentTarget);
+        if (index !== -1 && indexRef.current !== index) {
+          indexRef.current = index;
+          onNavigate();
+        }
       }
-    }
 
-    const props: ElementProps['item'] = {
-      onFocus({currentTarget}) {
-        forceSyncFocusRef.current = true;
-        syncCurrentTarget(currentTarget);
-      },
-      onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
-      ...(focusItemOnHover && {
-        onMouseMove({currentTarget}) {
+      const obj: ElementProps['item'] = {
+        onFocus({currentTarget}) {
           forceSyncFocusRef.current = true;
-          forceScrollIntoViewRef.current = false;
           syncCurrentTarget(currentTarget);
         },
-        onPointerLeave({pointerType}) {
-          if (!isPointerModalityRef.current || pointerType === 'touch') {
-            return;
-          }
-
-          forceSyncFocusRef.current = true;
-          indexRef.current = -1;
-          onNavigate();
-
-          if (!virtual) {
-            floatingFocusElementRef.current?.focus({preventScroll: true});
-          }
+        // Safari
+        onClick({currentTarget}) {
+          currentTarget.focus({preventScroll: true});
         },
-      }),
-    };
+        ...(focusItemOnHover && {
+          onMouseMove({currentTarget}) {
+            forceSyncFocusRef.current = true;
+            forceScrollIntoViewRef.current = false;
+            syncCurrentTarget(currentTarget);
+          },
+          onPointerLeave({pointerType}) {
+            if (!isPointerModalityRef.current || pointerType === 'touch') {
+              return;
+            }
 
-    return props;
-  }, [
-    latestOpenRef,
-    floatingFocusElementRef,
-    focusItemOnHover,
-    listRef,
-    onNavigate,
-    virtual,
-  ]);
+            forceSyncFocusRef.current = true;
+            indexRef.current = -1;
+            onNavigate();
+
+            if (!virtual) {
+              floatingFocusElementRef.current?.focus({preventScroll: true});
+            }
+          },
+        }),
+      };
+
+      if (active && obj.id?.endsWith('-fui-option')) {
+        obj.id = `${floatingId}-option-${activeIndex}`;
+      }
+
+      return obj;
+    },
+    [
+      floatingId,
+      activeIndex,
+      focusItemOnHover,
+      latestOpenRef,
+      listRef,
+      onNavigate,
+      virtual,
+      floatingFocusElementRef,
+    ],
+  );
 
   const getParentOrientation = React.useCallback(() => {
     return (

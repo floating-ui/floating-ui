@@ -19,6 +19,7 @@ import {
   useInteractions,
   useListItem,
   useListNavigation,
+  useRole,
 } from '../../src';
 import type {UseListNavigationProps} from '../../src/hooks/useListNavigation';
 import {Main as ComplexGrid} from '../visual/components/ComplexGrid';
@@ -1474,4 +1475,88 @@ test('Home or End key press is ignored for typeable combobox reference', async (
   await waitFor(() => {
     expect(screen.getByTestId('item-1')).toHaveFocus();
   });
+});
+
+test('`aria-activedescendant` refers to the correct item when list changes', async () => {
+  function VirtualListApp() {
+    const [open, setOpen] = useState(false);
+    const [items, setItems] = useState(['apple', 'banana', 'cherry']);
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const listRef = useRef<Array<HTMLElement | null>>([]);
+
+    const {refs, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+    });
+
+    const role = useRole(context, {role: 'combobox'});
+    const listNavigation = useListNavigation(context, {
+      listRef,
+      activeIndex,
+      onNavigate: setActiveIndex,
+      virtual: true,
+    });
+
+    const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
+      [role, listNavigation],
+    );
+
+    return (
+      <>
+        <button
+          {...getReferenceProps({ref: refs.setReference})}
+          data-testid="reference"
+        >
+          Open
+        </button>
+        {open && (
+          <div
+            {...getFloatingProps({ref: refs.setFloating})}
+            data-testid="floating"
+          >
+            {items.map((item, index) => {
+              return (
+                <div
+                  key={item}
+                  role="option"
+                  data-testid={`item-${index}`}
+                  {...getItemProps({
+                    active: activeIndex === index,
+                    ref(node) {
+                      listRef.current[index] = node;
+                    },
+                  })}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        )}
+        <button
+          data-testid="change-items"
+          onClick={() => {
+            setItems(['kiwi']);
+          }}
+        >
+          Change Items
+        </button>
+      </>
+    );
+  }
+
+  render(<VirtualListApp />);
+
+  await userEvent.click(screen.getByTestId('reference'));
+  await userEvent.keyboard('{ArrowDown}');
+  await act(async () => {});
+  expect(screen.getByTestId('reference')).toHaveAttribute(
+    'aria-activedescendant',
+    screen.getByTestId('item-0').id,
+  );
+  await userEvent.click(screen.getByTestId('change-items'));
+  expect(screen.getByTestId('reference')).toHaveAttribute(
+    'aria-activedescendant',
+    screen.getByTestId('item-0').id,
+  );
 });
