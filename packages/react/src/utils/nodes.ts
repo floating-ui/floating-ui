@@ -3,7 +3,6 @@ import type {ReferenceType, FloatingNodeType} from '../types';
 export function getNodeChildren<RT extends ReferenceType = ReferenceType>(
   nodes: Array<FloatingNodeType<RT>>,
   id: string | undefined,
-  onlyOpenChildren = true,
 ) {
   let allChildren = nodes.filter(
     (node) => node.parentId === id && node.context?.open,
@@ -11,14 +10,12 @@ export function getNodeChildren<RT extends ReferenceType = ReferenceType>(
   let currentChildren = allChildren;
 
   while (currentChildren.length) {
-    currentChildren = onlyOpenChildren
-      ? nodes.filter(
-          (node) =>
-            currentChildren?.some(
-              (n) => node.parentId === n.id && node.context?.open,
-            ),
-        )
-      : nodes;
+    currentChildren = nodes.filter(
+      (node) =>
+        currentChildren?.some(
+          (n) => node.parentId === n.id && node.context?.open,
+        ),
+    );
 
     allChildren = allChildren.concat(currentChildren);
   }
