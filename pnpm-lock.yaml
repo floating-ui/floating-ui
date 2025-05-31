@@ -325,8 +325,8 @@ importers:
         specifier: ^1.5.1
         version: 1.5.1
       use-isomorphic-layout-effect:
-        specifier: ^1.1.2
-        version: 1.1.2(@types/react@18.3.19)(react@18.2.0)
+        specifier: ^1.2.1
+        version: 1.2.1(@types/react@18.3.19)(react@18.2.0)
       vitest-browser-react:
         specifier: ^0.1.1
         version: 0.1.1(@types/react-dom@18.3.1)(@types/react@18.3.19)(@vitest/browser@3.0.9(@types/node@20.10.6)(playwright@1.50.0)(typescript@5.4.2)(vite@6.2.2(@types/node@20.10.6)(jiti@1.21.0)(terser@5.39.0))(vitest@3.0.9))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@20.10.6)(@vitest/browser@3.0.9)(jiti@1.21.0)(jsdom@26.0.0)(msw@2.7.3(@types/node@20.10.6)(typescript@5.4.2))(terser@5.39.0))
@@ -362,8 +362,8 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
       use-isomorphic-layout-effect:
-        specifier: ^1.1.2
-        version: 1.1.2(@types/react@18.3.19)(react@18.2.0)
+        specifier: ^1.2.1
+        version: 1.2.1(@types/react@18.3.19)(react@18.2.0)
 
   packages/react-native:
     dependencies:
@@ -493,8 +493,8 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3
       use-isomorphic-layout-effect:
-        specifier: ^1.1.1
-        version: 1.1.2(@types/react@18.3.19)(react@18.2.0)
+        specifier: ^1.2.1
+        version: 1.2.1(@types/react@18.3.19)(react@18.2.0)
     devDependencies:
       '@svgr/webpack':
         specifier: ^5.5.0
@@ -3831,6 +3831,9 @@ packages:
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
+
+  '@types/node@18.19.107':
+    resolution: {integrity: sha512-uvHN/vnsPj8hJWaqXUjT59LKYh0RlZXsdYa4CGz4R9aFGePPsUPN0xlHrDzOset937H2TunFJ8SwPCX69y9qhA==}
 
   '@types/node@18.19.4':
     resolution: {integrity: sha512-xNzlUhzoHotIsnFoXmJB+yWmBvFZgKCI9TtPIEdYIMM1KWfwuY8zh7wvc1u1OAXlC7dlf6mZVx/s+Y5KfFz19A==}
@@ -9189,11 +9192,11 @@ packages:
       react: '>=16.8.0 <19.0.0'
       react-dom: '>=16.8.0 <19.0.0'
 
-  use-isomorphic-layout-effect@1.1.2:
-    resolution: {integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==}
+  use-isomorphic-layout-effect@1.2.1:
+    resolution: {integrity: sha512-tpZZ+EX0gaghDAiFR37hj5MgY6ZN55kLiPkJsKxBMZ6GZdOSPJXiOzPM984oPYZ5AnehYx5WQp1+ME8I/P/pRA==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -12118,7 +12121,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.10.6
+      '@types/node': 18.19.107
       '@types/yargs': 15.0.19
       chalk: 4.1.2
 
@@ -12135,7 +12138,7 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.10.6
+      '@types/node': 18.19.107
       '@types/yargs': 17.0.32
       chalk: 4.1.2
 
@@ -14324,6 +14327,10 @@ snapshots:
       form-data: 4.0.2
 
   '@types/node@12.20.55': {}
+
+  '@types/node@18.19.107':
+    dependencies:
+      undici-types: 5.26.5
 
   '@types/node@18.19.4':
     dependencies:
@@ -20545,13 +20552,13 @@ snapshots:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
 
-  use-isomorphic-layout-effect@1.1.2(@types/react@18.3.19)(react@17.0.2):
+  use-isomorphic-layout-effect@1.2.1(@types/react@18.3.19)(react@17.0.2):
     dependencies:
       react: 17.0.2
     optionalDependencies:
       '@types/react': 18.3.19
 
-  use-isomorphic-layout-effect@1.1.2(@types/react@18.3.19)(react@18.2.0):
+  use-isomorphic-layout-effect@1.2.1(@types/react@18.3.19)(react@18.2.0):
     dependencies:
       react: 18.2.0
     optionalDependencies:
@@ -20560,7 +20567,7 @@ snapshots:
   use-latest@1.2.1(@types/react@18.3.19)(react@17.0.2):
     dependencies:
       react: 17.0.2
-      use-isomorphic-layout-effect: 1.1.2(@types/react@18.3.19)(react@17.0.2)
+      use-isomorphic-layout-effect: 1.2.1(@types/react@18.3.19)(react@17.0.2)
     optionalDependencies:
       '@types/react': 18.3.19
 
