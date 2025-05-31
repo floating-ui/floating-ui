@@ -1,5 +1,12 @@
 # @floating-ui/react
 
+## 0.27.10
+
+### Patch Changes
+
+- fix(safePolygon): handle pointer moving outside of all floating elements in a tree with a close delay
+- fix(useDismiss): bail out of blur to mark inside react tree if floating tree exists
+
 ## 0.27.9
 
 ### Patch Changes
