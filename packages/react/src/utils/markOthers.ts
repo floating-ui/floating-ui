@@ -5,7 +5,18 @@ import {getDocument} from './element';
 
 type Undo = () => void;
 
-let counterMap = new WeakMap<Element, number>();
+const counters = {
+  inert: new WeakMap<Element, number>(),
+  'aria-hidden': new WeakMap<Element, number>(),
+  none: new WeakMap<Element, number>(),
+};
+
+function getCounterMap(control: 'inert' | 'aria-hidden' | null) {
+  if (control === 'inert') return counters.inert;
+  if (control === 'aria-hidden') return counters['aria-hidden'];
+  return counters.none;
+}
+
 let uncontrolledElementsSet = new WeakSet<Element>();
 let markerMap: Record<string, WeakMap<Element, number>> = {};
 let lockCount = 0;
@@ -60,7 +71,6 @@ function applyAttributeToOthers(
     if (!el || elementsToKeep.has(el)) {
       return;
     }
-
     elementsToKeep.add(el);
     el.parentNode && keep(el.parentNode);
   }
@@ -80,10 +90,8 @@ function applyAttributeToOthers(
           ? node.getAttribute(controlAttribute)
           : null;
         const alreadyHidden = attr !== null && attr !== 'false';
-        const currentCounterValue = counterMap.get(node) || 0;
-        const counterValue = controlAttribute
-          ? currentCounterValue + 1
-          : currentCounterValue;
+        const counterMap = getCounterMap(controlAttribute);
+        const counterValue = (counterMap.get(node) || 0) + 1;
         const markerValue = (markerCounter.get(node) || 0) + 1;
 
         counterMap.set(node, counterValue);
@@ -112,10 +120,9 @@ function applyAttributeToOthers(
 
   return () => {
     hiddenElements.forEach((element) => {
+      const counterMap = getCounterMap(controlAttribute);
       const currentCounterValue = counterMap.get(element) || 0;
-      const counterValue = controlAttribute
-        ? currentCounterValue - 1
-        : currentCounterValue;
+      const counterValue = currentCounterValue - 1;
       const markerValue = (markerCounter.get(element) || 0) - 1;
 
       counterMap.set(element, counterValue);
@@ -125,7 +132,6 @@ function applyAttributeToOthers(
         if (!uncontrolledElementsSet.has(element) && controlAttribute) {
           element.removeAttribute(controlAttribute);
         }
-
         uncontrolledElementsSet.delete(element);
       }
 
@@ -137,8 +143,9 @@ function applyAttributeToOthers(
     lockCount--;
 
     if (!lockCount) {
-      counterMap = new WeakMap();
-      counterMap = new WeakMap();
+      counters.inert = new WeakMap();
+      counters['aria-hidden'] = new WeakMap();
+      counters.none = new WeakMap();
       uncontrolledElementsSet = new WeakSet();
       markerMap = {};
     }
