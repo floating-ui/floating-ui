@@ -148,7 +148,7 @@ export type UseFloatingOptions<RT extends ReferenceType = ReferenceType> =
       /**
        * Whether to use `transform` for positioning instead of `top` and `left`
        * (layout) in the `floatingStyles` object.
-       * @default false
+       * @default true
        */
       transform?: boolean;
     }
