@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useClientLayoutEffect} from '@floating-ui/react/utils';
 
 import {SafeReact} from '../utils/safeReact';
 
@@ -15,7 +15,7 @@ function useFloatingId(): string | undefined {
     serverHandoffComplete ? genId() : undefined,
   );
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (id == null) {
       setId(genId());
     }

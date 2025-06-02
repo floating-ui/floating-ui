@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {isElement} from '@floating-ui/utils/dom';
 import {
-  useModernLayoutEffect,
+  useClientLayoutEffect,
   enableFocusInside,
   disableFocusInside,
   getPreviousTabbable,
@@ -53,7 +53,7 @@ export function useFloatingPortalNode(props: UseFloatingPortalNodeProps = {}) {
 
   const portalNodeRef = React.useRef<HTMLDivElement | null>(null);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     return () => {
       portalNode?.remove();
       // Allow the subsequent layout effects to create a new node on updates.
@@ -65,7 +65,7 @@ export function useFloatingPortalNode(props: UseFloatingPortalNodeProps = {}) {
     };
   }, [portalNode]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     // Wait for the uniqueId to be generated before creating the portal node in
     // React <18 (using `useFloatingId` instead of the native `useId`).
     // https://github.com/floating-ui/floating-ui/issues/2778
@@ -82,7 +82,7 @@ export function useFloatingPortalNode(props: UseFloatingPortalNodeProps = {}) {
     setPortalNode(subRoot);
   }, [id, uniqueId]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     // Wait for the root to exist before creating the portal node. The root must
     // be stored in state, not a ref, for this to work reactively.
     if (root === null) return;

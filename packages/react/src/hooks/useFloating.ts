@@ -4,7 +4,7 @@ import {
   type VirtualElement,
 } from '@floating-ui/react-dom';
 import {isElement} from '@floating-ui/utils/dom';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useClientLayoutEffect} from '@floating-ui/react/utils';
 
 import {useFloatingTree} from '../components/FloatingTree';
 import type {
@@ -49,7 +49,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
   const tree = useFloatingTree();
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (domReference) {
       domReferenceRef.current = domReference;
     }
@@ -133,7 +133,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     [position, refs, elements, nodeId, rootContext],
   );
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     rootContext.dataRef.current.floatingContext = context;
 
     const node = tree?.nodesRef.current.find((node) => node.id === nodeId);

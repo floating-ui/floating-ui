@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {useLatestRef, useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useLatestRef, useClientLayoutEffect} from '@floating-ui/react/utils';
 
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 
@@ -76,7 +76,7 @@ export function useTransitionStatus(
     setStatus('unmounted');
   }
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!floating) return;
 
     if (open) {
@@ -168,7 +168,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   const closeRef = useLatestRef(unstable_close);
   const commonRef = useLatestRef(unstable_common);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     const initialStyles = execWithArgsOrReturn(initialRef.current, fnArgs);
     const closeStyles = execWithArgsOrReturn(closeRef.current, fnArgs);
     const commonStyles = execWithArgsOrReturn(commonRef.current, fnArgs);
