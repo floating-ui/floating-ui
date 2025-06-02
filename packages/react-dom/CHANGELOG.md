@@ -1,5 +1,11 @@
 # @floating-ui/react-dom
 
+## 2.1.3
+
+### Patch Changes
+
+- fix(useFloating): correct `transform` default doc (`@default true` instead of `@default false`)
+
 ## 2.1.2
 
 ### Patch Changes

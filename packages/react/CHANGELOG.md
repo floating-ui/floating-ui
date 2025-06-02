@@ -1,5 +1,12 @@
 # @floating-ui/react
 
+## 0.27.11
+
+### Patch Changes
+
+- fix(FloatingFocusManager): check if target is connected for `restoreFocus` prop
+- Update dependencies: `@floating-ui/react-dom@2.1.3`
+
 ## 0.27.10
 
 ### Patch Changes
