@@ -1,5 +1,12 @@
 # @floating-ui/react
 
+## 0.27.12
+
+### Patch Changes
+
+- fix(FloatingFocusManager): ensure `aria-hidden`/`inert` are cleaned up correctly when mixing `outsideElementsInert` `true`/`false`
+- fix(safePolygon): revert to checking if any nested child is open
+
 ## 0.27.11
 
 ### Patch Changes
