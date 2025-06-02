@@ -154,23 +154,9 @@ export function safePolygon(options: SafePolygonOptions = {}) {
         return;
       }
 
-      // If the cursor is over any open nested child, abort.
-      if (tree) {
-        const openChildren = getNodeChildren(tree.nodesRef.current, nodeId);
-        const isOverOpenChild = openChildren.some((child) => {
-          const childFloating = child.context?.elements.floating;
-          return (
-            childFloating &&
-            isInside(clientPoint, childFloating.getBoundingClientRect())
-          );
-        });
-
-        if (
-          isOverOpenChild ||
-          (openChildren.length && isInside(clientPoint, rect))
-        ) {
-          return;
-        }
+      // If any nested child is open, abort.
+      if (tree && getNodeChildren(tree.nodesRef.current, nodeId).length) {
+        return;
       }
 
       // If the pointer is leaving from the opposite side, the "buffer" logic
