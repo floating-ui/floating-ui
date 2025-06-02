@@ -72,6 +72,6 @@
     "config": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "use-isomorphic-layout-effect": "^1.1.2"
+    "use-isomorphic-layout-effect": "^1.2.1"
   }
 }
