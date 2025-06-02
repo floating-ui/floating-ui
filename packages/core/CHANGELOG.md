@@ -1,5 +1,11 @@
 # @floating-ui/core
 
+## 1.7.1
+
+### Patch Changes
+
+- fix(flip): only allow fallback to the perpendicular axis if all placements on the preferred side axis overflow the main axis with `crossAxis: 'alignment'`
+
 ## 1.7.0
 
 ### Minor Changes
