@@ -414,7 +414,7 @@ export function FloatingFocusManager(
         // focus from being lost outside the floating tree.
         if (
           restoreFocus &&
-          event.currentTarget !== domReference &&
+          currentTarget !== domReference &&
           !target?.isConnected &&
           activeElement(getDocument(floatingFocusElement)) ===
             getDocument(floatingFocusElement).body
