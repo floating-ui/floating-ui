@@ -111,3 +111,56 @@ test('multiple cleanups with differing controlAttribute', () => {
 
   expect(target.getAttribute('data-floating-ui-inert')).toBe(null);
 });
+
+test('mixed controlAttribute usage (aria-hidden/inert/none)', () => {
+  const other = document.createElement('div');
+  document.body.appendChild(other);
+
+  const A = document.createElement('div');
+  A.setAttribute('data-testid', 'A');
+  document.body.appendChild(A);
+
+  const B = document.createElement('div');
+  B.setAttribute('data-testid', 'B');
+  document.body.appendChild(B);
+
+  const C = document.createElement('div');
+  C.setAttribute('data-testid', 'C');
+  document.body.appendChild(C);
+
+  const cleanupA = markOthers([A], /* ariaHidden= */ true);
+
+  expect(other.getAttribute('aria-hidden')).toBe('true');
+  expect(other.hasAttribute('inert')).toBe(false);
+  expect(other.getAttribute('data-floating-ui-inert')).toBe('');
+
+  const cleanupB = markOthers([B], /* ariaHidden= */ false, /* inert= */ true);
+
+  expect(other.getAttribute('aria-hidden')).toBe('true');
+  expect(other.getAttribute('inert')).toBe('');
+  expect(other.getAttribute('data-floating-ui-inert')).toBe('');
+
+  const cleanupC = markOthers([C], /* ariaHidden= */ false, /* inert= */ false);
+
+  expect(other.getAttribute('aria-hidden')).toBe('true');
+  expect(other.getAttribute('inert')).toBe('');
+  expect(other.getAttribute('data-floating-ui-inert')).toBe('');
+
+  cleanupC();
+
+  expect(other.getAttribute('aria-hidden')).toBe('true');
+  expect(other.getAttribute('inert')).toBe('');
+  expect(other.getAttribute('data-floating-ui-inert')).toBe('');
+
+  cleanupB();
+
+  expect(other.getAttribute('aria-hidden')).toBe('true');
+  expect(other.hasAttribute('inert')).toBe(false);
+  expect(other.getAttribute('data-floating-ui-inert')).toBe('');
+
+  cleanupA();
+
+  expect(other.hasAttribute('aria-hidden')).toBe(false);
+  expect(other.hasAttribute('inert')).toBe(false);
+  expect(other.hasAttribute('data-floating-ui-inert')).toBe(false);
+});
