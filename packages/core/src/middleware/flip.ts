@@ -144,9 +144,17 @@ export const flip = (
           checkCrossAxis === 'alignment'
             ? initialSideAxis !== getSideAxis(nextPlacement)
             : false;
-        const hasInitialMainAxisOverflow = overflowsData[0]?.overflows[0] > 0;
 
-        if (!ignoreCrossAxisOverflow || hasInitialMainAxisOverflow) {
+        if (
+          !ignoreCrossAxisOverflow ||
+          // We leave the current main axis only if every placement on that axis
+          // overflows the main axis.
+          overflowsData.every(
+            (d) =>
+              d.overflows[0] > 0 &&
+              getSideAxis(d.placement) === initialSideAxis,
+          )
+        ) {
           // Try next placement and re-run the lifecycle.
           return {
             data: {
