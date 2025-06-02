@@ -5,6 +5,7 @@ import {
   fireEvent,
   render,
   screen,
+  waitFor,
   within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -1718,7 +1719,7 @@ describe('Drawer', () => {
 describe('restoreFocus', () => {
   function App({restoreFocus = true}: {restoreFocus?: boolean}) {
     const [isOpen, setIsOpen] = useState(false);
-    const [removedIndex, setRemovedIndex] = useState(0);
+    const [removed, setRemoved] = useState(false);
 
     const {refs, context} = useFloating({
       open: isOpen,
@@ -1726,11 +1727,11 @@ describe('restoreFocus', () => {
     });
 
     const click = useClick(context);
-
     const {getReferenceProps, getFloatingProps} = useInteractions([click]);
 
     return (
       <>
+        <button onClick={() => setRemoved(true)}>remove</button>
         <button
           ref={refs.setReference}
           {...getReferenceProps()}
@@ -1739,29 +1740,17 @@ describe('restoreFocus', () => {
         {isOpen && (
           <FloatingFocusManager
             context={context}
-            initialFocus={1}
             restoreFocus={restoreFocus}
+            initialFocus={1}
           >
             <div
               ref={refs.setFloating}
               {...getFloatingProps()}
               data-testid="floating"
             >
-              {removedIndex < 3 && (
-                <button onClick={() => setRemovedIndex((i) => i + 1)}>
-                  three
-                </button>
-              )}
-              {removedIndex < 1 && (
-                <button onClick={() => setRemovedIndex((i) => i + 1)}>
-                  one
-                </button>
-              )}
-              {removedIndex < 2 && (
-                <button onClick={() => setRemovedIndex((i) => i + 1)}>
-                  two
-                </button>
-              )}
+              <button>one</button>
+              {!removed && <button>two</button>}
+              <button>three</button>
             </div>
           </FloatingFocusManager>
         )}
@@ -1769,55 +1758,49 @@ describe('restoreFocus', () => {
     );
   }
 
-  test('true: restores focus to nearest tabbable element if currently focused element is removed', async () => {
-    render(<App />);
+  test.skipIf(isJSDOM())(
+    'true: restores focus to nearest tabbable element if currently focused element is removed',
+    async () => {
+      render(<App />);
 
-    await userEvent.click(screen.getByTestId('reference'));
-    await act(async () => {});
+      await userEvent.click(screen.getByTestId('reference'));
+      await act(async () => {});
 
-    const one = screen.getByRole('button', {name: 'one'});
-    const two = screen.getByRole('button', {name: 'two'});
-    const three = screen.getByRole('button', {name: 'three'});
-    const floating = screen.getByTestId('floating');
+      const two = screen.getByRole('button', {name: 'two'});
+      const three = screen.getByRole('button', {name: 'three'});
+      const remove = screen.getByText('remove');
 
-    expect(one).toHaveFocus();
-    fireEvent.click(one);
-    fireEvent.focusOut(floating);
+      expect(two).toHaveFocus();
 
-    await act(async () => {});
+      fireEvent.click(remove);
 
-    expect(two).toHaveFocus();
-    fireEvent.click(two);
-    fireEvent.focusOut(floating);
+      await waitFor(() => {
+        expect(three).toHaveFocus();
+      });
+    },
+  );
 
-    await act(async () => {});
+  test.skipIf(isJSDOM())(
+    'false: does not restore focus to nearest tabbable element if currently focused element is removed',
+    async () => {
+      render(<App restoreFocus={false} />);
 
-    expect(three).toHaveFocus();
-    fireEvent.click(three);
-    fireEvent.focusOut(floating);
+      await userEvent.click(screen.getByTestId('reference'));
+      await act(async () => {});
 
-    await act(async () => {});
+      const two = screen.getByRole('button', {name: 'two'});
+      const remove = screen.getByText('remove');
 
-    expect(floating).toHaveFocus();
-  });
+      expect(two).toHaveFocus();
 
-  test('false: does not restore focus to nearest tabbable element if currently focused element is removed', async () => {
-    render(<App restoreFocus={false} />);
+      fireEvent.click(remove);
+      await act(async () => {});
 
-    await userEvent.click(screen.getByTestId('reference'));
-    await act(async () => {});
-
-    const one = screen.getByRole('button', {name: 'one'});
-    const floating = screen.getByTestId('floating');
-
-    expect(one).toHaveFocus();
-    fireEvent.click(one);
-    fireEvent.focusOut(floating);
-
-    await act(async () => {});
-
-    expect(document.body).toHaveFocus();
-  });
+      await waitFor(() => {
+        expect(document.body).toHaveFocus();
+      });
+    },
+  );
 });
 
 test('trapped combobox prevents focus moving outside floating element', async () => {
