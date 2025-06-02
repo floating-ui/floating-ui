@@ -198,4 +198,10 @@ test('when crossAxis: "alignment" and fallbackAxisSideDirection: "end", does not
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `cross-axis-alignment-fallback-axis-side-chooses-bottom.png`,
   );
+
+  await scroll(page, {x: 610, y: 320});
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `cross-axis-alignment-fallback-axis-side-chooses-right.png`,
+  );
 });
