@@ -1,5 +1,5 @@
 import path from 'path';
-import {type UserConfig, defineConfig} from 'vitest/config';
+import {type ViteUserConfig, defineConfig} from 'vitest/config';
 
 // root path of the monorepo
 const basePath = path.resolve(
@@ -7,7 +7,7 @@ const basePath = path.resolve(
   '../../../',
 );
 
-export const defineViteConfig = (config: UserConfig): UserConfig =>
+export const defineViteConfig = (config: ViteUserConfig): ViteUserConfig =>
   defineConfig({
     ...config,
     resolve: {
