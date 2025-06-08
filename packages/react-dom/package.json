@@ -64,7 +64,6 @@
     "@floating-ui/dom": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.23.3",
     "@testing-library/react": "^16.2.0",
     "@types/react": "^18.3.19",
     "@types/react-dom": "^18.3.1",

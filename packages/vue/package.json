@@ -61,7 +61,6 @@
     "vue-demi": ">=0.13.0"
   },
   "devDependencies": {
-    "@parcel/transformer-vue": "^2.10.3",
     "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/vue": "^6.6.1",
     "@vitejs/plugin-vue": "^5.2.3",
