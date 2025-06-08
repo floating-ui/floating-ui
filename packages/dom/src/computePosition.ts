@@ -1,5 +1,5 @@
 import {
-  computePosition as computePositionCore,
+  computePosition as computePositionCorePreTyped,
   type ComputePositionReturn,
 } from '@floating-ui/core';
 import {platform} from './platform';
@@ -8,6 +8,12 @@ import type {
   FloatingElement,
   ReferenceElement,
 } from './types';
+
+const computePositionCore = computePositionCorePreTyped as unknown as (
+  reference: ReferenceElement,
+  floating: FloatingElement,
+  options?: Partial<ComputePositionConfig>,
+) => ComputePositionReturn;
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element

@@ -93,24 +93,28 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
 
     const open = openOption.value;
 
-    computePosition(referenceElement.value, floatingElement.value, {
-      middleware: middlewareOption.value,
-      placement: placementOption.value,
-      strategy: strategyOption.value,
-    }).then((position) => {
-      x.value = position.x;
-      y.value = position.y;
-      strategy.value = position.strategy;
-      placement.value = position.placement;
-      middlewareData.value = position.middlewareData;
-      /**
-       * The floating element's position may be recomputed while it's closed
-       * but still mounted (such as when transitioning out). To ensure
-       * `isPositioned` will be `false` initially on the next open, avoid
-       * setting it to `true` when `open === false` (must be specified).
-       */
-      isPositioned.value = open !== false;
-    });
+    const position = computePosition(
+      referenceElement.value,
+      floatingElement.value,
+      {
+        middleware: middlewareOption.value,
+        placement: placementOption.value,
+        strategy: strategyOption.value,
+      },
+    );
+
+    x.value = position.x;
+    y.value = position.y;
+    strategy.value = position.strategy;
+    placement.value = position.placement;
+    middlewareData.value = position.middlewareData;
+    /**
+     * The floating element's position may be recomputed while it's closed
+     * but still mounted (such as when transitioning out). To ensure
+     * `isPositioned` will be `false` initially on the next open, avoid
+     * setting it to `true` when `open === false` (must be specified).
+     */
+    isPositioned.value = open !== false;
   }
 
   function cleanup() {

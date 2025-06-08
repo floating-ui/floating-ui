@@ -1,6 +1,5 @@
 import {computePosition} from '@floating-ui/dom';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 
 import type {
   ComputePositionConfig,
@@ -92,24 +91,25 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       config.platform = platformRef.current;
     }
 
-    computePosition(referenceRef.current, floatingRef.current, config).then(
-      (data) => {
-        const fullData = {
-          ...data,
-          // The floating element's position may be recomputed while it's closed
-          // but still mounted (such as when transitioning out). To ensure
-          // `isPositioned` will be `false` initially on the next open, avoid
-          // setting it to `true` when `open === false` (must be specified).
-          isPositioned: openRef.current !== false,
-        };
-        if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
-          dataRef.current = fullData;
-          ReactDOM.flushSync(() => {
-            setData(fullData);
-          });
-        }
-      },
+    const data = computePosition(
+      referenceRef.current,
+      floatingRef.current,
+      config,
     );
+
+    const fullData = {
+      ...data,
+      // The floating element's position may be recomputed while it's closed
+      // but still mounted (such as when transitioning out). To ensure
+      // `isPositioned` will be `false` initially on the next open, avoid
+      // setting it to `true` when `open === false` (must be specified).
+      isPositioned: openRef.current !== false,
+    };
+
+    if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+      dataRef.current = fullData;
+      setData(fullData);
+    }
   }, [latestMiddleware, placement, strategy, platformRef, openRef]);
 
   useModernLayoutEffect(() => {

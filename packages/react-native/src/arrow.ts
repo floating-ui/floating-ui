@@ -22,7 +22,7 @@ export const arrow = (
   return {
     name: 'arrow',
     options,
-    fn(state) {
+    async fn(state) {
       const {element, padding} =
         typeof options === 'function' ? options(state) : options;
 

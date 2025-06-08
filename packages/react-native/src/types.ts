@@ -1,9 +1,88 @@
 import type {
   ComputePositionReturn,
-  Middleware,
+  Middleware as CoreMiddleware,
   Placement,
-} from '@floating-ui/core/async';
+  Platform as CorePlatform,
+  MiddlewareState,
+  MiddlewareReturn,
+  ElementRects,
+  Rect,
+  Dimensions,
+  Boundary,
+  RootBoundary,
+  Strategy,
+  Elements,
+  ClientRectObject,
+} from '@floating-ui/core';
 import type * as React from 'react';
+
+// Type overrides to make core types async for React Native
+export interface Platform
+  extends Omit<
+    CorePlatform,
+    | 'getElementRects'
+    | 'getClippingRect'
+    | 'getDimensions'
+    | 'convertOffsetParentRelativeRectToViewportRelativeRect'
+    | 'getOffsetParent'
+    | 'isElement'
+    | 'getDocumentElement'
+    | 'getClientRects'
+    | 'isRTL'
+    | 'getScale'
+  > {
+  getElementRects: (args: {
+    reference: any;
+    floating: any;
+    strategy: Strategy;
+  }) => Promise<ElementRects>;
+  getClippingRect: (args: {
+    element: any;
+    boundary: Boundary;
+    rootBoundary: RootBoundary;
+    strategy: Strategy;
+  }) => Promise<Rect>;
+  getDimensions: (element: any) => Promise<Dimensions>;
+  convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
+    elements?: Elements;
+    rect: Rect;
+    offsetParent: any;
+    strategy: Strategy;
+  }) => Promise<Rect>;
+  getOffsetParent?: (element: any) => Promise<any>;
+  isElement?: (value: any) => Promise<boolean>;
+  getDocumentElement?: (element: any) => Promise<any>;
+  getClientRects?: (element: any) => ClientRectObject;
+  isRTL?: (element: any) => Promise<boolean>;
+  getScale?: (element: any) => Promise<{
+    x: number;
+    y: number;
+  }>;
+}
+
+export interface Middleware extends Omit<CoreMiddleware, 'fn'> {
+  fn: (state: MiddlewareState) => Promise<MiddlewareReturn>;
+}
+
+export interface ComputePositionConfig {
+  /**
+   * Object to interface with the current platform.
+   */
+  platform: Platform;
+  /**
+   * Where to place the floating element relative to the reference element.
+   */
+  placement?: Placement;
+  /**
+   * The strategy to use when positioning the floating element.
+   */
+  strategy?: Strategy;
+  /**
+   * Array of middleware objects to modify the positioning or provide data for
+   * rendering.
+   */
+  middleware?: Array<Middleware | null | undefined | false>;
+}
 
 export type {
   AlignedPlacement,
@@ -13,8 +92,6 @@ export type {
   Axis,
   Boundary,
   ClientRectObject,
-  ComputePositionConfig,
-  ComputePositionReturn,
   Coords,
   DetectOverflowOptions,
   Dimensions,
@@ -26,7 +103,6 @@ export type {
   HideOptions,
   InlineOptions,
   Length,
-  Middleware,
   MiddlewareArguments,
   MiddlewareData,
   MiddlewareReturn,
@@ -34,7 +110,6 @@ export type {
   OffsetOptions,
   Padding,
   Placement,
-  Platform,
   Rect,
   ReferenceElement,
   RootBoundary,
@@ -44,7 +119,7 @@ export type {
   SizeOptions,
   Strategy,
   VirtualElement,
-} from '@floating-ui/core/async';
+} from '@floating-ui/core';
 
 export interface UseFloatingOptions {
   /**
