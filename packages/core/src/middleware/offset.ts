@@ -5,7 +5,12 @@ import {
   getSideAxis,
   type Coords,
 } from '../utils';
-import type {Derivable, Middleware, MiddlewareState} from '../types';
+import type {
+  Derivable,
+  Middleware,
+  MiddlewareState,
+  StrippablePromise,
+} from '../types';
 
 type OffsetValue =
   | number
@@ -43,7 +48,7 @@ export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 export async function convertValueToCoords(
   state: MiddlewareState,
   options: OffsetOptions,
-): Promise<Coords> {
+): StrippablePromise<Coords> {
   const {placement, platform, elements} = state;
   const rtl = await platform.isRTL?.(elements.floating);
 

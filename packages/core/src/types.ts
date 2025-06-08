@@ -10,7 +10,7 @@ import type {
   Strategy,
 } from './utils';
 
-type Promisable<T> = T | Promise<T>;
+export type StrippablePromise<T> = Promise<T>;
 
 /**
  * Function option to derive middleware options from state.
@@ -27,14 +27,14 @@ export interface Platform {
     reference: ReferenceElement;
     floating: FloatingElement;
     strategy: Strategy;
-  }) => Promisable<ElementRects>;
+  }) => StrippablePromise<ElementRects>;
   getClippingRect: (args: {
     element: any;
     boundary: Boundary;
     rootBoundary: RootBoundary;
     strategy: Strategy;
-  }) => Promisable<Rect>;
-  getDimensions: (element: any) => Promisable<Dimensions>;
+  }) => StrippablePromise<Rect>;
+  getDimensions: (element: any) => StrippablePromise<Dimensions>;
 
   // Optional
   convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
@@ -42,13 +42,13 @@ export interface Platform {
     rect: Rect;
     offsetParent: any;
     strategy: Strategy;
-  }) => Promisable<Rect>;
-  getOffsetParent?: (element: any) => Promisable<any>;
-  isElement?: (value: any) => Promisable<boolean>;
-  getDocumentElement?: (element: any) => Promisable<any>;
-  getClientRects?: (element: any) => Promisable<Array<ClientRectObject>>;
-  isRTL?: (element: any) => Promisable<boolean>;
-  getScale?: (element: any) => Promisable<{x: number; y: number}>;
+  }) => StrippablePromise<Rect>;
+  getOffsetParent?: (element: any) => StrippablePromise<any>;
+  isElement?: (value: any) => StrippablePromise<boolean>;
+  getDocumentElement?: (element: any) => StrippablePromise<any>;
+  getClientRects?: (element: any) => StrippablePromise<Array<ClientRectObject>>;
+  isRTL?: (element: any) => StrippablePromise<boolean>;
+  getScale?: (element: any) => StrippablePromise<{x: number; y: number}>;
 }
 
 export interface MiddlewareData {
@@ -122,7 +122,7 @@ export type ComputePosition = (
   reference: unknown,
   floating: unknown,
   config: ComputePositionConfig,
-) => Promise<ComputePositionReturn>;
+) => StrippablePromise<ComputePositionReturn>;
 
 export interface MiddlewareReturn extends Partial<Coords> {
   data?: {
@@ -139,7 +139,7 @@ export interface MiddlewareReturn extends Partial<Coords> {
 export type Middleware = {
   name: string;
   options?: any;
-  fn: (state: MiddlewareState) => Promisable<MiddlewareReturn>;
+  fn: (state: MiddlewareState) => StrippablePromise<MiddlewareReturn>;
 };
 
 export type ReferenceElement = any;

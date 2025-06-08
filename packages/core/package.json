@@ -65,7 +65,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "clean": "rimraf dist out-tsc && find . -name '*.d.ts' ! -name 'env.d.ts' -delete",
-    "build": "tsdown",
+    "build": "tsdown && node ../../config/transform-sync-dts.mjs && node ../../config/transform-async-dts.mjs",
     "prepack": "node ../../config/prepack.mjs core --utils --sync",
     "publint": "publint",
     "typecheck": "tsc -b"

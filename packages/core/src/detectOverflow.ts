@@ -12,6 +12,7 @@ import type {
   ElementContext,
   MiddlewareState,
   RootBoundary,
+  StrippablePromise,
 } from './types';
 
 export interface DetectOverflowOptions {
@@ -54,7 +55,7 @@ export interface DetectOverflowOptions {
 export async function detectOverflow(
   state: MiddlewareState,
   options: DetectOverflowOptions | Derivable<DetectOverflowOptions> = {},
-): Promise<SideObject> {
+): StrippablePromise<SideObject> {
   const {x, y, platform, rects, elements, strategy} = state;
 
   const {

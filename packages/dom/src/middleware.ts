@@ -41,7 +41,7 @@ import type {
 export const detectOverflow: (
   state: MiddlewareState,
   options?: DetectOverflowOptions | Derivable<DetectOverflowOptions>,
-) => Promise<SideObject> = detectOverflowCore;
+) => SideObject = detectOverflowCore;
 
 /**
  * Modifies the placement by translating the floating element along the

@@ -3,7 +3,11 @@
   "compilerOptions": {
     "composite": true,
     "types": [],
-    "outDir": "out-tsc"
+    "outDir": "out-tsc",
+    "paths": {
+      "@floating-ui/core": ["../core/dist/cjs/index.d.ts"],
+      "@floating-ui/core/*": ["../core/dist/cjs/*"]
+    }
   },
   "include": ["src"],
   "references": [{"path": "../core/tsconfig.lib.json"}]
