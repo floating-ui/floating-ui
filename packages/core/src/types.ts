@@ -11,6 +11,7 @@ import type {
 } from './utils';
 
 type Promisable<T> = T | Promise<T>;
+type Generatable<T> = T | Promise<T> | Generator<any, T, any>;
 
 /**
  * Function option to derive middleware options from state.
@@ -139,7 +140,7 @@ export interface MiddlewareReturn extends Partial<Coords> {
 export type Middleware = {
   name: string;
   options?: any;
-  fn: (state: MiddlewareState) => Promisable<MiddlewareReturn>;
+  fn: (state: MiddlewareState) => Generatable<MiddlewareReturn>;
 };
 
 export type ReferenceElement = any;

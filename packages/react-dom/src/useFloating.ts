@@ -77,40 +77,50 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const platformRef = useLatestRef(platform);
   const openRef = useLatestRef(open);
 
-  const update = React.useCallback(() => {
-    if (!referenceRef.current || !floatingRef.current) {
-      return;
-    }
+  const update = React.useCallback(
+    (flushSync = true) => {
+      if (!referenceRef.current || !floatingRef.current) {
+        return;
+      }
 
-    const config: ComputePositionConfig = {
-      placement,
-      strategy,
-      middleware: latestMiddleware,
-    };
+      const config: ComputePositionConfig = {
+        placement,
+        strategy,
+        middleware: latestMiddleware,
+      };
 
-    if (platformRef.current) {
-      config.platform = platformRef.current;
-    }
+      if (platformRef.current) {
+        config.platform = platformRef.current;
+      }
 
-    computePosition(referenceRef.current, floatingRef.current, config).then(
-      (data) => {
-        const fullData = {
-          ...data,
-          // The floating element's position may be recomputed while it's closed
-          // but still mounted (such as when transitioning out). To ensure
-          // `isPositioned` will be `false` initially on the next open, avoid
-          // setting it to `true` when `open === false` (must be specified).
-          isPositioned: openRef.current !== false,
-        };
-        if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
-          dataRef.current = fullData;
+      const data = computePosition(
+        referenceRef.current,
+        floatingRef.current,
+        config,
+      );
+
+      const fullData = {
+        ...data,
+        // The floating element's position may be recomputed while it's closed
+        // but still mounted (such as when transitioning out). To ensure
+        // `isPositioned` will be `false` initially on the next open, avoid
+        // setting it to `true` when `open === false` (must be specified).
+        isPositioned: openRef.current !== false,
+      };
+
+      if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+        dataRef.current = fullData;
+        if (flushSync) {
           ReactDOM.flushSync(() => {
             setData(fullData);
           });
+        } else {
+          setData(fullData);
         }
-      },
-    );
-  }, [latestMiddleware, placement, strategy, platformRef, openRef]);
+      }
+    },
+    [latestMiddleware, placement, strategy, platformRef, openRef],
+  );
 
   useModernLayoutEffect(() => {
     if (open === false && dataRef.current.isPositioned) {
@@ -133,10 +143,15 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
     if (referenceEl && floatingEl) {
       if (whileElementsMountedRef.current) {
-        return whileElementsMountedRef.current(referenceEl, floatingEl, update);
+        let shouldFlushSync = false;
+        return whileElementsMountedRef.current(referenceEl, floatingEl, () => {
+          // Don't flush on the first update to avoid React error.
+          update(shouldFlushSync);
+          shouldFlushSync = true;
+        });
       }
 
-      update();
+      update(false);
     }
   }, [
     referenceEl,

@@ -59,7 +59,7 @@ export const limitShift = (
   options?: LimitShiftOptions | Derivable<LimitShiftOptions>,
   deps?: React.DependencyList,
 ): {
-  fn: (state: MiddlewareState) => Coords;
+  fn: (state: MiddlewareState & {coords: Coords}) => Coords;
   options: any;
 } => ({
   ...baseLimitShift(options),

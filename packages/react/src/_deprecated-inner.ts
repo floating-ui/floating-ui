@@ -85,7 +85,7 @@ export const inner = (
 ): Middleware => ({
   name: 'inner',
   options: props,
-  async fn(state) {
+  fn(state) {
     const {
       listRef,
       overflowRef,
@@ -132,23 +132,23 @@ export const inner = (
 
     const nextArgs = {
       ...state,
-      ...(await offset(
+      ...offset(
         -item.offsetTop -
           floating.clientTop -
           rects.reference.height / 2 -
           item.offsetHeight / 2 -
           innerOffset,
-      ).fn(state)),
+      ).fn(state),
     };
 
-    const overflow = await detectOverflow(
+    const overflow = detectOverflow(
       getArgsWithCustomFloatingHeight(
         nextArgs,
         scrollEl.scrollHeight + clientTop + floating.clientTop,
       ),
       detectOverflowOptions,
     );
-    const refOverflow = await detectOverflow(nextArgs, {
+    const refOverflow = detectOverflow(nextArgs, {
       ...detectOverflowOptions,
       elementContext: 'reference',
     });
@@ -186,7 +186,7 @@ export const inner = (
     }
 
     if (overflowRef) {
-      overflowRef.current = await detectOverflow(
+      overflowRef.current = detectOverflow(
         getArgsWithCustomFloatingHeight(
           {...nextArgs, y: nextY},
           scrollEl.offsetHeight + clientTop + floating.clientTop,

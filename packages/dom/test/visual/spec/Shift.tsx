@@ -42,7 +42,7 @@ export function Shift() {
   const [limitShiftOffset, setLimitShiftOffset] =
     useState<LimitShiftOptions['offset']>(0);
   const [offsetValue, setOffsetValue] = useState(0);
-  const {x, y, strategy, update, refs} = useFloating({
+  const {x, y, strategy, refs, update} = useFloating({
     placement,
     whileElementsMounted: autoUpdate,
     middleware: [

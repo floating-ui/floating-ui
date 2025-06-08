@@ -356,12 +356,22 @@ test('external elements sync', async () => {
 
   const {getByTestId} = render(<App />);
 
-  await act(async () => {});
-
   expect(getByTestId('value').textContent).toBe('0,0');
 });
 
 test('external reference element sync', async () => {
+  const mockBoundingClientRect = vi.fn(() => ({
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+    top: 0,
+    right: 50,
+    bottom: 50,
+    left: 0,
+    toJSON: () => {},
+  }));
+
   function App() {
     const [referenceEl, setReferenceEl] = React.useState<HTMLElement | null>(
       null,
@@ -372,9 +382,16 @@ test('external reference element sync', async () => {
       },
     });
 
+    const handleRef = React.useCallback((node: HTMLDivElement | null) => {
+      if (node) {
+        node.getBoundingClientRect = mockBoundingClientRect;
+        setReferenceEl(node);
+      }
+    }, []);
+
     return (
       <>
-        <div data-testid="reference" ref={setReferenceEl} />
+        <div data-testid="reference" ref={handleRef} />
         <div ref={refs.setFloating} />
         <div data-testid="value">{`${x},${y}`}</div>
       </>
@@ -382,6 +399,11 @@ test('external reference element sync', async () => {
   }
 
   const {getByTestId} = render(<App />);
+
+  expect(getByTestId('value').textContent).toBe('25,50');
+});
+
+test('external floating element sync', async () => {
   const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
@@ -393,15 +415,7 @@ test('external reference element sync', async () => {
     left: 0,
     toJSON: () => {},
   }));
-  const reference = getByTestId('reference');
-  reference.getBoundingClientRect = mockBoundingClientRect;
 
-  await act(async () => {});
-
-  expect(getByTestId('value').textContent).toBe('25,50');
-});
-
-test('external floating element sync', async () => {
   function App() {
     const [floatingEl, setFloatingEl] = React.useState<HTMLElement | null>(
       null,
@@ -412,9 +426,19 @@ test('external floating element sync', async () => {
       },
     });
 
+    const handleRef = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        if (node) {
+          node.getBoundingClientRect = mockBoundingClientRect;
+          refs.setReference(node);
+        }
+      },
+      [refs],
+    );
+
     return (
       <>
-        <div data-testid="reference" ref={refs.setReference} />
+        <div data-testid="reference" ref={handleRef} />
         <div ref={setFloatingEl} />
         <div data-testid="value">{`${x},${y}`}</div>
       </>
@@ -422,6 +446,11 @@ test('external floating element sync', async () => {
   }
 
   const {getByTestId} = render(<App />);
+
+  expect(getByTestId('value').textContent).toBe('25,50');
+});
+
+test('external elements sync', async () => {
   const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
@@ -433,15 +462,7 @@ test('external floating element sync', async () => {
     left: 0,
     toJSON: () => {},
   }));
-  const reference = getByTestId('reference');
-  reference.getBoundingClientRect = mockBoundingClientRect;
 
-  await act(async () => {});
-
-  expect(getByTestId('value').textContent).toBe('25,50');
-});
-
-test('external elements sync', async () => {
   function App() {
     const [referenceEl, setReferenceEl] = React.useState<HTMLElement | null>(
       null,
@@ -456,9 +477,16 @@ test('external elements sync', async () => {
       },
     });
 
+    const handleRef = React.useCallback((node: HTMLDivElement | null) => {
+      if (node) {
+        node.getBoundingClientRect = mockBoundingClientRect;
+        setReferenceEl(node);
+      }
+    }, []);
+
     return (
       <>
-        <div data-testid="reference" ref={setReferenceEl} />
+        <div data-testid="reference" ref={handleRef} />
         <div ref={setFloatingEl} />
         <div data-testid="value">{`${x},${y}`}</div>
       </>
@@ -466,21 +494,6 @@ test('external elements sync', async () => {
   }
 
   const {getByTestId} = render(<App />);
-  const mockBoundingClientRect = vi.fn(() => ({
-    x: 0,
-    y: 0,
-    width: 50,
-    height: 50,
-    top: 0,
-    right: 50,
-    bottom: 50,
-    left: 0,
-    toJSON: () => {},
-  }));
-  const reference = getByTestId('reference');
-  reference.getBoundingClientRect = mockBoundingClientRect;
-
-  await act(async () => {});
 
   expect(getByTestId('value').textContent).toBe('25,50');
 });
@@ -516,25 +529,6 @@ test('external elements sync update', async () => {
 });
 
 test('floatingStyles no transform', async () => {
-  function App() {
-    const {refs, floatingStyles} = useFloating({
-      transform: false,
-    });
-
-    return (
-      <>
-        <div data-testid="reference" ref={refs.setReference} />
-        <div
-          data-testid="floating"
-          ref={refs.setFloating}
-          style={floatingStyles}
-        />
-      </>
-    );
-  }
-
-  const {getByTestId} = render(<App />);
-
   const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
@@ -546,14 +540,35 @@ test('floatingStyles no transform', async () => {
     left: 0,
     toJSON: () => {},
   }));
-  const reference = getByTestId('reference');
-  reference.getBoundingClientRect = mockBoundingClientRect;
 
-  expect(getByTestId('floating').style.position).toBe('absolute');
-  expect(getByTestId('floating').style.top).toBe('0px');
-  expect(getByTestId('floating').style.left).toBe('0px');
+  function App() {
+    const {refs, floatingStyles} = useFloating({
+      transform: false,
+    });
 
-  await act(async () => {});
+    const handleRef = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        if (node) {
+          node.getBoundingClientRect = mockBoundingClientRect;
+          refs.setReference(node);
+        }
+      },
+      [refs],
+    );
+
+    return (
+      <>
+        <div data-testid="reference" ref={handleRef} />
+        <div
+          data-testid="floating"
+          ref={refs.setFloating}
+          style={floatingStyles}
+        />
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
 
   expect(getByTestId('floating').style.position).toBe('absolute');
   expect(getByTestId('floating').style.top).toBe('50px');
@@ -561,23 +576,6 @@ test('floatingStyles no transform', async () => {
 });
 
 test('floatingStyles default', async () => {
-  function App() {
-    const {refs, floatingStyles} = useFloating();
-
-    return (
-      <>
-        <div data-testid="reference" ref={refs.setReference} />
-        <div
-          data-testid="floating"
-          ref={refs.setFloating}
-          style={floatingStyles}
-        />
-      </>
-    );
-  }
-
-  const {getByTestId} = render(<App />);
-
   const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
@@ -589,15 +587,33 @@ test('floatingStyles default', async () => {
     left: 0,
     toJSON: () => {},
   }));
-  const reference = getByTestId('reference');
-  reference.getBoundingClientRect = mockBoundingClientRect;
 
-  expect(getByTestId('floating').style.position).toBe('absolute');
-  expect(getByTestId('floating').style.top).toBe('0px');
-  expect(getByTestId('floating').style.left).toBe('0px');
-  expect(getByTestId('floating').style.transform).toBe('translate(0px, 0px)');
+  function App() {
+    const {refs, floatingStyles} = useFloating();
 
-  await act(async () => {});
+    const handleRef = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        if (node) {
+          node.getBoundingClientRect = mockBoundingClientRect;
+          refs.setReference(node);
+        }
+      },
+      [refs],
+    );
+
+    return (
+      <>
+        <div data-testid="reference" ref={handleRef} />
+        <div
+          data-testid="floating"
+          ref={refs.setFloating}
+          style={floatingStyles}
+        />
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
 
   expect(getByTestId('floating').style.position).toBe('absolute');
   expect(getByTestId('floating').style.top).toBe('0px');
