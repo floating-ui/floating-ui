@@ -21,6 +21,7 @@ export function defineViteConfig(config: ViteUserConfig): ViteUserConfig {
           'packages/devtools/src',
         ),
         '@floating-ui/core': path.resolve(basePath, 'packages/core/src'),
+        '@floating-ui/core/async': path.resolve(basePath, 'packages/core/src'),
         '@floating-ui/dom': path.resolve(basePath, 'packages/dom/src'),
         '@floating-ui/react-dom': path.resolve(
           basePath,

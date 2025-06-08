@@ -13,6 +13,7 @@
     "baseUrl": ".",
     "paths": {
       "@floating-ui/core": ["../packages/core/src/index.ts"],
+      "@floating-ui/core/async": ["../packages/core/src/index.ts"],
       "@floating-ui/core/*": ["../packages/core/src/*"],
       "@floating-ui/dom": ["../packages/dom/src/index.ts"],
       "@floating-ui/dom/*": ["../packages/dom/src/*"],
