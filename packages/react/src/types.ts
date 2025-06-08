@@ -91,7 +91,6 @@ export {
   computePosition,
   detectOverflow,
   flip,
-  getOverflowAncestors,
   hide,
   inline,
   limitShift,

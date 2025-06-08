@@ -9,9 +9,7 @@
     "pnpm": ">=8.13.1"
   },
   "workspaces": [
-    "./packages/*",
-    "extension",
-    "config"
+    "./packages/*"
   ],
   "scripts": {
     "lint": "turbo lint",
@@ -19,7 +17,6 @@
     "playwright": "turbo playwright",
     "playwright:update": "turbo playwright -- -u",
     "build": "turbo build",
-    "build:api": "turbo build:api",
     "clean": "turbo clean",
     "publint": "turbo publint",
     "test": "turbo test",
@@ -44,24 +41,14 @@
     "semi": true
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.23.7",
-    "@babel/preset-typescript": "^7.23.3",
     "@changesets/cli": "^2.27.1",
     "@changesets/types": "^6.0.0",
     "@eslint/js": "^9.17.0",
-    "@microsoft/api-extractor": "^7.43.1",
     "@playwright/test": "^1.50.0",
-    "@rollup/plugin-alias": "^5.1.0",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-replace": "^5.0.5",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^11.1.5",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.6",
     "@vitest/browser": "^3.0.9",
-    "babel-plugin-annotate-pure-calls": "^0.4.0",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -71,11 +58,10 @@
     "jsdom": "^26.0.0",
     "postcss": "^8.4.32",
     "prettier": "^3.1.1",
-    "publint": "^0.2.7",
+    "publint": "^0.3.12",
     "rimraf": "^5.0.5",
-    "rollup": "^4.36.0",
-    "rollup-plugin-copy": "^3.5.0",
     "tailwindcss": "^3.4.0",
+    "tsdown": "^0.12.7",
     "turbo": "^2.3.3",
     "typescript": "~5.2.2",
     "typescript-eslint": "^8.17.0",

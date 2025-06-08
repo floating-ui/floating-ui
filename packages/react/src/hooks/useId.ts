@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
-
+import {useModernLayoutEffect} from '../utils/hooks';
 import {SafeReact} from '../utils/safeReact';
 
 let serverHandoffComplete = false;

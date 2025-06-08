@@ -1,4 +1,4 @@
-import {getComputedStyle} from '@floating-ui/utils/dom';
+import {getComputedStyle} from '../utils';
 
 export function isStaticPositioned(element: Element): boolean {
   return getComputedStyle(element).position === 'static';

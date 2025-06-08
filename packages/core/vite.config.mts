@@ -1,3 +1,3 @@
-import {defineViteConfig} from 'config';
+import {defineViteConfig} from '../../config';
 
 export default defineViteConfig({});

@@ -1,42 +1,53 @@
 {
   "name": "@floating-ui/dom",
+  "type": "commonjs",
   "version": "1.7.1",
   "description": "Floating UI for the web",
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.dom.umd.js",
-  "module": "./dist/floating-ui.dom.esm.js",
-  "unpkg": "./dist/floating-ui.dom.umd.min.js",
-  "types": "./dist/floating-ui.dom.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./dist/floating-ui.dom.d.mts",
-        "default": "./dist/floating-ui.dom.mjs"
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
       },
-      "types": "./dist/floating-ui.dom.d.ts",
-      "module": "./dist/floating-ui.dom.esm.js",
-      "default": "./dist/floating-ui.dom.umd.js"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      }
+    },
+    "./utils": {
+      "require": {
+        "types": "./dist/cjs/utils/index.d.ts",
+        "default": "./dist/cjs/utils/index.js"
+      },
+      "import": {
+        "types": "./dist/esm/utils/index.d.ts",
+        "default": "./dist/esm/utils/index.js"
+      }
     }
   },
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "utils"
   ],
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --write .",
-    "clean": "rimraf dist out-tsc test-results",
+    "clean": "rimraf dist out-tsc test-results && find . -name '*.d.ts' ! -name 'env.d.ts' -delete",
     "dev": "vite",
-    "build": "rollup -c",
-    "build:api": "build-api --tsc tsconfig.lib.json",
+    "build": "tsdown",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "publint": "publint",
     "playwright": "playwright test ./test/functional",
-    "prepack": "compat-exports",
+    "prepack": "node ../../config/prepack.mjs dom --utils",
     "typecheck": "tsc -b"
   },
   "author": "atomiks",
@@ -57,14 +68,12 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/core": "workspace:^",
-    "@floating-ui/utils": "workspace:^"
+    "@floating-ui/core": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^18.3.19",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
-    "config": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1"

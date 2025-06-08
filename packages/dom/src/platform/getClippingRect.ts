@@ -5,8 +5,8 @@ import type {
   RootBoundary,
   Strategy,
 } from '@floating-ui/core';
-import {rectToClientRect} from '@floating-ui/core';
-import {createCoords, max, min} from '@floating-ui/utils';
+import {rectToClientRect} from '@floating-ui/core/utils';
+import {createCoords, max, min} from '@floating-ui/core/utils';
 import {
   getComputedStyle,
   getDocumentElement,
@@ -18,8 +18,7 @@ import {
   isLastTraversableNode,
   isOverflowElement,
   isTopLayer,
-} from '@floating-ui/utils/dom';
-
+} from '../utils';
 import type {Platform, ReferenceElement} from '../types';
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getDocumentRect} from '../utils/getDocumentRect';

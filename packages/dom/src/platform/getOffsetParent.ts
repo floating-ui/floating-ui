@@ -10,7 +10,7 @@ import {
   isLastTraversableNode,
   isTableElement,
   isTopLayer,
-} from '@floating-ui/utils/dom';
+} from '../utils';
 import {isStaticPositioned} from '../utils/isStaticPositioned';
 
 type Polyfill = (element: HTMLElement) => Element | null;

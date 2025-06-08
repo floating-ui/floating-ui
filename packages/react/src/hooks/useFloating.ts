@@ -3,9 +3,8 @@ import {
   useFloating as usePosition,
   type VirtualElement,
 } from '@floating-ui/react-dom';
-import {isElement} from '@floating-ui/utils/dom';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
-
+import {isElement} from '@floating-ui/dom/utils';
+import {useModernLayoutEffect} from '../utils/hooks';
 import {useFloatingTree} from '../components/FloatingTree';
 import type {
   FloatingContext,

@@ -1,12 +1,11 @@
 import {
-  type Coords,
   clamp,
   evaluate,
   getOppositeAxis,
   getSide,
   getSideAxis,
-} from '@floating-ui/utils';
-
+  type Coords,
+} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';

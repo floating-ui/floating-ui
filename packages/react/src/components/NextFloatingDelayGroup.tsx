@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useModernLayoutEffect} from '../utils/hooks';
 
 import {getDelay} from '../hooks/useHover';
 import type {FloatingRootContext, Delay} from '../types';
@@ -37,7 +37,7 @@ export interface NextFloatingDelayGroupProps {
   /**
    * An optional explicit timeout to use for the group, which represents when
    * grouping logic will no longer be active after the close delay completes.
-   * This is useful if you want grouping to “last” longer than the close delay,
+   * This is useful if you want grouping to "last" longer than the close delay,
    * for example if there is no close delay at all.
    */
   timeoutMs?: number;

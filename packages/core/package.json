@@ -1,41 +1,51 @@
 {
   "name": "@floating-ui/core",
+  "type": "commonjs",
   "version": "1.7.1",
   "description": "Positioning library for floating elements: tooltips, popovers, dropdowns, and more",
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.core.umd.js",
-  "module": "./dist/floating-ui.core.esm.js",
-  "unpkg": "./dist/floating-ui.core.umd.min.js",
-  "types": "./dist/floating-ui.core.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./dist/floating-ui.core.d.mts",
-        "default": "./dist/floating-ui.core.mjs"
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
       },
-      "types": "./dist/floating-ui.core.d.ts",
-      "module": "./dist/floating-ui.core.esm.js",
-      "default": "./dist/floating-ui.core.umd.js"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      }
+    },
+    "./utils": {
+      "require": {
+        "types": "./dist/cjs/utils/index.d.ts",
+        "default": "./dist/cjs/utils/index.js"
+      },
+      "import": {
+        "types": "./dist/esm/utils/index.d.ts",
+        "default": "./dist/esm/utils/index.js"
+      }
     }
   },
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "utils"
   ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "clean": "rimraf dist out-tsc",
-    "dev": "rollup -c -w",
-    "build": "rollup -c",
-    "build:api": "build-api --tsc tsconfig.lib.json",
+    "clean": "rimraf dist out-tsc && find . -name '*.d.ts' ! -name 'env.d.ts' -delete",
+    "build": "tsdown",
+    "prepack": "node ../../config/prepack.mjs core --utils",
     "publint": "publint",
-    "prepack": "compat-exports",
     "typecheck": "tsc -b"
   },
   "author": "atomiks",
@@ -54,11 +64,5 @@
     "menu",
     "popup",
     "positioning"
-  ],
-  "dependencies": {
-    "@floating-ui/utils": "workspace:^"
-  },
-  "devDependencies": {
-    "config": "workspace:*"
-  }
+  ]
 }

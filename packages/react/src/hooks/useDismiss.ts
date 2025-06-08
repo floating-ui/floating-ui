@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {getOverflowAncestors} from '@floating-ui/react-dom';
+import {getOverflowAncestors} from '@floating-ui/dom/utils';
 import {
   getComputedStyle,
   getParentNode,
@@ -7,21 +7,20 @@ import {
   isHTMLElement,
   isLastTraversableNode,
   isWebKit,
-} from '@floating-ui/utils/dom';
+} from '@floating-ui/dom/utils';
 import {
   contains,
   getDocument,
   getTarget,
   isEventTargetWithin,
-  isReactEvent,
   isRootElement,
-  useEffectEvent,
-  getNodeChildren,
-} from '@floating-ui/react/utils';
-
+} from '../utils/element';
 import {useFloatingTree} from '../components/FloatingTree';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {useEffectEvent} from '../utils/hooks';
+import {isReactEvent} from '../utils/event';
+import {getNodeChildren} from '../utils/nodes';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 const bubbleHandlerKeys = {
@@ -71,7 +70,7 @@ export interface UseDismissProps {
    */
   referencePress?: boolean;
   /**
-   * The type of event to use to determine a “press”.
+   * The type of event to use to determine a "press".
    * - `pointerdown` is eager on both mouse + touch input.
    * - `mousedown` is eager on mouse input, but lazy on touch input.
    * - `click` is lazy on both mouse + touch input.
@@ -82,7 +81,7 @@ export interface UseDismissProps {
    * Whether to dismiss the floating element upon pressing outside of the
    * floating element.
    * If you have another element, like a toast, that is rendered outside the
-   * floating element’s React tree and don’t want the floating element to close
+   * floating element's React tree and don't want the floating element to close
    * when pressing it, you can guard the check like so:
    * ```jsx
    * useDismiss(context, {
@@ -93,7 +92,7 @@ export interface UseDismissProps {
    */
   outsidePress?: boolean | ((event: MouseEvent) => boolean);
   /**
-   * The type of event to use to determine an outside “press”.
+   * The type of event to use to determine an outside "press".
    * - `pointerdown` is eager on both mouse + touch input.
    * - `mousedown` is eager on mouse input, but lazy on touch input.
    * - `click` is lazy on both mouse + touch input.

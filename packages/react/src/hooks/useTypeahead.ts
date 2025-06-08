@@ -3,9 +3,8 @@ import {
   useEffectEvent,
   useLatestRef,
   useModernLayoutEffect,
-  stopEvent,
-} from '@floating-ui/react/utils';
-
+} from '../utils/hooks';
+import {stopEvent} from '../utils/event';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 

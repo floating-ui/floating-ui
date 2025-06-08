@@ -1,1 +1,1 @@
-export {isElement} from '@floating-ui/utils/dom';
+export {isElement} from '../utils';
