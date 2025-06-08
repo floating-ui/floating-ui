@@ -11,6 +11,7 @@
   "types": "./dist/cjs/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
+    "./async/package.json": "./dist/async/package.json",
     ".": {
       "require": {
         "types": "./dist/cjs/index.d.ts",
@@ -19,6 +20,16 @@
       "import": {
         "types": "./dist/esm/index.d.ts",
         "default": "./dist/esm/index.js"
+      }
+    },
+    "./async": {
+      "require": {
+        "types": "./dist/async/cjs/index.d.ts",
+        "default": "./dist/async/cjs/index.js"
+      },
+      "import": {
+        "types": "./dist/async/esm/index.d.ts",
+        "default": "./dist/async/esm/index.js"
       }
     },
     "./utils": {
@@ -30,12 +41,23 @@
         "types": "./dist/esm/utils/index.d.ts",
         "default": "./dist/esm/utils/index.js"
       }
+    },
+    "./async/utils": {
+      "require": {
+        "types": "./dist/async/cjs/utils/index.d.ts",
+        "default": "./dist/async/cjs/utils/index.js"
+      },
+      "import": {
+        "types": "./dist/async/esm/utils/index.d.ts",
+        "default": "./dist/async/esm/utils/index.js"
+      }
     }
   },
   "sideEffects": false,
   "files": [
     "dist",
-    "utils"
+    "utils",
+    "async"
   ],
   "scripts": {
     "test": "vitest run",
@@ -44,7 +66,7 @@
     "format": "prettier --write .",
     "clean": "rimraf dist out-tsc && find . -name '*.d.ts' ! -name 'env.d.ts' -delete",
     "build": "tsdown",
-    "prepack": "node ../../config/prepack.mjs core --utils",
+    "prepack": "node ../../config/prepack.mjs core --utils --sync",
     "publint": "publint",
     "typecheck": "tsc -b"
   },

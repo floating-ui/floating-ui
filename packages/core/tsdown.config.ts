@@ -1,3 +1,3 @@
 import {defineTsdownConfig} from '../../config';
 
-export default defineTsdownConfig();
+export default defineTsdownConfig({sync: true});

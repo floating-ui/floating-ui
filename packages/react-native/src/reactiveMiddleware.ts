@@ -21,7 +21,7 @@ import {
   type Derivable,
   type MiddlewareState,
   type Coords,
-} from '@floating-ui/core';
+} from '@floating-ui/core/async';
 import {arrow as baseArrow} from './arrow';
 
 /**

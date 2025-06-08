@@ -1,5 +1,9 @@
-import type {Derivable, Middleware, ArrowOptions} from '@floating-ui/core';
-import {arrow as arrowCore} from '@floating-ui/core';
+import type {
+  Derivable,
+  Middleware,
+  ArrowOptions,
+} from '@floating-ui/core/async';
+import {arrow as arrowCore} from '@floating-ui/core/async';
 
 /**
  * A data provider that provides data to position an inner element of the

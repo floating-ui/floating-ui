@@ -1,5 +1,5 @@
-import type {ComputePositionReturn} from '@floating-ui/core';
-import {computePosition} from '@floating-ui/core';
+import type {ComputePositionReturn} from '@floating-ui/core/async';
+import {computePosition} from '@floating-ui/core/async';
 import * as React from 'react';
 
 import {createPlatform} from './createPlatform';

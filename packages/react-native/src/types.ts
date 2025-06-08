@@ -2,7 +2,7 @@ import type {
   ComputePositionReturn,
   Middleware,
   Placement,
-} from '@floating-ui/core';
+} from '@floating-ui/core/async';
 import type * as React from 'react';
 
 export type {
@@ -44,7 +44,7 @@ export type {
   SizeOptions,
   Strategy,
   VirtualElement,
-} from '@floating-ui/core';
+} from '@floating-ui/core/async';
 
 export interface UseFloatingOptions {
   /**

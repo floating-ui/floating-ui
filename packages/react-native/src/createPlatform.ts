@@ -1,4 +1,4 @@
-import type {Platform, VirtualElement} from '@floating-ui/core';
+import type {Platform, VirtualElement} from '@floating-ui/core/async';
 import {Dimensions, Platform as RNPlatform, StatusBar} from 'react-native';
 import type {View} from 'react-native';
 
