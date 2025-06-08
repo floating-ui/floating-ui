@@ -162,12 +162,6 @@ importers:
       react-router-dom:
         specifier: ^6.21.1
         version: 6.21.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      resize-observer-polyfill:
-        specifier: ^1.5.1
-        version: 1.5.1
-      use-isomorphic-layout-effect:
-        specifier: ^1.2.1
-        version: 1.2.1(@types/react@18.3.19)(react@18.2.0)
       vitest-browser-react:
         specifier: ^0.2.0
         version: 0.2.0(@types/react-dom@18.3.1)(@types/react@18.3.19)(@vitest/browser@3.0.9(@types/node@22.15.30)(playwright@1.50.0)(typescript@5.4.2)(vite@6.2.2(@types/node@22.15.30)(jiti@2.4.2)(terser@5.41.0))(vitest@3.0.9))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@22.15.30)(@vitest/browser@3.0.9)(jiti@2.4.2)(jsdom@26.0.0)(msw@2.7.3(@types/node@22.15.30)(typescript@5.4.2))(terser@5.41.0))
@@ -196,9 +190,6 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
-      use-isomorphic-layout-effect:
-        specifier: ^1.2.1
-        version: 1.2.1(@types/react@18.3.19)(react@18.2.0)
 
   packages/react-native:
     dependencies:
@@ -306,9 +297,6 @@ importers:
       unist-util-visit:
         specifier: ^2.0.3
         version: 2.0.3
-      use-isomorphic-layout-effect:
-        specifier: ^1.2.1
-        version: 1.2.1(@types/react@18.3.19)(react@18.2.0)
     devDependencies:
       '@svgr/webpack':
         specifier: ^5.5.0
@@ -2251,12 +2239,6 @@ packages:
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-
-  '@types/node@18.19.107':
-    resolution: {integrity: sha512-uvHN/vnsPj8hJWaqXUjT59LKYh0RlZXsdYa4CGz4R9aFGePPsUPN0xlHrDzOset937H2TunFJ8SwPCX69y9qhA==}
-
-  '@types/node@18.19.4':
-    resolution: {integrity: sha512-xNzlUhzoHotIsnFoXmJB+yWmBvFZgKCI9TtPIEdYIMM1KWfwuY8zh7wvc1u1OAXlC7dlf6mZVx/s+Y5KfFz19A==}
 
   '@types/node@20.10.6':
     resolution: {integrity: sha512-Vac8H+NlRNNlAmDfGUP7b5h/KA+AtWIzuXy0E6OyP8f1tCLYAtPvKRRDJjAPqhpCb0t6U2j7/xqAuLEebW2kiw==}
@@ -6470,63 +6452,6 @@ packages:
   url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
 
-  use-callback-ref@1.3.1:
-    resolution: {integrity: sha512-Lg4Vx1XZQauB42Hw3kK7JM6yjVjgFmFC5/Ab797s79aARomD2nEErc4mCgM8EZrARLmmbWpi5DGCadmK50DcAQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@types/react': ^16.8.0 || ^17.0.0 || ^18.0.0
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  use-composed-ref@1.3.0:
-    resolution: {integrity: sha512-GLMG0Jc/jiKov/3Ulid1wbv3r54K9HlMW29IWcDFPEqFkSO2nS0MuefWgMJpeHQ9YJeXDL3ZUF+P3jdXlZX/cQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-
-  use-disposable@1.0.2:
-    resolution: {integrity: sha512-UMaXVlV77dWOu4GqAFNjRzHzowYKUKbJBQfCexvahrYeIz4OkUYUjna4Tjjdf92NH8Nm8J7wEfFRgTIwYjO5jg==}
-    peerDependencies:
-      '@types/react': '>=16.8.0 <19.0.0'
-      '@types/react-dom': '>=16.8.0 <19.0.0'
-      react: '>=16.8.0 <19.0.0'
-      react-dom: '>=16.8.0 <19.0.0'
-
-  use-isomorphic-layout-effect@1.2.1:
-    resolution: {integrity: sha512-tpZZ+EX0gaghDAiFR37hj5MgY6ZN55kLiPkJsKxBMZ6GZdOSPJXiOzPM984oPYZ5AnehYx5WQp1+ME8I/P/pRA==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  use-latest@1.2.1:
-    resolution: {integrity: sha512-xA+AVm/Wlg3e2P/JiItTziwS7FK92LWrDB0p+hgXloIMuVCeJJ8v6f0eeHyPZaJrM+usM1FkFfbNCrJGs8A/zw==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  use-resize-observer@9.1.0:
-    resolution: {integrity: sha512-R25VqO9Wb3asSD4eqtcxk8sJalvIOYBqS8MNZlpDSQ4l4xMQxC/J7Id9HoTqPq8FwULIn0PVW+OAqF2dyYbjow==}
-    peerDependencies:
-      react: 16.8.0 - 18
-      react-dom: 16.8.0 - 18
-
-  use-sidecar@1.1.2:
-    resolution: {integrity: sha512-epTbsLuzZ7lPClpz2TyryBfztm7m+28DlEv2ZCQ3MDr5ssiwyOwGH/e5F9CkfWjJ1t4clvI58yF822/GUkjjhw==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@types/react': ^16.9.0 || ^17.0.0 || ^18.0.0
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
   use-sync-external-store@1.2.0:
     resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
     peerDependencies:
@@ -8338,7 +8263,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 18.19.107
+      '@types/node': 20.10.6
       '@types/yargs': 15.0.19
       chalk: 4.1.2
 
@@ -8355,7 +8280,7 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 18.19.107
+      '@types/node': 20.10.6
       '@types/yargs': 17.0.32
       chalk: 4.1.2
 
@@ -9171,14 +9096,6 @@ snapshots:
       '@types/unist': 2.0.10
 
   '@types/node@12.20.55': {}
-
-  '@types/node@18.19.107':
-    dependencies:
-      undici-types: 5.26.5
-
-  '@types/node@18.19.4':
-    dependencies:
-      undici-types: 5.26.5
 
   '@types/node@20.10.6':
     dependencies:
@@ -14227,60 +14144,6 @@ snapshots:
       querystringify: 2.2.0
       requires-port: 1.0.0
 
-<<<<<<< HEAD
-  use-callback-ref@1.3.1(@types/react@18.3.19)(react@17.0.2):
-    dependencies:
-      react: 17.0.2
-      tslib: 2.6.2
-    optionalDependencies:
-      '@types/react': 18.3.19
-
-  use-composed-ref@1.3.0(react@17.0.2):
-    dependencies:
-      react: 17.0.2
-
-  use-disposable@1.0.2(@types/react-dom@18.3.1)(@types/react@18.3.19)(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
-    dependencies:
-      '@types/react': 18.3.19
-      '@types/react-dom': 18.3.1
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
-
-  use-isomorphic-layout-effect@1.2.1(@types/react@18.3.19)(react@17.0.2):
-    dependencies:
-      react: 17.0.2
-    optionalDependencies:
-      '@types/react': 18.3.19
-
-  use-isomorphic-layout-effect@1.2.1(@types/react@18.3.19)(react@18.2.0):
-    dependencies:
-      react: 18.2.0
-    optionalDependencies:
-      '@types/react': 18.3.19
-
-  use-latest@1.2.1(@types/react@18.3.19)(react@17.0.2):
-    dependencies:
-      react: 17.0.2
-      use-isomorphic-layout-effect: 1.2.1(@types/react@18.3.19)(react@17.0.2)
-    optionalDependencies:
-      '@types/react': 18.3.19
-
-  use-resize-observer@9.1.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
-    dependencies:
-      '@juggle/resize-observer': 3.4.0
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
-
-  use-sidecar@1.1.2(@types/react@18.3.19)(react@17.0.2):
-    dependencies:
-      detect-node-es: 1.1.0
-      react: 17.0.2
-      tslib: 2.6.2
-    optionalDependencies:
-      '@types/react': 18.3.19
-
-=======
->>>>>>> c9d00909 (chore(next): bundle with `tsdown` (#3324))
   use-sync-external-store@1.2.0(react@18.2.0):
     dependencies:
       react: 18.2.0
