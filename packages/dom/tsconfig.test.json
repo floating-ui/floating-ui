@@ -5,11 +5,9 @@
     "types": ["node", "react", "react-dom", "vitest/globals"]
   },
   "include": ["test"],
-  "exclude": ["*.config.*"],
+  "exclude": ["**/playwright.config.*"],
   "references": [
     {"path": "./tsconfig.lib.json"},
-    {"path": "../core/tsconfig.lib.json"},
-    {"path": "../dom/tsconfig.lib.json"},
     {"path": "../react-dom/tsconfig.lib.json"}
   ]
 }

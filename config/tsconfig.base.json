@@ -11,6 +11,9 @@
     "emitDeclarationOnly": true,
     "composite": true,
     "baseUrl": ".",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "allowImportingTsExtensions": true,
     "paths": {
       "@floating-ui/core": ["../packages/core/src/index.ts"],
       "@floating-ui/core/*": ["../packages/core/src/*"],
@@ -21,7 +24,9 @@
       "@floating-ui/react": ["../packages/react/src/index.ts"],
       "@floating-ui/react/*": ["../packages/react/src/*"],
       "@floating-ui/react-native": ["../packages/react-native/src/index.ts"],
-      "@floating-ui/react-native/*": ["../packages/react-native/src/*"]
+      "@floating-ui/react-native/*": ["../packages/react-native/src/*"],
+      "@floating-ui/vue": ["../packages/vue/src/index.ts"],
+      "@floating-ui/vue/*": ["../packages/vue/src/*"]
     }
   }
 }

@@ -1,8 +1,8 @@
 {
   "extends": "../../config/tsconfig.base.json",
-  "exclude": ["vite.config.*", "*.config.*", "test/**/*"],
+  "exclude": ["*.config.*", "test"],
   "references": [
     {"path": "./tsconfig.lib.json"},
-    {"path": "../core/tsconfig.lib.json"}
+    {"path": "./tsconfig.test.json"}
   ]
 }

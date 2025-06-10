@@ -1,9 +1,8 @@
 {
   "extends": "../../config/tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "out-tsc",
-    "jsx": "react-jsx"
-  },
-  "exclude": ["*.config.*"],
-  "references": [{"path": "./tsconfig.lib.json"}]
+  "exclude": ["*.config.*", "test"],
+  "references": [
+    {"path": "./tsconfig.lib.json"},
+    {"path": "./tsconfig.test.json"}
+  ]
 }

@@ -40,9 +40,6 @@ export interface ShiftOptions extends DetectOverflowOptions {
   };
 }
 
-/**
- * Generator version of `shift()` (mirrors `flipGen()` pattern).
- */
 export function* shiftGen(
   state: MiddlewareState,
   options: ShiftOptions | Derivable<ShiftOptions> = {},
