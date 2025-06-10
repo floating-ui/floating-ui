@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react';
-import {defineViteConfig} from '../../config';
+import {defineViteConfig} from '../../config/index.mts';
 
 export default defineViteConfig({
   server: {
