@@ -1,5 +1,5 @@
 import {defineConfig} from 'tsdown';
-import {addPureAnnotations} from './addPureAnnotations';
+import {addPureAnnotations} from './addPureAnnotations.mts';
 
 export interface TsdownConfigOptions {
   external?: string[];

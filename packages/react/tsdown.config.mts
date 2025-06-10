@@ -1,4 +1,4 @@
-import {defineTsdownConfig} from '../../config';
+import {defineTsdownConfig} from '../../config/index.mts';
 
 export default defineTsdownConfig({
   external: [
