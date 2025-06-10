@@ -1,5 +1,5 @@
 import type {Strategy} from '@floating-ui/core';
-import {useFloating} from '@floating-ui/react-dom';
+import {useFloating, autoUpdate} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
@@ -23,6 +23,7 @@ export function Scroll() {
   const [node, setNode] = useState<Node>('referenceScrollParent');
   const {x, y, refs, update} = useFloating({
     strategy: strategyState,
+    whileElementsMounted: autoUpdate,
   });
   const {scrollRef, indicator} = useScroll({refs, update});
 

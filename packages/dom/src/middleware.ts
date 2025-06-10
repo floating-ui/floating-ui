@@ -38,10 +38,19 @@ import type {
  * - 0 = lies flush with the boundary
  * @see https://floating-ui.com/docs/detectOverflow
  */
-export const detectOverflow: (
+export function detectOverflow(
   state: MiddlewareState,
   options?: DetectOverflowOptions | Derivable<DetectOverflowOptions>,
-) => Promise<SideObject> = detectOverflowCore;
+): SideObject {
+  const gen = detectOverflowCore(state, options);
+  let step = gen.next();
+
+  while (!step.done) {
+    step = gen.next(step.value);
+  }
+
+  return step.value;
+}
 
 /**
  * Modifies the placement by translating the floating element along the
@@ -50,7 +59,9 @@ export const detectOverflow: (
  * object may be passed.
  * @see https://floating-ui.com/docs/offset
  */
-export const offset: (options?: OffsetOptions) => Middleware = offsetCore;
+export const offset: (
+  options?: OffsetOptions | Derivable<OffsetOptions>,
+) => Middleware = offsetCore as any;
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement
@@ -60,7 +71,7 @@ export const offset: (options?: OffsetOptions) => Middleware = offsetCore;
  */
 export const autoPlacement: (
   options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>,
-) => Middleware = autoPlacementCore;
+) => Middleware = autoPlacementCore as any;
 
 /**
  * Optimizes the visibility of the floating element by shifting it in order to
@@ -69,7 +80,7 @@ export const autoPlacement: (
  */
 export const shift: (
   options?: ShiftOptions | Derivable<ShiftOptions>,
-) => Middleware = shiftCore;
+) => Middleware = shiftCore as any;
 
 /**
  * Optimizes the visibility of the floating element by flipping the `placement`
@@ -79,7 +90,7 @@ export const shift: (
  */
 export const flip: (
   options?: FlipOptions | Derivable<FlipOptions>,
-) => Middleware = flipCore;
+) => Middleware = flipCore as any;
 
 /**
  * Provides data that allows you to change the size of the floating element —
@@ -89,7 +100,7 @@ export const flip: (
  */
 export const size: (
   options?: SizeOptions | Derivable<SizeOptions>,
-) => Middleware = sizeCore;
+) => Middleware = sizeCore as any;
 
 /**
  * Provides data to hide the floating element in applicable situations, such as
@@ -98,7 +109,7 @@ export const size: (
  */
 export const hide: (
   options?: HideOptions | Derivable<HideOptions>,
-) => Middleware = hideCore;
+) => Middleware = hideCore as any;
 
 /**
  * Provides data to position an inner element of the floating element so that it
@@ -107,7 +118,7 @@ export const hide: (
  */
 export const arrow: (
   options: ArrowOptions | Derivable<ArrowOptions>,
-) => Middleware = arrowCore;
+) => Middleware = arrowCore as any;
 
 /**
  * Provides improved positioning for inline reference elements that can span
@@ -116,7 +127,7 @@ export const arrow: (
  */
 export const inline: (
   options?: InlineOptions | Derivable<InlineOptions>,
-) => Middleware = inlineCore;
+) => Middleware = inlineCore as any;
 
 /**
  * Built-in `limiter` that will stop `shift()` at a certain point.

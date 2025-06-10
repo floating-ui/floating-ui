@@ -1,7 +1,12 @@
 import {evaluate, sides, type Rect, type SideObject} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
-import type {Derivable, Middleware} from '../types';
+import type {
+  Derivable,
+  Middleware,
+  MiddlewareState,
+  MiddlewareReturn,
+} from '../types';
 
 function getSideOffsets(overflow: SideObject, rect: Rect) {
   return {
@@ -23,6 +28,50 @@ export interface HideOptions extends DetectOverflowOptions {
   strategy?: 'referenceHidden' | 'escaped';
 }
 
+export function* hideGen(
+  state: MiddlewareState,
+  options: HideOptions | Derivable<HideOptions> = {},
+): Generator<any, MiddlewareReturn, any> {
+  const {rects} = state;
+
+  const {strategy = 'referenceHidden', ...detectOverflowOptions} = evaluate(
+    options,
+    state,
+  );
+
+  switch (strategy) {
+    case 'referenceHidden': {
+      const overflow = yield* detectOverflow(state, {
+        ...detectOverflowOptions,
+        elementContext: 'reference',
+      });
+      const offsets = getSideOffsets(overflow, rects.reference);
+      return {
+        data: {
+          referenceHiddenOffsets: offsets,
+          referenceHidden: isAnySideFullyClipped(offsets),
+        },
+      };
+    }
+    case 'escaped': {
+      const overflow = yield* detectOverflow(state, {
+        ...detectOverflowOptions,
+        altBoundary: true,
+      });
+      const offsets = getSideOffsets(overflow, rects.floating);
+      return {
+        data: {
+          escapedOffsets: offsets,
+          escaped: isAnySideFullyClipped(offsets),
+        },
+      };
+    }
+    default: {
+      return {};
+    }
+  }
+}
+
 /**
  * Provides data to hide the floating element in applicable situations, such as
  * when it is not in the same clipping context as the reference element.
@@ -33,44 +82,7 @@ export const hide = (
 ): Middleware => ({
   name: 'hide',
   options,
-  async fn(state) {
-    const {rects} = state;
-
-    const {strategy = 'referenceHidden', ...detectOverflowOptions} = evaluate(
-      options,
-      state,
-    );
-
-    switch (strategy) {
-      case 'referenceHidden': {
-        const overflow = await detectOverflow(state, {
-          ...detectOverflowOptions,
-          elementContext: 'reference',
-        });
-        const offsets = getSideOffsets(overflow, rects.reference);
-        return {
-          data: {
-            referenceHiddenOffsets: offsets,
-            referenceHidden: isAnySideFullyClipped(offsets),
-          },
-        };
-      }
-      case 'escaped': {
-        const overflow = await detectOverflow(state, {
-          ...detectOverflowOptions,
-          altBoundary: true,
-        });
-        const offsets = getSideOffsets(overflow, rects.floating);
-        return {
-          data: {
-            escapedOffsets: offsets,
-            escaped: isAnySideFullyClipped(offsets),
-          },
-        };
-      }
-      default: {
-        return {};
-      }
-    }
+  fn(state) {
+    return hideGen(state, options);
   },
 });

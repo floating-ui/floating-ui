@@ -44,6 +44,7 @@ export interface DetectOverflowOptions {
 }
 
 /**
+ * Generator version of detectOverflow that yields platform calls instead of awaiting them.
  * Resolves with an object of overflow side offsets that determine how much the
  * element is overflowing a given clipping boundary on each side.
  * - positive = overflowing the boundary by that number of pixels
@@ -51,10 +52,10 @@ export interface DetectOverflowOptions {
  * - 0 = lies flush with the boundary
  * @see https://floating-ui.com/docs/detectOverflow
  */
-export async function detectOverflow(
+export function* detectOverflow(
   state: MiddlewareState,
   options: DetectOverflowOptions | Derivable<DetectOverflowOptions> = {},
-): Promise<SideObject> {
+): Generator<any, SideObject, any> {
   const {x, y, platform, rects, elements, strategy} = state;
 
   const {
@@ -69,13 +70,16 @@ export async function detectOverflow(
   const altContext = elementContext === 'floating' ? 'reference' : 'floating';
   const element = elements[altBoundary ? altContext : elementContext];
 
+  const isElementResult = yield platform.isElement?.(element) ?? true;
+  const documentElement = yield platform.getDocumentElement?.(
+    elements.floating,
+  );
+
   const clippingClientRect = rectToClientRect(
-    await platform.getClippingRect({
-      element:
-        (await platform.isElement?.(element)) ?? true
-          ? element
-          : element.contextElement ||
-            (await platform.getDocumentElement?.(elements.floating)),
+    yield platform.getClippingRect({
+      element: isElementResult
+        ? element
+        : element.contextElement || documentElement,
       boundary,
       rootBoundary,
       strategy,
@@ -87,14 +91,15 @@ export async function detectOverflow(
       ? {x, y, width: rects.floating.width, height: rects.floating.height}
       : rects.reference;
 
-  const offsetParent = await platform.getOffsetParent?.(elements.floating);
-  const offsetScale = (await platform.isElement?.(offsetParent))
-    ? (await platform.getScale?.(offsetParent)) || {x: 1, y: 1}
+  const offsetParent = yield platform.getOffsetParent?.(elements.floating);
+  const isOffsetParentElement = yield platform.isElement?.(offsetParent);
+  const offsetScale = isOffsetParentElement
+    ? (yield platform.getScale?.(offsetParent)) || {x: 1, y: 1}
     : {x: 1, y: 1};
 
   const elementClientRect = rectToClientRect(
     platform.convertOffsetParentRelativeRectToViewportRelativeRect
-      ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+      ? yield platform.convertOffsetParentRelativeRectToViewportRelativeRect({
           elements,
           rect,
           offsetParent,

@@ -17,7 +17,7 @@ export function computePosition(
   reference: ReferenceElement,
   floating: FloatingElement,
   options?: Partial<ComputePositionConfig>,
-): Promise<ComputePositionReturn> {
+): ComputePositionReturn {
   // This caches the expensive `getClippingElementAncestors` function so that
   // multiple lifecycle resets re-use the same result. It only lives for a
   // single call. If other functions become expensive, we can add them as well.

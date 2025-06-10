@@ -1,11 +1,17 @@
 import {
+  type Coords,
   evaluate,
   getAlignment,
   getSide,
   getSideAxis,
-  type Coords,
-} from '../utils';
-import type {Derivable, Middleware, MiddlewareState} from '../types';
+} from '@floating-ui/core/utils';
+
+import type {
+  Derivable,
+  Middleware,
+  MiddlewareState,
+  MiddlewareReturn,
+} from '../types';
 
 type OffsetValue =
   | number
@@ -36,16 +42,15 @@ type OffsetValue =
       alignmentAxis?: number | null;
     };
 
-// For type backwards-compatibility, the `OffsetOptions` type was also
-// Derivable.
 export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
-export async function convertValueToCoords(
+export function* offsetGen(
   state: MiddlewareState,
-  options: OffsetOptions,
-): Promise<Coords> {
-  const {placement, platform, elements} = state;
-  const rtl = await platform.isRTL?.(elements.floating);
+  options: OffsetOptions = 0,
+): Generator<any, MiddlewareReturn, any> {
+  const {placement, platform, elements, x, y, middlewareData} = state;
+
+  const rtl = yield platform.isRTL?.(elements.floating);
 
   const side = getSide(placement);
   const alignment = getAlignment(placement);
@@ -59,18 +64,35 @@ export async function convertValueToCoords(
     typeof rawValue === 'number'
       ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}
       : {
-          mainAxis: rawValue.mainAxis || 0,
-          crossAxis: rawValue.crossAxis || 0,
-          alignmentAxis: rawValue.alignmentAxis,
+          mainAxis: rawValue.mainAxis ?? 0,
+          crossAxis: rawValue.crossAxis ?? 0,
+          alignmentAxis: rawValue.alignmentAxis ?? null,
         };
 
   if (alignment && typeof alignmentAxis === 'number') {
-    crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;
+    crossAxis = alignment === 'end' ? -alignmentAxis : alignmentAxis;
   }
 
-  return isVertical
+  const diffCoords: Coords = isVertical
     ? {x: crossAxis * crossAxisMulti, y: mainAxis * mainAxisMulti}
     : {x: mainAxis * mainAxisMulti, y: crossAxis * crossAxisMulti};
+
+  // if the same placement + arrow alignment offset, no change
+  if (
+    placement === middlewareData.offset?.placement &&
+    middlewareData.arrow?.alignmentOffset
+  ) {
+    return {};
+  }
+
+  return {
+    x: x + diffCoords.x,
+    y: y + diffCoords.y,
+    data: {
+      ...diffCoords,
+      placement,
+    },
+  };
 }
 
 /**
@@ -83,26 +105,7 @@ export async function convertValueToCoords(
 export const offset = (options: OffsetOptions = 0): Middleware => ({
   name: 'offset',
   options,
-  async fn(state) {
-    const {x, y, placement, middlewareData} = state;
-    const diffCoords = await convertValueToCoords(state, options);
-
-    // If the placement is the same and the arrow caused an alignment offset
-    // then we don't need to change the positioning coordinates.
-    if (
-      placement === middlewareData.offset?.placement &&
-      middlewareData.arrow?.alignmentOffset
-    ) {
-      return {};
-    }
-
-    return {
-      x: x + diffCoords.x,
-      y: y + diffCoords.y,
-      data: {
-        ...diffCoords,
-        placement,
-      },
-    };
+  fn(state) {
+    return offsetGen(state, options);
   },
 });

@@ -1,14 +1,21 @@
+// shift.ts
 import {
+  type Coords,
   clamp,
   evaluate,
   getOppositeAxis,
   getSide,
   getSideAxis,
-  type Coords,
-} from '../utils';
+} from '@floating-ui/core/utils';
+
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
-import type {Derivable, Middleware, MiddlewareState} from '../types';
+import type {
+  Derivable,
+  Middleware,
+  MiddlewareState,
+  MiddlewareReturn,
+} from '../types';
 
 export interface ShiftOptions extends DetectOverflowOptions {
   /**
@@ -34,6 +41,67 @@ export interface ShiftOptions extends DetectOverflowOptions {
 }
 
 /**
+ * Generator version of `shift()` (mirrors `flipGen()` pattern).
+ */
+export function* shiftGen(
+  state: MiddlewareState,
+  options: ShiftOptions | Derivable<ShiftOptions> = {},
+): Generator<any, MiddlewareReturn, any> {
+  const {x, y, placement} = state;
+
+  const {
+    mainAxis: checkMainAxis = true,
+    crossAxis: checkCrossAxis = false,
+    limiter = {fn: ({x, y}: MiddlewareState) => ({x, y})},
+    ...detectOverflowOptions
+  } = evaluate(options, state);
+
+  const coords = {x, y};
+  const overflow = yield* detectOverflow(state, detectOverflowOptions);
+  const crossAxis = getSideAxis(getSide(placement));
+  const mainAxis = getOppositeAxis(crossAxis);
+
+  let mainAxisCoord = coords[mainAxis];
+  let crossAxisCoord = coords[crossAxis];
+
+  if (checkMainAxis) {
+    const minSide = mainAxis === 'y' ? 'top' : 'left';
+    const maxSide = mainAxis === 'y' ? 'bottom' : 'right';
+    const min = mainAxisCoord + overflow[minSide];
+    const max = mainAxisCoord - overflow[maxSide];
+
+    mainAxisCoord = clamp(min, mainAxisCoord, max);
+  }
+
+  if (checkCrossAxis) {
+    const minSide = crossAxis === 'y' ? 'top' : 'left';
+    const maxSide = crossAxis === 'y' ? 'bottom' : 'right';
+    const min = crossAxisCoord + overflow[minSide];
+    const max = crossAxisCoord - overflow[maxSide];
+
+    crossAxisCoord = clamp(min, crossAxisCoord, max);
+  }
+
+  const limitedCoords = limiter.fn({
+    ...state,
+    [mainAxis]: mainAxisCoord,
+    [crossAxis]: crossAxisCoord,
+  });
+
+  return {
+    ...limitedCoords,
+    data: {
+      x: limitedCoords.x - x,
+      y: limitedCoords.y - y,
+      enabled: {
+        [mainAxis]: checkMainAxis,
+        [crossAxis]: checkCrossAxis,
+      },
+    },
+  };
+}
+
+/**
  * Optimizes the visibility of the floating element by shifting it in order to
  * keep it in view when it will overflow the clipping boundary.
  * @see https://floating-ui.com/docs/shift
@@ -43,59 +111,8 @@ export const shift = (
 ): Middleware => ({
   name: 'shift',
   options,
-  async fn(state) {
-    const {x, y, placement} = state;
-
-    const {
-      mainAxis: checkMainAxis = true,
-      crossAxis: checkCrossAxis = false,
-      limiter = {fn: ({x, y}: Coords) => ({x, y})},
-      ...detectOverflowOptions
-    } = evaluate(options, state);
-
-    const coords = {x, y};
-    const overflow = await detectOverflow(state, detectOverflowOptions);
-    const crossAxis = getSideAxis(getSide(placement));
-    const mainAxis = getOppositeAxis(crossAxis);
-
-    let mainAxisCoord = coords[mainAxis];
-    let crossAxisCoord = coords[crossAxis];
-
-    if (checkMainAxis) {
-      const minSide = mainAxis === 'y' ? 'top' : 'left';
-      const maxSide = mainAxis === 'y' ? 'bottom' : 'right';
-      const min = mainAxisCoord + overflow[minSide];
-      const max = mainAxisCoord - overflow[maxSide];
-
-      mainAxisCoord = clamp(min, mainAxisCoord, max);
-    }
-
-    if (checkCrossAxis) {
-      const minSide = crossAxis === 'y' ? 'top' : 'left';
-      const maxSide = crossAxis === 'y' ? 'bottom' : 'right';
-      const min = crossAxisCoord + overflow[minSide];
-      const max = crossAxisCoord - overflow[maxSide];
-
-      crossAxisCoord = clamp(min, crossAxisCoord, max);
-    }
-
-    const limitedCoords = limiter.fn({
-      ...state,
-      [mainAxis]: mainAxisCoord,
-      [crossAxis]: crossAxisCoord,
-    });
-
-    return {
-      ...limitedCoords,
-      data: {
-        x: limitedCoords.x - x,
-        y: limitedCoords.y - y,
-        enabled: {
-          [mainAxis]: checkMainAxis,
-          [crossAxis]: checkCrossAxis,
-        },
-      },
-    };
+  fn(state) {
+    return shiftGen(state, options);
   },
 });
 

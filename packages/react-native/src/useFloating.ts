@@ -1,5 +1,5 @@
 import type {ComputePositionReturn} from '@floating-ui/core';
-import {computePosition} from '@floating-ui/core';
+import {computePositionAsync} from '@floating-ui/core';
 import * as React from 'react';
 
 import {createPlatform} from './createPlatform';
@@ -85,7 +85,7 @@ export function useFloating(
       return;
     }
 
-    computePosition(referenceRef.current, floatingRef.current, {
+    computePositionAsync(referenceRef.current, floatingRef.current, {
       middleware: latestMiddleware,
       platform,
       placement,

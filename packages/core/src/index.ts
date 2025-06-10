@@ -1,4 +1,4 @@
-export {computePosition} from './computePosition';
+export {computePosition, computePositionAsync} from './computePosition';
 export {detectOverflow, type DetectOverflowOptions} from './detectOverflow';
 export {arrow, type ArrowOptions} from './middleware/arrow';
 export {
