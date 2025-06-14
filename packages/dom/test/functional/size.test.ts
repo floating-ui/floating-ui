@@ -1,11 +1,12 @@
 import {expect, test} from '@playwright/test';
 
 import {allPlacements} from '../visual/utils/allPlacements';
+import {stringifyPlacement} from '../visual/utils/stringifyPlacement';
 import {click} from './utils/click';
 import {resize} from './utils/resize';
 import {scroll} from './utils/scroll';
 
-allPlacements.forEach((placement) => {
+allPlacements.map(stringifyPlacement).forEach((placement) => {
   test(`correctly sized for placement ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/size');
     await click(page, `[data-testid="placement-${placement}"]`);
@@ -29,7 +30,7 @@ allPlacements.forEach((placement) => {
   });
 });
 
-['bottom', 'top'].forEach((verticalPlacement) => {
+['bottom-center', 'top-center'].forEach((verticalPlacement) => {
   test(`does not overflow due to size ${verticalPlacement}`, async ({page}) => {
     await page.goto('http://localhost:1234/size');
     await click(page, `[data-testid="placement-${verticalPlacement}"]`);
@@ -60,7 +61,7 @@ allPlacements.forEach((placement) => {
   });
 });
 
-['right', 'left'].forEach((horizontalPlacement) => {
+['right-center', 'left-center'].forEach((horizontalPlacement) => {
   test(`does not overflow due to size ${horizontalPlacement}`, async ({
     page,
   }) => {

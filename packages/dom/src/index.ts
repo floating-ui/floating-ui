@@ -37,8 +37,7 @@ export type {
   VirtualElement,
 } from './types';
 export type {
-  AlignedPlacement,
-  Alignment,
+  Align,
   Axis,
   ClientRectObject,
   ComputePositionReturn,

@@ -1,12 +1,14 @@
 import type {
   ComputePositionConfig,
   ComputePositionReturn,
-  Middleware,
   MiddlewareData,
+  MiddlewareReturn,
 } from './types';
-import type {ElementRects} from './utils';
+import type {ElementRects, Placement} from './utils';
 import {isGenerator} from './utils/isGenerator';
-import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
+import {getCoordinates} from './getCoordinates';
+
+const EMPTY_ARRAY: never[] = [];
 
 export function* computePositionGen(
   reference: unknown,
@@ -14,13 +16,17 @@ export function* computePositionGen(
   config: ComputePositionConfig,
 ): Generator<any, ComputePositionReturn, any> {
   const {
-    placement = 'bottom',
+    side = 'bottom',
+    align = 'center',
     strategy = 'absolute',
-    middleware = [],
+    middleware = EMPTY_ARRAY,
     platform,
   } = config;
 
-  const validMiddleware = middleware.filter(Boolean) as Array<Middleware>;
+  const elements = {reference, floating};
+  const placement: Placement = {side, align};
+  let renderedSide = placement.side;
+  let renderedAlign = placement.align;
 
   const rtl = (yield platform.isRTL?.(floating)) ?? false;
 
@@ -29,27 +35,34 @@ export function* computePositionGen(
     floating,
     strategy,
   });
-  let {x, y} = computeCoordsFromPlacement(rects, placement, rtl);
-  let statefulPlacement = placement;
+  let {x, y} = getCoordinates(rects, renderedSide, renderedAlign, rtl);
   let middlewareData: MiddlewareData = {};
   let resetCount = 0;
 
-  for (let i = 0; i < validMiddleware.length; i++) {
-    const {name, fn} = validMiddleware[i];
+  for (let i = 0; i < middleware.length; i++) {
+    const middlewareItem = middleware[i];
+
+    if (!middlewareItem) {
+      continue;
+    }
+
+    const {name, fn} = middlewareItem;
 
     const middlewareResult = fn({
       x,
       y,
-      initialPlacement: placement,
-      placement: statefulPlacement,
+      initialSide: placement.side,
+      initialAlign: placement.align,
+      side: renderedSide,
+      align: renderedAlign,
       strategy,
       middlewareData,
       rects,
       platform,
-      elements: {reference, floating},
+      elements,
     });
 
-    const result = isGenerator(middlewareResult)
+    const result: MiddlewareReturn = isGenerator(middlewareResult)
       ? yield* middlewareResult
       : yield middlewareResult;
 
@@ -69,16 +82,17 @@ export function* computePositionGen(
       resetCount++;
 
       if (typeof reset === 'object') {
-        if (reset.placement) {
-          statefulPlacement = reset.placement;
-        }
+        renderedSide = reset.side || renderedSide;
+        renderedAlign = reset.align || renderedAlign;
+
         if (reset.rects) {
           rects =
             reset.rects === true
               ? yield platform.getElementRects({reference, floating, strategy})
               : reset.rects;
         }
-        ({x, y} = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
+
+        ({x, y} = getCoordinates(rects, renderedSide, renderedAlign, rtl));
       }
 
       i = -1;
@@ -88,7 +102,8 @@ export function* computePositionGen(
   return {
     x,
     y,
-    placement: statefulPlacement,
+    side: renderedSide,
+    align: renderedAlign,
     strategy,
     middlewareData,
   };

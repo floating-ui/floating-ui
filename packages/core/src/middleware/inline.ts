@@ -1,7 +1,6 @@
 import {
   evaluate,
   getPaddingObject,
-  getSide,
   getSideAxis,
   max,
   min,
@@ -67,7 +66,7 @@ export function* inlineGen(
   state: MiddlewareState,
   options: InlineOptions | Derivable<InlineOptions> = {},
 ): Generator<any, MiddlewareReturn, any> {
-  const {placement, elements, rects, platform, strategy} = state;
+  const {side, elements, rects, platform, strategy} = state;
   // A MouseEvent's client{X,Y} coords can be up to 2 pixels off a
   // ClientRect's bounds, despite the event listener being triggered. A
   // padding of 2 seems to handle this issue.
@@ -103,10 +102,10 @@ export function* inlineGen(
 
     // There are 2 or more connected rects.
     if (clientRects.length >= 2) {
-      if (getSideAxis(placement) === 'y') {
+      if (getSideAxis(side) === 'y') {
         const firstRect = clientRects[0];
         const lastRect = clientRects[clientRects.length - 1];
-        const isTop = getSide(placement) === 'top';
+        const isTop = side === 'top';
 
         const top = firstRect.top;
         const bottom = lastRect.bottom;
@@ -127,7 +126,7 @@ export function* inlineGen(
         };
       }
 
-      const isLeftSide = getSide(placement) === 'left';
+      const isLeftSide = side === 'left';
       const maxRight = max(...clientRects.map((rect) => rect.right));
       const minLeft = min(...clientRects.map((rect) => rect.left));
       const measureRects = clientRects.filter((rect) =>

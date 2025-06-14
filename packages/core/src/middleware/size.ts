@@ -1,4 +1,4 @@
-import {evaluate, getAlignment, getSide, getSideAxis, max, min} from '../utils';
+import {evaluate, getSideAxis, max, min} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {
@@ -26,14 +26,12 @@ export function* sizeGen(
   state: MiddlewareState,
   options: SizeOptions | Derivable<SizeOptions> = {},
 ): Generator<any, MiddlewareReturn, any> {
-  const {placement, rects, platform, elements} = state;
+  const {rects, platform, elements, side, align} = state;
 
   const {apply = () => {}, ...detectOverflowOptions} = evaluate(options, state);
 
   const overflow = yield* detectOverflow(state, detectOverflowOptions);
-  const side = getSide(placement);
-  const alignment = getAlignment(placement);
-  const isYAxis = getSideAxis(placement) === 'y';
+  const isYAxis = getSideAxis(side) === 'y';
   const {width, height} = rects.floating;
 
   let heightSide: 'top' | 'bottom';
@@ -42,10 +40,10 @@ export function* sizeGen(
   if (side === 'top' || side === 'bottom') {
     heightSide = side;
     const rtl = yield platform.isRTL?.(elements.floating);
-    widthSide = alignment === (rtl ? 'start' : 'end') ? 'left' : 'right';
+    widthSide = align === (rtl ? 'start' : 'end') ? 'left' : 'right';
   } else {
     widthSide = side;
-    heightSide = alignment === 'end' ? 'top' : 'bottom';
+    heightSide = align === 'end' ? 'top' : 'bottom';
   }
 
   const maximumClippingHeight = height - overflow.top - overflow.bottom;
@@ -72,7 +70,7 @@ export function* sizeGen(
     availableHeight = maximumClippingHeight;
   }
 
-  if (noShift && !alignment) {
+  if (noShift && align === 'center') {
     const xMin = max(overflow.left, 0);
     const xMax = max(overflow.right, 0);
     const yMin = max(overflow.top, 0);

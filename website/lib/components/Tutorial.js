@@ -84,7 +84,7 @@ export const Result4 = () => {
 
 export const Result5 = () => {
   const {refs, floatingStyles} = useFloating({
-    placement: 'right',
+    side: 'right',
   });
 
   return (
@@ -106,7 +106,7 @@ export const Result5 = () => {
 
 export const Result6 = () => {
   const {refs, floatingStyles} = useFloating({
-    placement: 'top',
+    side: 'top',
   });
 
   return (
@@ -125,7 +125,7 @@ export const Result6 = () => {
 
 export const Result7 = () => {
   const {refs, floatingStyles} = useFloating({
-    placement: 'top',
+    side: 'top',
     middleware: [flip({rootBoundary: 'document'})],
   });
 
@@ -148,7 +148,7 @@ export const Result7 = () => {
 
 export const Result8 = () => {
   const {refs, floatingStyles} = useFloating({
-    placement: 'top',
+    side: 'top',
     middleware: [flip({rootBoundary: 'document'})],
   });
 
@@ -171,7 +171,7 @@ export const Result8 = () => {
 
 export const Result9 = () => {
   const {refs, floatingStyles} = useFloating({
-    placement: 'top',
+    side: 'top',
     middleware: [flip({rootBoundary: 'document'}), shift()],
   });
 
@@ -194,7 +194,7 @@ export const Result9 = () => {
 
 export const Result10 = () => {
   const {refs, floatingStyles} = useFloating({
-    placement: 'top',
+    side: 'top',
     middleware: [
       flip({rootBoundary: 'document'}),
       shift({padding: 5}),
@@ -220,7 +220,7 @@ export const Result10 = () => {
 
 export const Result11 = () => {
   const {refs, floatingStyles} = useFloating({
-    placement: 'top',
+    side: 'top',
     middleware: [
       offset(6),
       flip({rootBoundary: 'document'}),
@@ -255,7 +255,7 @@ export const Result12 = () => {
     update,
     middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
   } = useFloating({
-    placement: 'top',
+    side: 'top',
     middleware: [
       offset(6),
       flip({rootBoundary: 'document'}),
@@ -313,7 +313,7 @@ export const Result13 = () => {
     update,
     middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
   } = useFloating({
-    placement: 'top',
+    side: 'top',
     middleware: [
       offset(6),
       flip({rootBoundary: 'document'}),

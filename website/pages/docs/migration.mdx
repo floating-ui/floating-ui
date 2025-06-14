@@ -139,7 +139,7 @@ not modify it by default:
 import {computePosition} from '@floating-ui/dom';
 
 computePosition(referenceEl, floatingEl, {
-  placement: 'top',
+  side: 'top',
 }).then(({x, y}) => {
   // ...
 });
@@ -161,7 +161,7 @@ import {
 } from '@floating-ui/dom';
 
 computePosition(referenceEl, floatingEl, {
-  placement: 'top',
+  side: 'top',
   middleware: [flip(), shift({limiter: limitShift()})],
 }).then(({x, y}) => {
   // ...

@@ -37,14 +37,14 @@ export type OffsetValue =
        */
       mainAxis?: number;
       /**
-       * The axis that runs along the alignment of the floating element.
+       * The axis that runs along the align of the floating element.
        * Represents the skidding between the reference and floating element.
        * @default 0
        */
       crossAxis?: number;
       /**
        * The same axis as `crossAxis` but applies only to aligned placements
-       * and inverts the `end` alignment. When set to a number, it overrides the
+       * and inverts the `end` align. When set to a number, it overrides the
        * `crossAxis` value.
        *
        * A positive number will move the floating element in the direction of
@@ -52,7 +52,7 @@ export type OffsetValue =
        * the reverse.
        * @default null
        */
-      alignmentAxis?: number | null;
+      alignAxis?: number | null;
     };
 // `OffsetOptions` in the core library were originally already `Derivable`. For
 // backwards-compatibility, re-define it here to use the DOM Derivable type.

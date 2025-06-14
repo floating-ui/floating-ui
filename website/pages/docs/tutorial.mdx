@@ -163,7 +163,7 @@ const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
-  placement: 'right',
+  side: 'right',
 }).then(({x, y}) => {
   Object.assign(tooltip.style, {
     left: `${x}px`,
@@ -174,12 +174,11 @@ computePosition(button, tooltip, {
 
 <T.Result5 />
 
-The available base placements are `'top'{:js}`, `'right'{:js}`,
+The available sides are `'top'{:js}`, `'right'{:js}`,
 `'bottom'{:js}`, `'left'{:js}`.
 
-Each of these base placements has an alignment in the form
-`-start` and `-end`. For example, `'right-start'{:js}`, or
-`'bottom-end'{:js}`. These allow you to align the tooltip to the
+The alignments are `'center'{:js}`, `'start'{:js}`, and
+`'end'{:js}`. These allow you to align the tooltip to one of the
 edges of the button, rather than centering it.
 
 ## Our first problem
@@ -230,7 +229,7 @@ const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
-  placement: 'top',
+  side: 'top',
   middleware: [flip()],
 }).then(({x, y}) => {
   Object.assign(tooltip.style, {
@@ -280,7 +279,7 @@ const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
-  placement: 'top',
+  side: 'top',
   middleware: [flip(), shift()],
 }).then(({x, y}) => {
   Object.assign(tooltip.style, {
@@ -311,7 +310,7 @@ const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
-  placement: 'top',
+  side: 'top',
   middleware: [flip(), shift({padding: 5})],
 }).then(({x, y}) => {
   Object.assign(tooltip.style, {
@@ -343,7 +342,7 @@ const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
-  placement: 'top',
+  side: 'top',
   middleware: [offset(6), flip(), shift({padding: 5})],
 }).then(({x, y}) => {
   Object.assign(tooltip.style, {
@@ -409,7 +408,7 @@ const tooltip = document.querySelector('#tooltip');
 const arrowElement = document.querySelector('#arrow');
 
 computePosition(button, tooltip, {
-  placement: 'top',
+  side: 'top',
   middleware: [
     offset(6),
     flip(),
@@ -435,7 +434,7 @@ This contains an `arrow` object, referring to the name of the
 
 ```js {9,15-16}
 computePosition(button, tooltip, {
-  placement: 'top',
+  side: 'top',
   middleware: [
     offset(6),
     flip(),
@@ -457,7 +456,7 @@ We now want to use this data to apply the styles.
 
 ```js {18-31}
 computePosition(button, tooltip, {
-  placement: 'top',
+  side: 'top',
   middleware: [
     offset(6),
     flip(),

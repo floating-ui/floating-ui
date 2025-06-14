@@ -6,6 +6,8 @@ import {useState} from 'react';
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
+import {stringifyPlacement} from '../utils/stringifyPlacement';
+import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 const BOOLS = [true, false];
 const FALLBACK_STRATEGIES: Array<FlipOptions['fallbackStrategy']> = [
@@ -14,19 +16,23 @@ const FALLBACK_STRATEGIES: Array<FlipOptions['fallbackStrategy']> = [
 ];
 
 export function Flip() {
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const [mainAxis, setMainAxis] = useState(true);
   const [crossAxis, setCrossAxis] = useState<FlipOptions['crossAxis']>(true);
   const [fallbackPlacements, setFallbackPlacements] = useState<Placement[]>();
   const [fallbackStrategy, setFallbackStrategy] =
     useState<FlipOptions['fallbackStrategy']>('bestFit');
-  const [flipAlignment, setFlipAlignment] = useState(true);
+  const [flipAlign, setFlipAlign] = useState(true);
   const [addShift, setAddShift] = useState(false);
   const [fallbackAxisSideDirection, setFallbackAxisSideDirection] =
     useState<FlipOptions['fallbackAxisSideDirection']>('none');
 
   const {x, y, strategy, update, refs} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [
       flip({
@@ -34,10 +40,10 @@ export function Flip() {
         crossAxis,
         fallbackPlacements:
           addShift && fallbackAxisSideDirection === 'none'
-            ? ['bottom']
+            ? [{side: 'bottom', align: 'center'}]
             : fallbackPlacements,
         fallbackStrategy,
-        flipAlignment,
+        flipAlign,
         fallbackAxisSideDirection: 'end',
       }),
       addShift && shift(),
@@ -80,20 +86,10 @@ export function Flip() {
       </div>
 
       <h2>placement</h2>
-      <Controls>
-        {allPlacements.map((localPlacement) => (
-          <button
-            key={localPlacement}
-            data-testid={`placement-${localPlacement}`}
-            onClick={() => setPlacement(localPlacement)}
-            style={{
-              backgroundColor: localPlacement === placement ? 'black' : '',
-            }}
-          >
-            {localPlacement}
-          </button>
-        ))}
-      </Controls>
+      <AllPlacementsControls
+        placement={placement}
+        setPlacement={setPlacement}
+      />
 
       <h2>mainAxis</h2>
       <Controls>
@@ -111,7 +107,7 @@ export function Flip() {
 
       <h2>crossAxis</h2>
       <Controls>
-        {([...BOOLS, 'alignment'] as const).map((value) => (
+        {([...BOOLS, 'align'] as const).map((value) => (
           <button
             key={String(value)}
             data-testid={`crossAxis-${value}`}
@@ -158,7 +154,13 @@ export function Flip() {
           >
             {localFallbackPlacements[0] === 'undefined'
               ? 'undefined'
-              : `[${localFallbackPlacements?.join(', ')}]`}
+              : `[${localFallbackPlacements
+                  ?.map((placement) =>
+                    typeof placement === 'string'
+                      ? placement
+                      : stringifyPlacement(placement),
+                  )
+                  .join(', ')}]`}
           </button>
         ))}
       </Controls>
@@ -180,15 +182,15 @@ export function Flip() {
         ))}
       </Controls>
 
-      <h2>flipAlignment</h2>
+      <h2>flipAlign</h2>
       <Controls>
         {BOOLS.map((bool) => (
           <button
             key={String(bool)}
-            data-testid={`flipAlignment-${bool}`}
-            onClick={() => setFlipAlignment(bool)}
+            data-testid={`flipAlign-${bool}`}
+            onClick={() => setFlipAlign(bool)}
             style={{
-              backgroundColor: bool === flipAlignment ? 'black' : '',
+              backgroundColor: bool === flipAlign ? 'black' : '',
             }}
           >
             {String(bool)}

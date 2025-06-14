@@ -125,7 +125,7 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
   {name: 'fn => r.width/2', scrollLeft: 800},
   {name: 'fn => cA: f.width/2', scrollTop: 400},
 ].forEach(({name, ...scrollOffsets}) => {
-  ['top', 'bottom'].forEach((placement) => {
+  ['top-center', 'bottom-center'].forEach((placement) => {
     test(`limitShift.offset works for value ${name} ${placement}`, async ({
       page,
     }) => {
@@ -148,7 +148,7 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
   });
 });
 
-['top', 'bottom'].forEach((placement) => {
+['top-center', 'bottom-center'].forEach((placement) => {
   test(`offset is correctly added when limitShift is enabled ${placement}`, async ({
     page,
   }) => {

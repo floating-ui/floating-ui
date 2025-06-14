@@ -1,11 +1,11 @@
 import {
   evaluate,
-  getAlignment,
-  getAlignmentSides,
-  getOppositeAlignmentPlacement,
+  getAlign,
+  getAlignSides,
+  getOppositeAlignPlacement,
   getSide,
   placements as ALL_PLACEMENTS,
-  type Alignment,
+  type Align,
   type Placement,
 } from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
@@ -18,27 +18,32 @@ import type {
 } from '../types';
 
 export function getPlacementList(
-  alignment: Alignment | null,
-  autoAlignment: boolean,
-  allowedPlacements: Array<Placement>,
-) {
-  const allowedPlacementsSortedByAlignment = alignment
+  align: Align | null,
+  autoAlign: boolean,
+  allowedPlacements: readonly Placement[],
+): Placement[] {
+  const allowedPlacementsSortedByAlign = align
     ? [
         ...allowedPlacements.filter(
-          (placement) => getAlignment(placement) === alignment,
+          (placement) => getAlign(placement) === align,
         ),
         ...allowedPlacements.filter(
-          (placement) => getAlignment(placement) !== alignment,
+          (placement) => getAlign(placement) !== align,
         ),
       ]
-    : allowedPlacements.filter((placement) => getSide(placement) === placement);
+    : allowedPlacements.filter((placement) => {
+        const align = getAlign(placement);
+        return align === 'center' || align === undefined;
+      });
 
-  return allowedPlacementsSortedByAlignment.filter((placement) => {
-    if (alignment) {
+  return allowedPlacementsSortedByAlign.filter((placement) => {
+    if (align) {
+      const placementAlign = getAlign(placement);
       return (
-        getAlignment(placement) === alignment ||
-        (autoAlignment
-          ? getOppositeAlignmentPlacement(placement) !== placement
+        placementAlign === align ||
+        (autoAlign
+          ? getOppositeAlignPlacement(placement).side !== placement.side ||
+            getOppositeAlignPlacement(placement).align !== placement.align
           : false)
       );
     }
@@ -49,25 +54,25 @@ export function getPlacementList(
 
 export interface AutoPlacementOptions extends DetectOverflowOptions {
   /**
-   * The axis that runs along the alignment of the floating element. Determines
+   * The axis that runs along the align of the floating element. Determines
    * whether to check for most space along this axis.
    * @default false
    */
   crossAxis?: boolean;
   /**
-   * Choose placements with a particular alignment.
+   * Choose placements with a particular align.
    * @default undefined
    */
-  alignment?: Alignment | null;
+  align?: Align | null;
   /**
-   * Whether to choose placements with the opposite alignment if the preferred
-   * alignment does not fit.
+   * Whether to choose placements with the opposite align if the preferred
+   * align does not fit.
    * @default true
    */
-  autoAlignment?: boolean;
+  autoAlign?: boolean;
   /**
    * Which placements are allowed to be chosen. Placements must be within the
-   * `alignment` option if explicitly set.
+   * `align` option if explicitly set.
    * @default allPlacements (variable)
    */
   allowedPlacements?: Array<Placement>;
@@ -77,19 +82,19 @@ export function* autoPlacementGen(
   state: MiddlewareState,
   options: AutoPlacementOptions | Derivable<AutoPlacementOptions> = {},
 ): Generator<any, MiddlewareReturn, any> {
-  const {rects, middlewareData, placement, platform, elements} = state;
+  const {rects, middlewareData, platform, elements} = state;
 
   const {
     crossAxis = false,
-    alignment,
+    align,
     allowedPlacements = ALL_PLACEMENTS,
-    autoAlignment = true,
+    autoAlign = true,
     ...detectOverflowOptions
   } = evaluate(options, state);
 
   const placements =
-    alignment !== undefined || allowedPlacements === ALL_PLACEMENTS
-      ? getPlacementList(alignment || null, autoAlignment, allowedPlacements)
+    align !== undefined || allowedPlacements === ALL_PLACEMENTS
+      ? getPlacementList(align || null, autoAlign, allowedPlacements)
       : allowedPlacements;
 
   const overflow = yield* detectOverflow(state, detectOverflowOptions);
@@ -102,21 +107,25 @@ export function* autoPlacementGen(
   }
 
   const rtl = yield platform.isRTL?.(elements.floating);
-  const alignmentSides = getAlignmentSides(currentPlacement, rects, rtl);
+  const alignSides = getAlignSides(currentPlacement, rects, rtl);
 
   // Make `computeCoords` start from the right place.
-  if (placement !== currentPlacement) {
+  if (
+    state.side !== currentPlacement.side ||
+    state.align !== currentPlacement.align
+  ) {
     return {
       reset: {
-        placement: placements[0],
+        side: placements[0].side,
+        align: placements[0].align,
       },
     };
   }
 
   const currentOverflows = [
     overflow[getSide(currentPlacement)],
-    overflow[alignmentSides[0]],
-    overflow[alignmentSides[1]],
+    overflow[alignSides[0]],
+    overflow[alignSides[1]],
   ];
 
   const allOverflows = [
@@ -134,17 +143,18 @@ export function* autoPlacementGen(
         overflows: allOverflows,
       },
       reset: {
-        placement: nextPlacement,
+        side: nextPlacement.side,
+        align: nextPlacement.align,
       },
     };
   }
 
   const placementsSortedByMostSpace = allOverflows
     .map((d) => {
-      const alignment = getAlignment(d.placement);
+      const align = getAlign(d.placement);
       return [
         d.placement,
-        alignment && crossAxis
+        align && crossAxis
           ? // Check along the mainAxis and main crossAxis side.
             d.overflows.slice(0, 2).reduce((acc, v) => acc + v, 0)
           : // Check only the mainAxis.
@@ -160,7 +170,7 @@ export function* autoPlacementGen(
         0,
         // Aligned placements should not check their opposite crossAxis
         // side.
-        getAlignment(d[0]) ? 2 : 3,
+        getAlign(d[0]) ? 2 : 3,
       )
       .every((v) => v <= 0),
   );
@@ -168,14 +178,18 @@ export function* autoPlacementGen(
   const resetPlacement =
     placementsThatFitOnEachSide[0]?.[0] || placementsSortedByMostSpace[0][0];
 
-  if (resetPlacement !== placement) {
+  if (
+    resetPlacement.side !== state.side ||
+    resetPlacement.align !== state.align
+  ) {
     return {
       data: {
         index: currentIndex + 1,
         overflows: allOverflows,
       },
       reset: {
-        placement: resetPlacement,
+        side: resetPlacement.side,
+        align: resetPlacement.align,
       },
     };
   }

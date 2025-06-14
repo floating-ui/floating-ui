@@ -12,9 +12,9 @@ import {useRef, useState} from 'react';
 import {BoxSizeControl} from '../utils/BoxSizeControl';
 import {Container} from '../utils/Container';
 import {Controls} from '../utils/Controls';
-import {allPlacements} from '../utils/allPlacements';
 import {useBoxSize} from '../utils/useBoxSize';
 import {useSize} from '../utils/useSize';
+import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 export function Complex() {
   const [floatingSizeValue, floatingSize, handleFloatingSizeChange] =
@@ -24,7 +24,10 @@ export function Complex() {
   const [offsetValue, handleOffsetChange] = useSize(15);
   const [shiftValue, handleShiftChange] = useSize(5);
   const [paddingValue, handlePaddingChange] = useSize(10);
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
 
   const arrowRef = useRef<HTMLDivElement | null>(null);
   const {
@@ -33,10 +36,11 @@ export function Complex() {
     refs,
     strategy,
     update,
-    placement: resultantPlacement,
+    side: renderedSide,
     middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
   } = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(offsetValue),
@@ -53,7 +57,7 @@ export function Complex() {
     bottom: 'top',
   };
 
-  const staticSide = oppositeSidesMap[resultantPlacement.split('-')[0]];
+  const staticSide = oppositeSidesMap[renderedSide];
 
   return (
     <>
@@ -143,20 +147,10 @@ export function Complex() {
         />
       </Controls>
       <h3>Floating position</h3>
-      <Controls>
-        {allPlacements.map((localPlacement) => (
-          <button
-            key={localPlacement}
-            data-testid={`placement-${localPlacement}`}
-            onClick={() => setPlacement(localPlacement)}
-            style={{
-              backgroundColor: localPlacement === placement ? 'black' : '',
-            }}
-          >
-            {localPlacement}
-          </button>
-        ))}
-      </Controls>
+      <AllPlacementsControls
+        placement={placement}
+        setPlacement={setPlacement}
+      />
     </>
   );
 }

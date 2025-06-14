@@ -43,8 +43,7 @@ export type {
   FloatingNodeProps,
 } from './components/FloatingTree';
 export type {
-  AlignedPlacement,
-  Alignment,
+  Align,
   ArrowOptions,
   AutoPlacementOptions,
   AutoUpdateOptions,

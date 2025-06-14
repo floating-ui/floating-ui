@@ -8,7 +8,7 @@ function App() {
   const arrowRef = React.useRef(null);
   useFloating();
   const {update, refs, elements} = useFloating({
-    placement: 'right',
+    side: 'right',
     middleware: [offset(() => 5), shift(), arrow({element: arrowRef})],
     // @ts-expect-error - does not exist in React Native
     strategy: 'fixed',

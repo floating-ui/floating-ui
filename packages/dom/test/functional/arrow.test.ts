@@ -3,8 +3,9 @@ import {expect, test} from '@playwright/test';
 import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
 import {scroll} from './utils/scroll';
+import {stringifyPlacement} from '../visual/utils/stringifyPlacement';
 
-allPlacements.forEach((placement) => {
+allPlacements.map(stringifyPlacement).forEach((placement) => {
   [75, 150].forEach((floatingSize) => {
     [25, 125].forEach((referenceSize) => {
       [0, 20].forEach((arrowPadding) => {
@@ -26,7 +27,7 @@ allPlacements.forEach((placement) => {
   });
 });
 
-['top', 'bottom'].forEach((placement) => {
+['top-center', 'bottom-center'].forEach((placement) => {
   [75, 150].forEach((floatingSize) => {
     [25, 125].forEach((referenceSize) => {
       [0, 20].forEach((arrowPadding) => {
@@ -56,7 +57,7 @@ allPlacements.forEach((placement) => {
   });
 });
 
-['left', 'right'].forEach((placement) => {
+['left-center', 'right-center'].forEach((placement) => {
   [75, 150].forEach((floatingSize) => {
     [25, 125].forEach((referenceSize) => {
       [0, 20].forEach((arrowPadding) => {

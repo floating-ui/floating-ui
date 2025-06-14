@@ -1,17 +1,20 @@
 import type {Placement} from '@floating-ui/core';
+import {stringifyPlacement} from './stringifyPlacement';
 
 // clockwise ordering
 export const allPlacements: Placement[] = [
-  'top-start',
-  'top',
-  'top-end',
-  'right-start',
-  'right',
-  'right-end',
-  'bottom-end',
-  'bottom',
-  'bottom-start',
-  'left-end',
-  'left',
-  'left-start',
+  {side: 'top', align: 'start'},
+  {side: 'top', align: 'center'},
+  {side: 'top', align: 'end'},
+  {side: 'right', align: 'start'},
+  {side: 'right', align: 'center'},
+  {side: 'right', align: 'end'},
+  {side: 'bottom', align: 'start'},
+  {side: 'bottom', align: 'center'},
+  {side: 'bottom', align: 'end'},
+  {side: 'left', align: 'start'},
+  {side: 'left', align: 'center'},
+  {side: 'left', align: 'end'},
 ];
+
+export const allPlacementsString = allPlacements.map(stringifyPlacement);

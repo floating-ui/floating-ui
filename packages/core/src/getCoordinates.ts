@@ -1,23 +1,22 @@
 import {
-  getAlignment,
-  getAlignmentAxis,
   getAxisLength,
-  getSide,
   getSideAxis,
+  getOppositeAxis,
   type Coords,
   type ElementRects,
-  type Placement,
+  type Side,
+  type Align,
 } from './utils';
 
-export function computeCoordsFromPlacement(
+export function getCoordinates(
   {reference, floating}: ElementRects,
-  placement: Placement,
+  side: Side,
+  align: Align,
   rtl?: boolean,
 ): Coords {
-  const sideAxis = getSideAxis(placement);
-  const alignmentAxis = getAlignmentAxis(placement);
-  const alignLength = getAxisLength(alignmentAxis);
-  const side = getSide(placement);
+  const sideAxis = getSideAxis(side);
+  const alignAxis = getOppositeAxis(sideAxis);
+  const alignLength = getAxisLength(alignAxis);
   const isVertical = sideAxis === 'y';
 
   const commonX = reference.x + reference.width / 2 - floating.width / 2;
@@ -42,14 +41,10 @@ export function computeCoordsFromPlacement(
       coords = {x: reference.x, y: reference.y};
   }
 
-  switch (getAlignment(placement)) {
-    case 'start':
-      coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
-      break;
-    case 'end':
-      coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
-      break;
-    default:
+  if (align === 'start') {
+    coords[alignAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
+  } else if (align === 'end') {
+    coords[alignAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
   }
 
   return coords;
