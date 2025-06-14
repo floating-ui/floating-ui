@@ -15,6 +15,7 @@ import {Controls} from '../utils/Controls';
 import {allPlacements} from '../utils/allPlacements';
 import {useBoxSize} from '../utils/useBoxSize';
 import {useSize} from '../utils/useSize';
+import {stringifyPlacement} from '../utils/stringifyPlacement';
 
 export function Complex() {
   const [floatingSizeValue, floatingSize, handleFloatingSizeChange] =
@@ -24,7 +25,10 @@ export function Complex() {
   const [offsetValue, handleOffsetChange] = useSize(15);
   const [shiftValue, handleShiftChange] = useSize(5);
   const [paddingValue, handlePaddingChange] = useSize(10);
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
 
   const arrowRef = useRef<HTMLDivElement | null>(null);
   const {
@@ -33,10 +37,11 @@ export function Complex() {
     refs,
     strategy,
     update,
-    placement: resultantPlacement,
+    side: resultantSide,
     middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
   } = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(offsetValue),
@@ -53,7 +58,7 @@ export function Complex() {
     bottom: 'top',
   };
 
-  const staticSide = oppositeSidesMap[resultantPlacement.split('-')[0]];
+  const staticSide = oppositeSidesMap[resultantSide];
 
   return (
     <>
@@ -146,14 +151,14 @@ export function Complex() {
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button
-            key={localPlacement}
+            key={stringifyPlacement(localPlacement)}
             data-testid={`placement-${localPlacement}`}
             onClick={() => setPlacement(localPlacement)}
             style={{
               backgroundColor: localPlacement === placement ? 'black' : '',
             }}
           >
-            {localPlacement}
+            {stringifyPlacement(localPlacement)}
           </button>
         ))}
       </Controls>

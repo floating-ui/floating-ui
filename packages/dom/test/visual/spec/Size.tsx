@@ -13,19 +13,23 @@ import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useResize} from '../utils/useResize';
 import {useScroll} from '../utils/useScroll';
+import {stringifyPlacement} from '../utils/stringifyPlacement';
 
 type ShiftOrder = 'none' | 'before' | 'after';
 const SHIFT_ORDERS: ShiftOrder[] = ['none', 'before', 'after'];
 
 export function Size() {
   const [rtl, setRtl] = useState(false);
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const [addFlip, setAddFlip] = useState(false);
   const [addShift, setAddShift] = useState<ShiftOrder>('none');
   const [shiftCrossAxis, setShiftCrossAxis] = useState(false);
   const [shiftLimiter, setShiftLimiter] = useState(false);
 
-  const hasEdgeAlignment = placement.includes('-');
+  const hasEdgeAlign = placement.align !== 'center';
 
   const shiftOptions = {
     padding: 10,
@@ -34,7 +38,8 @@ export function Size() {
   };
 
   const {x, y, strategy, update, refs} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [
       addFlip && flip({padding: 10}),
@@ -83,7 +88,7 @@ export function Size() {
                 width:
                   addShift === 'before' && shiftCrossAxis
                     ? 100
-                    : addShift === 'before' && hasEdgeAlignment
+                    : addShift === 'before' && hasEdgeAlign
                       ? 360
                       : 600,
                 height: 600,
@@ -99,14 +104,14 @@ export function Size() {
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button
-            key={localPlacement}
+            key={stringifyPlacement(localPlacement)}
             data-testid={`placement-${localPlacement}`}
             onClick={() => setPlacement(localPlacement)}
             style={{
               backgroundColor: localPlacement === placement ? 'black' : '',
             }}
           >
-            {localPlacement}
+            {stringifyPlacement(localPlacement)}
           </button>
         ))}
       </Controls>

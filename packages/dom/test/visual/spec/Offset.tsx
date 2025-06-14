@@ -4,6 +4,7 @@ import {useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 import {allPlacements} from '../utils/allPlacements';
+import {stringifyPlacement} from '../utils/stringifyPlacement';
 
 const VALUES: Array<{
   offset: OffsetOptions;
@@ -19,16 +20,20 @@ const VALUES: Array<{
     offset: ({rects}) => ({crossAxis: -rects.floating.width / 2}),
     name: '() => cA: -f.width/2',
   },
-  {offset: {alignmentAxis: 5}, name: 'aA: 5'},
-  {offset: {alignmentAxis: -10}, name: 'aA: -10'},
+  {offset: {alignAxis: 5}, name: 'aA: 5'},
+  {offset: {alignAxis: -10}, name: 'aA: -10'},
 ];
 
 export function Offset() {
   const [rtl, setRtl] = useState(false);
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const [offsetValue, setOffsetValue] = useState<OffsetOptions>(0);
   const {refs, floatingStyles} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [
       {
@@ -73,14 +78,14 @@ export function Offset() {
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button
-            key={localPlacement}
+            key={stringifyPlacement(localPlacement)}
             data-testid={`placement-${localPlacement}`}
             onClick={() => setPlacement(localPlacement)}
             style={{
               backgroundColor: localPlacement === placement ? 'black' : '',
             }}
           >
-            {localPlacement}
+            {stringifyPlacement(localPlacement)}
           </button>
         ))}
       </Controls>

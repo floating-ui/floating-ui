@@ -10,6 +10,7 @@ import {useEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
+import {stringifyPlacement} from '../utils/stringifyPlacement';
 
 type ConnectedStatus = '1' | '2-disjoined' | '2-joined' | '3';
 const CONNECTED_STATUSES: ConnectedStatus[] = [
@@ -20,12 +21,16 @@ const CONNECTED_STATUSES: ConnectedStatus[] = [
 ];
 
 export function Inline() {
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<ConnectedStatus>('2-disjoined');
   const [mouseCoords, setMouseCoords] = useState<Coords | undefined>();
   const {x, y, strategy, refs} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     middleware: [inline(mouseCoords), flip(), size()],
     whileElementsMounted: autoUpdate,
   });
@@ -148,14 +153,14 @@ export function Inline() {
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button
-            key={localPlacement}
+            key={stringifyPlacement(localPlacement)}
             data-testid={`placement-${localPlacement}`}
             onClick={() => setPlacement(localPlacement)}
             style={{
               backgroundColor: localPlacement === placement ? 'black' : '',
             }}
           >
-            {localPlacement}
+            {stringifyPlacement(localPlacement)}
           </button>
         ))}
       </Controls>

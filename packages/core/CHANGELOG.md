@@ -4,13 +4,13 @@
 
 ### Patch Changes
 
-- fix(flip): only allow fallback to the perpendicular axis if all placements on the preferred side axis overflow the main axis with `crossAxis: 'alignment'`
+- fix(flip): only allow fallback to the perpendicular axis if all placements on the preferred side axis overflow the main axis with `crossAxis: 'align'`
 
 ## 1.7.0
 
 ### Minor Changes
 
-- feat(flip): add `"alignment"` string value for `crossAxis` option. This value determines if cross axis overflow checking is restricted to the `alignment` of the placement only. This prevents `fallbackPlacements`/`fallbackAxisSideDirection` from too eagerly changing to the perpendicular side (thereby preferring `shift()` if overflow is detected along the cross axis, even if `shift()` is placed after `flip()` in the middleware array).
+- feat(flip): add `"align"` string value for `crossAxis` option. This value determines if cross axis overflow checking is restricted to the `align` of the placement only. This prevents `fallbackPlacements`/`fallbackAxisSideDirection` from too eagerly changing to the perpendicular side (thereby preferring `shift()` if overflow is detected along the cross axis, even if `shift()` is placed after `flip()` in the middleware array).
 
 ## 1.6.9
 
@@ -99,13 +99,13 @@
 ### Patch Changes
 
 - 88bf9768: fix(offset): avoid doubling calculation on same placement reset when
-  `arrow` changes alignment of floating element
+  `arrow` changes align of floating element
 
 ## 1.5.0
 
 ### Minor Changes
 
-- d7e07fba: feat(arrow): add `alignmentOffset` data
+- d7e07fba: feat(arrow): add `alignOffset` data
 
 ### Patch Changes
 

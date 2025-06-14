@@ -5,12 +5,17 @@ import {useRef, useState} from 'react';
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useSize} from './useSize';
+import {stringifyPlacement} from './stringifyPlacement';
 
 export function New() {
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const arrowRef = useRef<HTMLDivElement | null>(null);
   const {refs, floatingStyles} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [arrow({element: arrowRef})],
   });
@@ -53,14 +58,14 @@ export function New() {
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button
-            key={localPlacement}
+            key={stringifyPlacement(localPlacement)}
             data-testid={`placement-${localPlacement}`}
             onClick={() => setPlacement(localPlacement)}
             style={{
               backgroundColor: localPlacement === placement ? 'black' : '',
             }}
           >
-            {localPlacement}
+            {stringifyPlacement(localPlacement)}
           </button>
         ))}
       </Controls>

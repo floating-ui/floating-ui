@@ -10,8 +10,7 @@ import type {
 import type {ComponentPublicInstance, Ref} from 'vue-demi';
 
 export type {
-  AlignedPlacement,
-  Alignment,
+  Align,
   AutoPlacementOptions,
   AutoUpdateOptions,
   Axis,

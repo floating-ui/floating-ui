@@ -33,8 +33,7 @@ export type {
   RootBoundary,
 } from './types';
 export type {
-  AlignedPlacement,
-  Alignment,
+  Align,
   Axis,
   ClientRectObject,
   Coords,

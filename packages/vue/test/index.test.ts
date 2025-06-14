@@ -40,7 +40,7 @@ describe('useFloating', () => {
     });
 
     const {rerender, getByTestId} = render(App, {
-      props: {placement: 'bottom'},
+      props: {side: 'bottom'},
     });
 
     await waitFor(() => {
@@ -48,7 +48,7 @@ describe('useFloating', () => {
       expect(getByTestId('y').textContent).toBe('5');
     });
 
-    await rerender({placement: 'right'});
+    await rerender({side: 'right'});
 
     await waitFor(() => {
       expect(getByTestId('x').textContent).toBe('5');
@@ -160,7 +160,7 @@ describe('useFloating', () => {
     });
 
     const {rerender, getByTestId} = render(App, {
-      props: {placement: 'bottom'},
+      props: {side: 'bottom'},
     });
 
     await waitFor(() => {
@@ -168,7 +168,7 @@ describe('useFloating', () => {
       expect(getByTestId('y').textContent).toBe('5');
     });
 
-    await rerender({placement: 'right'});
+    await rerender({side: 'right'});
 
     await waitFor(() => {
       expect(getByTestId('x').textContent).toBe('5');
@@ -374,7 +374,7 @@ describe('useFloating', () => {
     });
 
     const {rerender, getByTestId} = render(App, {
-      props: {placement: 'right'},
+      props: {side: 'right'},
     });
 
     await waitFor(() => {

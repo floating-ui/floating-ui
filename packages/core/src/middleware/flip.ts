@@ -1,10 +1,9 @@
 import {
   evaluate,
-  getAlignmentSides,
+  getAlignSides,
   getExpandedPlacements,
   getOppositeAxisPlacements,
   getOppositePlacement,
-  getSide,
   getSideAxis,
   type Placement,
 } from '../utils';
@@ -16,6 +15,7 @@ import type {
   MiddlewareState,
   MiddlewareReturn,
 } from '../types';
+import type {Side} from '../utils';
 
 export interface FlipOptions extends DetectOverflowOptions {
   /**
@@ -25,14 +25,14 @@ export interface FlipOptions extends DetectOverflowOptions {
    */
   mainAxis?: boolean;
   /**
-   * The axis that runs along the alignment of the floating element. Determines
+   * The axis that runs along the align of the floating element. Determines
    * whether overflow along this axis is checked to perform a flip.
-   * - `true`: Whether to check cross axis overflow for both side and alignment flipping.
+   * - `true`: Whether to check cross axis overflow for both side and align flipping.
    * - `false`: Whether to disable all cross axis overflow checking.
-   * - `'alignment'`: Whether to check cross axis overflow for alignment flipping only.
+   * - `'align'`: Whether to check cross axis overflow for align flipping only.
    * @default true
    */
-  crossAxis?: boolean | 'alignment';
+  crossAxis?: boolean | 'align';
   /**
    * Placements to try sequentially if the preferred `placement` does not fit.
    * @default [oppositePlacement] (computed)
@@ -50,11 +50,11 @@ export interface FlipOptions extends DetectOverflowOptions {
    */
   fallbackAxisSideDirection?: 'none' | 'start' | 'end';
   /**
-   * Whether to flip to placements with the opposite alignment if they fit
+   * Whether to flip to placements with the opposite align if they fit
    * better.
    * @default true
    */
-  flipAlignment?: boolean;
+  flipAlign?: boolean;
 }
 
 export function* flipGen(
@@ -62,13 +62,18 @@ export function* flipGen(
   options: FlipOptions | Derivable<FlipOptions> = {},
 ): Generator<any, MiddlewareReturn, any> {
   const {
-    placement,
+    side,
+    align,
+    initialSide,
+    initialAlign,
     middlewareData,
     rects,
-    initialPlacement,
     platform,
     elements,
   } = state;
+
+  const placement = {side, align};
+  const initialPlacement = {side: initialSide, align: initialAlign};
 
   const {
     mainAxis: checkMainAxis = true,
@@ -76,27 +81,27 @@ export function* flipGen(
     fallbackPlacements: specifiedFallbackPlacements,
     fallbackStrategy = 'bestFit',
     fallbackAxisSideDirection = 'none',
-    flipAlignment = true,
+    flipAlign = true,
     ...detectOverflowOptions
   } = evaluate(options, state);
 
-  // If a reset by the arrow was caused due to an alignment offset being
+  // If a reset by the arrow was caused due to an align offset being
   // added, we should skip any logic now since `flip()` has already done its
   // work.
   // https://github.com/floating-ui/floating-ui/issues/2549#issuecomment-1719601643
-  if (middlewareData.arrow?.alignmentOffset) {
+  if (middlewareData.arrow?.alignOffset) {
     return {};
   }
 
-  const side = getSide(placement);
-  const initialSideAxis = getSideAxis(initialPlacement);
-  const isBasePlacement = getSide(initialPlacement) === initialPlacement;
+  const currentSide = side as Side;
+  const initialSideAxis = getSideAxis(initialSide);
+  const isBasePlacement = align === 'center';
 
   const rtl = yield platform.isRTL?.(elements.floating);
 
   const fallbackPlacements =
     specifiedFallbackPlacements ||
-    (isBasePlacement || !flipAlignment
+    (isBasePlacement || !flipAlign
       ? [getOppositePlacement(initialPlacement)]
       : getExpandedPlacements(initialPlacement));
 
@@ -106,7 +111,7 @@ export function* flipGen(
     fallbackPlacements.push(
       ...getOppositeAxisPlacements(
         initialPlacement,
-        flipAlignment,
+        flipAlign,
         fallbackAxisSideDirection,
         rtl,
       ),
@@ -121,11 +126,11 @@ export function* flipGen(
   let overflowsData = middlewareData.flip?.overflows || [];
 
   if (checkMainAxis) {
-    overflows.push(overflow[side]);
+    overflows.push(overflow[currentSide]);
   }
 
   if (checkCrossAxis) {
-    const sides = getAlignmentSides(placement, rects, rtl);
+    const sides = getAlignSides(placement, rects, rtl);
     overflows.push(overflow[sides[0]], overflow[sides[1]]);
   }
 
@@ -138,8 +143,8 @@ export function* flipGen(
 
     if (nextPlacement) {
       const ignoreCrossAxisOverflow =
-        checkCrossAxis === 'alignment'
-          ? initialSideAxis !== getSideAxis(nextPlacement)
+        checkCrossAxis === 'align'
+          ? initialSideAxis !== getSideAxis(nextPlacement.side)
           : false;
 
       if (
@@ -148,7 +153,8 @@ export function* flipGen(
         // overflows the main axis.
         overflowsData.every(
           (d) =>
-            d.overflows[0] > 0 && getSideAxis(d.placement) === initialSideAxis,
+            d.overflows[0] > 0 &&
+            getSideAxis(d.placement.side) === initialSideAxis,
         )
       ) {
         // Try next placement and re-run the lifecycle.
@@ -158,7 +164,8 @@ export function* flipGen(
             overflows: overflowsData,
           },
           reset: {
-            placement: nextPlacement,
+            side: nextPlacement.side,
+            align: nextPlacement.align,
           },
         };
       }
@@ -177,7 +184,7 @@ export function* flipGen(
           const placement = overflowsData
             .filter((d) => {
               if (hasFallbackAxisSideDirection) {
-                const currentSideAxis = getSideAxis(d.placement);
+                const currentSideAxis = getSideAxis(d.placement.side);
                 return (
                   currentSideAxis === initialSideAxis ||
                   // Create a bias to the `y` side axis due to horizontal
@@ -209,10 +216,11 @@ export function* flipGen(
       }
     }
 
-    if (placement !== resetPlacement) {
+    if (side !== resetPlacement.side || align !== resetPlacement.align) {
       return {
         reset: {
-          placement: resetPlacement,
+          side: resetPlacement.side,
+          align: resetPlacement.align,
         },
       };
     }

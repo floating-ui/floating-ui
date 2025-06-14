@@ -1,4 +1,4 @@
-import type {Alignment, Placement} from '@floating-ui/core';
+import type {Align, Placement} from '@floating-ui/core';
 import {
   autoPlacement,
   autoUpdate,
@@ -9,19 +9,31 @@ import {useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
+import {stringifyPlacement} from '../utils/stringifyPlacement';
 
 const BOOLS = [true, false];
-const ALIGNMENTS: Array<null | Alignment> = [null, 'start', 'end'];
+const ALIGNMENTS: Array<Align> = ['center', 'start', 'end'];
 const ALLOWED_PLACEMENTS: Array<Placement[] | undefined> = [
   undefined,
-  ['top', 'bottom'],
-  ['left', 'right'],
-  ['top-start', 'top-end', 'bottom-start', 'bottom-end'],
+  [
+    {side: 'top', align: 'center'},
+    {side: 'bottom', align: 'center'},
+  ],
+  [
+    {side: 'left', align: 'center'},
+    {side: 'right', align: 'center'},
+  ],
+  [
+    {side: 'top', align: 'start'},
+    {side: 'top', align: 'end'},
+    {side: 'bottom', align: 'start'},
+    {side: 'bottom', align: 'end'},
+  ],
 ];
 
 export function AutoPlacement() {
-  const [alignment, setAlignment] = useState<Alignment | null>('start');
-  const [autoAlignment, setAutoAlignment] = useState(true);
+  const [align, setAlign] = useState<Align>('start');
+  const [autoAlign, setAutoAlign] = useState(true);
   const [allowedPlacements, setAllowedPlacements] = useState<
     Placement[] | undefined
   >();
@@ -32,8 +44,8 @@ export function AutoPlacement() {
     whileElementsMounted: autoUpdate,
     middleware: [
       autoPlacement({
-        alignment,
-        autoAlignment,
+        align,
+        autoAlign,
         allowedPlacements,
         crossAxis,
       }),
@@ -87,31 +99,31 @@ export function AutoPlacement() {
         </div>
       </div>
 
-      <h2>alignment</h2>
+      <h2>align</h2>
       <Controls>
-        {ALIGNMENTS.map((localAlignment) => (
+        {ALIGNMENTS.map((localAlign) => (
           <button
-            key={String(localAlignment)}
-            data-testid={`alignment-${localAlignment}`}
-            onClick={() => setAlignment(localAlignment)}
+            key={String(localAlign)}
+            data-testid={`align-${localAlign}`}
+            onClick={() => setAlign(localAlign)}
             style={{
-              backgroundColor: alignment === localAlignment ? 'black' : '',
+              backgroundColor: align === localAlign ? 'black' : '',
             }}
           >
-            {String(localAlignment)}
+            {String(localAlign)}
           </button>
         ))}
       </Controls>
 
-      <h2>autoAlignment</h2>
+      <h2>autoAlign</h2>
       <Controls>
         {BOOLS.map((bool) => (
           <button
             key={String(bool)}
-            data-testid={`autoAlignment-${bool}`}
-            onClick={() => setAutoAlignment(bool)}
+            data-testid={`autoAlign-${bool}`}
+            onClick={() => setAutoAlign(bool)}
             style={{
-              backgroundColor: bool === autoAlignment ? 'black' : '',
+              backgroundColor: bool === autoAlign ? 'black' : '',
             }}
           >
             {String(bool)}
@@ -123,15 +135,17 @@ export function AutoPlacement() {
       <Controls>
         {ALLOWED_PLACEMENTS.map((localAllowedPlacements) => (
           <button
-            key={String(localAllowedPlacements)}
-            data-testid={`allowedPlacements-${localAllowedPlacements}`}
+            key={String(localAllowedPlacements?.map(stringifyPlacement))}
+            data-testid={`allowedPlacements-${localAllowedPlacements?.map(
+              stringifyPlacement,
+            )}`}
             onClick={() => setAllowedPlacements(localAllowedPlacements)}
             style={{
               backgroundColor:
                 localAllowedPlacements === allowedPlacements ? 'black' : '',
             }}
           >
-            {String(localAllowedPlacements)}
+            {String(localAllowedPlacements?.map(stringifyPlacement))}
           </button>
         ))}
       </Controls>

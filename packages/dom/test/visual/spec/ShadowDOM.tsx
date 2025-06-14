@@ -4,6 +4,7 @@ import {useState} from 'react';
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {defineElements} from '../utils/shadowDOM';
+import {stringifyPlacement} from '../utils/stringifyPlacement';
 
 type UseCase =
   | 'direct-host-child'
@@ -24,7 +25,10 @@ defineElements();
 
 export function ShadowDOM() {
   const [useCase, setUseCase] = useState<UseCase>('direct-host-child');
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const [cssPosition, setCssPosition] = useState<CSSPosition>('static');
   const [strategy, setStrategy] = useState<Strategy>('absolute');
   const [withTransform, setWithTransform] = useState<boolean>(false);
@@ -32,7 +36,8 @@ export function ShadowDOM() {
 
   const UseCaseTag = useCase;
   const hostOptions = {
-    placement,
+    side: placement.side,
+    align: placement.align,
     strategy,
     polyfill,
     style: {
@@ -114,14 +119,14 @@ export function ShadowDOM() {
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button
-            key={localPlacement}
+            key={stringifyPlacement(localPlacement)}
             data-testid={`placement-${localPlacement}`}
             onClick={() => setPlacement(localPlacement)}
             style={{
               backgroundColor: localPlacement === placement ? 'black' : '',
             }}
           >
-            {localPlacement}
+            {stringifyPlacement(localPlacement)}
           </button>
         ))}
       </Controls>

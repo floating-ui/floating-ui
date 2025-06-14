@@ -9,7 +9,7 @@ function App() {
   const {refs, floatingStyles, update} = useFloating({
     open: true,
     transform: false,
-    placement: 'right',
+    side: 'right',
     middleware: [
       offset(() => ({mainAxis: 0})),
       shift(),

@@ -118,7 +118,7 @@ export const inner = (
     const floatingIsScrollEl = floating === scrollEl;
 
     if (__DEV__) {
-      if (!state.placement.startsWith('bottom')) {
+      if (state.placement.side !== 'bottom') {
         warn(
           '`placement` side must be "bottom" when using the `inner`',
           'middleware.',

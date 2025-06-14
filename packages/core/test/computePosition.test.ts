@@ -10,17 +10,16 @@ const platform = {
 } as unknown as Platform;
 
 test('returned data', () => {
-  const {x, y, placement, strategy, middlewareData} = computePosition(
-    reference,
-    floating,
-    {
-      placement: 'top',
+  const {x, y, side, align, placement, strategy, middlewareData} =
+    computePosition(reference, floating, {
+      side: 'top',
       middleware: [{name: 'custom', fn: () => ({data: {property: true}})}],
       platform,
-    },
-  );
+    });
 
-  expect(placement).toBe('top');
+  expect(side).toBe('top');
+  expect(align).toBe('center');
+  expect(placement).toEqual({side: 'top', align: 'center'});
   expect(strategy).toBe('absolute');
   expect(x).toBe(25);
   expect(y).toBe(-50);

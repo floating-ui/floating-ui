@@ -1,16 +1,28 @@
 import type {Middleware, Placement} from '@floating-ui/react';
-import {hide} from '@floating-ui/react';
-import {autoPlacement, shift} from '@floating-ui/react';
 import {
   arrow,
   autoUpdate,
   FloatingArrow,
   offset,
   useFloating,
+  autoPlacement,
+  shift,
+  hide,
 } from '@floating-ui/react';
 import {useRef, useState} from 'react';
 
 import type {FloatingArrowProps} from '../../../src/components/FloatingArrow';
+
+const allPlacements: Placement[] = [
+  {side: 'top'} as const,
+  {side: 'bottom'} as const,
+  {side: 'right'} as const,
+  {side: 'left'} as const,
+].flatMap((placement) => [
+  {side: placement.side, align: 'center'} as const,
+  {side: placement.side, align: 'start'} as const,
+  {side: placement.side, align: 'end'} as const,
+]);
 
 const ROUND_D =
   'M0 20C0 20 2.06906 19.9829 5.91817 15.4092C7.49986 13.5236 8.97939 12.3809 10.0002 12.3809C11.0202 12.3809 12.481 13.6451 14.0814 15.5472C17.952 20.1437 20 20 20 20H0Z';
@@ -36,19 +48,21 @@ function Demo({
 
   const {
     floatingStyles,
-    placement: finalPlacement,
+    side: finalSide,
+    align: finalAlign,
     middlewareData,
     refs,
     context,
   } = useFloating({
-    placement: placementProp,
+    side: placementProp?.side,
+    align: placementProp?.align,
     open: isOpen,
     onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
     middleware: [offset(8), ...(middleware ?? []), arrow({element: arrowRef})],
   });
 
-  const edgeAlignment = placementProp?.split('-')[1];
+  const edgeAlign = placementProp?.align;
 
   return (
     <div>
@@ -60,7 +74,7 @@ function Demo({
           color: 'white',
         }}
       >
-        {finalPlacement}
+        {finalSide}-{finalAlign}
       </span>
       {isOpen && (
         <div
@@ -79,7 +93,7 @@ function Demo({
           <FloatingArrow
             context={context}
             ref={arrowRef}
-            staticOffset={edgeAlignment ? '15%' : null}
+            staticOffset={edgeAlign ? '15%' : null}
             {...arrowProps}
           />
         </div>
@@ -87,11 +101,6 @@ function Demo({
     </div>
   );
 }
-
-const allPlacements = ['top', 'bottom', 'right', 'left'].flatMap(
-  (placement) =>
-    [placement, `${placement}-start`, `${placement}-end`] as Array<Placement>,
-);
 
 export const Main = () => {
   const borderWidth = 1;
@@ -103,7 +112,7 @@ export const Main = () => {
       <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
-            key={placement}
+            key={JSON.stringify(placement)}
             placement={placement}
             arrowProps={{
               fill: 'rgba(0,0,0,0.75)',
@@ -118,7 +127,7 @@ export const Main = () => {
       <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
-            key={placement}
+            key={JSON.stringify(placement)}
             placement={placement}
             arrowProps={{tipRadius: 2}}
           />
@@ -128,7 +137,7 @@ export const Main = () => {
       <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
-            key={placement}
+            key={JSON.stringify(placement)}
             placement={placement}
             arrowProps={{tipRadius: 5}}
           />
@@ -140,7 +149,7 @@ export const Main = () => {
       <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
-            key={placement}
+            key={JSON.stringify(placement)}
             placement={placement}
             arrowProps={{
               fill: 'white',
@@ -162,7 +171,7 @@ export const Main = () => {
       <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
-            key={placement}
+            key={JSON.stringify(placement)}
             placement={placement}
             arrowProps={{
               width: 20,
@@ -186,7 +195,7 @@ export const Main = () => {
       <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
-            key={placement}
+            key={JSON.stringify(placement)}
             placement={placement}
             arrowProps={{
               className:
@@ -203,7 +212,7 @@ export const Main = () => {
       <div className="grid grid-cols-1 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[130rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
-            key={placement}
+            key={JSON.stringify(placement)}
             arrowProps={{
               fill: 'rgba(255,0,0)',
               staticOffset: undefined,
@@ -228,7 +237,7 @@ export const Main = () => {
       <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
-            key={placement}
+            key={JSON.stringify(placement)}
             arrowProps={{
               fill: 'rgba(255,0,0)',
             }}

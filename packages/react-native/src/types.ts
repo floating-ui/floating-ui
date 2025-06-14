@@ -1,13 +1,13 @@
 import type {
+  Align,
   ComputePositionReturn,
   Middleware,
-  Placement,
+  Side,
 } from '@floating-ui/core';
 import type * as React from 'react';
 
 export type {
-  AlignedPlacement,
-  Alignment,
+  Align,
   ArrowOptions,
   AutoPlacementOptions,
   Axis,
@@ -48,9 +48,13 @@ export type {
 
 export interface UseFloatingOptions {
   /**
-   * Where to place the floating element relative to the reference element.
+   * Which side to place the floating element against the reference element.
    */
-  placement?: Placement;
+  side?: Side;
+  /**
+   * How to align the floating element relative to specified side.
+   */
+  align?: Align;
   /**
    * Array of middleware objects to modify the positioning or provide data for
    * rendering.

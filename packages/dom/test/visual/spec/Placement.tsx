@@ -6,12 +6,17 @@ import {flushSync} from 'react-dom';
 import {Controls} from '../utils/Controls';
 import {allPlacements} from '../utils/allPlacements';
 import {useSize} from '../utils/useSize';
+import {stringifyPlacement} from '../utils/stringifyPlacement';
 
 export function Placement() {
   const [rtl, setRtl] = useState(false);
-  const [placement, setPlacement] = useState<PlacementType>('bottom');
+  const [placement, setPlacement] = useState<PlacementType>({
+    side: 'bottom',
+    align: 'center',
+  });
   const {refs, floatingStyles, update} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
   });
   const [size, handleSizeChange] = useSize();
@@ -55,14 +60,14 @@ export function Placement() {
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button
-            key={localPlacement}
+            key={stringifyPlacement(localPlacement)}
             data-testid={`placement-${localPlacement}`}
             onClick={() => setPlacement(localPlacement)}
             style={{
               backgroundColor: localPlacement === placement ? 'black' : '',
             }}
           >
-            {localPlacement}
+            {stringifyPlacement(localPlacement)}
           </button>
         ))}
       </Controls>

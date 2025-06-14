@@ -3,68 +3,84 @@ import {getPlacementList} from '../../src/middleware/autoPlacement';
 test('base placement', () => {
   expect(
     getPlacementList(null, false, [
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'top-start',
-      'right-end',
+      {side: 'top', align: 'center'},
+      {side: 'bottom', align: 'center'},
+      {side: 'left', align: 'center'},
+      {side: 'right', align: 'center'},
+      {side: 'top', align: 'start'},
+      {side: 'right', align: 'end'},
     ]),
-  ).toEqual(['top', 'bottom', 'left', 'right']);
+  ).toEqual([
+    {side: 'top', align: 'center'},
+    {side: 'bottom', align: 'center'},
+    {side: 'left', align: 'center'},
+    {side: 'right', align: 'center'},
+  ]);
 });
 
-test('start alignment without auto alignment', () => {
+test('start align without auto align', () => {
   expect(
     getPlacementList('start', false, [
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'top-start',
-      'right-end',
-      'left-start',
+      {side: 'top', align: 'center'},
+      {side: 'bottom', align: 'center'},
+      {side: 'left', align: 'center'},
+      {side: 'right', align: 'center'},
+      {side: 'top', align: 'start'},
+      {side: 'right', align: 'end'},
+      {side: 'left', align: 'start'},
     ]),
-  ).toEqual(['top-start', 'left-start']);
+  ).toEqual([
+    {side: 'top', align: 'start'},
+    {side: 'left', align: 'start'},
+  ]);
 });
 
-test('start alignment with auto alignment', () => {
+test('start align with auto align', () => {
   expect(
     getPlacementList('start', true, [
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'top-start',
-      'right-end',
-      'left-start',
+      {side: 'top', align: 'center'},
+      {side: 'bottom', align: 'center'},
+      {side: 'left', align: 'center'},
+      {side: 'right', align: 'center'},
+      {side: 'top', align: 'start'},
+      {side: 'right', align: 'end'},
+      {side: 'left', align: 'start'},
     ]),
-  ).toEqual(['top-start', 'left-start', 'right-end']);
+  ).toEqual([
+    {side: 'top', align: 'start'},
+    {side: 'left', align: 'start'},
+    {side: 'right', align: 'end'},
+  ]);
 });
 
-test('end alignment without auto alignment', () => {
+test('end align without auto align', () => {
   expect(
     getPlacementList('end', false, [
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'top-start',
-      'right-end',
-      'left-start',
+      {side: 'top', align: 'center'},
+      {side: 'bottom', align: 'center'},
+      {side: 'left', align: 'center'},
+      {side: 'right', align: 'center'},
+      {side: 'top', align: 'start'},
+      {side: 'right', align: 'end'},
+      {side: 'left', align: 'start'},
     ]),
-  ).toEqual(['right-end']);
+  ).toEqual([{side: 'right', align: 'end'}]);
 });
 
-test('end alignment with auto alignment', () => {
+test('end align with auto align', () => {
   expect(
     getPlacementList('end', true, [
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'top-start',
-      'right-end',
-      'left-start',
+      {side: 'top', align: 'center'},
+      {side: 'bottom', align: 'center'},
+      {side: 'left', align: 'center'},
+      {side: 'right', align: 'center'},
+      {side: 'top', align: 'start'},
+      {side: 'right', align: 'end'},
+      {side: 'left', align: 'start'},
     ]),
-  ).toEqual(['right-end', 'top-start', 'left-start']);
+  ).toEqual([
+    {side: 'right', align: 'end'},
+    {side: 'top', align: 'start'},
+    {side: 'left', align: 'start'},
+  ]);
 });

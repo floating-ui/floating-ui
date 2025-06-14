@@ -115,7 +115,8 @@ export const Main = () => {
     context,
     placement: resultantPlacement,
   } = useFloating({
-    placement: placement ?? 'bottom-start',
+    side: placement?.side,
+    align: placement?.align,
     open,
     onOpenChange: setOpen,
     // We don't want flipping to occur while searching, as the floating element

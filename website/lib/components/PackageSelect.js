@@ -351,7 +351,7 @@ export function PackageSelect() {
     strategy: 'fixed',
     placement: 'bottom-start',
     middleware: [
-      offset({mainAxis: 10, alignmentAxis: -5}),
+      offset({mainAxis: 10, alignAxis: -5}),
       flip({padding: 10}),
       size({
         padding: 10,

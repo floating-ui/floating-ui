@@ -150,7 +150,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   } = props;
 
   const placement = context.placement;
-  const side = placement.split('-')[0] as Side;
+  const side = placement.side;
   const fnArgs = React.useMemo(() => ({side, placement}), [side, placement]);
   const isNumberDuration = typeof duration === 'number';
   const openDuration = (isNumberDuration ? duration : duration.open) || 0;

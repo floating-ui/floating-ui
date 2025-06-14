@@ -5,6 +5,8 @@ import type {
   Dimensions,
   ElementRects,
   Placement,
+  Align,
+  Side,
   Rect,
   SideObject,
   Strategy,
@@ -56,7 +58,7 @@ export interface MiddlewareData {
   [key: string]: any;
   arrow?: Partial<Coords> & {
     centerOffset: number;
-    alignmentOffset?: number;
+    alignOffset?: number;
   };
   autoPlacement?: {
     index?: number;
@@ -90,9 +92,14 @@ export interface ComputePositionConfig {
    */
   platform: Platform;
   /**
-   * Where to place the floating element relative to the reference element.
+   * The side where the floating element should appear relative to the reference element.
+   * @default 'bottom'
    */
-  placement?: Placement;
+  side?: Side;
+  /**
+   * How the floating element should align relative to the side. The default is 'center'.
+   */
+  align?: Align;
   /**
    * The strategy to use when positioning the floating element.
    */
@@ -106,9 +113,13 @@ export interface ComputePositionConfig {
 
 export interface ComputePositionReturn extends Coords {
   /**
-   * The final chosen placement of the floating element.
+   * The final chosen side of the floating element.
    */
-  placement: Placement;
+  side: Side;
+  /**
+   * The final chosen align.
+   */
+  align: Align;
   /**
    * The strategy used to position the floating element.
    */
@@ -132,7 +143,8 @@ export interface MiddlewareReturn extends Partial<Coords> {
   reset?:
     | boolean
     | {
-        placement?: Placement;
+        side?: Side;
+        align?: Align;
         rects?: boolean | ElementRects;
       };
 }
@@ -152,8 +164,14 @@ export interface Elements {
 }
 
 export interface MiddlewareState extends Coords {
-  initialPlacement: Placement;
-  placement: Placement;
+  /** Current chosen side */
+  side: Side;
+  /** Current chosen align */
+  align: Align;
+  /** Initial side */
+  initialSide: Side;
+  /** Initial align */
+  initialAlign: Align;
   strategy: Strategy;
   middlewareData: MiddlewareData;
   elements: Elements;
