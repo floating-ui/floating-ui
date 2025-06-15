@@ -5,7 +5,6 @@ import {
   type Padding,
   type SideObject,
 } from './utils';
-
 import type {
   Boundary,
   Derivable,

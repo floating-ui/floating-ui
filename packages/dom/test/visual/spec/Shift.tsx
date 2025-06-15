@@ -9,9 +9,9 @@ import {
 } from '@floating-ui/react-dom';
 import {useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
+import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 const BOOLS = [true, false];
 const LIMIT_SHIFT_OFFSET: Array<{
@@ -31,7 +31,10 @@ const LIMIT_SHIFT_OFFSET: Array<{
 ];
 
 export function Shift() {
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const [mainAxis, setMainAxis] = useState(true);
   const [crossAxis, setCrossAxis] = useState(false);
   const [limitShift, setLimitShift] = useState(false);
@@ -43,7 +46,8 @@ export function Shift() {
     useState<LimitShiftOptions['offset']>(0);
   const [offsetValue, setOffsetValue] = useState(0);
   const {x, y, strategy, refs, update} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(offsetValue),
@@ -93,20 +97,10 @@ export function Shift() {
       </div>
 
       <h2>placement</h2>
-      <Controls>
-        {allPlacements.map((localPlacement) => (
-          <button
-            key={localPlacement}
-            data-testid={`placement-${localPlacement}`}
-            onClick={() => setPlacement(localPlacement)}
-            style={{
-              backgroundColor: localPlacement === placement ? 'black' : '',
-            }}
-          >
-            {localPlacement}
-          </button>
-        ))}
-      </Controls>
+      <AllPlacementsControls
+        placement={placement}
+        setPlacement={setPlacement}
+      />
 
       <h2>offset</h2>
       <Controls>

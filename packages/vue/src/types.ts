@@ -1,17 +1,17 @@
 import type {
+  Align,
   FloatingElement,
   Middleware,
   MiddlewareData,
   Padding,
-  Placement,
   ReferenceElement,
+  Side,
   Strategy,
 } from '@floating-ui/dom';
 import type {ComponentPublicInstance, Ref} from 'vue-demi';
 
 export type {
-  AlignedPlacement,
-  Alignment,
+  Align,
   AutoPlacementOptions,
   AutoUpdateOptions,
   Axis,
@@ -65,10 +65,15 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
      */
     open?: MaybeReadonlyRefOrGetter<boolean | undefined>;
     /**
-     * Where to place the floating element relative to its reference element.
+     * The side where the floating element is placed relative to the reference element.
      * @default 'bottom'
      */
-    placement?: MaybeReadonlyRefOrGetter<Placement | undefined>;
+    side?: MaybeReadonlyRefOrGetter<Side | undefined>;
+    /**
+     * How the floating element aligns to the reference element on the specified side.
+     * @default 'center'
+     */
+    align?: MaybeReadonlyRefOrGetter<Align | undefined>;
     /**
      * The type of CSS position property to use.
      * @default 'absolute'
@@ -108,7 +113,11 @@ export type UseFloatingReturn = {
   /**
    * The stateful placement, which can be different from the initial `placement` passed as options.
    */
-  placement: Readonly<Ref<Placement>>;
+  side: Readonly<Ref<Side>>;
+  /**
+   * The stateful alignment, which can be different from the initial `align` passed as options.
+   */
+  align: Readonly<Ref<Align>>;
   /**
    * The type of CSS position property to use.
    */

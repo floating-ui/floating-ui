@@ -5,7 +5,7 @@ import {scroll} from './utils/scroll';
 
 test('top-start', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-start"]`);
+  await click(page, `[data-testid="align-start"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `top-start.png`,
@@ -14,7 +14,7 @@ test('top-start', async ({page}) => {
 
 test('bottom-start', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-start"]`);
+  await click(page, `[data-testid="align-start"]`);
 
   await scroll(page, {y: 610});
 
@@ -25,7 +25,7 @@ test('bottom-start', async ({page}) => {
 
 test('right-start', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-start"]`);
+  await click(page, `[data-testid="align-start"]`);
 
   await scroll(page, {x: 550});
 
@@ -36,7 +36,7 @@ test('right-start', async ({page}) => {
 
 test('left-start', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-start"]`);
+  await click(page, `[data-testid="align-start"]`);
 
   await scroll(page, {x: 550});
 
@@ -47,7 +47,7 @@ test('left-start', async ({page}) => {
 
 test('top', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="align-center"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `top.png`,
@@ -56,7 +56,7 @@ test('top', async ({page}) => {
 
 test('bottom', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="align-center"]`);
 
   await scroll(page, {y: 650});
 
@@ -67,7 +67,7 @@ test('bottom', async ({page}) => {
 
 test('right', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="align-center"]`);
 
   await scroll(page, {x: 600});
 
@@ -78,7 +78,7 @@ test('right', async ({page}) => {
 
 test('left', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="align-center"]`);
 
   await scroll(page, {x: 400});
 
@@ -89,7 +89,7 @@ test('left', async ({page}) => {
 
 test('top-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-end"]`);
+  await click(page, `[data-testid="align-end"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `top-end.png`,
@@ -98,7 +98,7 @@ test('top-end', async ({page}) => {
 
 test('bottom-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-end"]`);
+  await click(page, `[data-testid="align-end"]`);
 
   await scroll(page, {y: 610});
 
@@ -109,7 +109,7 @@ test('bottom-end', async ({page}) => {
 
 test('right-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-end"]`);
+  await click(page, `[data-testid="align-end"]`);
 
   await scroll(page, {x: 550});
 
@@ -120,7 +120,7 @@ test('right-end', async ({page}) => {
 
 test('left-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-end"]`);
+  await click(page, `[data-testid="align-end"]`);
 
   await scroll(page, {x: 550});
 
@@ -131,7 +131,7 @@ test('left-end', async ({page}) => {
 
 test('only top, bottom allowed', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="align-center"]`);
   await click(page, `[data-testid="allowedPlacements-top,bottom"]`);
 
   await scroll(page, {x: 700, y: 650});
@@ -149,7 +149,7 @@ test('only top, bottom allowed', async ({page}) => {
 
 test('only left, right allowed', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="align-center"]`);
   await click(page, `[data-testid="allowedPlacements-left,right"]`);
 
   await scroll(page, {x: 550, y: 750});
@@ -232,7 +232,7 @@ test('placement does not reset', async ({page}) => {
 
 test('placement is not sticky', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="align-center"]`);
   await click(page, `[data-testid="shift-true"]`);
 
   await scroll(page, {x: 700, y: 705});

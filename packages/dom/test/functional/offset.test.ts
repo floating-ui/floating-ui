@@ -2,8 +2,9 @@ import {expect, test} from '@playwright/test';
 
 import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
+import {stringifyPlacement} from '../visual/utils/stringifyPlacement';
 
-allPlacements.forEach((placement) => {
+allPlacements.map(stringifyPlacement).forEach((placement) => {
   [
     '0',
     '10',

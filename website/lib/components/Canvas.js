@@ -34,7 +34,8 @@ export function Canvas() {
         getDimensions: (element) => element,
         getClippingRect: () => ({x: 0, y: 0, width, height}),
       },
-      placement: 'top-start',
+      side: 'top',
+      align: 'start',
       middleware: [
         offset(5),
         flip({padding: 5}),

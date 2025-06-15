@@ -2,15 +2,19 @@ import type {Placement} from '@floating-ui/core';
 import {autoUpdate, shift, useFloating} from '@floating-ui/react-dom';
 import {useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useSize} from '../utils/useSize';
+import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 export function Scrollbars() {
   const [rtl, setRtl] = useState(false);
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const {x, y, refs, strategy} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [shift({crossAxis: true, altBoundary: true})],
   });
@@ -54,20 +58,10 @@ export function Scrollbars() {
         />
       </Controls>
 
-      <Controls>
-        {allPlacements.map((localPlacement) => (
-          <button
-            key={localPlacement}
-            data-testid={`placement-${localPlacement}`}
-            onClick={() => setPlacement(localPlacement)}
-            style={{
-              backgroundColor: localPlacement === placement ? 'black' : '',
-            }}
-          >
-            {localPlacement}
-          </button>
-        ))}
-      </Controls>
+      <AllPlacementsControls
+        placement={placement}
+        setPlacement={setPlacement}
+      />
 
       <h2>RTL</h2>
       <Controls>

@@ -122,9 +122,9 @@ These are the options you can pass to `flip(){:js}`.
 ```ts
 interface FlipOptions extends DetectOverflowOptions {
   mainAxis?: boolean;
-  crossAxis?: boolean | 'alignment';
+  crossAxis?: boolean | 'align';
   fallbackAxisSideDirection?: 'none' | 'start' | 'end';
-  flipAlignment?: boolean;
+  flipAlign?: boolean;
   fallbackPlacements?: Array<Placement>;
   fallbackStrategy?: 'bestFit' | 'initialPlacement';
 }
@@ -374,24 +374,24 @@ when using this option.
 
 </Notice>
 
-### `flipAlignment{:.key}`
+### `flipAlign{:.key}`
 
 default: `true{:js}`
 
-When an alignment is specified, e.g. `'top-start'{:js}` instead
-of just `'top'{:js}`, this will flip to `'top-end'{:js}` if
+When an align is specified, e.g. `'top-start'{:js}` instead of
+just `'top'{:js}`, this will flip to `'top-end'{:js}` if
 `start{:.string}` doesn't fit.
 
 ```js
 flip({
-  flipAlignment: false,
+  flipAlign: false,
 });
 ```
 
 When using this with the `shift(){:js}` middleware, ensure
 `flip(){:js}` is placed **before** `shift(){:js}` in your
-middleware array. This ensures the `flipAlignment{:.key}` logic
-can act before `shift(){:js}`'s does.
+middleware array. This ensures the `flipAlign{:.key}` logic can
+act before `shift(){:js}`'s does.
 
 ### `fallbackPlacements{:.key}`
 
@@ -438,7 +438,7 @@ In the above example, if `placement{:.key}` is set to
 </div>
 
 <Notice gap="above">
-  The options `flipAlignment{:.key}` and
+  The options `flipAlign{:.key}` and
   `fallbackAxisSideDirection{:.key}` no longer have an effect if
   this option is explicitly specified, as they are only shortcuts to
   create a computed list of fallback placements. To ensure your
@@ -498,10 +498,10 @@ not necessarily the one you passed in as the "preferred" one.
 
 ```js
 computePosition(referenceEl, floatingEl, {
-  placement: 'bottom',
+  side: 'bottom',
   middleware: [flip()],
-}).then(({placement}) => {
-  console.log(placement); // 'top' or 'bottom'
+}).then(({side}) => {
+  console.log(side); // 'top' or 'bottom'
 });
 ```
 
@@ -510,9 +510,9 @@ computePosition(referenceEl, floatingEl, {
 <ShowFor packages={['react', 'react-dom', 'react-native']}>
 
 ```js
-// placement can be 'top' or 'bottom'
-const {placement} = useFloating({
-  placement: 'bottom',
+// side can be 'top' or 'bottom'
+const {side} = useFloating({
+  side: 'bottom',
   middleware: [flip()],
 });
 ```
@@ -522,9 +522,9 @@ const {placement} = useFloating({
 <ShowFor packages={['vue']}>
 
 ```js
-// placement can be 'top' or 'bottom'
-const {placement} = useFloating(reference, floating, {
-  placement: 'bottom',
+// side can be 'top' or 'bottom'
+const {side} = useFloating(reference, floating, {
+  side: 'bottom',
   middleware: [flip()],
 });
 ```
@@ -541,13 +541,13 @@ const middleware = [offset(5)];
 const flipMiddleware = flip({
   // Ensure we flip to the perpendicular axis if it doesn't fit
   // on narrow viewports.
-  crossAxis: 'alignment',
+  crossAxis: 'align',
   fallbackAxisSideDirection: 'end', // or 'start'
 });
 const shiftMiddleware = shift();
 
-// Prioritize flip over shift for edge-aligned placements only.
-if (placement.includes('-')) {
+// Prioritize flip over shift for edge-aligned sides only.
+if (align !== 'center') {
   middleware.push(flipMiddleware, shiftMiddleware);
 } else {
   middleware.push(shiftMiddleware, flipMiddleware);

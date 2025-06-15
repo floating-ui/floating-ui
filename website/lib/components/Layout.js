@@ -406,7 +406,7 @@ function TableOfContents({anchors, hash}) {
 
   const {floatingStyles, refs, context} = useFloating({
     open: renderCircle,
-    placement: 'left',
+    side: 'left',
     strategy: 'fixed',
     whileElementsMounted: autoUpdate,
     transform: false,

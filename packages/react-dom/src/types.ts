@@ -9,8 +9,7 @@ export type {ArrowOptions} from './arrow';
 export {arrow} from './arrow';
 export {useFloating} from './useFloating';
 export type {
-  AlignedPlacement,
-  Alignment,
+  Align,
   AutoPlacementOptions,
   AutoUpdateOptions,
   Axis,
@@ -82,7 +81,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
        * Update the position of the floating element, re-rendering the component
        * if required.
        */
-      update: () => void;
+      update: (flushSync?: boolean) => void;
       /**
        * Pre-configured positioning styles to apply to the floating element.
        */

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {useLatestRef, useModernLayoutEffect} from '../utils/hooks';
-import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
+import type {Align, FloatingContext, ReferenceType, Side} from '../types';
 
 type Duration = number | {open?: number; close?: number};
 
@@ -106,7 +106,7 @@ export function useTransitionStatus(
 
 type CSSStylesProperty =
   | React.CSSProperties
-  | ((params: {side: Side; placement: Placement}) => React.CSSProperties);
+  | ((params: {side: Side; align: Align}) => React.CSSProperties);
 
 export interface UseTransitionStylesProps extends UseTransitionStatusProps {
   /**
@@ -149,9 +149,10 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
     duration = 250,
   } = props;
 
-  const placement = context.placement;
-  const side = placement.split('-')[0] as Side;
-  const fnArgs = React.useMemo(() => ({side, placement}), [side, placement]);
+  const fnArgs = React.useMemo(
+    () => ({side: context.side, align: context.align}),
+    [context.side, context.align],
+  );
   const isNumberDuration = typeof duration === 'number';
   const openDuration = (isNumberDuration ? duration : duration.open) || 0;
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;

@@ -80,9 +80,10 @@ export const MenuComponent = React.forwardRef<
     nodeId,
     open: isOpen,
     onOpenChange: setIsOpen,
-    placement: isNested ? 'right-start' : 'bottom-start',
+    side: isNested ? 'right' : 'bottom',
+    align: 'start',
     middleware: [
-      offset({mainAxis: isNested ? 0 : 4, alignmentAxis: isNested ? -4 : 0}),
+      offset({mainAxis: isNested ? 0 : 4, alignAxis: isNested ? -4 : 0}),
       flip(),
       shift(),
     ],

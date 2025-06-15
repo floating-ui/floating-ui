@@ -41,7 +41,8 @@ export const Main = ({
   const {floatingStyles, refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
-    placement: 'bottom-start',
+    side: 'bottom',
+    align: 'start',
   });
 
   const disabledIndices = [0, 1, 2, 3, 4, 5, 6, 9, 14, 23, 35];

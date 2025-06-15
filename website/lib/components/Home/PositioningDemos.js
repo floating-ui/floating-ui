@@ -71,7 +71,10 @@ function GridItem({
 }
 
 export function Placement() {
-  const [placement, setPlacement] = useState('top');
+  const [placement, setPlacement] = useState({
+    side: 'top',
+    align: 'center',
+  });
 
   return (
     <GridItem
@@ -88,104 +91,119 @@ export function Placement() {
         >
           {[
             {
-              placement: 'top',
+              side: 'top',
+              align: 'center',
               styles: {
                 left: 'calc(50% - 10px - 1rem)',
                 top: 0,
               },
             },
             {
-              placement: 'top-start',
+              side: 'top',
+              align: 'start',
               styles: {
                 left: 'calc(50% - 70px - 1rem)',
                 top: 0,
               },
             },
             {
-              placement: 'top-end',
+              side: 'top',
+              align: 'end',
               styles: {
                 left: 'calc(50% + 50px - 1rem)',
                 top: 0,
               },
             },
             {
-              placement: 'bottom',
+              side: 'bottom',
+              align: 'center',
               styles: {
                 left: 'calc(50% - 10px - 1rem)',
                 bottom: 0,
               },
             },
             {
-              placement: 'bottom-start',
+              side: 'bottom',
+              align: 'start',
               styles: {
                 left: 'calc(50% - 70px - 1rem)',
                 bottom: 0,
               },
             },
             {
-              placement: 'bottom-end',
+              side: 'bottom',
+              align: 'end',
               styles: {
                 left: 'calc(50% + 50px - 1rem)',
                 bottom: 0,
               },
             },
             {
-              placement: 'right',
+              side: 'right',
+              align: 'center',
               styles: {
                 top: 'calc(50% - 10px - 1rem)',
                 right: 'min(50px, 5%)',
               },
             },
             {
-              placement: 'right-start',
+              side: 'right',
+              align: 'start',
               styles: {
                 top: 'calc(50% - 70px - 1rem)',
                 right: 'min(50px, 5%)',
               },
             },
             {
-              placement: 'right-end',
+              side: 'right',
+              align: 'end',
               styles: {
                 top: 'calc(50% + 50px - 1rem)',
                 right: 'min(50px, 5%)',
               },
             },
             {
-              placement: 'left',
+              side: 'left',
+              align: 'center',
               styles: {
                 top: 'calc(50% - 10px - 1rem)',
                 left: 'min(50px, 5%)',
               },
             },
             {
-              placement: 'left-start',
+              side: 'left',
+              align: 'start',
               styles: {
                 top: 'calc(50% - 70px - 1rem)',
                 left: 'min(50px, 5%)',
               },
             },
             {
-              placement: 'left-end',
+              side: 'left',
+              align: 'end',
               styles: {
                 top: 'calc(50% + 50px - 1rem)',
                 left: 'min(50px, 5%)',
               },
             },
-          ].map(({placement: p, styles}) => (
+          ].map(({side, align, styles}) => (
             <button
-              key={p}
+              key={`${side}-${align}`}
               className="absolute p-4 transition hover:scale-125 cursor-default"
               style={styles}
-              onClick={() => setPlacement(p)}
-              aria-label={p}
+              onClick={() => setPlacement({side, align})}
+              aria-label={`${side}-${align}`}
             >
               <div
                 className={classNames(
                   'h-5 w-5 rounded-full border-2 border-solid',
                   {
                     'border-gray-800 bg-gray-800':
-                      placement === p,
-                    'border-gray-900': placement !== p,
+                      placement.side === side &&
+                      placement.align === align,
+                    'border-gray-900':
+                      placement.side !== side ||
+                      placement.align !== align,
                   },
                 )}
               />
@@ -197,17 +215,17 @@ export function Placement() {
                 className="text-center text-sm font-bold"
                 style={{
                   minWidth:
-                    ['top', 'bottom'].includes(
-                      placement.split('-')[0],
-                    ) && placement.includes('-')
+                    ['top', 'bottom'].includes(placement.side) &&
+                    placement.align !== 'center'
                       ? '8rem'
                       : undefined,
                 }}
               >
-                {placement}
+                {placement.side} {placement.align}
               </div>
             }
-            placement={placement}
+            side={placement.side}
+            align={placement.align}
             middleware={[{name: 'offset', options: 5}]}
           >
             <Reference />
@@ -245,7 +263,7 @@ export function Shift() {
             shadow={false}
           >
             <Floating
-              placement="right"
+              side="right"
               middleware={[
                 {name: 'offset', options: 5},
                 {
@@ -307,7 +325,7 @@ export function Flip() {
                   Tooltip
                 </span>
               }
-              placement="top"
+              side="top"
               middleware={[
                 {name: 'offset', options: 5},
                 {
@@ -388,7 +406,7 @@ export function Arrow() {
             shadow={false}
           >
             <Floating
-              placement="right"
+              side="right"
               content={<div className="h-[12rem] w-24" />}
               middleware={[
                 {name: 'offset', options: 16},
@@ -421,7 +439,8 @@ export function Virtual() {
   const boundaryRef = useRef();
   const pointerTypeRef = useRef();
   const {x, y, refs, update} = useFloating({
-    placement: 'bottom-start',
+    side: 'bottom',
+    align: 'start',
     strategy: 'fixed',
     middleware: [
       offset({mainAxis: 10, crossAxis: 10}),

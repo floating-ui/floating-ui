@@ -1,11 +1,12 @@
 import {expect, test} from '@playwright/test';
 
 import {allPlacements} from '../visual/utils/allPlacements';
+import {stringifyPlacement} from '../visual/utils/stringifyPlacement';
 import {click} from './utils/click';
 import {resize} from './utils/resize';
 import {scroll} from './utils/scroll';
 
-allPlacements.forEach((placement) => {
+allPlacements.map(stringifyPlacement).forEach((placement) => {
   test(`correctly sized for placement ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/size');
     await click(page, `[data-testid="placement-${placement}"]`);

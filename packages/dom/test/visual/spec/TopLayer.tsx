@@ -75,7 +75,7 @@ function StackedOnDialog({children, withTransform, strategy}: Props) {
   const {x, y, refs} = useFloating({
     strategy,
     whileElementsMounted: autoUpdate,
-    placement: 'bottom',
+    side: 'bottom',
     middleware: [flip()],
   });
 
@@ -131,7 +131,7 @@ function StackedOnPopover({children, withTransform, strategy}: Props) {
   const {x, y, refs} = useFloating({
     strategy,
     whileElementsMounted: autoUpdate,
-    placement: 'bottom',
+    side: 'bottom',
     middleware: [flip()],
   });
 
@@ -203,7 +203,7 @@ export function TopLayer() {
   const {refs, floatingStyles, x, y} = useFloating({
     strategy,
     whileElementsMounted: autoUpdate,
-    placement: 'top',
+    side: 'top',
     middleware: [collision && flip()],
   });
 

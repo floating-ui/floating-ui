@@ -40,9 +40,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   const whileElementsMountedOption = options.whileElementsMounted;
   const openOption = computed(() => toValue(options.open) ?? true);
   const middlewareOption = computed(() => toValue(options.middleware));
-  const placementOption = computed(
-    () => toValue(options.placement) ?? 'bottom',
-  );
+  const sideOption = computed(() => toValue(options.side) ?? 'bottom');
+  const alignOption = computed(() => toValue(options.align) ?? 'center');
   const strategyOption = computed(
     () => toValue(options.strategy) ?? 'absolute',
   );
@@ -52,7 +51,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   const x = ref(0);
   const y = ref(0);
   const strategy = ref(strategyOption.value);
-  const placement = ref(placementOption.value);
+  const side = ref(sideOption.value);
+  const align = ref(alignOption.value);
   const middlewareData = shallowRef<MiddlewareData>({});
   const isPositioned = ref(false);
   const floatingStyles = computed(() => {
@@ -98,7 +98,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       floatingElement.value,
       {
         middleware: middlewareOption.value,
-        placement: placementOption.value,
+        side: sideOption.value,
+        align: alignOption.value,
         strategy: strategyOption.value,
       },
     );
@@ -106,7 +107,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     x.value = position.x;
     y.value = position.y;
     strategy.value = position.strategy;
-    placement.value = position.placement;
+    side.value = position.side;
+    align.value = position.align;
     middlewareData.value = position.middlewareData;
     /**
      * The floating element's position may be recomputed while it's closed
@@ -149,7 +151,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   }
 
   watch(
-    [middlewareOption, placementOption, strategyOption, openOption],
+    [middlewareOption, sideOption, alignOption, strategyOption, openOption],
     update,
     {
       flush: 'sync',
@@ -179,7 +181,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     x: shallowReadonly(x),
     y: shallowReadonly(y),
     strategy: shallowReadonly(strategy),
-    placement: shallowReadonly(placement),
+    side: shallowReadonly(side),
+    align: shallowReadonly(align),
     middlewareData: shallowReadonly(middlewareData),
     isPositioned: shallowReadonly(isPositioned),
     floatingStyles,

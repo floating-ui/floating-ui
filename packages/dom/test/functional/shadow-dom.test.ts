@@ -3,9 +3,10 @@ import {expect, test} from '@playwright/test';
 import {allPlacements} from '../visual/utils/allPlacements';
 import {useCases} from '../visual/utils/shadowDOM';
 import {click} from './utils/click';
+import {stringifyPlacement} from '../visual/utils/stringifyPlacement';
 
 useCases.forEach((useCase) => {
-  allPlacements.forEach((placement) => {
+  allPlacements.map(stringifyPlacement).forEach((placement) => {
     ['static', 'relative', 'absolute'].forEach((cssPosition) => {
       ['absolute', 'fixed'].forEach((strategy) => {
         [true, false].forEach((withTransform) => {

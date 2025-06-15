@@ -217,7 +217,8 @@ export function Main() {
   const [blockSelection, setBlockSelection] = useState(false);
 
   const {floatingStyles, refs, context} = useFloating({
-    placement: 'bottom-start',
+    side: 'bottom',
+    align: 'start',
     open,
     onOpenChange: setOpen,
     whileElementsMounted: autoUpdate,

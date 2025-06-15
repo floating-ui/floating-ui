@@ -8,13 +8,16 @@ import {
 } from '@floating-ui/react-dom';
 import {useRef, useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 import {flushSync} from 'react-dom';
+import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 export function Arrow() {
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const arrowRef = useRef(null);
   const [padding, setPadding] = useState(0);
   const [floatingSize, setFloatingSize] = useState(75);
@@ -26,14 +29,15 @@ export function Arrow() {
 
   const {
     update,
-    placement: resultantPlacement,
+    side: renderedSide,
     middlewareData: {
       arrow: {x: arrowX, y: arrowY, centerOffset: centerOffsetValue} = {},
     },
     refs,
     floatingStyles,
   } = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [
       addOffset && offset(20),
@@ -49,7 +53,7 @@ export function Arrow() {
     bottom: 'top',
   };
 
-  const staticSide = oppositeSidesMap[resultantPlacement.split('-')[0]];
+  const staticSide = oppositeSidesMap[renderedSide];
 
   const {scrollRef} = useScroll({refs, update});
 
@@ -202,20 +206,10 @@ export function Arrow() {
       </Controls>
 
       <h2>Placement</h2>
-      <Controls>
-        {allPlacements.map((localPlacement) => (
-          <button
-            key={localPlacement}
-            data-testid={`placement-${localPlacement}`}
-            onClick={() => setPlacement(localPlacement)}
-            style={{
-              backgroundColor: localPlacement === placement ? 'black' : '',
-            }}
-          >
-            {localPlacement}
-          </button>
-        ))}
-      </Controls>
+      <AllPlacementsControls
+        placement={placement}
+        setPlacement={setPlacement}
+      />
 
       <h2>SVG</h2>
       <Controls>
@@ -266,12 +260,12 @@ export function Arrow() {
               if (bool) {
                 setReferenceSize(25);
                 setFloatingSize(125);
-                setPlacement('left-end');
+                setPlacement({side: 'left', align: 'end'});
                 setPadding(25);
               } else {
                 setReferenceSize(125);
                 setFloatingSize(75);
-                setPlacement('bottom');
+                setPlacement({side: 'bottom', align: 'center'});
                 setPadding(0);
               }
             }}

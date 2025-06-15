@@ -70,7 +70,8 @@ function Select({
   );
 
   const {refs, floatingStyles, context} = useFloating({
-    placement: 'bottom-start',
+    side: 'bottom',
+    align: 'start',
     open: isOpen,
     onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,

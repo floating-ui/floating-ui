@@ -1,11 +1,12 @@
-import type {Placement, Strategy} from '@floating-ui/dom';
+import type {Placement, Strategy, Side, Align} from '@floating-ui/dom';
 import {autoUpdate, computePosition, platform} from '@floating-ui/dom';
 import type {HTMLAttributes} from 'react';
 
 interface FloatingUICustomElement {
   reference: HTMLElement;
   floating: HTMLElement;
-  placement: Placement;
+  side: Side;
+  align: Align;
   strategy: Strategy;
   polyfill: string;
   cleanup: () => void;
@@ -39,12 +40,13 @@ export function defineElements(): void {
       implements FloatingUICustomElement
     {
       static get observedAttributes() {
-        return ['placement', 'strategy', 'style', 'polyfill'];
+        return ['side', 'align', 'strategy', 'style', 'polyfill'];
       }
 
       reference: HTMLElement;
       floating: HTMLElement;
-      placement: Placement = defaultOptions.placement;
+      side: Placement['side'] = defaultOptions.side;
+      align: Placement['align'] = defaultOptions.align;
       strategy: Strategy = defaultOptions.strategy;
       polyfill = 'false';
       cleanup!: () => void;
@@ -60,11 +62,16 @@ export function defineElements(): void {
       }
 
       attributeChangedCallback<
-        N extends Extract<keyof this, 'placement' | 'strategy' | 'polyfill'>,
-        V extends Placement | Strategy,
+        N extends Extract<
+          keyof this,
+          'side' | 'align' | 'strategy' | 'polyfill'
+        >,
+        V extends Placement['side'] | Placement['align'] | Strategy,
       >(name: N, _oldValue: V, value: V): void {
-        if (name === 'placement') {
-          this.placement = value as Placement;
+        if (name === 'side') {
+          this.side = value as Side;
+        } else if (name === 'align') {
+          this.align = value as Align;
         } else if (name === 'strategy') {
           this.strategy = value as Strategy;
           this.floating.style.position = value;
@@ -89,13 +96,14 @@ export function defineElements(): void {
     deepHostChildTag,
     class DeepHostChild extends HTMLElement implements FloatingUICustomElement {
       static get observedAttributes() {
-        return ['placement', 'strategy', 'style', 'polyfill'];
+        return ['side', 'align', 'strategy', 'style', 'polyfill'];
       }
 
       container: HTMLElement;
       reference: HTMLElement;
       floating: HTMLElement;
-      placement: Placement = defaultOptions.placement;
+      side: Placement['side'] = defaultOptions.side;
+      align: Placement['align'] = defaultOptions.align;
       strategy: Strategy = defaultOptions.strategy;
       polyfill = 'false';
       cleanup!: () => void;
@@ -113,11 +121,16 @@ export function defineElements(): void {
       }
 
       attributeChangedCallback<
-        N extends Extract<keyof this, 'placement' | 'strategy' | 'polyfill'>,
-        V extends Placement | Strategy,
+        N extends Extract<
+          keyof this,
+          'side' | 'align' | 'strategy' | 'polyfill'
+        >,
+        V extends Placement['side'] | Placement['align'] | Strategy,
       >(name: N, _oldValue: V, value: V): void {
-        if (name === 'placement') {
-          this.placement = value as Placement;
+        if (name === 'side') {
+          this.side = value as Side;
+        } else if (name === 'align') {
+          this.align = value as Align;
         } else if (name === 'strategy') {
           this.strategy = value as Strategy;
           this.floating.style.position = value;
@@ -162,12 +175,13 @@ export function defineElements(): void {
       implements FloatingUICustomElement
     {
       static get observedAttributes() {
-        return ['placement', 'strategy', 'style', 'polyfill'];
+        return ['side', 'align', 'strategy', 'style', 'polyfill'];
       }
 
       reference!: HTMLElement;
       floating: HTMLElement;
-      placement: Placement = defaultOptions.placement;
+      side: Placement['side'] = defaultOptions.side;
+      align: Placement['align'] = defaultOptions.align;
       strategy: Strategy = defaultOptions.strategy;
       polyfill = 'false';
       cleanup!: () => void;
@@ -182,11 +196,16 @@ export function defineElements(): void {
       }
 
       attributeChangedCallback<
-        N extends Extract<keyof this, 'placement' | 'strategy' | 'polyfill'>,
-        V extends Placement | Strategy,
+        N extends Extract<
+          keyof this,
+          'side' | 'align' | 'strategy' | 'polyfill'
+        >,
+        V extends Placement['side'] | Placement['align'] | Strategy,
       >(name: N, _oldValue: V, value: V): void {
-        if (name === 'placement') {
-          this.placement = value as Placement;
+        if (name === 'side') {
+          this.side = value as Side;
+        } else if (name === 'align') {
+          this.align = value as Align;
         } else if (name === 'strategy') {
           this.strategy = value as Strategy;
           this.floating.style.position = value;
@@ -243,12 +262,14 @@ function createFloatingElement(): HTMLDivElement {
 
 const defaultOptions = {
   strategy: 'absolute',
-  placement: 'bottom-end',
+  side: 'bottom',
+  align: 'end',
 } as const;
 
 async function position({
   floating,
-  placement,
+  side,
+  align,
   reference,
   strategy,
   polyfill,
@@ -258,7 +279,8 @@ async function position({
   }
 
   const {x, y} = computePosition(reference, floating, {
-    placement,
+    side,
+    align,
     strategy,
     platform: {
       ...platform,

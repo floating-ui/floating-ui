@@ -101,38 +101,45 @@ interface UseFloatingOptions {
 
 </ShowFor>
 
-### `placement{:.key}`
+### `side{:.key}`
 
 default: `'bottom'{:js}`
 
-The placement of the floating element relative to the reference
-element.
+The side where the floating element is placed relative to the
+reference element.
 
 ```js
 useFloating({
-  placement: 'left',
+  side: 'left',
 });
 ```
 
-12 strings are available:
+4 strings are available:
 
 ```ts
-type Placement =
-  | 'top'
-  | 'top-start'
-  | 'top-end'
-  | 'right'
-  | 'right-start'
-  | 'right-end'
-  | 'bottom'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'left'
-  | 'left-start'
-  | 'left-end';
+type Side = 'top' | 'right' | 'bottom' | 'left';
 ```
 
-The `-start{:.string}` and `-end{:.string}` alignments are
+### `align{:.key}`
+
+default: `'center'{:js}`
+
+How the floating element aligns to the reference element on the
+specified side.
+
+```js
+useFloating({
+  align: 'start',
+});
+```
+
+3 strings are available:
+
+```ts
+type Align = 'center' | 'start' | 'end';
+```
+
+The `start{:.string}` and `end{:.string}` aligns are
 [logical](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties)
 and will adapt to the writing direction (e.g. RTL) as expected.
 
@@ -458,7 +465,8 @@ The Hook returns the following type:
 ```ts
 interface UseFloatingReturn {
   context: FloatingContext;
-  placement: Placement;
+  side: Side;
+  align: Align;
   strategy: Strategy;
   x: number;
   y: number;
@@ -499,16 +507,28 @@ React tree than the one `useFloating(){:js}` is called in.
 
 </ShowFor>
 
-### `placement{:.const}`
+### `side{:.const}`
 
-The **final** placement of the floating element relative to the
-reference element. Unlike the one passed in the options, this one
-can be mutated by middleware like `flip(){:js}`. This is
+The **final** rendered side of the floating element relative to
+the reference element. Unlike the one passed in the options, this
+one can be mutated by middleware like `flip(){:js}`. This is
 necessary to determine the actual side of the floating element
 for styling.
 
 ```js
-const {placement} = useFloating();
+const {side} = useFloating();
+```
+
+### `align{:.const}`
+
+The **final** rendered align of the floating element relative to
+the reference element. Unlike the one passed in the options, this
+one can be mutated by middleware like `flip(){:js}`. This is
+necessary to determine the actual align of the floating element
+for styling.
+
+```js
+const {align} = useFloating();
 ```
 
 ### `strategy{:.const}`

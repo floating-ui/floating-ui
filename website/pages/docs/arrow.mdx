@@ -242,8 +242,8 @@ following scenario:
 
 - The reference element is either wider or taller than the
   floating element;
-- The floating element is using an edge alignment
-  (`-start{:.string}` or `-end{:.string}` placement).
+- The floating element is using an edge align (`-start{:.string}`
+  or `-end{:.string}` placement).
 
 ## Visualization
 
@@ -253,7 +253,8 @@ To help you understand how this middleware works, here is a
 ## Order
 
 `arrow(){:js}` should generally be placed toward the end of your
-middleware array, after `shift(){:js}` or `autoPlacement(){:js}` (if used).
+middleware array, after `shift(){:js}` or `autoPlacement(){:js}`
+(if used).
 
 ## Placement
 
@@ -264,11 +265,11 @@ the static axis offset of the arrow, the placement is returned:
 
 ```js
 computePosition(referenceEl, floatingEl, {
-  placement: 'top',
+  side: 'top',
   middleware: [flip(), arrow({element: arrowEl})],
 }).then((data) => {
-  // The final placement can be 'bottom' or 'top'
-  const placement = data.placement;
+  // The final rendered side can be 'bottom' or 'top'
+  const renderedSide = data.side;
 });
 ```
 
@@ -277,9 +278,9 @@ computePosition(referenceEl, floatingEl, {
 <ShowFor packages={['react', 'react-dom', 'react-native']}>
 
 ```js
-// The final placement can be 'bottom' or 'top'
-const {placement} = useFloating({
-  placement: 'top',
+// The final rendered side can be 'bottom' or 'top'
+const {side} = useFloating({
+  side: 'top',
   middleware: [flip(), arrow({element: arrowRef})],
 });
 ```
@@ -289,9 +290,9 @@ const {placement} = useFloating({
 <ShowFor packages={['vue']}>
 
 ```js
-// The final placement can be 'bottom' or 'top'
-const {placement} = useFloating(reference, floating, {
-  placement: 'top',
+// The final rendered side can be 'bottom' or 'top'
+const {side} = useFloating(reference, floating, {
+  side: 'top',
   middleware: [flip(), arrow({element: arrowRef})],
 });
 ```

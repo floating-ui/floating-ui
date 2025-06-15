@@ -158,16 +158,15 @@ The function takes the following parameters:
 ```ts
 interface Params {
   side: Side;
-  placement: Placement;
+  align: Align;
 }
 ```
 
 - `side{:.key}` represents a physical side — with the vast
   majority of transitions, you'll likely only need to be
   concerned about the side.
-- `placement{:.key}` represents the whole placement string in
-  cases where you want to also change the transition based on the
-  alignment.
+- `align{:.key}` represents the align of the floating element on
+  the specified side.
 
 ### `close{:.key}`
 

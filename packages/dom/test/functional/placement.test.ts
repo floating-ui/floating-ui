@@ -2,8 +2,9 @@ import {expect, test} from '@playwright/test';
 
 import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
+import {stringifyPlacement} from '../visual/utils/stringifyPlacement';
 
-allPlacements.forEach((placement) => {
+allPlacements.map(stringifyPlacement).forEach((placement) => {
   test(`correctly positioned on ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/placement');
     await click(page, `[data-testid="placement-${placement}"]`);
@@ -28,7 +29,7 @@ allPlacements.forEach((placement) => {
   });
 });
 
-allPlacements.forEach((placement) => {
+allPlacements.map(stringifyPlacement).forEach((placement) => {
   test(`rtl should be respected ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/placement');
     await click(page, `[data-testid="placement-${placement}"]`);

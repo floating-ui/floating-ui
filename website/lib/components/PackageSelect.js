@@ -132,7 +132,8 @@ function Tooltip({
   const {setIsPackageTooltipTouched} = useAppContext();
 
   const {refs, floatingStyles, context} = useFloating({
-    placement: 'bottom-start',
+    side: 'bottom',
+    align: 'start',
     open,
     onOpenChange,
     whileElementsMounted: autoUpdate,
@@ -300,7 +301,7 @@ export function PackageSelect() {
             })),
           );
         }
-      } catch (e) {
+      } catch (_e) {
         //
       }
     }
@@ -349,9 +350,10 @@ export function PackageSelect() {
     onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
     strategy: 'fixed',
-    placement: 'bottom-start',
+    side: 'bottom',
+    align: 'start',
     middleware: [
-      offset({mainAxis: 10, alignmentAxis: -5}),
+      offset({mainAxis: 10, alignAxis: -5}),
       flip({padding: 10}),
       size({
         padding: 10,

@@ -1,9 +1,5 @@
-import '@testing-library/jest-dom';
-
-import * as matchers from '@testing-library/jest-dom/matchers';
-import {expect, vi} from 'vitest';
-
-expect.extend(matchers);
+import '@testing-library/jest-dom/vitest';
+import {vi} from 'vitest';
 
 // https://github.com/testing-library/react-testing-library/issues/1197#issuecomment-2619825237
 (globalThis as any).jest = vi;

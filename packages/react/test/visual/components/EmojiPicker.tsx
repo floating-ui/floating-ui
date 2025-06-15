@@ -113,9 +113,10 @@ export const Main = () => {
     floatingStyles,
     refs,
     context,
-    placement: resultantPlacement,
+    side: renderedSide,
   } = useFloating({
-    placement: placement ?? 'bottom-start',
+    side: placement?.side,
+    align: placement?.align,
     open,
     onOpenChange: setOpen,
     // We don't want flipping to occur while searching, as the floating element
@@ -160,13 +161,13 @@ export const Main = () => {
 
   useEffect(() => {
     if (open) {
-      setPlacement(resultantPlacement);
+      setPlacement({side: renderedSide, align: 'center'});
     } else {
       setSearch('');
       setActiveIndex(null);
       setPlacement(null);
     }
-  }, [open, resultantPlacement]);
+  }, [open, renderedSide]);
 
   const handleEmojiClick = () => {
     if (activeIndex !== null) {

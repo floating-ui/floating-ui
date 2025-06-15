@@ -9,23 +9,26 @@ import {
 } from '@floating-ui/react-dom';
 import {useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useResize} from '../utils/useResize';
 import {useScroll} from '../utils/useScroll';
+import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 type ShiftOrder = 'none' | 'before' | 'after';
 const SHIFT_ORDERS: ShiftOrder[] = ['none', 'before', 'after'];
 
 export function Size() {
   const [rtl, setRtl] = useState(false);
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const [addFlip, setAddFlip] = useState(false);
   const [addShift, setAddShift] = useState<ShiftOrder>('none');
   const [shiftCrossAxis, setShiftCrossAxis] = useState(false);
   const [shiftLimiter, setShiftLimiter] = useState(false);
 
-  const hasEdgeAlignment = placement.includes('-');
+  const hasEdgeAlign = placement.align !== 'center';
 
   const shiftOptions = {
     padding: 10,
@@ -34,7 +37,8 @@ export function Size() {
   };
 
   const {x, y, strategy, update, refs} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [
       addFlip && flip({padding: 10}),
@@ -53,7 +57,7 @@ export function Size() {
   });
 
   const {scrollRef, indicator} = useScroll({refs, update, rtl});
-  useResize(scrollRef, update);
+  useResize(scrollRef, () => update());
 
   return (
     <>
@@ -83,7 +87,7 @@ export function Size() {
                 width:
                   addShift === 'before' && shiftCrossAxis
                     ? 100
-                    : addShift === 'before' && hasEdgeAlignment
+                    : addShift === 'before' && hasEdgeAlign
                       ? 360
                       : 600,
                 height: 600,
@@ -96,20 +100,10 @@ export function Size() {
       </div>
 
       <h2>placement</h2>
-      <Controls>
-        {allPlacements.map((localPlacement) => (
-          <button
-            key={localPlacement}
-            data-testid={`placement-${localPlacement}`}
-            onClick={() => setPlacement(localPlacement)}
-            style={{
-              backgroundColor: localPlacement === placement ? 'black' : '',
-            }}
-          >
-            {localPlacement}
-          </button>
-        ))}
-      </Controls>
+      <AllPlacementsControls
+        placement={placement}
+        setPlacement={setPlacement}
+      />
 
       <h2>RTL</h2>
       <Controls>

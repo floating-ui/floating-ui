@@ -1,11 +1,4 @@
-import {
-  type Coords,
-  evaluate,
-  getAlignment,
-  getSide,
-  getSideAxis,
-} from '@floating-ui/core/utils';
-
+import {type Coords, evaluate, getSideAxis} from '../utils';
 import type {
   Derivable,
   Middleware,
@@ -24,14 +17,14 @@ type OffsetValue =
        */
       mainAxis?: number;
       /**
-       * The axis that runs along the alignment of the floating element.
+       * The axis that runs along the align of the floating element.
        * Represents the skidding between the reference and floating element.
        * @default 0
        */
       crossAxis?: number;
       /**
        * The same axis as `crossAxis` but applies only to aligned placements
-       * and inverts the `end` alignment. When set to a number, it overrides the
+       * and inverts the `end` align. When set to a number, it overrides the
        * `crossAxis` value.
        *
        * A positive number will move the floating element in the direction of
@@ -39,7 +32,7 @@ type OffsetValue =
        * the reverse.
        * @default null
        */
-      alignmentAxis?: number | null;
+      alignAxis?: number | null;
     };
 
 export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
@@ -48,39 +41,40 @@ export function* offsetGen(
   state: MiddlewareState,
   options: OffsetOptions = 0,
 ): Generator<any, MiddlewareReturn, any> {
-  const {placement, platform, elements, x, y, middlewareData} = state;
+  const {platform, elements, x, y, middlewareData, side, align} = state;
 
   const rtl = yield platform.isRTL?.(elements.floating);
 
-  const side = getSide(placement);
-  const alignment = getAlignment(placement);
-  const isVertical = getSideAxis(placement) === 'y';
+  const isVertical = getSideAxis(side) === 'y';
   const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = evaluate(options, state);
 
   // eslint-disable-next-line prefer-const
-  let {mainAxis, crossAxis, alignmentAxis} =
+  let {mainAxis, crossAxis, alignAxis} =
     typeof rawValue === 'number'
-      ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}
+      ? {mainAxis: rawValue, crossAxis: 0, alignAxis: null}
       : {
           mainAxis: rawValue.mainAxis ?? 0,
           crossAxis: rawValue.crossAxis ?? 0,
-          alignmentAxis: rawValue.alignmentAxis ?? null,
+          alignAxis: rawValue.alignAxis ?? null,
         };
 
-  if (alignment && typeof alignmentAxis === 'number') {
-    crossAxis = alignment === 'end' ? -alignmentAxis : alignmentAxis;
+  if (align !== 'center' && typeof alignAxis === 'number') {
+    crossAxis = align === 'end' ? -alignAxis : alignAxis;
   }
 
   const diffCoords: Coords = isVertical
     ? {x: crossAxis * crossAxisMulti, y: mainAxis * mainAxisMulti}
     : {x: mainAxis * mainAxisMulti, y: crossAxis * crossAxisMulti};
 
-  // if the same placement + arrow alignment offset, no change
+  const offsetPlacement = middlewareData.offset?.placement;
+
+  // if the same placement + arrow align offset, no change
   if (
-    placement === middlewareData.offset?.placement &&
-    middlewareData.arrow?.alignmentOffset
+    offsetPlacement?.side === side &&
+    offsetPlacement.align === align &&
+    middlewareData.arrow?.alignOffset
   ) {
     return {};
   }
@@ -90,7 +84,10 @@ export function* offsetGen(
     y: y + diffCoords.y,
     data: {
       ...diffCoords,
-      placement,
+      placement: {
+        side,
+        align,
+      },
     },
   };
 }

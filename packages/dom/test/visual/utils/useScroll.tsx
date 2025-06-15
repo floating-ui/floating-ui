@@ -15,7 +15,7 @@ export const useScroll = ({
     reference: MutableRefObject<Element | VirtualElement | null>;
     floating: MutableRefObject<HTMLElement | null>;
   };
-  update: () => void;
+  update: (flushSync?: boolean) => void;
   rtl?: boolean;
 }) => {
   const {
@@ -26,7 +26,7 @@ export const useScroll = ({
     update: indicatorUpdate,
   } = useFloating({
     strategy: 'fixed',
-    placement: 'top',
+    side: 'top',
     middleware: [shift({crossAxis: true, altBoundary: true, padding: 10})],
   });
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -77,7 +77,7 @@ export const useScroll = ({
       scroll.scrollLeft = rtl ? -x : x;
     }
 
-    update();
+    update(false);
 
     return () => {
       parents.forEach((el) => {
