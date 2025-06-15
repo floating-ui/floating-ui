@@ -98,14 +98,6 @@ export function evaluate<T, P>(value: T | ((param: P) => T), param: P): T {
     : value;
 }
 
-export function getSide(placement: Placement): Side {
-  return placement.side;
-}
-
-export function getAlign(placement: Placement): Align {
-  return placement.align;
-}
-
 export function getOppositeAlign(align: Align): Align {
   return oppositeAlignMap[align];
 }
@@ -123,7 +115,7 @@ export function getSideAxis(side: Side): Axis {
 }
 
 export function getAlignAxis(placement: Placement): Axis {
-  return getOppositeAxis(getSideAxis(getSide(placement)));
+  return getOppositeAxis(getSideAxis(placement.side));
 }
 
 export function getAlignSides(
@@ -131,7 +123,7 @@ export function getAlignSides(
   rects: ElementRects,
   rtl = false,
 ): [Side, Side] {
-  const align = getAlign(placement);
+  const align = placement.align;
   const alignAxis = getAlignAxis(placement);
   const length = getAxisLength(alignAxis);
 
@@ -193,8 +185,8 @@ export function getOppositeAxisPlacements(
   direction: 'none' | Align,
   rtl?: boolean,
 ): Placement[] {
-  const align = getAlign(placement);
-  let list = getSideList(getSide(placement), direction === 'start', rtl);
+  const align = placement.align;
+  let list = getSideList(placement.side, direction === 'start', rtl);
 
   if (align && align !== 'center') {
     list = list.map((side) => ({...side, align: align}) as Placement);

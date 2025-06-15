@@ -1,8 +1,6 @@
 import {
   evaluate,
-  getAlign,
   getAlignSides,
-  getSide,
   placements as ALL_PLACEMENTS,
   type Align,
   type Placement,
@@ -90,7 +88,7 @@ export function* autoPlacementGen(
   const rtl = yield platform.isRTL?.(elements.floating);
   const alignSides = getAlignSides(currentPlacement, rects, rtl);
 
-  // Make `computeCoords` start from the right place.
+  // Make `getCoordinates` start from the right place.
   if (
     state.side !== currentPlacement.side ||
     state.align !== currentPlacement.align
@@ -104,7 +102,7 @@ export function* autoPlacementGen(
   }
 
   const currentOverflows = [
-    overflow[getSide(currentPlacement)],
+    overflow[currentPlacement.side],
     overflow[alignSides[0]],
     overflow[alignSides[1]],
   ];
@@ -132,10 +130,9 @@ export function* autoPlacementGen(
 
   const placementsSortedByMostSpace = allOverflows
     .map((d) => {
-      const align = getAlign(d.placement);
       return [
         d.placement,
-        align && crossAxis
+        d.placement.align !== 'center' && crossAxis
           ? // Check along the mainAxis and main crossAxis side.
             d.overflows.slice(0, 2).reduce((acc, v) => acc + v, 0)
           : // Check only the mainAxis.
@@ -151,7 +148,7 @@ export function* autoPlacementGen(
         0,
         // Aligned placements should not check their opposite crossAxis
         // side.
-        getAlign(d[0]) ? 2 : 3,
+        d[0].align !== 'center' ? 2 : 3,
       )
       .every((v) => v <= 0),
   );
