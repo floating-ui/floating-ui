@@ -2,7 +2,7 @@ import {getPlacementList} from '../../src/middleware/autoPlacement';
 
 test('base placement', () => {
   expect(
-    getPlacementList(null, false, [
+    getPlacementList('center', false, [
       {side: 'top', align: 'center'},
       {side: 'bottom', align: 'center'},
       {side: 'left', align: 'center'},
