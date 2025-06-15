@@ -55,7 +55,9 @@ export function Hide() {
 
   const {scrollRef, indicator} = useScroll({refs, update});
 
-  useLayoutEffect(update, [update, hierarchy]);
+  useLayoutEffect(() => {
+    update(false);
+  }, [update, hierarchy]);
 
   let referenceJsx = (
     <div ref={refs.setReference} className="reference">

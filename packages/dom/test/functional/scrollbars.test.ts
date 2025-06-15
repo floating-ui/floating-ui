@@ -2,7 +2,7 @@ import {expect, test} from '@playwright/test';
 
 import {click} from './utils/click';
 
-['bottom-center', 'right-center', 'left-center'].forEach((placement) => {
+['bottom', 'right', 'left'].forEach((placement) => {
   test(`correctly avoids scrollbar at ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/scrollbars');
 

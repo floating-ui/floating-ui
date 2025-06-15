@@ -132,10 +132,7 @@ test('left-end', async ({page}) => {
 test('only top, bottom allowed', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
   await click(page, `[data-testid="align-center"]`);
-  await click(
-    page,
-    `[data-testid="allowedPlacements-top-center,bottom-center"]`,
-  );
+  await click(page, `[data-testid="allowedPlacements-top,bottom"]`);
 
   await scroll(page, {x: 700, y: 650});
 
@@ -153,10 +150,7 @@ test('only top, bottom allowed', async ({page}) => {
 test('only left, right allowed', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
   await click(page, `[data-testid="align-center"]`);
-  await click(
-    page,
-    `[data-testid="allowedPlacements-left-center,right-center"]`,
-  );
+  await click(page, `[data-testid="allowedPlacements-left,right"]`);
 
   await scroll(page, {x: 550, y: 750});
 

@@ -16,7 +16,7 @@ test('chooses right client rect placed on bottom', async ({page}) => {
 
 test('chooses right client rect placed on top', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-top-center"]');
+  await click(page, '[data-testid="placement-top"]');
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
@@ -35,7 +35,7 @@ test('chooses left client rect placed on bottom', async ({page}) => {
 
 test('chooses left client rect placed on top', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-top-center"]');
+  await click(page, '[data-testid="placement-top"]');
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
@@ -46,7 +46,7 @@ test('chooses left client rect placed on top', async ({page}) => {
 // FIXME: chooses left rect unexpectedly
 test.skip('chooses right client rect placed on the right', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-right-center"]');
+  await click(page, '[data-testid="placement-right"]');
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
@@ -56,7 +56,7 @@ test.skip('chooses right client rect placed on the right', async ({page}) => {
 
 test('chooses left client rect placed on the right', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-right-center"]');
+  await click(page, '[data-testid="placement-right"]');
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
@@ -66,7 +66,7 @@ test('chooses left client rect placed on the right', async ({page}) => {
 
 test('chooses right client rect placed on the left', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-left-center"]');
+  await click(page, '[data-testid="placement-left"]');
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
@@ -76,7 +76,7 @@ test('chooses right client rect placed on the left', async ({page}) => {
 
 test('chooses left client rect placed on the left', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-left-center"]');
+  await click(page, '[data-testid="placement-left"]');
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
@@ -86,7 +86,7 @@ test('chooses left client rect placed on the left', async ({page}) => {
 
 test('connected placed on top', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-top-center"]');
+  await click(page, '[data-testid="placement-top"]');
   await click(page, '[data-testid="connected-2-joined"]');
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
@@ -107,7 +107,7 @@ test('connected placed on bottom', async ({page}) => {
 
 test('connected placed on left', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-left-center"]');
+  await click(page, '[data-testid="placement-left"]');
   await click(page, '[data-testid="connected-2-joined"]');
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
@@ -118,7 +118,7 @@ test('connected placed on left', async ({page}) => {
 
 test('connected placed on right', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-right-center"]');
+  await click(page, '[data-testid="placement-right"]');
   await click(page, '[data-testid="connected-2-joined"]');
 
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
@@ -154,7 +154,7 @@ test('chooses rect based on placement without any mouse coords top', async ({
 }) => {
   await page.goto('http://localhost:1234/inline');
   await click(page, '[data-testid="open-true"]');
-  await click(page, '[data-testid="placement-top-center"]');
+  await click(page, '[data-testid="placement-top"]');
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     'right-rect-no-coords.png',
@@ -163,7 +163,7 @@ test('chooses rect based on placement without any mouse coords top', async ({
 
 test('correctly centers over two rects', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-left-center"]');
+  await click(page, '[data-testid="placement-left"]');
   await click(page, '[data-testid="connected-3"]');
   await click(page, '[data-testid="open-true"]');
 

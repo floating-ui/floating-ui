@@ -2,7 +2,6 @@ import {
   evaluate,
   getAlign,
   getAlignSides,
-  getOppositeAlignPlacement,
   getSide,
   placements as ALL_PLACEMENTS,
   type Align,
@@ -18,38 +17,20 @@ import type {
 } from '../types';
 
 export function getPlacementList(
-  align: Align | null,
+  align: Align,
   autoAlign: boolean,
   allowedPlacements: readonly Placement[],
 ): Placement[] {
-  const allowedPlacementsSortedByAlign = align
-    ? [
-        ...allowedPlacements.filter(
-          (placement) => getAlign(placement) === align,
-        ),
-        ...allowedPlacements.filter(
-          (placement) => getAlign(placement) !== align,
-        ),
-      ]
-    : allowedPlacements.filter((placement) => {
-        const align = getAlign(placement);
-        return align === 'center' || align === undefined;
-      });
-
-  return allowedPlacementsSortedByAlign.filter((placement) => {
-    if (align) {
-      const placementAlign = getAlign(placement);
-      return (
-        placementAlign === align ||
-        (autoAlign
-          ? getOppositeAlignPlacement(placement).side !== placement.side ||
-            getOppositeAlignPlacement(placement).align !== placement.align
-          : false)
-      );
-    }
-
-    return true;
-  });
+  return align === 'center'
+    ? allowedPlacements.filter((p) => p.align === 'center')
+    : [
+        ...allowedPlacements.filter((p) => p.align === align),
+        ...(autoAlign
+          ? allowedPlacements.filter((p) => {
+              return p.align !== align && p.align !== 'center';
+            })
+          : []),
+      ];
 }
 
 export interface AutoPlacementOptions extends DetectOverflowOptions {
@@ -61,9 +42,9 @@ export interface AutoPlacementOptions extends DetectOverflowOptions {
   crossAxis?: boolean;
   /**
    * Choose placements with a particular align.
-   * @default undefined
+   * @default 'center'
    */
-  align?: Align | null;
+  align?: Align;
   /**
    * Whether to choose placements with the opposite align if the preferred
    * align does not fit.
@@ -86,15 +67,15 @@ export function* autoPlacementGen(
 
   const {
     crossAxis = false,
-    align,
+    align = 'center',
     allowedPlacements = ALL_PLACEMENTS,
     autoAlign = true,
     ...detectOverflowOptions
   } = evaluate(options, state);
 
   const placements =
-    align !== undefined || allowedPlacements === ALL_PLACEMENTS
-      ? getPlacementList(align || null, autoAlign, allowedPlacements)
+    align !== 'center' || allowedPlacements === ALL_PLACEMENTS
+      ? getPlacementList(align, autoAlign, allowedPlacements)
       : allowedPlacements;
 
   const overflow = yield* detectOverflow(state, detectOverflowOptions);

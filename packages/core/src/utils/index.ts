@@ -102,8 +102,12 @@ export function getSide(placement: Placement): Side {
   return placement.side;
 }
 
-export function getAlign(placement: Placement): Align | undefined {
+export function getAlign(placement: Placement): Align {
   return placement.align;
+}
+
+export function getOppositeAlign(align: Align): Align {
+  return oppositeAlignMap[align];
 }
 
 export function getOppositeAxis(axis: Axis): Axis {

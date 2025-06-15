@@ -162,7 +162,7 @@ test('fallbackStrategy: "initialPlacement"', async ({page}) => {
 
 test('falls back to only checking mainAxis overflow first', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await click(page, `[data-testid="placement-right-center"]`);
+  await click(page, `[data-testid="placement-right"]`);
   await click(page, `[data-testid="shift-true"]`);
 
   await scroll(page, {x: 780, y: 600});
@@ -176,7 +176,7 @@ test('when crossAxis: "align" and fallbackAxisSideDirection: "end", does not fli
   page,
 }) => {
   await page.goto('http://localhost:1234/flip');
-  await click(page, `[data-testid="placement-left-center"]`);
+  await click(page, `[data-testid="placement-left"]`);
   await click(page, `[data-testid="crossAxis-align"]`);
   await click(page, `[data-testid="shift-true"]`);
   await click(page, `[data-testid="fallbackAxisSideDirection-end"]`);

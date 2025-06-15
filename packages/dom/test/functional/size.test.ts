@@ -30,7 +30,7 @@ allPlacements.map(stringifyPlacement).forEach((placement) => {
   });
 });
 
-['bottom-center', 'top-center'].forEach((verticalPlacement) => {
+['bottom', 'top'].forEach((verticalPlacement) => {
   test(`does not overflow due to size ${verticalPlacement}`, async ({page}) => {
     await page.goto('http://localhost:1234/size');
     await click(page, `[data-testid="placement-${verticalPlacement}"]`);
@@ -61,7 +61,7 @@ allPlacements.map(stringifyPlacement).forEach((placement) => {
   });
 });
 
-['right-center', 'left-center'].forEach((horizontalPlacement) => {
+['right', 'left'].forEach((horizontalPlacement) => {
   test(`does not overflow due to size ${horizontalPlacement}`, async ({
     page,
   }) => {

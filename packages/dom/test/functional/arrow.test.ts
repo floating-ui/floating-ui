@@ -27,7 +27,7 @@ allPlacements.map(stringifyPlacement).forEach((placement) => {
   });
 });
 
-['top-center', 'bottom-center'].forEach((placement) => {
+['top', 'bottom'].forEach((placement) => {
   [75, 150].forEach((floatingSize) => {
     [25, 125].forEach((referenceSize) => {
       [0, 20].forEach((arrowPadding) => {
@@ -57,7 +57,7 @@ allPlacements.map(stringifyPlacement).forEach((placement) => {
   });
 });
 
-['left-center', 'right-center'].forEach((placement) => {
+['left', 'right'].forEach((placement) => {
   [75, 150].forEach((floatingSize) => {
     [25, 125].forEach((referenceSize) => {
       [0, 20].forEach((arrowPadding) => {

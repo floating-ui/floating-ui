@@ -12,16 +12,19 @@ export function AllPlacementsControls({
 }) {
   return (
     <Controls>
-      {allPlacements.map((localPlacement) => (
+      {allPlacements.map((p) => (
         <button
-          key={stringifyPlacement(localPlacement)}
-          data-testid={`placement-${stringifyPlacement(localPlacement)}`}
-          onClick={() => setPlacement(localPlacement)}
+          key={stringifyPlacement(p)}
+          data-testid={`placement-${stringifyPlacement(p)}`}
+          onClick={() => setPlacement(p)}
           style={{
-            backgroundColor: localPlacement === placement ? 'black' : '',
+            backgroundColor:
+              p.side === placement.side && p.align === placement.align
+                ? 'black'
+                : '',
           }}
         >
-          {stringifyPlacement(localPlacement)}
+          {stringifyPlacement(p)}
         </button>
       ))}
     </Controls>
