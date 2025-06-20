@@ -2,15 +2,19 @@ import type {Placement} from '@floating-ui/core';
 import {arrow, autoUpdate, useFloating} from '@floating-ui/react-dom';
 import {useRef, useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useSize} from './useSize';
+import {AllPlacementsControls} from './AllPlacementsControls';
 
 export function New() {
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const arrowRef = useRef<HTMLDivElement | null>(null);
   const {refs, floatingStyles} = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     whileElementsMounted: autoUpdate,
     middleware: [arrow({element: arrowRef})],
   });
@@ -50,20 +54,10 @@ export function New() {
       </Controls>
 
       <h2>Placement</h2>
-      <Controls>
-        {allPlacements.map((localPlacement) => (
-          <button
-            key={localPlacement}
-            data-testid={`placement-${localPlacement}`}
-            onClick={() => setPlacement(localPlacement)}
-            style={{
-              backgroundColor: localPlacement === placement ? 'black' : '',
-            }}
-          >
-            {localPlacement}
-          </button>
-        ))}
-      </Controls>
+      <AllPlacementsControls
+        placement={placement}
+        setPlacement={setPlacement}
+      />
     </>
   );
 }

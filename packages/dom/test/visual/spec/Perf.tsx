@@ -16,7 +16,7 @@ const arrowEl = document.createElement('div');
 
 export function Perf() {
   const {x, y, refs, strategy} = useFloating({
-    placement: 'top',
+    side: 'top',
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(1),

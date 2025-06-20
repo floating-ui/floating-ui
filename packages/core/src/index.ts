@@ -16,7 +16,6 @@ export type {SizeOptions} from './middleware/size';
 export {size} from './middleware/size';
 export type {
   Boundary,
-  ComputePosition,
   ComputePositionConfig,
   ComputePositionReturn,
   Derivable,
@@ -33,8 +32,7 @@ export type {
   RootBoundary,
 } from './types';
 export type {
-  AlignedPlacement,
-  Alignment,
+  Align,
   Axis,
   ClientRectObject,
   Coords,

@@ -1,13 +1,10 @@
-// shift.ts
 import {
   type Coords,
   clamp,
   evaluate,
   getOppositeAxis,
-  getSide,
   getSideAxis,
-} from '@floating-ui/core/utils';
-
+} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {
@@ -19,7 +16,7 @@ import type {
 
 export interface ShiftOptions extends DetectOverflowOptions {
   /**
-   * The axis that runs along the alignment of the floating element. Determines
+   * The axis that runs along the align of the floating element. Determines
    * whether overflow along this axis is checked to perform shifting.
    * @default true
    */
@@ -44,7 +41,7 @@ export function* shiftGen(
   state: MiddlewareState,
   options: ShiftOptions | Derivable<ShiftOptions> = {},
 ): Generator<any, MiddlewareReturn, any> {
-  const {x, y, placement} = state;
+  const {x, y, side} = state;
 
   const {
     mainAxis: checkMainAxis = true,
@@ -55,7 +52,7 @@ export function* shiftGen(
 
   const coords = {x, y};
   const overflow = yield* detectOverflow(state, detectOverflowOptions);
-  const crossAxis = getSideAxis(getSide(placement));
+  const crossAxis = getSideAxis(side);
   const mainAxis = getOppositeAxis(crossAxis);
 
   let mainAxisCoord = coords[mainAxis];
@@ -117,7 +114,7 @@ type LimitShiftOffset =
   | number
   | {
       /**
-       * Offset the limiting of the axis that runs along the alignment of the
+       * Offset the limiting of the axis that runs along the align of the
        * floating element.
        */
       mainAxis?: number;
@@ -137,7 +134,7 @@ export interface LimitShiftOptions {
    */
   offset?: LimitShiftOffset | Derivable<LimitShiftOffset>;
   /**
-   * Whether to limit the axis that runs along the alignment of the floating
+   * Whether to limit the axis that runs along the align of the floating
    * element.
    */
   mainAxis?: boolean;
@@ -158,7 +155,7 @@ export const limitShift = (
 } => ({
   options,
   fn(state) {
-    const {x, y, placement, rects, middlewareData} = state;
+    const {x, y, side, rects, middlewareData} = state;
 
     const {
       offset = 0,
@@ -167,7 +164,7 @@ export const limitShift = (
     } = evaluate(options, state);
 
     const coords = {x, y};
-    const crossAxis = getSideAxis(placement);
+    const crossAxis = getSideAxis(side);
     const mainAxis = getOppositeAxis(crossAxis);
 
     let mainAxisCoord = coords[mainAxis];
@@ -199,7 +196,7 @@ export const limitShift = (
 
     if (checkCrossAxis) {
       const len = mainAxis === 'y' ? 'width' : 'height';
-      const isOriginSide = ['top', 'left'].includes(getSide(placement));
+      const isOriginSide = ['top', 'left'].includes(side);
       const limitMin =
         rects.reference[crossAxis] -
         rects.floating[len] +

@@ -17,7 +17,7 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
   function InlineMiddleware() {
     const arrowRef = React.useRef(null);
     const {refs} = useFloating({
-      placement: 'right',
+      side: 'right',
       middleware: [
         offset(),
         offset(10),
@@ -96,7 +96,7 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
       }),
     ]);
     const {x, y, refs} = useFloating({
-      placement: 'right',
+      side: 'right',
       middleware,
     });
 

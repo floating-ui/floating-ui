@@ -113,7 +113,7 @@ useFloating(reference, floating, {
 The value(s) passed are
 [logical](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties),
 meaning their effect on the physical result is dependent on the
-placement, writing direction (e.g. RTL), or alignment.
+placement, writing direction (e.g. RTL), or align.
 
 ## Order
 
@@ -130,7 +130,7 @@ type Options =
   | {
       mainAxis?: number;
       crossAxis?: number;
-      alignmentAxis?: number | null;
+      alignAxis?: number | null;
     };
 ```
 
@@ -224,7 +224,7 @@ Here's how it looks on the four sides:
 
 default: `0{:js}`
 
-The axis that runs along the alignment of the floating element.
+The axis that runs along the align of the floating element.
 Represents the skidding between the floating element and the
 reference element.
 
@@ -295,13 +295,13 @@ Here's how it looks on the four sides:
   </div>
 </Chrome>
 
-### `alignmentAxis{:.key}`
+### `alignAxis{:.key}`
 
 default: `null{:js}`
 
 The same axis as `crossAxis{:.key}` but applies only to aligned
-placements and inverts the `end{:.string}` alignment. When set to
-a number, it overrides the `crossAxis{:.key}` value.
+placements and inverts the `end{:.string}` align. When set to a
+number, it overrides the `crossAxis{:.key}` value.
 
 A positive number will move the floating element in the direction
 of the opposite edge to the one that is aligned, while a negative
@@ -309,7 +309,7 @@ number the reverse.
 
 ```js
 offset({
-  alignmentAxis: 20,
+  alignAxis: 20,
 });
 ```
 
@@ -352,13 +352,13 @@ Here's how it differentiates from `crossAxis{:.key}`:
       middleware={[
         {
           name: 'offset',
-          options: {alignmentAxis: 20},
+          options: {alignAxis: 20},
         },
       ]}
     >
       <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
         top-start <br />{' '}
-        <strong className="text-inherit">(alignmentAxis)</strong>
+        <strong className="text-inherit">(alignAxis)</strong>
       </div>
     </Floating>
     <Floating
@@ -366,13 +366,13 @@ Here's how it differentiates from `crossAxis{:.key}`:
       middleware={[
         {
           name: 'offset',
-          options: {alignmentAxis: 20},
+          options: {alignAxis: 20},
         },
       ]}
     >
       <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
         top-end <br />{' '}
-        <strong className="text-inherit">(alignmentAxis)</strong>
+        <strong className="text-inherit">(alignAxis)</strong>
       </div>
     </Floating>
   </div>
@@ -468,10 +468,11 @@ A diagonal placement is also possible:
 
 ```js
 computePosition(referenceEl, floatingEl, {
-  placement: 'top-start',
+  side: 'top',
+  align: 'start',
   middleware: [
     offset(({rects}) => ({
-      alignmentAxis: -rects.floating.width,
+      alignAxis: -rects.floating.width,
     })),
   ],
 });
@@ -483,10 +484,11 @@ computePosition(referenceEl, floatingEl, {
 
 ```js
 useFloating({
-  placement: 'top-start',
+  side: 'top',
+  align: 'start',
   middleware: [
     offset(({rects}) => ({
-      alignmentAxis: -rects.floating.width,
+      alignAxis: -rects.floating.width,
     })),
   ],
 });
@@ -498,10 +500,11 @@ useFloating({
 
 ```js
 useFloating(reference, floating, {
-  placement: 'top-start',
+  side: 'top',
+  align: 'start',
   middleware: [
     offset(({rects}) => ({
-      alignmentAxis: -rects.floating.width,
+      alignAxis: -rects.floating.width,
     })),
   ],
 });
@@ -512,12 +515,13 @@ useFloating(reference, floating, {
 <Chrome center className="pt-16 pb-24">
   <div className="flex gap-4">
     <Floating
-      placement="top-start"
+      side="top"
+      align="start"
       middleware={[
         {
           name: 'offset',
           options: ({rects}) => ({
-            alignmentAxis: -rects.floating.width,
+            alignAxis: -rects.floating.width,
           }),
         },
       ]}
@@ -527,48 +531,10 @@ useFloating(reference, floating, {
   </div>
 </Chrome>
 
-This time, `'top-start'{:js}` was used as the starting point.
+This time, `'top'{:js}` and `'start'{:js}` were used as the
+starting point.
 
 <ShowFor packages={['core', 'dom']}>
-
-So, it's straightforward to allow this:
-
-```js
-computePosition(referenceEl, floatingEl, {
-  placement: 'center',
-});
-```
-
-With a wrapper, like this:
-
-```js
-import {computePosition as base, offset} from '@floating-ui/dom';
-
-const centerOffset = offset(({rects}) => {
-  return -rects.reference.height / 2 - rects.floating.height / 2;
-});
-
-export function computePosition(
-  referenceEl,
-  floatingEl,
-  options,
-) {
-  const isCentered = options.placement === 'center';
-  const placement = isCentered ? 'bottom' : options.placement;
-  const middleware = [
-    isCentered && centerOffset,
-    ...(options.middleware || []),
-  ];
-
-  return base(referenceEl, floatingEl, {
-    ...options,
-    placement,
-    middleware,
-  });
-}
-```
-
-</ShowFor>
 
 <Notice>
   What about centering on the screen? You don't need Floating UI

@@ -12,7 +12,8 @@ export function useFloating(
   options: UseFloatingOptions = {},
 ): UseFloatingReturn {
   const {
-    placement = 'bottom',
+    side = 'bottom',
+    align = 'center',
     middleware = [],
     sameScrollView = true,
     elements: {
@@ -58,7 +59,8 @@ export function useFloating(
   const [data, setData] = React.useState<ComputePositionReturn>({
     x: 0,
     y: 0,
-    placement,
+    side,
+    align,
     strategy: 'absolute',
     middlewareData: {},
   });
@@ -88,13 +90,14 @@ export function useFloating(
     computePositionAsync(referenceRef.current, floatingRef.current, {
       middleware: latestMiddleware,
       platform,
-      placement,
+      side,
+      align,
     }).then((data) => {
       if (isMountedRef.current) {
         setData(data);
       }
     });
-  }, [latestMiddleware, platform, placement]);
+  }, [latestMiddleware, platform, side, align]);
 
   React.useLayoutEffect(() => {
     if (referenceEl) referenceRef.current = referenceEl;

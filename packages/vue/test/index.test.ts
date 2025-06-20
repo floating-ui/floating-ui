@@ -5,9 +5,10 @@ import {defineComponent, effectScope, ref, toRef} from 'vue';
 import {arrow, offset, useFloating} from '../src';
 import type {
   FloatingElement,
+  Align,
   Middleware,
-  Placement,
   ReferenceElement,
+  Side,
   Strategy,
 } from '../src/types';
 import type {ArrowOptions, UseFloatingOptions} from '../src/types';
@@ -24,10 +25,11 @@ describe('useFloating', () => {
   test('updates floating coords on placement change', async () => {
     const App = defineComponent({
       name: 'App',
-      props: ['placement'],
-      setup(props: {placement?: Placement}) {
+      props: ['side', 'align'],
+      setup(props: {side?: Side; align?: Align}) {
         return setup({
-          placement: toRef(props, 'placement'),
+          side: toRef(props, 'side'),
+          align: toRef(props, 'align'),
           middleware: [offset(5)],
         });
       },
@@ -40,7 +42,7 @@ describe('useFloating', () => {
     });
 
     const {rerender, getByTestId} = render(App, {
-      props: {placement: 'bottom'},
+      props: {side: 'bottom', align: 'center'},
     });
 
     await waitFor(() => {
@@ -48,7 +50,7 @@ describe('useFloating', () => {
       expect(getByTestId('y').textContent).toBe('5');
     });
 
-    await rerender({placement: 'right'});
+    await rerender({side: 'right', align: 'center'});
 
     await waitFor(() => {
       expect(getByTestId('x').textContent).toBe('5');
@@ -144,10 +146,11 @@ describe('useFloating', () => {
   test('updates floating coords when placement is a getter function', async () => {
     const App = defineComponent({
       name: 'App',
-      props: ['placement'],
-      setup(props: {placement?: Placement}) {
+      props: ['side', 'align'],
+      setup(props: {side?: Side; align?: Align}) {
         return setup({
-          placement: () => props.placement,
+          side: () => props.side,
+          align: () => props.align,
           middleware: [offset(5)],
         });
       },
@@ -160,7 +163,7 @@ describe('useFloating', () => {
     });
 
     const {rerender, getByTestId} = render(App, {
-      props: {placement: 'bottom'},
+      props: {side: 'bottom', align: 'center'},
     });
 
     await waitFor(() => {
@@ -168,7 +171,7 @@ describe('useFloating', () => {
       expect(getByTestId('y').textContent).toBe('5');
     });
 
-    await rerender({placement: 'right'});
+    await rerender({side: 'right', align: 'center'});
 
     await waitFor(() => {
       expect(getByTestId('x').textContent).toBe('5');
@@ -362,29 +365,35 @@ describe('useFloating', () => {
   test('fallbacks to default when placement becomes undefined', async () => {
     const App = defineComponent({
       name: 'App',
-      props: ['placement'],
-      setup(props: {placement?: Placement}) {
-        return setup({placement: toRef(props, 'placement')});
+      props: ['side', 'align'],
+      setup(props: {side?: Side; align?: Align}) {
+        return setup({
+          side: toRef(props, 'side'),
+          align: toRef(props, 'align'),
+        });
       },
       template: /* HTML */ `
         <div ref="reference" />
         <div ref="floating" />
-        <div data-testid="placement">{{placement}}</div>
+        <div data-testid="side">{{side}}</div>
+        <div data-testid="align">{{align}}</div>
       `,
     });
 
     const {rerender, getByTestId} = render(App, {
-      props: {placement: 'right'},
+      props: {side: 'right', align: 'center'},
     });
 
     await waitFor(() => {
-      expect(getByTestId('placement').textContent).toBe('right');
+      expect(getByTestId('side').textContent).toBe('right');
+      expect(getByTestId('align').textContent).toBe('center');
     });
 
-    await rerender({placement: undefined});
+    await rerender({side: 'bottom', align: 'start'});
 
     await waitFor(() => {
-      expect(getByTestId('placement').textContent).toBe('bottom');
+      expect(getByTestId('side').textContent).toBe('bottom');
+      expect(getByTestId('align').textContent).toBe('start');
     });
   });
 

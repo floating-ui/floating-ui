@@ -57,13 +57,14 @@ export const Main = () => {
 export function Tooltip({
   children,
   label,
-  placement = 'top',
+  placement = {side: 'top', align: 'center'},
   delay = 0,
 }: Props) {
   const [open, setOpen] = useState(false);
 
   const {refs, floatingStyles, context} = useFloating({
-    placement,
+    side: placement?.side,
+    align: placement?.align,
     open,
     onOpenChange: setOpen,
     middleware: [offset(5), flip(), shift({padding: 8})],

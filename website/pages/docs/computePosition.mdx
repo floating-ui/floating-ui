@@ -216,36 +216,41 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-### `placement{:.key}`
+### `side{:.key}`
 
-Where to place the floating element relative to its reference
-element. By default, this is `'bottom'{:js}`.
+The side where the floating element is placed relative to the
+reference element. By default, this is `'bottom'{:js}`.
 
-12 strings are available:
+4 strings are available:
 
 ```ts
-type Placement =
-  | 'top'
-  | 'top-start'
-  | 'top-end'
-  | 'right'
-  | 'right-start'
-  | 'right-end'
-  | 'bottom'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'left'
-  | 'left-start'
-  | 'left-end';
+type Side = 'top' | 'right' | 'bottom' | 'left';
 ```
 
 ```js
 computePosition(referenceEl, floatingEl, {
-  placement: 'bottom-start', // 'bottom' by default
+  side: 'top', // 'bottom' by default
 });
 ```
 
-The `-start{:.string}` and `-end{:.string}` alignments are
+### `align{:.key}`
+
+How the floating element aligns to the reference element on the
+specified side. By default, this is `'center'{:js}`.
+
+```js
+computePosition(referenceEl, floatingEl, {
+  align: 'start', // 'center' by default
+});
+```
+
+3 strings are available:
+
+```ts
+type Align = 'center' | 'start' | 'end';
+```
+
+The `start{:.string}` and `end{:.string}` aligns are
 [logical](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties)
 and will adapt to the writing direction (e.g. RTL) as expected.
 
@@ -392,7 +397,8 @@ function wrapper(referenceEl, floatingEl, options) {
 interface ComputePositionReturn {
   x: number;
   y: number;
-  placement: Placement;
+  side: Side;
+  align: Align;
   strategy: Strategy;
   middlewareData: MiddlewareData;
 }

@@ -2,10 +2,45 @@ type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};
 
-export type Alignment = 'start' | 'end';
 export type Side = 'top' | 'right' | 'bottom' | 'left';
-export type AlignedPlacement = `${Side}-${Alignment}`;
-export type Placement = Prettify<Side | AlignedPlacement>;
+export type Align = 'center' | 'start' | 'end';
+
+export interface Placement {
+  side: Side;
+  align: Align;
+}
+
+const topCenter: Placement = {side: 'top', align: 'center'};
+const topStart: Placement = {side: 'top', align: 'start'};
+const topEnd: Placement = {side: 'top', align: 'end'};
+
+const rightCenter: Placement = {side: 'right', align: 'center'};
+const rightStart: Placement = {side: 'right', align: 'start'};
+const rightEnd: Placement = {side: 'right', align: 'end'};
+
+const bottomCenter: Placement = {side: 'bottom', align: 'center'};
+const bottomStart: Placement = {side: 'bottom', align: 'start'};
+const bottomEnd: Placement = {side: 'bottom', align: 'end'};
+
+const leftCenter: Placement = {side: 'left', align: 'center'};
+const leftStart: Placement = {side: 'left', align: 'start'};
+const leftEnd: Placement = {side: 'left', align: 'end'};
+
+export const placements: readonly Placement[] = [
+  topCenter,
+  topStart,
+  topEnd,
+  rightCenter,
+  rightStart,
+  rightEnd,
+  bottomCenter,
+  bottomStart,
+  bottomEnd,
+  leftCenter,
+  leftStart,
+  leftEnd,
+] as const;
+
 export type Strategy = 'absolute' | 'fixed';
 export type Axis = 'x' | 'y';
 export type Coords = {[key in Axis]: number};
@@ -32,12 +67,7 @@ export interface VirtualElement {
 }
 
 export const sides: Side[] = ['top', 'right', 'bottom', 'left'];
-export const alignments: Alignment[] = ['start', 'end'];
-export const placements: Placement[] = sides.reduce(
-  (acc: Placement[], side) =>
-    acc.concat(side, `${side}-${alignments[0]}`, `${side}-${alignments[1]}`),
-  [],
-);
+export const aligns: Align[] = ['start', 'end', 'center'];
 
 export const min = Math.min;
 export const max = Math.max;
@@ -45,16 +75,17 @@ export const round = Math.round;
 export const floor = Math.floor;
 export const createCoords = (v: number) => ({x: v, y: v});
 
-const oppositeSideMap = {
+const oppositeSideMap: Record<Side, Side> = {
   left: 'right',
   right: 'left',
   bottom: 'top',
   top: 'bottom',
 };
 
-const oppositeAlignmentMap = {
+const oppositeAlignMap: Record<Align, Align> = {
   start: 'end',
   end: 'start',
+  center: 'center',
 };
 
 export function clamp(start: number, value: number, end: number): number {
@@ -67,12 +98,8 @@ export function evaluate<T, P>(value: T | ((param: P) => T), param: P): T {
     : value;
 }
 
-export function getSide(placement: Placement): Side {
-  return placement.split('-')[0] as Side;
-}
-
-export function getAlignment(placement: Placement): Alignment | undefined {
-  return placement.split('-')[1] as Alignment | undefined;
+export function getOppositeAlign(align: Align): Align {
+  return oppositeAlignMap[align];
 }
 
 export function getOppositeAxis(axis: Axis): Axis {
@@ -83,63 +110,61 @@ export function getAxisLength(axis: Axis): Length {
   return axis === 'y' ? 'height' : 'width';
 }
 
-export function getSideAxis(placement: Placement): Axis {
-  return ['top', 'bottom'].includes(getSide(placement)) ? 'y' : 'x';
+export function getSideAxis(side: Side): Axis {
+  return side === 'top' || side === 'bottom' ? 'y' : 'x';
 }
 
-export function getAlignmentAxis(placement: Placement): Axis {
-  return getOppositeAxis(getSideAxis(placement));
+export function getAlignAxis(placement: Placement): Axis {
+  return getOppositeAxis(getSideAxis(placement.side));
 }
 
-export function getAlignmentSides(
+export function getAlignSides(
   placement: Placement,
   rects: ElementRects,
   rtl = false,
 ): [Side, Side] {
-  const alignment = getAlignment(placement);
-  const alignmentAxis = getAlignmentAxis(placement);
-  const length = getAxisLength(alignmentAxis);
+  const align = placement.align;
+  const alignAxis = getAlignAxis(placement);
+  const length = getAxisLength(alignAxis);
 
-  let mainAlignmentSide: Side =
-    alignmentAxis === 'x'
-      ? alignment === (rtl ? 'end' : 'start')
+  let mainAlignSide: Side =
+    alignAxis === 'x'
+      ? align === (rtl ? 'end' : 'start')
         ? 'right'
         : 'left'
-      : alignment === 'start'
+      : align === 'start'
         ? 'bottom'
         : 'top';
 
   if (rects.reference[length] > rects.floating[length]) {
-    mainAlignmentSide = getOppositePlacement(mainAlignmentSide);
+    mainAlignSide = oppositeSideMap[mainAlignSide];
   }
 
-  return [mainAlignmentSide, getOppositePlacement(mainAlignmentSide)];
+  return [mainAlignSide, oppositeSideMap[mainAlignSide]];
 }
 
 export function getExpandedPlacements(placement: Placement): Array<Placement> {
   const oppositePlacement = getOppositePlacement(placement);
 
   return [
-    getOppositeAlignmentPlacement(placement),
+    getOppositeAlignPlacement(placement),
     oppositePlacement,
-    getOppositeAlignmentPlacement(oppositePlacement),
+    getOppositeAlignPlacement(oppositePlacement),
   ];
 }
 
-export function getOppositeAlignmentPlacement<T extends string>(
-  placement: T,
-): T {
-  return placement.replace(
-    /start|end/g,
-    (alignment) => oppositeAlignmentMap[alignment as Alignment],
-  ) as T;
+export function getOppositeAlignPlacement(placement: Placement): Placement {
+  return {
+    side: placement.side,
+    align: oppositeAlignMap[placement.align],
+  };
 }
 
 function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
-  const lr: Placement[] = ['left', 'right'];
-  const rl: Placement[] = ['right', 'left'];
-  const tb: Placement[] = ['top', 'bottom'];
-  const bt: Placement[] = ['bottom', 'top'];
+  const lr: Placement[] = [leftCenter, rightCenter];
+  const rl: Placement[] = [rightCenter, leftCenter];
+  const tb: Placement[] = [topCenter, bottomCenter];
+  const bt: Placement[] = [bottomCenter, topCenter];
 
   switch (side) {
     case 'top':
@@ -156,29 +181,29 @@ function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
 
 export function getOppositeAxisPlacements(
   placement: Placement,
-  flipAlignment: boolean,
-  direction: 'none' | Alignment,
+  flipAlign: boolean,
+  direction: 'none' | Align,
   rtl?: boolean,
 ): Placement[] {
-  const alignment = getAlignment(placement);
-  let list = getSideList(getSide(placement), direction === 'start', rtl);
+  const align = placement.align;
+  let list = getSideList(placement.side, direction === 'start', rtl);
 
-  if (alignment) {
-    list = list.map((side) => `${side}-${alignment}` as Placement);
+  if (align && align !== 'center') {
+    list = list.map((side) => ({...side, align: align}) as Placement);
 
-    if (flipAlignment) {
-      list = list.concat(list.map(getOppositeAlignmentPlacement));
+    if (flipAlign) {
+      list = list.concat(list.map(getOppositeAlignPlacement));
     }
   }
 
   return list;
 }
 
-export function getOppositePlacement<T extends string>(placement: T): T {
-  return placement.replace(
-    /left|right|bottom|top/g,
-    (side) => oppositeSideMap[side as Side],
-  ) as T;
+export function getOppositePlacement(placement: Placement): Placement {
+  return {
+    side: oppositeSideMap[placement.side],
+    align: placement.align,
+  };
 }
 
 export function expandPaddingObject(padding: Partial<SideObject>): SideObject {

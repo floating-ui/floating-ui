@@ -130,8 +130,8 @@ These are the options you can pass to `autoPlacement(){:js}`.
 ```ts
 interface AutoPlacementOptions extends DetectOverflowOptions {
   crossAxis?: boolean;
-  alignment?: Alignment | null;
-  autoAlignment?: boolean;
+  align?: Align | null;
+  autoAlign?: boolean;
   allowedPlacements?: Array<Placement>;
 }
 ```
@@ -141,9 +141,9 @@ interface AutoPlacementOptions extends DetectOverflowOptions {
 default: `false{:js}`
 
 Determines whether a "most space" strategy is also used for the
-cross axis (which runs along the alignment of the floating
-element). May be desirable when the `allowedPlacements{:.key}`
-are all on the same axis.
+cross axis (which runs along the align of the floating element).
+May be desirable when the `allowedPlacements{:.key}` are all on
+the same axis.
 
 ```js
 autoPlacement({
@@ -151,7 +151,7 @@ autoPlacement({
 });
 ```
 
-### `alignment{:.key}`
+### `align{:.key}`
 
 default: `undefined{:js}`
 
@@ -159,29 +159,28 @@ Without options, `autoPlacement(){:js}` will choose any of the
 `Side{:.class}` placements which fit best, i.e. `'top'{:js}`,
 `'right'{:js}`, `'bottom'{:js}`, or `'left'{:js}`.
 
-By specifying an alignment, it will choose those aligned
-placements.
+By specifying an align, it will choose those aligned placements.
 
 ```js
 autoPlacement({
   // top-start, right-start, bottom-start, left-start
-  alignment: 'start',
+  align: 'start',
 });
 ```
 
-### `autoAlignment{:.key}`
+### `autoAlign{:.key}`
 
 default: `true{:js}`
 
-When `alignment{:.key}` is specified, this describes whether to
-automatically choose placements with the opposite alignment if
-they fit better.
+When `align{:.key}` is specified, this describes whether to
+automatically choose placements with the opposite align if they
+fit better.
 
 ```js
 autoPlacement({
-  alignment: 'start',
-  // Won't also choose 'end' alignments if those fit better
-  autoAlignment: false,
+  align: 'start',
+  // Won't also choose 'end' aligns if those fit better
+  autoAlign: false,
 });
 ```
 

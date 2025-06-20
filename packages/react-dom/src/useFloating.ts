@@ -23,7 +23,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
   const {
-    placement = 'bottom',
+    side = 'bottom',
+    align = 'center',
     strategy = 'absolute',
     middleware = [],
     platform,
@@ -37,7 +38,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     x: 0,
     y: 0,
     strategy,
-    placement,
+    side,
+    align,
     middlewareData: {},
     isPositioned: false,
   });
@@ -84,7 +86,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       }
 
       const config: ComputePositionConfig = {
-        placement,
+        side,
+        align,
         strategy,
         middleware: latestMiddleware,
       };
@@ -119,7 +122,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
         }
       }
     },
-    [latestMiddleware, placement, strategy, platformRef, openRef],
+    [latestMiddleware, side, align, strategy, platformRef, openRef],
   );
 
   useModernLayoutEffect(() => {

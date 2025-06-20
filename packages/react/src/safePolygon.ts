@@ -1,5 +1,5 @@
 import {isElement} from '@floating-ui/dom/utils';
-import type {Rect, Side} from './types';
+import type {Rect} from './types';
 import type {HandleClose} from './hooks/useHover';
 import {contains, getTarget} from './utils/element';
 import {getNodeChildren} from './utils/nodes';
@@ -81,15 +81,7 @@ export function safePolygon(options: SafePolygonOptions = {}) {
     return speed;
   }
 
-  const fn: HandleClose = ({
-    x,
-    y,
-    placement,
-    elements,
-    onClose,
-    nodeId,
-    tree,
-  }) => {
+  const fn: HandleClose = ({x, y, side, elements, onClose, nodeId, tree}) => {
     return function onMouseMove(event: MouseEvent) {
       function close() {
         clearTimeoutIfSet(timeoutRef);
@@ -101,7 +93,6 @@ export function safePolygon(options: SafePolygonOptions = {}) {
       if (
         !elements.domReference ||
         !elements.floating ||
-        placement == null ||
         x == null ||
         y == null
       ) {
@@ -116,7 +107,6 @@ export function safePolygon(options: SafePolygonOptions = {}) {
       const isOverReferenceEl = contains(elements.domReference, target);
       const refRect = elements.domReference.getBoundingClientRect();
       const rect = elements.floating.getBoundingClientRect();
-      const side = placement.split('-')[0] as Side;
       const cursorLeaveFromRight = x > rect.right - rect.width / 2;
       const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
       const isOverReferenceRect = isInside(clientPoint, refRect);

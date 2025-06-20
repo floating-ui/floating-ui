@@ -172,36 +172,36 @@ test('falls back to only checking mainAxis overflow first', async ({page}) => {
   );
 });
 
-test('when crossAxis: "alignment" and fallbackAxisSideDirection: "end", does not flip to the perpendicular side if preferred side has no mainAxis overflow', async ({
+test('when crossAxis: "align" and fallbackAxisSideDirection: "end", does not flip to the perpendicular side if preferred side has no mainAxis overflow', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/flip');
   await click(page, `[data-testid="placement-left"]`);
-  await click(page, `[data-testid="crossAxis-alignment"]`);
+  await click(page, `[data-testid="crossAxis-align"]`);
   await click(page, `[data-testid="shift-true"]`);
   await click(page, `[data-testid="fallbackAxisSideDirection-end"]`);
 
   await scroll(page, {x: 400, y: 600});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `cross-axis-alignment-fallback-axis-side-left.png`,
+    `cross-axis-align-fallback-axis-side-left.png`,
   );
 
   await scroll(page, {x: 400, y: 350});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `cross-axis-alignment-fallback-axis-side-remains-left.png`,
+    `cross-axis-align-fallback-axis-side-remains-left.png`,
   );
 
   await scroll(page, {x: 480, y: 600});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `cross-axis-alignment-fallback-axis-side-chooses-bottom.png`,
+    `cross-axis-align-fallback-axis-side-chooses-bottom.png`,
   );
 
   await scroll(page, {x: 610, y: 320});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `cross-axis-alignment-fallback-axis-side-chooses-right.png`,
+    `cross-axis-align-fallback-axis-side-chooses-right.png`,
   );
 });

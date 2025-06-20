@@ -67,7 +67,8 @@ computePosition(
 );
 
 computePosition(document.body, document.body, {
-  placement: 'right',
+  side: 'right',
+  align: 'start',
 });
 
 computePosition(document.body, document.body, {
@@ -80,7 +81,7 @@ computePosition(document.body, document.body, {
 });
 
 computePosition(document.body, document.body, {
-  placement: 'right',
+  side: 'right',
   middleware: [
     shift(),
     flip(),

@@ -3,7 +3,7 @@ import {getComputedStyle} from '@floating-ui/dom/utils';
 import {useModernLayoutEffect} from '../utils/hooks';
 
 import {useId} from '../hooks/useId';
-import type {Alignment, FloatingContext, Side} from '../types';
+import type {FloatingContext} from '../types';
 import {warn} from '../utils/log';
 
 export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
@@ -58,7 +58,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
 ): React.JSX.Element | null {
   const {
     context: {
-      placement,
+      side,
+      align,
       elements: {floating},
       middlewareData: {arrow, shift},
     },
@@ -95,7 +96,6 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     return null;
   }
 
-  const [side, alignment] = placement.split('-') as [Side, Alignment];
   const isVerticalSide = side === 'top' || side === 'bottom';
 
   let computedStaticOffset = staticOffset;
@@ -114,11 +114,10 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const isCustomShape = !!d;
 
   const yOffsetProp =
-    computedStaticOffset && alignment === 'end' ? 'bottom' : 'top';
-  let xOffsetProp =
-    computedStaticOffset && alignment === 'end' ? 'right' : 'left';
+    computedStaticOffset && align === 'end' ? 'bottom' : 'top';
+  let xOffsetProp = computedStaticOffset && align === 'end' ? 'right' : 'left';
   if (computedStaticOffset && isRTL) {
-    xOffsetProp = alignment === 'end' ? 'left' : 'right';
+    xOffsetProp = align === 'end' ? 'left' : 'right';
   }
 
   const arrowX = arrow?.x != null ? computedStaticOffset || arrow.x : '';

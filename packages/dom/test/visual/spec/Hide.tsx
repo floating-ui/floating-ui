@@ -8,12 +8,15 @@ import {
 } from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
+import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 export function Hide() {
-  const [placement, setPlacement] = useState<Placement>('bottom');
+  const [placement, setPlacement] = useState<Placement>({
+    side: 'bottom',
+    align: 'center',
+  });
   const [hierarchy, setHierarchy] = useState('a');
   const isFixedStrategy = ['j', 'k', 'l', 'm', 'o', 'p', 'q'].includes(
     hierarchy,
@@ -27,7 +30,8 @@ export function Hide() {
     update,
     middlewareData: {hide: {referenceHidden, escaped} = {}},
   } = useFloating({
-    placement,
+    side: placement.side,
+    align: placement.align,
     strategy: isFixedStrategy ? 'fixed' : 'absolute',
     whileElementsMounted: autoUpdate,
     middleware: [
@@ -51,7 +55,9 @@ export function Hide() {
 
   const {scrollRef, indicator} = useScroll({refs, update});
 
-  useLayoutEffect(update, [update, hierarchy]);
+  useLayoutEffect(() => {
+    update(false);
+  }, [update, hierarchy]);
 
   let referenceJsx = (
     <div ref={refs.setReference} className="reference">
@@ -295,20 +301,10 @@ export function Hide() {
         </div>
       </div>
 
-      <Controls>
-        {allPlacements.map((localPlacement) => (
-          <button
-            key={localPlacement}
-            data-testid={`placement-${localPlacement}`}
-            onClick={() => setPlacement(localPlacement)}
-            style={{
-              backgroundColor: localPlacement === placement ? 'black' : '',
-            }}
-          >
-            {localPlacement}
-          </button>
-        ))}
-      </Controls>
+      <AllPlacementsControls
+        placement={placement}
+        setPlacement={setPlacement}
+      />
 
       <h2>Hierarchy</h2>
       <Controls>

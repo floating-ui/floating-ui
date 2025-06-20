@@ -22,7 +22,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
   const {floatingStyles, refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
-    placement: 'bottom-start',
+    side: 'bottom',
   });
 
   const disabledIndices = [0, 1, 2, 3, 4, 5, 6, 7, 10, 15, 45, 48];

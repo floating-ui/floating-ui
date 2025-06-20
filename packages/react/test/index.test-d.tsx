@@ -26,7 +26,7 @@ function App() {
   const arrowRef = React.useRef(null);
   useFloating();
   const {refs, floatingStyles, update, context} = useFloating({
-    placement: 'right',
+    side: 'right',
     middleware: [shift(), arrow({element: arrowRef}), false, null, undefined],
     strategy: 'fixed',
     platform: {

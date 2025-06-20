@@ -5,6 +5,8 @@ import type {
   Dimensions,
   ElementRects,
   Placement,
+  Align,
+  Side,
   Rect,
   SideObject,
   Strategy,
@@ -56,7 +58,7 @@ export interface MiddlewareData {
   [key: string]: any;
   arrow?: Partial<Coords> & {
     centerOffset: number;
-    alignmentOffset?: number;
+    alignOffset?: number;
   };
   autoPlacement?: {
     index?: number;
@@ -90,25 +92,37 @@ export interface ComputePositionConfig {
    */
   platform: Platform;
   /**
-   * Where to place the floating element relative to the reference element.
+   * The side where the floating element is placed relative to the reference element.
+   * @default 'bottom'
    */
-  placement?: Placement;
+  side?: Side;
+  /**
+   * How the floating element aligns to the reference element on the specified side.
+   * @default 'center'
+   */
+  align?: Align;
   /**
    * The strategy to use when positioning the floating element.
+   * @default 'absolute'
    */
   strategy?: Strategy;
   /**
    * Array of middleware objects to modify the positioning or provide data for
    * rendering.
+   * @default []
    */
   middleware?: Array<Middleware | null | undefined | false>;
 }
 
 export interface ComputePositionReturn extends Coords {
   /**
-   * The final chosen placement of the floating element.
+   * The final chosen side of the floating element.
    */
-  placement: Placement;
+  side: Side;
+  /**
+   * The final chosen align.
+   */
+  align: Align;
   /**
    * The strategy used to position the floating element.
    */
@@ -119,12 +133,6 @@ export interface ComputePositionReturn extends Coords {
   middlewareData: MiddlewareData;
 }
 
-export type ComputePosition = (
-  reference: unknown,
-  floating: unknown,
-  config: ComputePositionConfig,
-) => Promise<ComputePositionReturn>;
-
 export interface MiddlewareReturn extends Partial<Coords> {
   data?: {
     [key: string]: any;
@@ -132,7 +140,8 @@ export interface MiddlewareReturn extends Partial<Coords> {
   reset?:
     | boolean
     | {
-        placement?: Placement;
+        side?: Side;
+        align?: Align;
         rects?: boolean | ElementRects;
       };
 }
@@ -152,8 +161,14 @@ export interface Elements {
 }
 
 export interface MiddlewareState extends Coords {
-  initialPlacement: Placement;
-  placement: Placement;
+  /** Current chosen side */
+  side: Side;
+  /** Current chosen align */
+  align: Align;
+  /** Initial side */
+  initialSide: Side;
+  /** Initial align */
+  initialAlign: Align;
   strategy: Strategy;
   middlewareData: MiddlewareData;
   elements: Elements;

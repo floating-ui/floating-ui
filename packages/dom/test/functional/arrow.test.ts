@@ -3,8 +3,9 @@ import {expect, test} from '@playwright/test';
 import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
 import {scroll} from './utils/scroll';
+import {stringifyPlacement} from '../visual/utils/stringifyPlacement';
 
-allPlacements.forEach((placement) => {
+allPlacements.map(stringifyPlacement).forEach((placement) => {
   [75, 150].forEach((floatingSize) => {
     [25, 125].forEach((referenceSize) => {
       [0, 20].forEach((arrowPadding) => {

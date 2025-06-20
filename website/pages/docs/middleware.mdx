@@ -21,7 +21,7 @@ Each middleware is executed in order:
 
 ```js
 computePosition(referenceEl, floatingEl, {
-  placement: 'right',
+  side: 'right',
   middleware: [],
 });
 ```
@@ -32,7 +32,7 @@ computePosition(referenceEl, floatingEl, {
 
 ```js
 useFloating({
-  placement: 'right',
+  side: 'right',
   middleware: [],
 });
 ```
@@ -43,7 +43,7 @@ useFloating({
 
 ```js
 useFloating(reference, floating, {
-  placement: 'right',
+  side: 'right',
   middleware: [],
 });
 ```
@@ -72,7 +72,7 @@ the coordinates. To use this middleware, add it to your
 
 ```js
 computePosition(referenceEl, floatingEl, {
-  placement: 'right',
+  side: 'right',
   middleware: [shiftByOnePixel],
 });
 ```
@@ -83,7 +83,7 @@ computePosition(referenceEl, floatingEl, {
 
 ```js
 useFloating({
-  placement: 'right',
+  side: 'right',
   middleware: [shiftByOnePixel],
 });
 ```
@@ -94,7 +94,7 @@ useFloating({
 
 ```js
 useFloating(reference, floating, {
-  placement: 'right',
+  side: 'right',
   middleware: [shiftByOnePixel],
 });
 ```
@@ -235,8 +235,10 @@ The properties passed are below:
 interface MiddlewareState {
   x: number;
   y: number;
-  initialPlacement: Placement;
-  placement: Placement;
+  initialSide: Side;
+  initialAlign: Align;
+  side: Side;
+  align: Align;
   strategy: Strategy;
   middlewareData: MiddlewareData;
   elements: Elements;
@@ -373,7 +375,7 @@ const middleware = {
     if (someCondition) {
       return {
         reset: {
-          placement: nextPlacement,
+          side: nextSide,
         },
       };
     }

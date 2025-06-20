@@ -135,7 +135,8 @@ function PopoverComponent({
   const {floatingStyles, refs, context} = useFloating({
     nodeId,
     open,
-    placement,
+    side: placement?.side,
+    align: placement?.align,
     onOpenChange: setOpen,
     middleware: [offset(10), flip(), shift()],
     whileElementsMounted: autoUpdate,

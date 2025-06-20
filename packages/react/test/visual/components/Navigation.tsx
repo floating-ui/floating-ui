@@ -53,7 +53,8 @@ export const NavigationItem = React.forwardRef<
     nodeId,
     onOpenChange: setOpen,
     middleware: [offset(8), flip(), shift()],
-    placement: 'right-start',
+    side: 'right',
+    align: 'start',
   });
 
   const {getReferenceProps, getFloatingProps} = useInteractions([

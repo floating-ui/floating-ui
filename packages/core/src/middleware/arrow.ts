@@ -1,14 +1,13 @@
-import type {Padding} from '@floating-ui/core/utils';
 import {
+  type Padding,
   clamp,
   evaluate,
-  getAlignment,
-  getAlignmentAxis,
   getAxisLength,
+  getOppositeAxis,
   getPaddingObject,
+  getSideAxis,
   min as mathMin,
-} from '@floating-ui/core/utils';
-
+} from '../utils';
 import type {
   Derivable,
   Middleware,
@@ -34,7 +33,7 @@ export function* arrowGen(
   state: MiddlewareState,
   options: ArrowOptions | Derivable<ArrowOptions>,
 ): Generator<any, MiddlewareReturn, any> {
-  const {x, y, placement, rects, platform, elements, middlewareData} = state;
+  const {x, y, rects, platform, elements, middlewareData, side, align} = state;
   // Since element is required, we don't Partial<> the type.
   const {element, padding = 0} = evaluate(options, state) || {};
 
@@ -44,7 +43,7 @@ export function* arrowGen(
 
   const paddingObject = getPaddingObject(padding);
   const coords = {x, y};
-  const axis = getAlignmentAxis(placement);
+  const axis = getOppositeAxis(getSideAxis(side));
   const length = getAxisLength(axis);
   const arrowDimensions = yield platform.getDimensions(element);
   const isYAxis = axis === 'y';
@@ -90,24 +89,24 @@ export function* arrowGen(
   // a single reset is performed when this is true.
   const shouldAddOffset =
     !middlewareData.arrow &&
-    getAlignment(placement) != null &&
+    align !== 'center' &&
     center !== offset &&
     rects.reference[length] / 2 -
       (center < min ? minPadding : maxPadding) -
       arrowDimensions[length] / 2 <
       0;
-  const alignmentOffset = shouldAddOffset
+  const alignOffset = shouldAddOffset
     ? center < min
       ? center - min
       : center - max
     : 0;
 
   return {
-    [axis]: coords[axis] + alignmentOffset,
+    [axis]: coords[axis] + alignOffset,
     data: {
       [axis]: offset,
-      centerOffset: center - offset - alignmentOffset,
-      ...(shouldAddOffset && {alignmentOffset}),
+      centerOffset: center - offset - alignOffset,
+      ...(shouldAddOffset && {alignOffset}),
     },
     reset: shouldAddOffset,
   };
