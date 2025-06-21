@@ -1,10 +1,4 @@
-import {
-  evaluate,
-  getAlignSides,
-  placements as ALL_PLACEMENTS,
-  type Align,
-  type Placement,
-} from '../utils';
+import {evaluate, getAlignSides, placements as ALL_PLACEMENTS} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {
@@ -12,6 +6,8 @@ import type {
   Middleware,
   MiddlewareState,
   MiddlewareReturn,
+  Align,
+  Placement,
 } from '../types';
 
 export function getPlacementList(

@@ -1,14 +1,16 @@
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & {};
-
-export type Side = 'top' | 'right' | 'bottom' | 'left';
-export type Align = 'center' | 'start' | 'end';
-
-export interface Placement {
-  side: Side;
-  align: Align;
-}
+import type {
+  Align,
+  Axis,
+  ClientRectObject,
+  ElementRects,
+  Length,
+  LogicalSide,
+  Padding,
+  Placement,
+  Rect,
+  Side,
+  SideObject,
+} from '../types';
 
 const topCenter: Placement = {side: 'top', align: 'center'};
 const topStart: Placement = {side: 'top', align: 'start'};
@@ -41,31 +43,6 @@ export const placements: readonly Placement[] = [
   leftEnd,
 ] as const;
 
-export type Strategy = 'absolute' | 'fixed';
-export type Axis = 'x' | 'y';
-export type Coords = {[key in Axis]: number};
-export type Length = 'width' | 'height';
-export type Dimensions = {[key in Length]: number};
-export type SideObject = {[key in Side]: number};
-export type Rect = Prettify<Coords & Dimensions>;
-export type Padding = number | Prettify<Partial<SideObject>>;
-export type ClientRectObject = Prettify<Rect & SideObject>;
-
-export interface ElementRects {
-  reference: Rect;
-  floating: Rect;
-}
-
-/**
- * Custom positioning reference element.
- * @see https://floating-ui.com/docs/virtual-elements
- */
-export interface VirtualElement {
-  getBoundingClientRect(): ClientRectObject;
-  getClientRects?(): Array<ClientRectObject>;
-  contextElement?: any;
-}
-
 export const sides: Side[] = ['top', 'right', 'bottom', 'left'];
 export const aligns: Align[] = ['start', 'end', 'center'];
 
@@ -75,11 +52,13 @@ export const round = Math.round;
 export const floor = Math.floor;
 export const createCoords = (v: number) => ({x: v, y: v});
 
-const oppositeSideMap: Record<Side, Side> = {
+const oppositeSideMap: Record<LogicalSide, LogicalSide> = {
   left: 'right',
   right: 'left',
   bottom: 'top',
   top: 'bottom',
+  'inline-start': 'inline-end',
+  'inline-end': 'inline-start',
 };
 
 const oppositeAlignMap: Record<Align, Align> = {
@@ -110,7 +89,7 @@ export function getAxisLength(axis: Axis): Length {
   return axis === 'y' ? 'height' : 'width';
 }
 
-export function getSideAxis(side: Side): Axis {
+export function getSideAxis(side: LogicalSide): Axis {
   return side === 'top' || side === 'bottom' ? 'y' : 'x';
 }
 
@@ -127,7 +106,7 @@ export function getAlignSides(
   const alignAxis = getAlignAxis(placement);
   const length = getAxisLength(alignAxis);
 
-  let mainAlignSide: Side =
+  let mainAlignSide: LogicalSide =
     alignAxis === 'x'
       ? align === (rtl ? 'end' : 'start')
         ? 'right'
@@ -140,7 +119,13 @@ export function getAlignSides(
     mainAlignSide = oppositeSideMap[mainAlignSide];
   }
 
-  return [mainAlignSide, oppositeSideMap[mainAlignSide]];
+  const mainPhysicalSide: Side = convertToPhysicalSide(mainAlignSide, rtl);
+  const oppositePhysicalSide: Side = convertToPhysicalSide(
+    oppositeSideMap[mainAlignSide],
+    rtl,
+  );
+
+  return [mainPhysicalSide, oppositePhysicalSide];
 }
 
 export function getExpandedPlacements(placement: Placement): Array<Placement> {
@@ -160,7 +145,11 @@ export function getOppositeAlignPlacement(placement: Placement): Placement {
   };
 }
 
-function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
+function getSideList(
+  side: LogicalSide,
+  isStart: boolean,
+  rtl?: boolean,
+): Placement[] {
   const lr: Placement[] = [leftCenter, rightCenter];
   const rl: Placement[] = [rightCenter, leftCenter];
   const tb: Placement[] = [topCenter, bottomCenter];
@@ -173,6 +162,8 @@ function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
       return isStart ? lr : rl;
     case 'left':
     case 'right':
+    case 'inline-start':
+    case 'inline-end':
       return isStart ? tb : bt;
     default:
       return [];
@@ -204,6 +195,16 @@ export function getOppositePlacement(placement: Placement): Placement {
     side: oppositeSideMap[placement.side],
     align: placement.align,
   };
+}
+
+export function convertToPhysicalSide(side: LogicalSide, rtl: boolean): Side {
+  if (side === 'inline-start') {
+    return rtl ? 'right' : 'left';
+  }
+  if (side === 'inline-end') {
+    return rtl ? 'left' : 'right';
+  }
+  return side;
 }
 
 export function expandPaddingObject(padding: Partial<SideObject>): SideObject {

@@ -5,7 +5,6 @@ import {
   getOppositeAxisPlacements,
   getOppositePlacement,
   getSideAxis,
-  type Placement,
 } from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
@@ -14,6 +13,7 @@ import type {
   Middleware,
   MiddlewareState,
   MiddlewareReturn,
+  Placement,
 } from '../types';
 
 export interface FlipOptions extends DetectOverflowOptions {

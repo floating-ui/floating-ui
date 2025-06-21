@@ -25,7 +25,7 @@ export function Placement() {
       <h1>Placement</h1>
       <p>
         The floating element should be correctly positioned when given each of
-        the 12 placements.
+        the physical and logical placements.
       </p>
       <div className="container" style={{direction: rtl ? 'rtl' : 'ltr'}}>
         <div ref={refs.setReference} className="reference">
@@ -59,6 +59,7 @@ export function Placement() {
       <AllPlacementsControls
         placement={placement}
         setPlacement={setPlacement}
+        includeLogical
       />
 
       <h2>RTL</h2>

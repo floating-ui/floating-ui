@@ -3,8 +3,10 @@ import type {
   ComputePositionReturn,
   MiddlewareData,
   MiddlewareReturn,
+  ElementRects,
+  Placement,
 } from './types';
-import type {ElementRects, Placement} from './utils';
+import {convertToPhysicalSide} from './utils';
 import {isGenerator} from './utils/isGenerator';
 import {getCoordinates} from './getCoordinates';
 
@@ -25,10 +27,14 @@ export function* computePositionGen(
 
   const elements = {reference, floating};
   const placement: Placement = {side, align};
-  let renderedSide = placement.side;
+
+  const rtl = (yield platform.isRTL?.(floating)) || false;
+
+  let renderedSide = convertToPhysicalSide(placement.side, rtl);
   let renderedAlign = placement.align;
 
-  const rtl = (yield platform.isRTL?.(floating)) ?? false;
+  const initialSide = renderedSide;
+  const initialAlign = renderedAlign;
 
   let rects: ElementRects = yield platform.getElementRects({
     reference,
@@ -51,8 +57,8 @@ export function* computePositionGen(
     const middlewareResult = fn({
       x,
       y,
-      initialSide: placement.side,
-      initialAlign: placement.align,
+      initialSide,
+      initialAlign,
       side: renderedSide,
       align: renderedAlign,
       strategy,
@@ -82,7 +88,9 @@ export function* computePositionGen(
       resetCount++;
 
       if (typeof reset === 'object') {
-        renderedSide = reset.side || renderedSide;
+        renderedSide = reset.side
+          ? convertToPhysicalSide(reset.side, rtl)
+          : renderedSide;
         renderedAlign = reset.align || renderedAlign;
 
         if (reset.rects) {

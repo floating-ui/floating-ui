@@ -5,14 +5,14 @@ import {
   max,
   min,
   rectToClientRect,
-  type ClientRectObject,
-  type Padding,
 } from '../utils';
 import type {
   Derivable,
   Middleware,
   MiddlewareState,
   MiddlewareReturn,
+  ClientRectObject,
+  Padding,
 } from '../types';
 
 function getBoundingRect(rects: Array<ClientRectObject>) {

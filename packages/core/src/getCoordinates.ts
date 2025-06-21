@@ -1,12 +1,5 @@
-import {
-  getAxisLength,
-  getSideAxis,
-  getOppositeAxis,
-  type Coords,
-  type ElementRects,
-  type Side,
-  type Align,
-} from './utils';
+import {getAxisLength, getSideAxis, getOppositeAxis} from './utils';
+import type {Coords, ElementRects, Side, Align} from './types';
 
 export function getCoordinates(
   {reference, floating}: ElementRects,

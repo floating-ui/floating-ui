@@ -1,4 +1,4 @@
-import type {Rect} from './';
+import type {Rect} from '../types';
 
 export function paintDebugRects(elementRect: Rect, clippingRect: Rect) {
   const elNode = document.getElementById('elementRect') as HTMLElement;
