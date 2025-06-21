@@ -1,10 +1,4 @@
-import {
-  type Coords,
-  clamp,
-  evaluate,
-  getOppositeAxis,
-  getSideAxis,
-} from '../utils';
+import {clamp, evaluate, getOppositeAxis, getSideAxis} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {
@@ -12,6 +6,7 @@ import type {
   Middleware,
   MiddlewareState,
   MiddlewareReturn,
+  Coords,
 } from '../types';
 
 export interface ShiftOptions extends DetectOverflowOptions {

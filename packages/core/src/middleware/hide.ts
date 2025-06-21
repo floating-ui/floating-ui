@@ -1,4 +1,4 @@
-import {evaluate, sides, type Rect, type SideObject} from '../utils';
+import {evaluate, sides} from '../utils';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {
@@ -6,6 +6,8 @@ import type {
   Middleware,
   MiddlewareState,
   MiddlewareReturn,
+  Rect,
+  SideObject,
 } from '../types';
 
 function getSideOffsets(overflow: SideObject, rect: Rect) {

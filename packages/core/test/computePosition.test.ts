@@ -52,7 +52,6 @@ test('middleware', () => {
 
 test('middlewareData', () => {
   const {middlewareData} = computePosition(reference, floating, {
-    // @ts-ignore - computePosition() only uses this property
     platform,
     middleware: [
       {
@@ -67,4 +66,72 @@ test('middlewareData', () => {
   });
 
   expect(middlewareData.test).toEqual({hello: true});
+});
+
+test('inline-start and inline-end with RTL', () => {
+  const ltrPlatform = {
+    ...platform,
+    isRTL: () => false,
+  };
+
+  const rtlPlatform = {
+    ...platform,
+    isRTL: () => true,
+  };
+
+  // LTR: inline-start should behave like left
+  const {
+    x: ltrStartX,
+    y: ltrStartY,
+    side: ltrStartSide,
+  } = computePosition(reference, floating, {
+    side: 'inline-start',
+    platform: ltrPlatform,
+  });
+
+  // LTR: inline-end should behave like right
+  const {
+    x: ltrEndX,
+    y: ltrEndY,
+    side: ltrEndSide,
+  } = computePosition(reference, floating, {
+    side: 'inline-end',
+    platform: ltrPlatform,
+  });
+
+  // RTL: inline-start should behave like right
+  const {
+    x: rtlStartX,
+    y: rtlStartY,
+    side: rtlStartSide,
+  } = computePosition(reference, floating, {
+    side: 'inline-start',
+    platform: rtlPlatform,
+  });
+
+  // RTL: inline-end should behave like left
+  const {
+    x: rtlEndX,
+    y: rtlEndY,
+    side: rtlEndSide,
+  } = computePosition(reference, floating, {
+    side: 'inline-end',
+    platform: rtlPlatform,
+  });
+
+  // LTR inline-start = left position
+  expect([ltrStartX, ltrStartY]).toEqual([-50, 25]);
+  expect(ltrStartSide).toBe('left');
+
+  // LTR inline-end = right position
+  expect([ltrEndX, ltrEndY]).toEqual([100, 25]);
+  expect(ltrEndSide).toBe('right');
+
+  // RTL inline-start = right position
+  expect([rtlStartX, rtlStartY]).toEqual([100, 25]);
+  expect(rtlStartSide).toBe('right');
+
+  // RTL inline-end = left position
+  expect([rtlEndX, rtlEndY]).toEqual([-50, 25]);
+  expect(rtlEndSide).toBe('left');
 });

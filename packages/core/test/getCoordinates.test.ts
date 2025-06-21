@@ -3,27 +3,6 @@ import {getCoordinates} from '../src/getCoordinates';
 const reference = {x: 0, y: 0, width: 100, height: 100};
 const floating = {x: 0, y: 0, width: 50, height: 50};
 
-test('bottom', () => {
-  expect(getCoordinates({reference, floating}, 'bottom', 'center')).toEqual({
-    x: 25,
-    y: 100,
-  });
-});
-
-test('bottom-start', () => {
-  expect(getCoordinates({reference, floating}, 'bottom', 'start')).toEqual({
-    x: 0,
-    y: 100,
-  });
-});
-
-test('bottom-end', () => {
-  expect(getCoordinates({reference, floating}, 'bottom', 'end')).toEqual({
-    x: 50,
-    y: 100,
-  });
-});
-
 test('top', () => {
   expect(getCoordinates({reference, floating}, 'top', 'center')).toEqual({
     x: 25,
@@ -84,5 +63,50 @@ test('left-end', () => {
   expect(getCoordinates({reference, floating}, 'left', 'end')).toEqual({
     x: -50,
     y: 50,
+  });
+});
+
+test('bottom', () => {
+  expect(getCoordinates({reference, floating}, 'bottom', 'center')).toEqual({
+    x: 25,
+    y: 100,
+  });
+});
+
+test('bottom-start', () => {
+  expect(getCoordinates({reference, floating}, 'bottom', 'start')).toEqual({
+    x: 0,
+    y: 100,
+  });
+});
+
+test('bottom-end', () => {
+  expect(getCoordinates({reference, floating}, 'bottom', 'end')).toEqual({
+    x: 50,
+    y: 100,
+  });
+});
+
+test('rtl', () => {
+  expect(getCoordinates({reference, floating}, 'top', 'start', true)).toEqual({
+    x: 50,
+    y: -50,
+  });
+
+  expect(getCoordinates({reference, floating}, 'top', 'end', true)).toEqual({
+    x: 0,
+    y: -50,
+  });
+
+  expect(
+    getCoordinates({reference, floating}, 'bottom', 'start', true),
+  ).toEqual({
+    x: 50,
+    y: 100,
+  });
+
+  expect(getCoordinates({reference, floating}, 'bottom', 'end', true)).toEqual({
+    x: 0,
+    y: 100,
   });
 });
