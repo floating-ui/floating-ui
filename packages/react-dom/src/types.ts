@@ -30,7 +30,6 @@ export type {
   InlineOptions,
   Length,
   Middleware,
-  MiddlewareArguments,
   MiddlewareData,
   MiddlewareReturn,
   MiddlewareState,

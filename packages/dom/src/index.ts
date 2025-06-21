@@ -26,7 +26,6 @@ export type {
   FloatingElement,
   HideOptions,
   Middleware,
-  MiddlewareArguments,
   MiddlewareState,
   NodeScroll,
   OffsetOptions,
