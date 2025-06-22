@@ -207,6 +207,17 @@ export function convertToPhysicalSide(side: LogicalSide, rtl: boolean): Side {
   return side;
 }
 
+export function convertToLogicalSide(side: Side, rtl: boolean): LogicalSide {
+  if (side === 'left') {
+    return rtl ? 'inline-end' : 'inline-start';
+  }
+  if (side === 'right') {
+    return rtl ? 'inline-start' : 'inline-end';
+  }
+  // top/bottom remain the same
+  return side;
+}
+
 export function expandPaddingObject(padding: Partial<SideObject>): SideObject {
   return {top: 0, right: 0, bottom: 0, left: 0, ...padding};
 }

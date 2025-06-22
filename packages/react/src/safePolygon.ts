@@ -81,7 +81,15 @@ export function safePolygon(options: SafePolygonOptions = {}) {
     return speed;
   }
 
-  const fn: HandleClose = ({x, y, side, elements, onClose, nodeId, tree}) => {
+  const fn: HandleClose = ({
+    x,
+    y,
+    physicalSide: physicalSideProp,
+    elements,
+    onClose,
+    nodeId,
+    tree,
+  }) => {
     return function onMouseMove(event: MouseEvent) {
       function close() {
         clearTimeoutIfSet(timeoutRef);
@@ -94,7 +102,8 @@ export function safePolygon(options: SafePolygonOptions = {}) {
         !elements.domReference ||
         !elements.floating ||
         x == null ||
-        y == null
+        y == null ||
+        physicalSideProp == null
       ) {
         return;
       }
@@ -116,6 +125,7 @@ export function safePolygon(options: SafePolygonOptions = {}) {
       const right = (isFloatingWider ? refRect : rect).right;
       const top = (isFloatingTaller ? refRect : rect).top;
       const bottom = (isFloatingTaller ? refRect : rect).bottom;
+      const physicalSide = physicalSideProp!;
 
       if (isOverFloatingEl) {
         hasLanded = true;
@@ -154,10 +164,10 @@ export function safePolygon(options: SafePolygonOptions = {}) {
       // ignored.
       // A constant of 1 handles floating point rounding errors.
       if (
-        (side === 'top' && y >= refRect.bottom - 1) ||
-        (side === 'bottom' && y <= refRect.top + 1) ||
-        (side === 'left' && x >= refRect.right - 1) ||
-        (side === 'right' && x <= refRect.left + 1)
+        (physicalSide === 'top' && y >= refRect.bottom - 1) ||
+        (physicalSide === 'bottom' && y <= refRect.top + 1) ||
+        (physicalSide === 'left' && x >= refRect.right - 1) ||
+        (physicalSide === 'right' && x <= refRect.left + 1)
       ) {
         return close();
       }
@@ -169,7 +179,7 @@ export function safePolygon(options: SafePolygonOptions = {}) {
       // ensures it always remains open in that case.
       let rectPoly: Point[] = [];
 
-      switch (side) {
+      switch (physicalSide) {
         case 'top':
           rectPoly = [
             [left, refRect.top + 1],
@@ -205,7 +215,7 @@ export function safePolygon(options: SafePolygonOptions = {}) {
       }
 
       function getPolygon([x, y]: Point): Array<Point> {
-        switch (side) {
+        switch (physicalSide) {
           case 'top': {
             const cursorPointOne: Point = [
               isFloatingWider

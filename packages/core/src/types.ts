@@ -140,11 +140,15 @@ export interface ComputePositionConfig {
 
 export interface ComputePositionReturn extends Coords {
   /**
-   * The final chosen physical side of the floating element.
+   * The rendered side of the floating element.
    */
-  side: Side;
+  side: LogicalSide;
   /**
-   * The final chosen align.
+   * The physical rendered side of the floating element.
+   */
+  physicalSide: Side;
+  /**
+   * The rendered align of the floating element.
    */
   align: Align;
   /**
@@ -185,13 +189,11 @@ export interface Elements {
 }
 
 export interface MiddlewareState extends Coords {
-  /** Current chosen physical side */
+  /** Current chosen side (physical) */
   side: Side;
   /** Current chosen align */
   align: Align;
-  /** Initial physical side */
   initialSide: Side;
-  /** Initial align */
   initialAlign: Align;
   strategy: Strategy;
   middlewareData: MiddlewareData;

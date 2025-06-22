@@ -1,6 +1,7 @@
 import type {
   ComputePositionConfig,
   ComputePositionReturn,
+  Side,
   VirtualElement,
 } from '@floating-ui/dom';
 import type * as React from 'react';
@@ -29,6 +30,7 @@ export type {
   HideOptions,
   InlineOptions,
   Length,
+  LogicalSide,
   Middleware,
   MiddlewareData,
   MiddlewareReturn,
@@ -68,7 +70,10 @@ type Prettify<T> = {
 } & {};
 
 export type UseFloatingData = Prettify<
-  ComputePositionReturn & {isPositioned: boolean}
+  Omit<ComputePositionReturn, 'physicalSide'> & {
+    isPositioned: boolean;
+    physicalSide: Side | undefined;
+  }
 >;
 
 export type ReferenceType = Element | VirtualElement;

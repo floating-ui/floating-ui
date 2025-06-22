@@ -63,6 +63,7 @@ export type {
   HideOptions,
   InlineOptions,
   Length,
+  LogicalSide,
   Middleware,
   MiddlewareData,
   MiddlewareReturn,

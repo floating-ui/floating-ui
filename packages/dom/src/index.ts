@@ -56,4 +56,5 @@ export type {
   Side,
   SideObject,
   Strategy,
+  LogicalSide,
 } from '@floating-ui/core';

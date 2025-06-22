@@ -40,6 +40,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     strategy,
     side,
     align,
+    physicalSide: undefined,
     middlewareData: {},
     isPositioned: false,
   });

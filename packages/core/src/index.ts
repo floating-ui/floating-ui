@@ -43,4 +43,5 @@ export type {
   SideObject,
   Strategy,
   VirtualElement,
+  LogicalSide,
 } from './types';

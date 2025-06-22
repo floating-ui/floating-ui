@@ -6,7 +6,7 @@ import type {
   ElementRects,
   Placement,
 } from './types';
-import {convertToPhysicalSide} from './utils';
+import {convertToLogicalSide, convertToPhysicalSide} from './utils';
 import {isGenerator} from './utils/isGenerator';
 import {getCoordinates} from './getCoordinates';
 
@@ -110,7 +110,9 @@ export function* computePositionGen(
   return {
     x,
     y,
-    side: renderedSide,
+    side:
+      side[0] === 'i' ? convertToLogicalSide(renderedSide, rtl) : renderedSide,
+    physicalSide: renderedSide,
     align: renderedAlign,
     strategy,
     middlewareData,

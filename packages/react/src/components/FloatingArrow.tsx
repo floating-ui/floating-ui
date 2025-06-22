@@ -131,11 +131,18 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
       ` Q${width / 2},${height} ${svgX},${height - svgY}` +
       ' Z';
 
+  const left = isCustomShape ? 'rotate(90deg)' : 'rotate(-90deg)';
+  const right = isCustomShape ? 'rotate(-90deg)' : 'rotate(90deg)';
+  const inlineStart = isRTL ? right : left;
+  const inlineEnd = isRTL ? left : right;
+
   const rotation = {
     top: isCustomShape ? 'rotate(180deg)' : '',
-    left: isCustomShape ? 'rotate(90deg)' : 'rotate(-90deg)',
     bottom: isCustomShape ? '' : 'rotate(180deg)',
-    right: isCustomShape ? 'rotate(-90deg)' : 'rotate(90deg)',
+    left,
+    right,
+    'inline-start': inlineStart,
+    'inline-end': inlineEnd,
   }[side];
 
   return (

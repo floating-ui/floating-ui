@@ -26,6 +26,7 @@ export type {
   HideOptions,
   InlineOptions,
   Length,
+  LogicalSide,
   Middleware,
   MiddlewareData,
   MiddlewareReturn,
@@ -44,6 +45,10 @@ export type {
   Strategy,
   VirtualElement,
 } from '@floating-ui/core';
+
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
 
 export interface UseFloatingOptions {
   /**
@@ -67,7 +72,12 @@ export interface UseFloatingOptions {
   };
 }
 
-export interface UseFloatingReturn extends ComputePositionReturn {
+export interface UseFloatingReturn
+  extends Omit<ComputePositionReturn, 'physicalSide'> {
+  /**
+   * The physical rendered side of the floating element.
+   */
+  physicalSide: Side | undefined;
   /**
    * Update the position of the floating element, re-rendering the component
    * if required.
@@ -118,3 +128,9 @@ export interface UseFloatingReturn extends ComputePositionReturn {
     scrollEventThrottle: 16;
   };
 }
+
+export type UseFloatingData = Prettify<
+  Omit<ComputePositionReturn, 'physicalSide'> & {
+    physicalSide: Side | undefined;
+  }
+>;
