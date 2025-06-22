@@ -17,3 +17,4 @@ test-results
 out
 out-tsc
 .turbo
+packages/*/utils/

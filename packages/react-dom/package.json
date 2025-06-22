@@ -20,11 +20,22 @@
         "types": "./dist/esm/index.d.ts",
         "default": "./dist/esm/index.js"
       }
+    },
+    "./utils": {
+      "require": {
+        "types": "./dist/cjs/utils/index.d.ts",
+        "default": "./dist/cjs/utils/index.js"
+      },
+      "import": {
+        "types": "./dist/esm/utils/index.d.ts",
+        "default": "./dist/esm/utils/index.js"
+      }
     }
   },
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "utils"
   ],
   "scripts": {
     "lint": "eslint .",
@@ -34,7 +45,7 @@
     "test:watch": "vitest watch",
     "build": "tsdown",
     "publint": "publint",
-    "prepack": "node ../../config/prepack.mjs react-dom",
+    "prepack": "node ../../config/prepack.mjs react-dom --utils",
     "typecheck": "tsc -b"
   },
   "author": "atomiks",

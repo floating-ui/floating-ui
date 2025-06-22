@@ -20,11 +20,22 @@
         "types": "./dist/esm/index.d.ts",
         "default": "./dist/esm/index.js"
       }
+    },
+    "./utils": {
+      "require": {
+        "types": "./dist/cjs/utils/index.d.ts",
+        "default": "./dist/cjs/utils/index.js"
+      },
+      "import": {
+        "types": "./dist/esm/utils/index.d.ts",
+        "default": "./dist/esm/utils/index.js"
+      }
     }
   },
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "utils"
   ],
   "scripts": {
     "lint": "eslint .",
@@ -35,7 +46,7 @@
     "build": "tsdown",
     "dev": "vite",
     "publint": "publint",
-    "prepack": "node ../../config/prepack.mjs vue",
+    "prepack": "node ../../config/prepack.mjs vue --utils",
     "typecheck": "tsc -b"
   },
   "author": "lozinsky",
