@@ -84,6 +84,7 @@ test('inline-start and inline-end with RTL', () => {
     x: ltrStartX,
     y: ltrStartY,
     side: ltrStartSide,
+    physicalSide: ltrStartPhysicalSide,
   } = computePosition(reference, floating, {
     side: 'inline-start',
     platform: ltrPlatform,
@@ -94,6 +95,7 @@ test('inline-start and inline-end with RTL', () => {
     x: ltrEndX,
     y: ltrEndY,
     side: ltrEndSide,
+    physicalSide: ltrEndPhysicalSide,
   } = computePosition(reference, floating, {
     side: 'inline-end',
     platform: ltrPlatform,
@@ -104,6 +106,7 @@ test('inline-start and inline-end with RTL', () => {
     x: rtlStartX,
     y: rtlStartY,
     side: rtlStartSide,
+    physicalSide: rtlStartPhysicalSide,
   } = computePosition(reference, floating, {
     side: 'inline-start',
     platform: rtlPlatform,
@@ -114,6 +117,7 @@ test('inline-start and inline-end with RTL', () => {
     x: rtlEndX,
     y: rtlEndY,
     side: rtlEndSide,
+    physicalSide: rtlEndPhysicalSide,
   } = computePosition(reference, floating, {
     side: 'inline-end',
     platform: rtlPlatform,
@@ -121,17 +125,21 @@ test('inline-start and inline-end with RTL', () => {
 
   // LTR inline-start = left position
   expect([ltrStartX, ltrStartY]).toEqual([-50, 25]);
-  expect(ltrStartSide).toBe('left');
+  expect(ltrStartSide).toBe('inline-start');
+  expect(ltrStartPhysicalSide).toBe('left');
 
   // LTR inline-end = right position
   expect([ltrEndX, ltrEndY]).toEqual([100, 25]);
-  expect(ltrEndSide).toBe('right');
+  expect(ltrEndSide).toBe('inline-end');
+  expect(ltrEndPhysicalSide).toBe('right');
 
   // RTL inline-start = right position
   expect([rtlStartX, rtlStartY]).toEqual([100, 25]);
-  expect(rtlStartSide).toBe('right');
+  expect(rtlStartSide).toBe('inline-start');
+  expect(rtlStartPhysicalSide).toBe('right');
 
   // RTL inline-end = left position
   expect([rtlEndX, rtlEndY]).toEqual([-50, 25]);
-  expect(rtlEndSide).toBe('left');
+  expect(rtlEndSide).toBe('inline-end');
+  expect(rtlEndPhysicalSide).toBe('left');
 });
