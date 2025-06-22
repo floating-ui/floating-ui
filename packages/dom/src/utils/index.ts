@@ -1,3 +1,5 @@
+export * from '@floating-ui/core/utils';
+
 type OverflowAncestors = Array<Element | Window | VisualViewport>;
 
 function hasWindow() {

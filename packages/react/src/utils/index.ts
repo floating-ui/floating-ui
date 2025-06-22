@@ -1,3 +1,5 @@
+export * from '@floating-ui/react-dom/utils';
+
 export * from './element';
 export * from './nodes';
 export * from './platform';

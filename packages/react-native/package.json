@@ -20,11 +20,22 @@
         "types": "./dist/esm/index.d.ts",
         "default": "./dist/esm/index.js"
       }
+    },
+    "./utils": {
+      "require": {
+        "types": "./dist/cjs/utils/index.d.ts",
+        "default": "./dist/cjs/utils/index.js"
+      },
+      "import": {
+        "types": "./dist/esm/utils/index.d.ts",
+        "default": "./dist/esm/utils/index.js"
+      }
     }
   },
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "utils"
   ],
   "scripts": {
     "lint": "eslint .",
@@ -32,7 +43,7 @@
     "clean": "rimraf dist out-tsc && find . -name '*.d.ts' ! -name 'env.d.ts' -delete",
     "build": "tsdown",
     "publint": "publint",
-    "prepack": "node ../../config/prepack.mjs react-native",
+    "prepack": "node ../../config/prepack.mjs react-native --utils",
     "typecheck": "tsc -b"
   },
   "author": "atomiks",
