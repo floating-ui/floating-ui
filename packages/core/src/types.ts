@@ -64,7 +64,7 @@ export interface Platform {
   getDimensions: (element: any) => Promisable<Dimensions>;
 
   // Optional
-  convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
+  convertToViewportRelativeRect?: (args: {
     elements?: Elements;
     rect: Rect;
     offsetParent: any;

@@ -2,6 +2,7 @@
   "extends": "../../config/tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
+    "jsx": "react-jsx",
     "types": [],
     "outDir": "out-tsc"
   },

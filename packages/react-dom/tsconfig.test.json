@@ -2,8 +2,14 @@
   "extends": "../../config/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "out-tsc",
-    "jsx": "react-jsx"
+    "types": ["node", "react", "react-dom", "vitest/globals"]
   },
-  "include": ["test", "vite.config.mts"],
-  "references": [{"path": "./tsconfig.lib.json"}]
+  "include": ["test"],
+  "exclude": ["*.config.*"],
+  "references": [
+    {"path": "./tsconfig.lib.json"},
+    {"path": "../core/tsconfig.lib.json"},
+    {"path": "../dom/tsconfig.lib.json"},
+    {"path": "../react-dom/tsconfig.lib.json"}
+  ]
 }

@@ -22,20 +22,25 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
         offset(),
         offset(10),
         offset(() => 5),
-        offset(() => ({crossAxis: 10})),
-        offset({crossAxis: 10, mainAxis: 10}),
+        offset(() => ({align: 10})),
+        offset({align: 10, side: 10}),
 
-        flip({fallbackPlacements: ['top', 'bottom']}),
+        flip({
+          fallbackPlacements: [
+            {side: 'top', align: 'center'},
+            {side: 'bottom', align: 'center'},
+          ],
+        }),
 
         shift(),
-        shift({crossAxis: true}),
+        shift({align: true}),
         shift({boundary: document.createElement('div')}),
         shift({boundary: [document.createElement('div')]}),
         shift({limiter: limitShift()}),
         shift({limiter: limitShift({offset: 10})}),
-        shift({limiter: limitShift({offset: {crossAxis: 10}})}),
+        shift({limiter: limitShift({offset: {align: 10}})}),
         shift({limiter: limitShift({offset: () => 5})}),
-        shift({limiter: limitShift({offset: () => ({crossAxis: 10})})}),
+        shift({limiter: limitShift({offset: () => ({align: 10})})}),
 
         arrow({element: arrowRef}),
 
@@ -65,23 +70,28 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
       offset(),
       offset(10),
       offset(() => 5),
-      offset(() => ({crossAxis: 10})),
-      offset({crossAxis: 10, mainAxis: 10}),
+      offset(() => ({align: 10})),
+      offset({align: 10, side: 10}),
 
       // should also test `autoPlacement.allowedPlacements`
       // can't have both `flip` and `autoPlacement` in the same middleware
       // array, or multiple `flip`s
-      flip({fallbackPlacements: ['top', 'bottom']}),
+      flip({
+        fallbackPlacements: [
+          {side: 'top', align: 'center'},
+          {side: 'bottom', align: 'center'},
+        ],
+      }),
 
       shift(),
-      shift({crossAxis: true}),
+      shift({align: true}),
       shift({boundary: document.createElement('div')}),
       shift({boundary: [document.createElement('div')]}),
       shift({limiter: limitShift()}),
       shift({limiter: limitShift({offset: 10})}),
-      shift({limiter: limitShift({offset: {crossAxis: 10}})}),
+      shift({limiter: limitShift({offset: {align: 10}})}),
       shift({limiter: limitShift({offset: () => 5})}),
-      shift({limiter: limitShift({offset: () => ({crossAxis: 10})})}),
+      shift({limiter: limitShift({offset: () => ({align: 10})})}),
 
       arrow({element: arrowRef}),
 

@@ -121,16 +121,16 @@ These are the options you can pass to `flip(){:js}`.
 
 ```ts
 interface FlipOptions extends DetectOverflowOptions {
-  mainAxis?: boolean;
-  crossAxis?: boolean | 'align';
+  side?: boolean;
+  align?: boolean | 'align';
   fallbackAxisSideDirection?: 'none' | 'start' | 'end';
   flipAlign?: boolean;
   fallbackPlacements?: Array<Placement>;
-  fallbackStrategy?: 'bestFit' | 'initialPlacement';
+  failureStrategy?: 'best-fit' | 'initial-placement';
 }
 ```
 
-### `mainAxis{:.key}`
+### `side{:.key}`
 
 default: `true{:js}`
 
@@ -142,7 +142,7 @@ flip. By disabling this, it will ignore overflow.
 
 ```js
 flip({
-  mainAxis: false,
+  side: false,
 });
 ```
 
@@ -159,7 +159,7 @@ flip({
         {
           name: 'flip',
           options: {
-            mainAxis: false,
+            side: false,
           },
         },
       ]}
@@ -169,17 +169,17 @@ flip({
   </Chrome>
 </div>
 
-### `crossAxis{:.key}`
+### `align{:.key}`
 
 default: `true{:js}`
 
 This is the cross axis in which overflow is checked to perform a
-flip, the axis perpendicular to `mainAxis{:.key}`. By disabling
-this, it will ignore overflow.
+flip, the axis perpendicular to `side{:.key}`. By disabling this,
+it will ignore overflow.
 
 ```js
 flip({
-  crossAxis: false,
+  align: false,
 });
 ```
 
@@ -197,7 +197,7 @@ flip({
         {
           name: 'flip',
           options: {
-            crossAxis: true,
+            align: true,
             rootBoundary: 'document'
           },
         },
@@ -220,7 +220,7 @@ flip({
         {
           name: 'flip',
           options: {
-            crossAxis: false,
+            align: false,
             rootBoundary: 'document'
           },
         },
@@ -452,18 +452,18 @@ when using this option.
 
 </Notice>
 
-### `fallbackStrategy{:.key}`
+### `failureStrategy{:.key}`
 
-default: `'bestFit'{:js}`
+default: `'best-fit'{:js}`
 
 When no placements fit, then you'll want to decide what happens.
-`'bestFit'{:js}` will use the placement which fits best on the
-checked axes. `'initialPlacement'{:js}` will use the initial
+`'best-fit'{:js}` will use the placement which fits best on the
+checked axes. `'initial-placement'{:js}` will use the initial
 `placement{:.key}` specified.
 
 ```js
 flip({
-  fallbackStrategy: 'initialPlacement',
+  failureStrategy: 'initial-placement',
 });
 ```
 
@@ -541,7 +541,7 @@ const middleware = [offset(5)];
 const flipMiddleware = flip({
   // Ensure we flip to the perpendicular axis if it doesn't fit
   // on narrow viewports.
-  crossAxis: 'align',
+  align: 'align',
   fallbackAxisSideDirection: 'end', // or 'start'
 });
 const shiftMiddleware = shift();

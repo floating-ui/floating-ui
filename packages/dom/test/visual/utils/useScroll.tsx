@@ -27,7 +27,7 @@ export const useScroll = ({
   } = useFloating({
     strategy: 'fixed',
     side: 'top',
-    middleware: [shift({crossAxis: true, altBoundary: true, padding: 10})],
+    middleware: [shift({align: true, altBoundary: true, padding: 10})],
   });
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [{scrollX, scrollY}, setScroll] = useState<{

@@ -22,7 +22,7 @@ function Outside({scroll}: {scroll: number[]}) {
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
-        crossAxis: true,
+        align: true,
         limiter: limitShift(),
         boundary: iframe || undefined,
       }),
@@ -88,7 +88,7 @@ function OutsideEmbedded({scroll}: {scroll: number[]}) {
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
-        crossAxis: true,
+        align: true,
         limiter: limitShift(),
         boundary: nestedIFrame || undefined,
       }),
@@ -170,7 +170,7 @@ function Inside({scroll}: {scroll: number[]}) {
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
-        crossAxis: true,
+        align: true,
         limiter: limitShift(),
       }),
     ],
@@ -238,7 +238,7 @@ function InsideScrollable({scroll}: {scroll: number[]}) {
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
-        crossAxis: true,
+        align: true,
         limiter: limitShift(),
       }),
     ],
@@ -317,7 +317,7 @@ function Nested({scroll}: {scroll: number[]}) {
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
-        crossAxis: true,
+        align: true,
         limiter: limitShift(),
         boundary: rootIFrame || undefined,
       }),
@@ -401,7 +401,7 @@ function Virtual({scroll}: {scroll: number[]}) {
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
-        crossAxis: true,
+        align: true,
         limiter: limitShift(),
         boundary: iframe || undefined,
       }),

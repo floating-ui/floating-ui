@@ -11,12 +11,12 @@ function App() {
     transform: false,
     side: 'right',
     middleware: [
-      offset(() => ({mainAxis: 0})),
+      offset(() => ({side: 0})),
       shift(),
       arrow({element: arrowRef}),
       {
         name: 'test',
-        async fn({elements}) {
+        fn({elements}) {
           // @ts-expect-error - should not be allowed with strong typing
           elements.floating.style = '';
           return {};

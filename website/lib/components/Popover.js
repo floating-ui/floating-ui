@@ -47,7 +47,7 @@ export function usePopover({
       offset(remToPx(10 / 16)),
       flip({
         fallbackAxisSideDirection: 'end',
-        crossAxis: false,
+        align: false,
       }),
       shift({
         limiter: limitShift({offset: remToPx(15 / 16)}),

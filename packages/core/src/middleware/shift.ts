@@ -11,17 +11,15 @@ import type {
 
 export interface ShiftOptions extends DetectOverflowOptions {
   /**
-   * The axis that runs along the align of the floating element. Determines
-   * whether overflow along this axis is checked to perform shifting.
-   * @default true
-   */
-  mainAxis?: boolean;
-  /**
-   * The axis that runs along the side of the floating element. Determines
-   * whether overflow along this axis is checked to perform shifting.
+   * Determines whether to shift the floating element along the side axis.
    * @default false
    */
-  crossAxis?: boolean;
+  side?: boolean;
+  /**
+   * Determines whether to shift the floating element along the align axis.
+   * @default true
+   */
+  align?: boolean;
   /**
    * Accepts a function that limits the shifting done in order to prevent
    * detachment.
@@ -39,42 +37,42 @@ export function* shiftGen(
   const {x, y, side} = state;
 
   const {
-    mainAxis: checkMainAxis = true,
-    crossAxis: checkCrossAxis = false,
+    side: checkSideAxis = false,
+    align: checkAlignAxis = true,
     limiter = {fn: ({x, y}: MiddlewareState) => ({x, y})},
     ...detectOverflowOptions
   } = evaluate(options, state);
 
   const coords = {x, y};
   const overflow = yield* detectOverflow(state, detectOverflowOptions);
-  const crossAxis = getSideAxis(side);
-  const mainAxis = getOppositeAxis(crossAxis);
+  const sideAxis = getSideAxis(side);
+  const alignAxis = getOppositeAxis(sideAxis);
 
-  let mainAxisCoord = coords[mainAxis];
-  let crossAxisCoord = coords[crossAxis];
+  let sideAxisCoord = coords[sideAxis];
+  let alignAxisCoord = coords[alignAxis];
 
-  if (checkMainAxis) {
-    const minSide = mainAxis === 'y' ? 'top' : 'left';
-    const maxSide = mainAxis === 'y' ? 'bottom' : 'right';
-    const min = mainAxisCoord + overflow[minSide];
-    const max = mainAxisCoord - overflow[maxSide];
+  if (checkSideAxis) {
+    const minSide = sideAxis === 'y' ? 'top' : 'left';
+    const maxSide = sideAxis === 'y' ? 'bottom' : 'right';
+    const min = sideAxisCoord + overflow[minSide];
+    const max = sideAxisCoord - overflow[maxSide];
 
-    mainAxisCoord = clamp(min, mainAxisCoord, max);
+    sideAxisCoord = clamp(min, sideAxisCoord, max);
   }
 
-  if (checkCrossAxis) {
-    const minSide = crossAxis === 'y' ? 'top' : 'left';
-    const maxSide = crossAxis === 'y' ? 'bottom' : 'right';
-    const min = crossAxisCoord + overflow[minSide];
-    const max = crossAxisCoord - overflow[maxSide];
+  if (checkAlignAxis) {
+    const minSide = alignAxis === 'y' ? 'top' : 'left';
+    const maxSide = alignAxis === 'y' ? 'bottom' : 'right';
+    const min = alignAxisCoord + overflow[minSide];
+    const max = alignAxisCoord - overflow[maxSide];
 
-    crossAxisCoord = clamp(min, crossAxisCoord, max);
+    alignAxisCoord = clamp(min, alignAxisCoord, max);
   }
 
   const limitedCoords = limiter.fn({
     ...state,
-    [mainAxis]: mainAxisCoord,
-    [crossAxis]: crossAxisCoord,
+    [sideAxis]: sideAxisCoord,
+    [alignAxis]: alignAxisCoord,
   });
 
   return {
@@ -83,8 +81,8 @@ export function* shiftGen(
       x: limitedCoords.x - x,
       y: limitedCoords.y - y,
       enabled: {
-        [mainAxis]: checkMainAxis,
-        [crossAxis]: checkCrossAxis,
+        [sideAxis]: checkSideAxis,
+        [alignAxis]: checkAlignAxis,
       },
     },
   };
@@ -109,15 +107,15 @@ type LimitShiftOffset =
   | number
   | {
       /**
-       * Offset the limiting of the axis that runs along the align of the
-       * floating element.
-       */
-      mainAxis?: number;
-      /**
        * Offset the limiting of the axis that runs along the side of the
        * floating element.
        */
-      crossAxis?: number;
+      side?: number;
+      /**
+       * Offset the limiting of the axis that runs along the align of the
+       * floating element.
+       */
+      align?: number;
     };
 
 export interface LimitShiftOptions {
@@ -129,14 +127,14 @@ export interface LimitShiftOptions {
    */
   offset?: LimitShiftOffset | Derivable<LimitShiftOffset>;
   /**
-   * Whether to limit the axis that runs along the align of the floating
-   * element.
+   * Whether to limit shifting on the axis that runs along the side of the floating element.
    */
-  mainAxis?: boolean;
+  side?: boolean;
   /**
-   * Whether to limit the axis that runs along the side of the floating element.
+   * Whether to limit shifting on the axis that runs along the align of the
+   * floating element.
    */
-  crossAxis?: boolean;
+  align?: boolean;
 }
 
 /**
@@ -154,65 +152,61 @@ export const limitShift = (
 
     const {
       offset = 0,
-      mainAxis: checkMainAxis = true,
-      crossAxis: checkCrossAxis = true,
+      align: checkAlignAxis = true,
+      side: checkSideAxis = true,
     } = evaluate(options, state);
 
     const coords = {x, y};
-    const crossAxis = getSideAxis(side);
-    const mainAxis = getOppositeAxis(crossAxis);
+    const sideAxis = getSideAxis(side);
+    const alignAxis = getOppositeAxis(sideAxis);
 
-    let mainAxisCoord = coords[mainAxis];
-    let crossAxisCoord = coords[crossAxis];
+    let alignAxisCoord = coords[alignAxis];
+    let sideAxisCoord = coords[sideAxis];
 
     const rawOffset = evaluate(offset, state);
     const computedOffset =
       typeof rawOffset === 'number'
-        ? {mainAxis: rawOffset, crossAxis: 0}
-        : {mainAxis: 0, crossAxis: 0, ...rawOffset};
+        ? {side: rawOffset, align: 0}
+        : {side: 0, align: 0, ...rawOffset};
 
-    if (checkMainAxis) {
-      const len = mainAxis === 'y' ? 'height' : 'width';
+    if (checkSideAxis) {
+      const len = sideAxis === 'y' ? 'width' : 'height';
+      const isOriginSide = ['top', 'left'].includes(side);
       const limitMin =
-        rects.reference[mainAxis] -
+        rects.reference[sideAxis] -
         rects.floating[len] +
-        computedOffset.mainAxis;
+        (isOriginSide ? middlewareData.offset?.[sideAxis] || 0 : 0) +
+        (isOriginSide ? 0 : computedOffset.align);
       const limitMax =
-        rects.reference[mainAxis] +
-        rects.reference[len] -
-        computedOffset.mainAxis;
+        rects.reference[sideAxis] +
+        rects.reference[len] +
+        (isOriginSide ? 0 : middlewareData.offset?.[sideAxis] || 0) -
+        (isOriginSide ? computedOffset.align : 0);
 
-      if (mainAxisCoord < limitMin) {
-        mainAxisCoord = limitMin;
-      } else if (mainAxisCoord > limitMax) {
-        mainAxisCoord = limitMax;
+      if (sideAxisCoord < limitMin) {
+        sideAxisCoord = limitMin;
+      } else if (sideAxisCoord > limitMax) {
+        sideAxisCoord = limitMax;
       }
     }
 
-    if (checkCrossAxis) {
-      const len = mainAxis === 'y' ? 'width' : 'height';
-      const isOriginSide = ['top', 'left'].includes(side);
+    if (checkAlignAxis) {
+      const len = alignAxis === 'y' ? 'height' : 'width';
       const limitMin =
-        rects.reference[crossAxis] -
-        rects.floating[len] +
-        (isOriginSide ? middlewareData.offset?.[crossAxis] || 0 : 0) +
-        (isOriginSide ? 0 : computedOffset.crossAxis);
+        rects.reference[alignAxis] - rects.floating[len] + computedOffset.side;
       const limitMax =
-        rects.reference[crossAxis] +
-        rects.reference[len] +
-        (isOriginSide ? 0 : middlewareData.offset?.[crossAxis] || 0) -
-        (isOriginSide ? computedOffset.crossAxis : 0);
+        rects.reference[alignAxis] + rects.reference[len] - computedOffset.side;
 
-      if (crossAxisCoord < limitMin) {
-        crossAxisCoord = limitMin;
-      } else if (crossAxisCoord > limitMax) {
-        crossAxisCoord = limitMax;
+      if (alignAxisCoord < limitMin) {
+        alignAxisCoord = limitMin;
+      } else if (alignAxisCoord > limitMax) {
+        alignAxisCoord = limitMax;
       }
     }
 
     return {
-      [mainAxis]: mainAxisCoord,
-      [crossAxis]: crossAxisCoord,
+      [sideAxis]: sideAxisCoord,
+      [alignAxis]: alignAxisCoord,
     } as Coords;
   },
 });

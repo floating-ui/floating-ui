@@ -261,9 +261,9 @@ until it reaches a minimum size, at which point it will flip.
 If you're using the `padding{:.key}` option in either middleware,
 ensure they share the **same value**.
 
-### `bestFit{:.string}`
+### `best-fit{:.string}`
 
-The `'bestFit'{:js}` fallback strategy in the `flip(){:js}`
+The `'best-fit'{:js}` fallback strategy in the `flip(){:js}`
 middleware is the default, which ensures the best fitting
 placement is used. In this scenario, place `size(){:js}`
 **after** `flip(){:js}`:
@@ -311,7 +311,7 @@ const middleware = [
 This strategy ensures the floating element stays in view at all
 times at the most optimal size.
 
-### `initialPlacement{:.string}`
+### `initial-placement{:.string}`
 
 If instead, you want the initial placement to take precedence,
 and are setting a minimum acceptable size, place `size(){:js}`
@@ -329,7 +329,7 @@ const middleware = [
     },
   }),
   flip({
-    fallbackStrategy: 'initialPlacement',
+    failureStrategy: 'initial-placement',
   }),
 ];
 ```

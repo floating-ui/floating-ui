@@ -25,14 +25,14 @@ export function Size() {
   });
   const [addFlip, setAddFlip] = useState(false);
   const [addShift, setAddShift] = useState<ShiftOrder>('none');
-  const [shiftCrossAxis, setShiftCrossAxis] = useState(false);
+  const [shiftalignAxis, setShiftalignAxis] = useState(false);
   const [shiftLimiter, setShiftLimiter] = useState(false);
 
   const hasEdgeAlign = placement.align !== 'center';
 
   const shiftOptions = {
     padding: 10,
-    crossAxis: shiftCrossAxis,
+    align: shiftalignAxis,
     limiter: shiftLimiter ? limitShift({offset: 50}) : undefined,
   };
 
@@ -85,7 +85,7 @@ export function Size() {
               height: 300,
               ...(addShift !== 'none' && {
                 width:
-                  addShift === 'before' && shiftCrossAxis
+                  addShift === 'before' && shiftalignAxis
                     ? 100
                     : addShift === 'before' && hasEdgeAlign
                       ? 360
@@ -155,15 +155,15 @@ export function Size() {
 
       {addShift !== 'none' && (
         <>
-          <h3>shift.crossAxis</h3>
+          <h3>shift.alignAxis</h3>
           <Controls>
             {[true, false].map((bool) => (
               <button
                 key={String(bool)}
-                data-testid={`shift.crossAxis-${bool}`}
-                onClick={() => setShiftCrossAxis(bool)}
+                data-testid={`shift.alignAxis-${bool}`}
+                onClick={() => setShiftalignAxis(bool)}
                 style={{
-                  backgroundColor: shiftCrossAxis === bool ? 'black' : '',
+                  backgroundColor: shiftalignAxis === bool ? 'black' : '',
                 }}
               >
                 {String(bool)}

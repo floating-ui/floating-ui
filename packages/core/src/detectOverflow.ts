@@ -12,7 +12,7 @@ import type {
 export interface DetectOverflowOptions {
   /**
    * The clipping element(s) or area in which overflow will be checked.
-   * @default 'clippingAncestors'
+   * @default 'clipping-ancestors'
    */
   boundary?: Boundary;
   /**
@@ -27,7 +27,7 @@ export interface DetectOverflowOptions {
   elementContext?: ElementContext;
   /**
    * Whether to check for overflow using the alternate element's boundary
-   * (`clippingAncestors` boundary only).
+   * (`clipping-ancestors` boundary only).
    * @default false
    */
   altBoundary?: boolean;
@@ -54,7 +54,7 @@ export function* detectOverflow(
   const {x, y, platform, rects, elements, strategy} = state;
 
   const {
-    boundary = 'clippingAncestors',
+    boundary = 'clipping-ancestors',
     rootBoundary = 'viewport',
     elementContext = 'floating',
     altBoundary = false,
@@ -93,8 +93,8 @@ export function* detectOverflow(
     : {x: 1, y: 1};
 
   const elementClientRect = rectToClientRect(
-    platform.convertOffsetParentRelativeRectToViewportRelativeRect
-      ? yield platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+    platform.convertToViewportRelativeRect
+      ? yield platform.convertToViewportRelativeRect({
           elements,
           rect,
           offsetParent,

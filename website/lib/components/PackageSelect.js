@@ -353,7 +353,7 @@ export function PackageSelect() {
     side: 'bottom',
     align: 'start',
     middleware: [
-      offset({mainAxis: 10, alignAxis: -5}),
+      offset({side: 10, align: -5}),
       flip({padding: 10}),
       size({
         padding: 10,

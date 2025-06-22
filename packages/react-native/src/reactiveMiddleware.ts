@@ -27,7 +27,7 @@ import {arrow as baseArrow} from './arrow';
 /**
  * Modifies the placement by translating the floating element along the
  * specified axes.
- * A number (shorthand for `mainAxis` or distance), or an axes configuration
+ * A number (shorthand for `sideAxis` or distance), or an axes configuration
  * object may be passed.
  * @see https://floating-ui.com/docs/offset
  */

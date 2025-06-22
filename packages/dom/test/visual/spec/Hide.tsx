@@ -35,7 +35,7 @@ export function Hide() {
     strategy: isFixedStrategy ? 'fixed' : 'absolute',
     whileElementsMounted: autoUpdate,
     middleware: [
-      hide({strategy: 'referenceHidden'}),
+      hide({strategy: 'reference-hidden'}),
       hide({strategy: 'escaped'}),
       hierarchy === 'o' && shift(),
       size({

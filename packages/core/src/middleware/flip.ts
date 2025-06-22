@@ -18,20 +18,18 @@ import type {
 
 export interface FlipOptions extends DetectOverflowOptions {
   /**
-   * The axis that runs along the side of the floating element. Determines
-   * whether overflow along this axis is checked to perform a flip.
+   * Determines whether to check for overflow along the side axis.
    * @default true
    */
-  mainAxis?: boolean;
+  side?: boolean;
   /**
-   * The axis that runs along the align of the floating element. Determines
-   * whether overflow along this axis is checked to perform a flip.
+   * Determines whether to check for overflow along the align axis.
    * - `true`: Whether to check cross axis overflow for both side and align flipping.
    * - `false`: Whether to disable all cross axis overflow checking.
    * - `'align'`: Whether to check cross axis overflow for align flipping only.
    * @default true
    */
-  crossAxis?: boolean | 'align';
+  align?: boolean | 'align';
   /**
    * Placements to try sequentially if the preferred `placement` does not fit.
    * @default [oppositePlacement] (computed)
@@ -39,9 +37,9 @@ export interface FlipOptions extends DetectOverflowOptions {
   fallbackPlacements?: Array<Placement>;
   /**
    * What strategy to use when no placements fit.
-   * @default 'bestFit'
+   * @default 'best-fit'
    */
-  fallbackStrategy?: 'bestFit' | 'initialPlacement';
+  failureStrategy?: 'best-fit' | 'initial-placement';
   /**
    * Whether to allow fallback to the perpendicular axis of the preferred
    * placement, and if so, which side direction along the axis to prefer.
@@ -75,10 +73,10 @@ export function* flipGen(
   const initialPlacement = {side: initialSide, align: initialAlign};
 
   const {
-    mainAxis: checkMainAxis = true,
-    crossAxis: checkCrossAxis = true,
+    side: checkSide = true,
+    align: checkAlign = true,
     fallbackPlacements: specifiedFallbackPlacements,
-    fallbackStrategy = 'bestFit',
+    failureStrategy = 'best-fit',
     fallbackAxisSideDirection = 'none',
     flipAlign = true,
     ...detectOverflowOptions
@@ -124,11 +122,11 @@ export function* flipGen(
   const overflows = [];
   let overflowsData = middlewareData.flip?.overflows || [];
 
-  if (checkMainAxis) {
+  if (checkSide) {
     overflows.push(overflow[currentSide]);
   }
 
-  if (checkCrossAxis) {
+  if (checkAlign) {
     const sides = getAlignSides(placement, rects, rtl);
     overflows.push(overflow[sides[0]], overflow[sides[1]]);
   }
@@ -141,13 +139,13 @@ export function* flipGen(
     const nextPlacement = placements[nextIndex];
 
     if (nextPlacement) {
-      const ignoreCrossAxisOverflow =
-        checkCrossAxis === 'align'
+      const ignoreAlignAxisOverflow =
+        checkAlign === 'align'
           ? initialSideAxis !== getSideAxis(nextPlacement.side)
           : false;
 
       if (
-        !ignoreCrossAxisOverflow ||
+        !ignoreAlignAxisOverflow ||
         // We leave the current main axis only if every placement on that axis
         // overflows the main axis.
         overflowsData.every(
@@ -170,48 +168,43 @@ export function* flipGen(
       }
     }
 
-    // First, find the candidates that fit on the mainAxis side of overflow,
-    // then find the placement that fits the best on the main crossAxis side.
+    // First, find the candidates that fit on the sideAxis side of overflow,
+    // then find the placement that fits the best on the main alignAxis side.
     let resetPlacement = overflowsData
       .filter((d) => d.overflows[0] <= 0)
       .sort((a, b) => a.overflows[1] - b.overflows[1])[0]?.placement;
 
     // Otherwise fallback.
     if (!resetPlacement) {
-      switch (fallbackStrategy) {
-        case 'bestFit': {
-          const placement = overflowsData
-            .filter((d) => {
-              if (hasFallbackAxisSideDirection) {
-                const currentSideAxis = getSideAxis(d.placement.side);
-                return (
-                  currentSideAxis === initialSideAxis ||
-                  // Create a bias to the `y` side axis due to horizontal
-                  // reading directions favoring greater width.
-                  currentSideAxis === 'y'
-                );
-              }
-              return true;
-            })
-            .map(
-              (d) =>
-                [
-                  d.placement,
-                  d.overflows
-                    .filter((overflow) => overflow > 0)
-                    .reduce((acc, overflow) => acc + overflow, 0),
-                ] as const,
-            )
-            .sort((a, b) => a[1] - b[1])[0]?.[0];
-          if (placement) {
-            resetPlacement = placement;
-          }
-          break;
+      resetPlacement = initialPlacement;
+
+      if (failureStrategy === 'best-fit') {
+        const placement = overflowsData
+          .filter((d) => {
+            if (hasFallbackAxisSideDirection) {
+              const currentSideAxis = getSideAxis(d.placement.side);
+              return (
+                currentSideAxis === initialSideAxis ||
+                // Create a bias to the `y` side axis due to horizontal
+                // reading directions favoring greater width.
+                currentSideAxis === 'y'
+              );
+            }
+            return true;
+          })
+          .map(
+            (d) =>
+              [
+                d.placement,
+                d.overflows
+                  .filter((overflow) => overflow > 0)
+                  .reduce((acc, overflow) => acc + overflow, 0),
+              ] as const,
+          )
+          .sort((a, b) => a[1] - b[1])[0]?.[0];
+        if (placement) {
+          resetPlacement = placement;
         }
-        case 'initialPlacement':
-          resetPlacement = initialPlacement;
-          break;
-        default:
       }
     }
 

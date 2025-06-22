@@ -16,7 +16,7 @@ export function Scrollbars() {
     side: placement.side,
     align: placement.align,
     whileElementsMounted: autoUpdate,
-    middleware: [shift({crossAxis: true, altBoundary: true})],
+    middleware: [shift({align: true, altBoundary: true})],
   });
   const [size, handleSizeChange] = useSize(300);
 

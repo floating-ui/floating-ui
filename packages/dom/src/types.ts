@@ -11,6 +11,7 @@ import type {
   Middleware as CoreMiddleware,
   MiddlewareReturn,
   MiddlewareState as CoreMiddlewareState,
+  OffsetOptions as CoreOffsetOptions,
   Rect,
   RootBoundary,
   ShiftOptions as CoreShiftOptions,
@@ -25,38 +26,6 @@ type Prettify<T> = {
 export type Generatable<T> = T | Promise<T> | Generator<any, T, any>;
 
 export type Derivable<T> = (state: MiddlewareState) => T;
-
-export type OffsetValue =
-  | number
-  | {
-      /**
-       * The axis that runs along the side of the floating element. Represents
-       * the distance (gutter or margin) between the reference and floating
-       * element.
-       * @default 0
-       */
-      mainAxis?: number;
-      /**
-       * The axis that runs along the align of the floating element.
-       * Represents the skidding between the reference and floating element.
-       * @default 0
-       */
-      crossAxis?: number;
-      /**
-       * The same axis as `crossAxis` but applies only to aligned placements
-       * and inverts the `end` align. When set to a number, it overrides the
-       * `crossAxis` value.
-       *
-       * A positive number will move the floating element in the direction of
-       * the opposite edge to the one that is aligned, while a negative number
-       * the reverse.
-       * @default null
-       */
-      alignAxis?: number | null;
-    };
-// `OffsetOptions` in the core library were originally already `Derivable`. For
-// backwards-compatibility, re-define it here to use the DOM Derivable type.
-export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
 export interface Platform {
   // Required
@@ -74,7 +43,7 @@ export interface Platform {
   getDimensions: (element: Element) => Dimensions;
 
   // Optional
-  convertOffsetParentRelativeRectToViewportRelativeRect: (args: {
+  convertToViewportRelativeRect: (args: {
     elements?: Elements;
     rect: Rect;
     offsetParent: Element;
@@ -99,7 +68,7 @@ export interface NodeScroll {
 /**
  * The clipping boundary area of the floating element.
  */
-export type Boundary = 'clippingAncestors' | Element | Array<Element> | Rect;
+export type Boundary = 'clipping-ancestors' | Element | Array<Element> | Rect;
 
 export type DetectOverflowOptions = Prettify<
   Omit<CoreDetectOverflowOptions, 'boundary'> & {
@@ -150,6 +119,8 @@ export type Middleware = Prettify<
     fn(state: MiddlewareState): MiddlewareReturn;
   }
 >;
+
+export type OffsetOptions = CoreOffsetOptions | Derivable<CoreOffsetOptions>;
 
 export type SizeOptions = Prettify<
   Omit<CoreSizeOptions, 'apply' | 'boundary'> &
