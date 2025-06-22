@@ -1,16 +1,40 @@
-import type {
-  Axis,
-  ClientRectObject,
-  Coords,
-  Dimensions,
-  ElementRects,
-  Placement,
-  Align,
-  Side,
-  Rect,
-  SideObject,
-  Strategy,
-} from './utils';
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
+
+export type Side = 'top' | 'right' | 'bottom' | 'left';
+export type Align = 'center' | 'start' | 'end';
+export type LogicalSide = Prettify<Side | 'inline-start' | 'inline-end'>;
+
+export interface Placement {
+  side: LogicalSide;
+  align: Align;
+}
+
+export type Strategy = 'absolute' | 'fixed';
+export type Axis = 'x' | 'y';
+export type Coords = {[key in Axis]: number};
+export type Length = 'width' | 'height';
+export type Dimensions = {[key in Length]: number};
+export type SideObject = {[key in Side]: number};
+export type Rect = Prettify<Coords & Dimensions>;
+export type Padding = number | Prettify<Partial<SideObject>>;
+export type ClientRectObject = Prettify<Rect & SideObject>;
+
+export interface ElementRects {
+  reference: Rect;
+  floating: Rect;
+}
+
+/**
+ * Custom positioning reference element.
+ * @see https://floating-ui.com/docs/virtual-elements
+ */
+export interface VirtualElement {
+  getBoundingClientRect(): ClientRectObject;
+  getClientRects?(): Array<ClientRectObject>;
+  contextElement?: any;
+}
 
 type Promisable<T> = T | Promise<T>;
 type Generatable<T> = T | Promise<T> | Generator<any, T, any>;
@@ -95,7 +119,7 @@ export interface ComputePositionConfig {
    * The side where the floating element is placed relative to the reference element.
    * @default 'bottom'
    */
-  side?: Side;
+  side?: LogicalSide;
   /**
    * How the floating element aligns to the reference element on the specified side.
    * @default 'center'
@@ -116,11 +140,15 @@ export interface ComputePositionConfig {
 
 export interface ComputePositionReturn extends Coords {
   /**
-   * The final chosen side of the floating element.
+   * The rendered side of the floating element.
    */
-  side: Side;
+  side: LogicalSide;
   /**
-   * The final chosen align.
+   * The physical rendered side of the floating element.
+   */
+  physicalSide: Side;
+  /**
+   * The rendered align of the floating element.
    */
   align: Align;
   /**
@@ -140,7 +168,7 @@ export interface MiddlewareReturn extends Partial<Coords> {
   reset?:
     | boolean
     | {
-        side?: Side;
+        side?: LogicalSide;
         align?: Align;
         rects?: boolean | ElementRects;
       };
@@ -161,13 +189,11 @@ export interface Elements {
 }
 
 export interface MiddlewareState extends Coords {
-  /** Current chosen side */
+  /** Current chosen side (physical) */
   side: Side;
   /** Current chosen align */
   align: Align;
-  /** Initial side */
   initialSide: Side;
-  /** Initial align */
   initialAlign: Align;
   strategy: Strategy;
   middlewareData: MiddlewareData;
@@ -175,10 +201,6 @@ export interface MiddlewareState extends Coords {
   rects: ElementRects;
   platform: Platform;
 }
-/**
- * @deprecated use `MiddlewareState` instead.
- */
-export type MiddlewareArguments = MiddlewareState;
 
 export type Boundary = any;
 export type RootBoundary = 'viewport' | 'document' | Rect;

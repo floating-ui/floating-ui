@@ -23,15 +23,12 @@ export type {
   Elements,
   FloatingElement,
   Middleware,
-  MiddlewareArguments,
   MiddlewareData,
   MiddlewareReturn,
   MiddlewareState,
   Platform,
   ReferenceElement,
   RootBoundary,
-} from './types';
-export type {
   Align,
   Axis,
   ClientRectObject,
@@ -46,4 +43,5 @@ export type {
   SideObject,
   Strategy,
   VirtualElement,
-} from './utils';
+  LogicalSide,
+} from './types';

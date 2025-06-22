@@ -1,9 +1,12 @@
-import type {ComputePositionReturn} from '@floating-ui/core';
 import {computePositionAsync} from '@floating-ui/core';
 import * as React from 'react';
 
 import {createPlatform} from './createPlatform';
-import type {UseFloatingOptions, UseFloatingReturn} from './types';
+import type {
+  UseFloatingData,
+  UseFloatingOptions,
+  UseFloatingReturn,
+} from './types';
 import {deepEqual} from './utils/deepEqual';
 
 const ORIGIN = {x: 0, y: 0};
@@ -56,11 +59,12 @@ export function useFloating(
   const floatingRef = React.useRef<any>(null);
   const offsetParentRef = React.useRef<any>(null);
 
-  const [data, setData] = React.useState<ComputePositionReturn>({
+  const [data, setData] = React.useState<UseFloatingData>({
     x: 0,
     y: 0,
     side,
     align,
+    physicalSide: undefined,
     strategy: 'absolute',
     middlewareData: {},
   });

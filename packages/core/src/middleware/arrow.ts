@@ -1,5 +1,4 @@
 import {
-  type Padding,
   clamp,
   evaluate,
   getAxisLength,
@@ -13,6 +12,7 @@ import type {
   Middleware,
   MiddlewareState,
   MiddlewareReturn,
+  Padding,
 } from '../types';
 
 export interface ArrowOptions {

@@ -1,16 +1,12 @@
-import {
-  evaluate,
-  getPaddingObject,
-  rectToClientRect,
-  type Padding,
-  type SideObject,
-} from './utils';
+import {evaluate, getPaddingObject, rectToClientRect} from './utils';
 import type {
   Boundary,
   Derivable,
   ElementContext,
   MiddlewareState,
   RootBoundary,
+  Padding,
+  SideObject,
 } from './types';
 
 export interface DetectOverflowOptions {

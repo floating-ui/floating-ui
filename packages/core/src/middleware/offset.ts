@@ -1,9 +1,10 @@
-import {type Coords, evaluate, getSideAxis} from '../utils';
+import {evaluate, getSideAxis} from '../utils';
 import type {
   Derivable,
   Middleware,
   MiddlewareState,
   MiddlewareReturn,
+  Coords,
 } from '../types';
 
 type OffsetValue =

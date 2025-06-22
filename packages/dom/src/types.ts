@@ -144,10 +144,6 @@ export type MiddlewareState = Prettify<
     elements: Elements;
   }
 >;
-/**
- * @deprecated use `MiddlewareState` instead.
- */
-export type MiddlewareArguments = MiddlewareState;
 
 export type Middleware = Prettify<
   Omit<CoreMiddleware, 'fn'> & {

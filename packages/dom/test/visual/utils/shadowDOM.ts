@@ -1,11 +1,11 @@
-import type {Placement, Strategy, Side, Align} from '@floating-ui/dom';
+import type {Placement, Strategy, Align, LogicalSide} from '@floating-ui/dom';
 import {autoUpdate, computePosition, platform} from '@floating-ui/dom';
 import type {HTMLAttributes} from 'react';
 
 interface FloatingUICustomElement {
   reference: HTMLElement;
   floating: HTMLElement;
-  side: Side;
+  side: LogicalSide;
   align: Align;
   strategy: Strategy;
   polyfill: string;
@@ -66,10 +66,10 @@ export function defineElements(): void {
           keyof this,
           'side' | 'align' | 'strategy' | 'polyfill'
         >,
-        V extends Placement['side'] | Placement['align'] | Strategy,
+        V extends LogicalSide | Placement['align'] | Strategy,
       >(name: N, _oldValue: V, value: V): void {
         if (name === 'side') {
-          this.side = value as Side;
+          this.side = value as LogicalSide;
         } else if (name === 'align') {
           this.align = value as Align;
         } else if (name === 'strategy') {
@@ -125,10 +125,10 @@ export function defineElements(): void {
           keyof this,
           'side' | 'align' | 'strategy' | 'polyfill'
         >,
-        V extends Placement['side'] | Placement['align'] | Strategy,
+        V extends LogicalSide | Placement['align'] | Strategy,
       >(name: N, _oldValue: V, value: V): void {
         if (name === 'side') {
-          this.side = value as Side;
+          this.side = value as LogicalSide;
         } else if (name === 'align') {
           this.align = value as Align;
         } else if (name === 'strategy') {
@@ -200,10 +200,10 @@ export function defineElements(): void {
           keyof this,
           'side' | 'align' | 'strategy' | 'polyfill'
         >,
-        V extends Placement['side'] | Placement['align'] | Strategy,
+        V extends LogicalSide | Placement['align'] | Strategy,
       >(name: N, _oldValue: V, value: V): void {
         if (name === 'side') {
-          this.side = value as Side;
+          this.side = value as LogicalSide;
         } else if (name === 'align') {
           this.align = value as Align;
         } else if (name === 'strategy') {

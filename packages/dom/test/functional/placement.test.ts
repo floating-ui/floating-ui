@@ -1,10 +1,24 @@
 import {expect, test} from '@playwright/test';
+import type {Placement} from '@floating-ui/core';
 
 import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
 import {stringifyPlacement} from '../visual/utils/stringifyPlacement';
 
-allPlacements.map(stringifyPlacement).forEach((placement) => {
+const logicalPlacements: Placement[] = [
+  {side: 'inline-start', align: 'start'},
+  {side: 'inline-start', align: 'center'},
+  {side: 'inline-start', align: 'end'},
+  {side: 'inline-end', align: 'start'},
+  {side: 'inline-end', align: 'center'},
+  {side: 'inline-end', align: 'end'},
+];
+
+const placementsToTest = [...allPlacements, ...logicalPlacements].map(
+  stringifyPlacement,
+);
+
+placementsToTest.forEach((placement) => {
   test(`correctly positioned on ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/placement');
     await click(page, `[data-testid="placement-${placement}"]`);
@@ -29,7 +43,7 @@ allPlacements.map(stringifyPlacement).forEach((placement) => {
   });
 });
 
-allPlacements.map(stringifyPlacement).forEach((placement) => {
+placementsToTest.forEach((placement) => {
   test(`rtl should be respected ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/placement');
     await click(page, `[data-testid="placement-${placement}"]`);

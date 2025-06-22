@@ -2,6 +2,7 @@ import type {
   FloatingElement,
   MiddlewareData,
   ReferenceElement,
+  Side,
 } from '@floating-ui/dom';
 import {computePosition} from '@floating-ui/dom';
 import type {Ref} from 'vue-demi';
@@ -53,6 +54,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   const strategy = ref(strategyOption.value);
   const side = ref(sideOption.value);
   const align = ref(alignOption.value);
+  const physicalSide = ref<Side | undefined>(undefined);
   const middlewareData = shallowRef<MiddlewareData>({});
   const isPositioned = ref(false);
   const floatingStyles = computed(() => {
@@ -110,6 +112,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     side.value = position.side;
     align.value = position.align;
     middlewareData.value = position.middlewareData;
+    physicalSide.value = position.physicalSide;
     /**
      * The floating element's position may be recomputed while it's closed
      * but still mounted (such as when transitioning out). To ensure
@@ -183,6 +186,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     strategy: shallowReadonly(strategy),
     side: shallowReadonly(side),
     align: shallowReadonly(align),
+    physicalSide: shallowReadonly(physicalSide),
     middlewareData: shallowReadonly(middlewareData),
     isPositioned: shallowReadonly(isPositioned),
     floatingStyles,

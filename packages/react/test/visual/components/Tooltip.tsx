@@ -94,14 +94,16 @@ export function Tooltip({
       opacity: 0,
       scale: '0.925',
     },
-    common: ({side}) => ({
+    common: ({physicalSide}) => ({
       transitionTimingFunction: 'cubic-bezier(.18,.87,.4,.97)',
-      transformOrigin: {
-        top: 'bottom',
-        left: 'right',
-        bottom: 'top',
-        right: 'left',
-      }[side],
+      transformOrigin: physicalSide
+        ? {
+            top: 'bottom',
+            left: 'right',
+            bottom: 'top',
+            right: 'left',
+          }[physicalSide]
+        : undefined,
     }),
   });
 

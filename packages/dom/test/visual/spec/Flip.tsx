@@ -129,7 +129,7 @@ export function Flip() {
                 ? 'undefined'
                 : localFallbackPlacements[0] == null
                   ? '[]'
-                  : localFallbackPlacements.length === 12
+                  : localFallbackPlacements.length === allPlacements.length
                     ? 'all'
                     : ''
             }`}

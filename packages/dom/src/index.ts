@@ -26,7 +26,6 @@ export type {
   FloatingElement,
   HideOptions,
   Middleware,
-  MiddlewareArguments,
   MiddlewareState,
   NodeScroll,
   OffsetOptions,
@@ -57,4 +56,5 @@ export type {
   Side,
   SideObject,
   Strategy,
+  LogicalSide,
 } from '@floating-ui/core';
