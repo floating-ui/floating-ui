@@ -25,7 +25,12 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
         offset(() => ({crossAxis: 10})),
         offset({crossAxis: 10, mainAxis: 10}),
 
-        flip({fallbackPlacements: ['top', 'bottom']}),
+        flip({
+          fallbackPlacements: [
+            {side: 'top', align: 'center'},
+            {side: 'bottom', align: 'center'},
+          ],
+        }),
 
         shift(),
         shift({crossAxis: true}),
@@ -71,7 +76,12 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
       // should also test `autoPlacement.allowedPlacements`
       // can't have both `flip` and `autoPlacement` in the same middleware
       // array, or multiple `flip`s
-      flip({fallbackPlacements: ['top', 'bottom']}),
+      flip({
+        fallbackPlacements: [
+          {side: 'top', align: 'center'},
+          {side: 'bottom', align: 'center'},
+        ],
+      }),
 
       shift(),
       shift({crossAxis: true}),
