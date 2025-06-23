@@ -41,7 +41,7 @@ export interface FlipOptions extends DetectOverflowOptions {
    * What strategy to use when no placements fit.
    * @default 'best-fit'
    */
-  fallbackStrategy?: 'best-fit' | 'initial-placement';
+  failureStrategy?: 'best-fit' | 'initial-placement';
   /**
    * Whether to allow fallback to the perpendicular axis of the preferred
    * placement, and if so, which side direction along the axis to prefer.
@@ -78,7 +78,7 @@ export function* flipGen(
     mainAxis: checkMainAxis = true,
     crossAxis: checkCrossAxis = true,
     fallbackPlacements: specifiedFallbackPlacements,
-    fallbackStrategy = 'best-fit',
+    failureStrategy = 'best-fit',
     fallbackAxisSideDirection = 'none',
     flipAlign = true,
     ...detectOverflowOptions
@@ -178,40 +178,35 @@ export function* flipGen(
 
     // Otherwise fallback.
     if (!resetPlacement) {
-      switch (fallbackStrategy) {
-        case 'best-fit': {
-          const placement = overflowsData
-            .filter((d) => {
-              if (hasFallbackAxisSideDirection) {
-                const currentSideAxis = getSideAxis(d.placement.side);
-                return (
-                  currentSideAxis === initialSideAxis ||
-                  // Create a bias to the `y` side axis due to horizontal
-                  // reading directions favoring greater width.
-                  currentSideAxis === 'y'
-                );
-              }
-              return true;
-            })
-            .map(
-              (d) =>
-                [
-                  d.placement,
-                  d.overflows
-                    .filter((overflow) => overflow > 0)
-                    .reduce((acc, overflow) => acc + overflow, 0),
-                ] as const,
-            )
-            .sort((a, b) => a[1] - b[1])[0]?.[0];
-          if (placement) {
-            resetPlacement = placement;
-          }
-          break;
+      resetPlacement = initialPlacement;
+
+      if (failureStrategy === 'best-fit') {
+        const placement = overflowsData
+          .filter((d) => {
+            if (hasFallbackAxisSideDirection) {
+              const currentSideAxis = getSideAxis(d.placement.side);
+              return (
+                currentSideAxis === initialSideAxis ||
+                // Create a bias to the `y` side axis due to horizontal
+                // reading directions favoring greater width.
+                currentSideAxis === 'y'
+              );
+            }
+            return true;
+          })
+          .map(
+            (d) =>
+              [
+                d.placement,
+                d.overflows
+                  .filter((overflow) => overflow > 0)
+                  .reduce((acc, overflow) => acc + overflow, 0),
+              ] as const,
+          )
+          .sort((a, b) => a[1] - b[1])[0]?.[0];
+        if (placement) {
+          resetPlacement = placement;
         }
-        case 'initial-placement':
-          resetPlacement = initialPlacement;
-          break;
-        default:
       }
     }
 

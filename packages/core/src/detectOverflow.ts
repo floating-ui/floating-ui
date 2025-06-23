@@ -93,8 +93,8 @@ export function* detectOverflow(
     : {x: 1, y: 1};
 
   const elementClientRect = rectToClientRect(
-    platform.convertOffsetParentRelativeRectToViewportRelativeRect
-      ? yield platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+    platform.convertToViewportRelativeRect
+      ? yield platform.convertToViewportRelativeRect({
           elements,
           rect,
           offsetParent,

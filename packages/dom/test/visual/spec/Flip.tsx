@@ -10,7 +10,7 @@ import {stringifyPlacement} from '../utils/stringifyPlacement';
 import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 const BOOLS = [true, false];
-const FALLBACK_STRATEGIES: Array<FlipOptions['fallbackStrategy']> = [
+const FALLBACK_STRATEGIES: Array<FlipOptions['failureStrategy']> = [
   'best-fit',
   'initial-placement',
 ];
@@ -23,8 +23,8 @@ export function Flip() {
   const [mainAxis, setMainAxis] = useState(true);
   const [crossAxis, setCrossAxis] = useState<FlipOptions['crossAxis']>(true);
   const [fallbackPlacements, setFallbackPlacements] = useState<Placement[]>();
-  const [fallbackStrategy, setFallbackStrategy] =
-    useState<FlipOptions['fallbackStrategy']>('best-fit');
+  const [failureStrategy, setfailureStrategy] =
+    useState<FlipOptions['failureStrategy']>('best-fit');
   const [flipAlign, setFlipAlign] = useState(true);
   const [addShift, setAddShift] = useState(false);
   const [fallbackAxisSideDirection, setFallbackAxisSideDirection] =
@@ -42,7 +42,7 @@ export function Flip() {
           addShift && fallbackAxisSideDirection === 'none'
             ? [{side: 'bottom', align: 'center'}]
             : fallbackPlacements,
-        fallbackStrategy,
+        failureStrategy,
         flipAlign,
         fallbackAxisSideDirection: 'end',
       }),
@@ -165,19 +165,19 @@ export function Flip() {
         ))}
       </Controls>
 
-      <h2>fallbackStrategy</h2>
+      <h2>failureStrategy</h2>
       <Controls>
-        {FALLBACK_STRATEGIES.map((localFallbackStrategy) => (
+        {FALLBACK_STRATEGIES.map((localfailureStrategy) => (
           <button
-            key={localFallbackStrategy}
-            data-testid={`fallbackStrategy-${localFallbackStrategy}`}
-            onClick={() => setFallbackStrategy(localFallbackStrategy)}
+            key={localfailureStrategy}
+            data-testid={`failureStrategy-${localfailureStrategy}`}
+            onClick={() => setfailureStrategy(localfailureStrategy)}
             style={{
               backgroundColor:
-                localFallbackStrategy === fallbackStrategy ? 'black' : '',
+                localfailureStrategy === failureStrategy ? 'black' : '',
             }}
           >
-            {localFallbackStrategy}
+            {localfailureStrategy}
           </button>
         ))}
       </Controls>

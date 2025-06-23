@@ -185,7 +185,7 @@ function getClippingRect({element, boundary, rootBoundary}) {
 Depending on the platform you're working with, these may or may
 not be necessary.
 
-### `convertOffsetParentRelativeRectToViewportRelativeRect{:.function}`
+### `convertToViewportRelativeRect{:.function}`
 
 This function will take a `Rect{:.class}` that is relative to a
 given `offsetParent{:.param}` element and convert its `x{:.key}`
@@ -193,7 +193,7 @@ and `y{:.key}` values such that it is instead relative to the
 viewport.
 
 ```js
-function convertOffsetParentRelativeRectToViewportRelativeRect({
+function convertToViewportRelativeRect({
   rect,
   offsetParent,
   strategy,
@@ -287,7 +287,7 @@ computePosition(referenceEl, floatingEl, {
     getClippingRect,
 
     // Optional
-    convertOffsetParentRelativeRectToViewportRelativeRect,
+    convertToViewportRelativeRect,
     getOffsetParent,
     getDocumentElement,
     getClientRects,

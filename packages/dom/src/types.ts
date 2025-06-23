@@ -74,7 +74,7 @@ export interface Platform {
   getDimensions: (element: Element) => Dimensions;
 
   // Optional
-  convertOffsetParentRelativeRectToViewportRelativeRect: (args: {
+  convertToViewportRelativeRect: (args: {
     elements?: Elements;
     rect: Rect;
     offsetParent: Element;

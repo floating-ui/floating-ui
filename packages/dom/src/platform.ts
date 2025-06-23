@@ -1,4 +1,4 @@
-import {convertOffsetParentRelativeRectToViewportRelativeRect} from './platform/convertOffsetParentRelativeRectToViewportRelativeRect';
+import {convertToViewportRelativeRect} from './platform/convertToViewportRelativeRect';
 import {getClientRects} from './platform/getClientRects';
 import {getClippingRect} from './platform/getClippingRect';
 import {getDimensions} from './platform/getDimensions';
@@ -11,7 +11,7 @@ import {isRTL} from './platform/isRTL';
 import type {Platform} from './types';
 
 export const platform: Platform = {
-  convertOffsetParentRelativeRectToViewportRelativeRect,
+  convertToViewportRelativeRect,
   getDocumentElement,
   getClippingRect,
   getOffsetParent,

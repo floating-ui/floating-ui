@@ -126,7 +126,7 @@ interface FlipOptions extends DetectOverflowOptions {
   fallbackAxisSideDirection?: 'none' | 'start' | 'end';
   flipAlign?: boolean;
   fallbackPlacements?: Array<Placement>;
-  fallbackStrategy?: 'best-fit' | 'initial-placement';
+  failureStrategy?: 'best-fit' | 'initial-placement';
 }
 ```
 
@@ -452,7 +452,7 @@ when using this option.
 
 </Notice>
 
-### `fallbackStrategy{:.key}`
+### `failureStrategy{:.key}`
 
 default: `'best-fit'{:js}`
 
@@ -463,7 +463,7 @@ checked axes. `'initial-placement'{:js}` will use the initial
 
 ```js
 flip({
-  fallbackStrategy: 'initial-placement',
+  failureStrategy: 'initial-placement',
 });
 ```
 

@@ -217,7 +217,7 @@ export function ComboboxDemo() {
         },
         padding,
       }),
-      flip({padding, fallbackStrategy: 'initial-placement'}),
+      flip({padding, failureStrategy: 'initial-placement'}),
     ],
   });
 

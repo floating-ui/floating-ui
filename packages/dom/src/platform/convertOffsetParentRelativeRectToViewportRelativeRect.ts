@@ -12,7 +12,7 @@ import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
 import {getHTMLOffset} from '../utils/getHTMLOffset';
 
-export function convertOffsetParentRelativeRectToViewportRelativeRect({
+export function convertToViewportRelativeRect({
   elements,
   rect,
   offsetParent,
