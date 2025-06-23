@@ -3,6 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "types": [],
+    "jsx": "react-jsx",
     "outDir": "out-tsc"
   },
   "include": ["src"],
