@@ -126,7 +126,7 @@ interface FlipOptions extends DetectOverflowOptions {
   fallbackAxisSideDirection?: 'none' | 'start' | 'end';
   flipAlign?: boolean;
   fallbackPlacements?: Array<Placement>;
-  fallbackStrategy?: 'bestFit' | 'initialPlacement';
+  fallbackStrategy?: 'best-fit' | 'initial-placement';
 }
 ```
 
@@ -454,16 +454,16 @@ when using this option.
 
 ### `fallbackStrategy{:.key}`
 
-default: `'bestFit'{:js}`
+default: `'best-fit'{:js}`
 
 When no placements fit, then you'll want to decide what happens.
-`'bestFit'{:js}` will use the placement which fits best on the
-checked axes. `'initialPlacement'{:js}` will use the initial
+`'best-fit'{:js}` will use the placement which fits best on the
+checked axes. `'initial-placement'{:js}` will use the initial
 `placement{:.key}` specified.
 
 ```js
 flip({
-  fallbackStrategy: 'initialPlacement',
+  fallbackStrategy: 'initial-placement',
 });
 ```
 

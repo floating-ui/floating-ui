@@ -263,7 +263,7 @@ ensure they share the **same value**.
 
 ### `bestFit{:.string}`
 
-The `'bestFit'{:js}` fallback strategy in the `flip(){:js}`
+The `'best-fit'{:js}` fallback strategy in the `flip(){:js}`
 middleware is the default, which ensures the best fitting
 placement is used. In this scenario, place `size(){:js}`
 **after** `flip(){:js}`:
@@ -329,7 +329,7 @@ const middleware = [
     },
   }),
   flip({
-    fallbackStrategy: 'initialPlacement',
+    fallbackStrategy: 'initial-placement',
   }),
 ];
 ```

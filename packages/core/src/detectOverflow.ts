@@ -12,7 +12,7 @@ import type {
 export interface DetectOverflowOptions {
   /**
    * The clipping element(s) or area in which overflow will be checked.
-   * @default 'clippingAncestors'
+   * @default 'clipping-ancestors'
    */
   boundary?: Boundary;
   /**
@@ -54,7 +54,7 @@ export function* detectOverflow(
   const {x, y, platform, rects, elements, strategy} = state;
 
   const {
-    boundary = 'clippingAncestors',
+    boundary = 'clipping-ancestors',
     rootBoundary = 'viewport',
     elementContext = 'floating',
     altBoundary = false,

@@ -11,8 +11,8 @@ import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 const BOOLS = [true, false];
 const FALLBACK_STRATEGIES: Array<FlipOptions['fallbackStrategy']> = [
-  'bestFit',
-  'initialPlacement',
+  'best-fit',
+  'initial-placement',
 ];
 
 export function Flip() {
@@ -24,7 +24,7 @@ export function Flip() {
   const [crossAxis, setCrossAxis] = useState<FlipOptions['crossAxis']>(true);
   const [fallbackPlacements, setFallbackPlacements] = useState<Placement[]>();
   const [fallbackStrategy, setFallbackStrategy] =
-    useState<FlipOptions['fallbackStrategy']>('bestFit');
+    useState<FlipOptions['fallbackStrategy']>('best-fit');
   const [flipAlign, setFlipAlign] = useState(true);
   const [addShift, setAddShift] = useState(false);
   const [fallbackAxisSideDirection, setFallbackAxisSideDirection] =

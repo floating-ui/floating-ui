@@ -66,7 +66,7 @@ export function SelectDemo() {
       }),
       flip({
         padding: 25,
-        fallbackStrategy: 'initialPlacement',
+        fallbackStrategy: 'initial-placement',
       }),
     ],
   });

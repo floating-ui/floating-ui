@@ -108,7 +108,7 @@ shift({
 });
 shift({boundary: document.body});
 shift({boundary: [document.body]});
-shift({boundary: 'clippingAncestors'});
+shift({boundary: 'clipping-ancestors'});
 shift({limiter: limitShift()});
 shift({limiter: limitShift({offset: 5})});
 shift({limiter: limitShift({offset: {mainAxis: 5}})});
@@ -131,7 +131,7 @@ flip({
   padding: {top: 0},
 });
 flip({boundary: [document.body]});
-flip({boundary: 'clippingAncestors'});
+flip({boundary: 'clipping-ancestors'});
 flip(() => ({boundary: document.body}));
 size({
   // @ts-expect-error
@@ -139,7 +139,7 @@ size({
 });
 size({boundary: document.body});
 size({boundary: [document.body]});
-size({boundary: 'clippingAncestors'});
+size({boundary: 'clipping-ancestors'});
 size(() => ({boundary: document.body}));
 autoPlacement({
   // @ts-expect-error
@@ -148,7 +148,7 @@ autoPlacement({
 autoPlacement(() => ({boundary: document.body}));
 size({boundary: document.body});
 size({boundary: [document.body]});
-size({boundary: 'clippingAncestors'});
+size({boundary: 'clipping-ancestors'});
 size({
   apply({elements, availableHeight, availableWidth}) {
     availableHeight;
@@ -210,14 +210,14 @@ const middlewareWDetectOverflow: Middleware = {
     detectOverflow(args);
     detectOverflow(args, {
       elementContext: 'reference',
-      boundary: 'clippingAncestors',
+      boundary: 'clipping-ancestors',
       rootBoundary: 'document',
       padding: 5,
       altBoundary: true,
     });
     detectOverflow(args, {
       elementContext: 'reference',
-      boundary: 'clippingAncestors',
+      boundary: 'clipping-ancestors',
       rootBoundary: 'document',
       padding: {bottom: 5},
       altBoundary: true,

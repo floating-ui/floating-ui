@@ -27,7 +27,7 @@ export interface HideOptions extends DetectOverflowOptions {
   /**
    * The strategy used to determine when to hide the floating element.
    */
-  strategy?: 'referenceHidden' | 'escaped';
+  strategy?: 'reference-hidden' | 'escaped';
 }
 
 export function* hideGen(
@@ -36,13 +36,13 @@ export function* hideGen(
 ): Generator<any, MiddlewareReturn, any> {
   const {rects} = state;
 
-  const {strategy = 'referenceHidden', ...detectOverflowOptions} = evaluate(
+  const {strategy = 'reference-hidden', ...detectOverflowOptions} = evaluate(
     options,
     state,
   );
 
   switch (strategy) {
-    case 'referenceHidden': {
+    case 'reference-hidden': {
       const overflow = yield* detectOverflow(state, {
         ...detectOverflowOptions,
         elementContext: 'reference',

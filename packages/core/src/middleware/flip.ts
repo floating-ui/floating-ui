@@ -39,9 +39,9 @@ export interface FlipOptions extends DetectOverflowOptions {
   fallbackPlacements?: Array<Placement>;
   /**
    * What strategy to use when no placements fit.
-   * @default 'bestFit'
+   * @default 'best-fit'
    */
-  fallbackStrategy?: 'bestFit' | 'initialPlacement';
+  fallbackStrategy?: 'best-fit' | 'initial-placement';
   /**
    * Whether to allow fallback to the perpendicular axis of the preferred
    * placement, and if so, which side direction along the axis to prefer.
@@ -78,7 +78,7 @@ export function* flipGen(
     mainAxis: checkMainAxis = true,
     crossAxis: checkCrossAxis = true,
     fallbackPlacements: specifiedFallbackPlacements,
-    fallbackStrategy = 'bestFit',
+    fallbackStrategy = 'best-fit',
     fallbackAxisSideDirection = 'none',
     flipAlign = true,
     ...detectOverflowOptions
@@ -179,7 +179,7 @@ export function* flipGen(
     // Otherwise fallback.
     if (!resetPlacement) {
       switch (fallbackStrategy) {
-        case 'bestFit': {
+        case 'best-fit': {
           const placement = overflowsData
             .filter((d) => {
               if (hasFallbackAxisSideDirection) {
@@ -208,7 +208,7 @@ export function* flipGen(
           }
           break;
         }
-        case 'initialPlacement':
+        case 'initial-placement':
           resetPlacement = initialPlacement;
           break;
         default:

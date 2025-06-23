@@ -138,7 +138,7 @@ test('fallbackPlacements: all', async ({page}) => {
   );
 });
 
-test('fallbackStrategy: "bestFit"', async ({page}) => {
+test('fallbackStrategy: "best-fit"', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
   await click(page, `[data-testid="fallbackStrategy-bestFit"]`);
 
@@ -149,7 +149,7 @@ test('fallbackStrategy: "bestFit"', async ({page}) => {
   );
 });
 
-test('fallbackStrategy: "initialPlacement"', async ({page}) => {
+test('fallbackStrategy: "initial-placement"', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
   await click(page, `[data-testid="fallbackStrategy-initialPlacement"]`);
 
