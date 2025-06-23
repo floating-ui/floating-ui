@@ -2,4 +2,4 @@
 '@floating-ui/core': major
 ---
 
-breaking: rename `fallbackStrategy` to `failureStrategy`
+breaking(flip): rename `fallbackStrategy` to `failureStrategy`

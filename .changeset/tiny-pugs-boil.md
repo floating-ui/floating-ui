@@ -2,4 +2,4 @@
 '@floating-ui/core': major
 ---
 
-breaking: `convertOffsetParentRelativeRectToViewportRelativeRect` → `convertToViewportRelativeRect`
+breaking(platform): `convertOffsetParentRelativeRectToViewportRelativeRect` → `convertToViewportRelativeRect`

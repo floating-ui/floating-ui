@@ -4,7 +4,7 @@
 
 breaking: camelCase to kebab-case strings:
 
-- `referenceHidden` → `reference-hidden`
-- `clippingAncestors` → `clipping-ancestors`
-- `bestFit` → `best-fit`
-- `initialPlacement` → `initial-placement`
+- `hide` middleware: `referenceHidden` → `reference-hidden`
+- `flip` middleware: `bestFit` → `best-fit`
+- `flip` middleware: `initialPlacement` → `initial-placement`
+- `boundary` option: `clippingAncestors` → `clipping-ancestors`

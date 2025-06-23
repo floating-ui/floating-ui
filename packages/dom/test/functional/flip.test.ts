@@ -140,23 +140,23 @@ test('fallbackPlacements: all', async ({page}) => {
 
 test('failureStrategy: "best-fit"', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await click(page, `[data-testid="failureStrategy-bestFit"]`);
+  await click(page, `[data-testid="failureStrategy-best-fit"]`);
 
   await scroll(page, {x: 300, y: 315});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `failureStrategy-bestFit.png`,
+    `failureStrategy-best-fit.png`,
   );
 });
 
 test('failureStrategy: "initial-placement"', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await click(page, `[data-testid="failureStrategy-initialPlacement"]`);
+  await click(page, `[data-testid="failureStrategy-initial-placement"]`);
 
   await scroll(page, {x: 300, y: 315});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `failureStrategy-initialPlacement.png`,
+    `failureStrategy-initial-placement.png`,
   );
 });
 
