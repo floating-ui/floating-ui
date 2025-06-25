@@ -1074,7 +1074,9 @@ describe('modal', () => {
     );
     expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
-    expect(screen.getByTestId('role-status')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('role-status')).not.toHaveAttribute(
+      'aria-hidden',
+    );
     expect(screen.getByTestId('el-output')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden', 'true');
     expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden', 'true');
@@ -1083,7 +1085,9 @@ describe('modal', () => {
 
     expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
-    expect(screen.getByTestId('role-status')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('role-status')).not.toHaveAttribute(
+      'aria-hidden',
+    );
     expect(screen.getByTestId('el-output')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');

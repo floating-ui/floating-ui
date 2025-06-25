@@ -159,7 +159,9 @@ export function markOthers(
 ): Undo {
   const body = getDocument(avoidElements[0]).body;
   return applyAttributeToOthers(
-    avoidElements.concat(Array.from(body.querySelectorAll('[aria-live], [role=status], output'))),
+    avoidElements.concat(
+      Array.from(body.querySelectorAll('[aria-live], [role=status], output')),
+    ),
     body,
     ariaHidden,
     inert,
