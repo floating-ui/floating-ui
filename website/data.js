@@ -213,4 +213,10 @@ export const MINI_SPONSORS = [
     url: 'https://strands-hint.net/',
     MemberId: 656348,
   },
+  {
+    logo: '/sponsors/bestetf.svg',
+    label: 'ETF Comparison',
+    url: 'https://www.bestetf.net/compare/',
+    MemberId: 701752,
+  },
 ];
