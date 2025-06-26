@@ -225,4 +225,10 @@ export const MINI_SPONSORS = [
     url: 'https://thenoodlemagazine.net/',
     MemberId: 702879,
   },
+  {
+    logo: '/sponsors/discountagent.svg',
+    label: 'Discount Agent UK',
+    url: 'https://discountagent.co.uk/',
+    MemberId: 702065,
+  },
 ];
