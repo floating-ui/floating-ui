@@ -219,4 +219,10 @@ export const MINI_SPONSORS = [
     url: 'https://www.bestetf.net/compare/',
     MemberId: 701752,
   },
+  {
+    logo: '/sponsors/noodlemag.svg',
+    label: 'NoodleMagazine',
+    url: 'https://thenoodlemagazine.net/',
+    MemberId: 702879,
+  },
 ];
