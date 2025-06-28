@@ -111,13 +111,13 @@ shift({boundary: [document.body]});
 shift({boundary: 'clipping-ancestors'});
 shift({limiter: limitShift()});
 shift({limiter: limitShift({offset: 5})});
-shift({limiter: limitShift({offset: {mainAxis: 5}})});
-shift({limiter: limitShift({offset: {crossAxis: 5}})});
-shift({limiter: limitShift({offset: {mainAxis: 5, crossAxis: 5}})});
+shift({limiter: limitShift({offset: {sideAxis: 5}})});
+shift({limiter: limitShift({offset: {alignAxis: 5}})});
+shift({limiter: limitShift({offset: {sideAxis: 5, alignAxis: 5}})});
 shift({limiter: limitShift({offset: () => 5})});
-shift({limiter: limitShift({offset: () => ({mainAxis: 5})})});
-shift({limiter: limitShift({offset: () => ({crossAxis: 5})})});
-shift({limiter: limitShift({offset: () => ({mainAxis: 5, crossAxis: 5})})});
+shift({limiter: limitShift({offset: () => ({sideAxis: 5})})});
+shift({limiter: limitShift({offset: () => ({alignAxis: 5})})});
+shift({limiter: limitShift({offset: () => ({sideAxis: 5, alignAxis: 5})})});
 // @ts-expect-error
 shift({limiter: 'test'});
 shift(() => ({boundary: document.body}));
@@ -162,21 +162,21 @@ size({
 
 offset();
 offset(5);
-offset({mainAxis: 5});
-offset({crossAxis: 5});
-offset({mainAxis: 5, crossAxis: 5});
+offset({sideAxis: 5});
+offset({alignAxis: 5});
+offset({sideAxis: 5, alignAxis: 5});
 offset(() => 5);
-offset(() => ({mainAxis: 5}));
-offset(() => ({crossAxis: 5}));
-offset(() => ({mainAxis: 5, crossAxis: 5}));
+offset(() => ({sideAxis: 5}));
+offset(() => ({alignAxis: 5}));
+offset(() => ({sideAxis: 5, alignAxis: 5}));
 // @ts-expect-error
 offset(() => 'test');
 // @ts-expect-error
 offset('test');
 // @ts-expect-error
-offset({mainAxis: 'test'});
+offset({sideAxis: 'test'});
 // @ts-expect-error
-offset({crossAxis: 'test'});
+offset({alignAxis: 'test'});
 
 inline(() => ({padding: 5}));
 

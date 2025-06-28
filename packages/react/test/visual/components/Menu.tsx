@@ -99,7 +99,7 @@ export const MenuComponent = React.forwardRef<
     side: isNested ? 'right' : 'bottom',
     align: 'start',
     middleware: [
-      offset({mainAxis: isNested ? 0 : 4, alignAxis: isNested ? -4 : 0}),
+      offset({sideAxis: isNested ? 0 : 4, alignAxis: isNested ? -4 : 0}),
       flip(),
       shift(),
     ],

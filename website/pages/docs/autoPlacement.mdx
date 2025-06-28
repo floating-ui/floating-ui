@@ -129,14 +129,14 @@ These are the options you can pass to `autoPlacement(){:js}`.
 
 ```ts
 interface AutoPlacementOptions extends DetectOverflowOptions {
-  crossAxis?: boolean;
+  alignAxis?: boolean;
   align?: Align | null;
   autoAlign?: boolean;
   allowedPlacements?: Array<Placement>;
 }
 ```
 
-### `crossAxis{:.key}`
+### `alignAxis{:.key}`
 
 default: `false{:js}`
 
@@ -147,7 +147,7 @@ the same axis.
 
 ```js
 autoPlacement({
-  crossAxis: true,
+  alignAxis: true,
 });
 ```
 

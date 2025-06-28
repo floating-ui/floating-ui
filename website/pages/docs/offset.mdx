@@ -128,15 +128,14 @@ These are the options you can pass to `offset(){:js}`.
 type Options =
   | number
   | {
-      mainAxis?: number;
-      crossAxis?: number;
-      alignAxis?: number | null;
+      sideAxis?: number;
+      alignAxis?: number;
     };
 ```
 
 A number represents the distance (gutter or margin) between the
 floating element and the reference element. This is shorthand for
-`mainAxis{:.key}`.
+`sideAxis{:.key}`.
 
 ```js
 offset(10);
@@ -145,7 +144,7 @@ offset(10);
 An object can also be passed, which enables you to individually
 configure each axis.
 
-### `mainAxis{:.key}`
+### `sideAxis{:.key}`
 
 default: `0{:js}`
 
@@ -155,7 +154,7 @@ element and the reference element.
 
 ```js
 offset({
-  mainAxis: 10,
+  sideAxis: 10,
 });
 ```
 
@@ -210,81 +209,6 @@ Here's how it looks on the four sides:
         {
           name: 'offset',
           options: 10,
-        },
-      ]}
-    >
-      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
-        right
-      </div>
-    </Floating>
-  </div>
-</Chrome>
-
-### `crossAxis{:.key}`
-
-default: `0{:js}`
-
-The axis that runs along the align of the floating element.
-Represents the skidding between the floating element and the
-reference element.
-
-```js
-offset({
-  crossAxis: 20,
-});
-```
-
-Here's how it looks on the four sides:
-
-<Chrome center className="pt-16 pb-24" tall>
-  <div className="mt-4 flex flex-col gap-4 md:flex-row">
-    <Floating
-      placement="top"
-      middleware={[
-        {
-          name: 'offset',
-          options: {crossAxis: 20},
-        },
-      ]}
-    >
-      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
-        top
-      </div>
-    </Floating>
-    <Floating
-      placement="bottom"
-      middleware={[
-        {
-          name: 'offset',
-          options: {crossAxis: 20},
-        },
-      ]}
-    >
-      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
-        bottom
-      </div>
-    </Floating>
-  </div>
-  <div className="flex flex-col gap-4 md:flex-row">
-    <Floating
-      placement="left"
-      middleware={[
-        {
-          name: 'offset',
-          options: {crossAxis: 20},
-        },
-      ]}
-    >
-      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
-        left
-      </div>
-    </Floating>
-    <Floating
-      placement="right"
-      middleware={[
-        {
-          name: 'offset',
-          options: {crossAxis: 20},
         },
       ]}
     >
@@ -297,11 +221,11 @@ Here's how it looks on the four sides:
 
 ### `alignAxis{:.key}`
 
-default: `null{:js}`
+default: `0{:js}`
 
-The same axis as `crossAxis{:.key}` but applies only to aligned
-placements and inverts the `end{:.string}` align. When set to a
-number, it overrides the `crossAxis{:.key}` value.
+The axis that runs along the align of the floating element.
+Represents the skidding between the floating element and the
+reference element.
 
 A positive number will move the floating element in the direction
 of the opposite edge to the one that is aligned, while a negative
@@ -313,42 +237,40 @@ offset({
 });
 ```
 
-Here's how it differentiates from `crossAxis{:.key}`:
+Here's how it looks on the four sides:
 
 <Chrome center className="pt-16 pb-24" tall>
   <div className="mt-4 flex flex-col gap-4 md:flex-row">
     <Floating
-      placement="top-start"
+      placement="top"
       middleware={[
         {
           name: 'offset',
-          options: {crossAxis: 20},
+          options: {alignAxis: 20},
         },
       ]}
     >
-      <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
-        top-start <br />{' '}
-        <strong className="text-inherit">(crossAxis)</strong>
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
+        top
       </div>
     </Floating>
     <Floating
-      placement="top-end"
+      placement="bottom"
       middleware={[
         {
           name: 'offset',
-          options: {crossAxis: 20},
+          options: {alignAxis: 20},
         },
       ]}
     >
-      <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
-        top-end <br />{' '}
-        <strong className="text-inherit">(crossAxis)</strong>
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
+        bottom
       </div>
     </Floating>
   </div>
   <div className="flex flex-col gap-4 md:flex-row">
     <Floating
-      placement="top-start"
+      placement="left"
       middleware={[
         {
           name: 'offset',
@@ -356,13 +278,12 @@ Here's how it differentiates from `crossAxis{:.key}`:
         },
       ]}
     >
-      <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
-        top-start <br />{' '}
-        <strong className="text-inherit">(alignAxis)</strong>
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
+        left
       </div>
     </Floating>
     <Floating
-      placement="top-end"
+      placement="right"
       middleware={[
         {
           name: 'offset',
@@ -370,9 +291,8 @@ Here's how it differentiates from `crossAxis{:.key}`:
         },
       ]}
     >
-      <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
-        top-end <br />{' '}
-        <strong className="text-inherit">(alignAxis)</strong>
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
+        right
       </div>
     </Floating>
   </div>

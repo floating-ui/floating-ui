@@ -50,7 +50,7 @@ export function useTooltip({
       inline(),
       flip({
         fallbackAxisSideDirection: 'start',
-        crossAxis: placement.includes('-'),
+        alignAxis: placement.includes('-'),
         padding: 5,
       }),
       shift({padding: 5}),

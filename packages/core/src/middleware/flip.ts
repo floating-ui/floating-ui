@@ -22,7 +22,7 @@ export interface FlipOptions extends DetectOverflowOptions {
    * whether overflow along this axis is checked to perform a flip.
    * @default true
    */
-  mainAxis?: boolean;
+  sideAxis?: boolean;
   /**
    * The axis that runs along the align of the floating element. Determines
    * whether overflow along this axis is checked to perform a flip.
@@ -31,7 +31,7 @@ export interface FlipOptions extends DetectOverflowOptions {
    * - `'align'`: Whether to check cross axis overflow for align flipping only.
    * @default true
    */
-  crossAxis?: boolean | 'align';
+  alignAxis?: boolean | 'align';
   /**
    * Placements to try sequentially if the preferred `placement` does not fit.
    * @default [oppositePlacement] (computed)
@@ -75,8 +75,8 @@ export function* flipGen(
   const initialPlacement = {side: initialSide, align: initialAlign};
 
   const {
-    mainAxis: checkMainAxis = true,
-    crossAxis: checkCrossAxis = true,
+    sideAxis: checkMainAxis = true,
+    alignAxis: checkCrossAxis = true,
     fallbackPlacements: specifiedFallbackPlacements,
     failureStrategy = 'best-fit',
     fallbackAxisSideDirection = 'none',
@@ -170,8 +170,8 @@ export function* flipGen(
       }
     }
 
-    // First, find the candidates that fit on the mainAxis side of overflow,
-    // then find the placement that fits the best on the main crossAxis side.
+    // First, find the candidates that fit on the sideAxis side of overflow,
+    // then find the placement that fits the best on the main alignAxis side.
     let resetPlacement = overflowsData
       .filter((d) => d.overflows[0] <= 0)
       .sort((a, b) => a.overflows[1] - b.overflows[1])[0]?.placement;

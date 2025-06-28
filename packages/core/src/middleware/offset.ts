@@ -1,14 +1,14 @@
 import {evaluate, getSideAxis} from '../utils';
 import type {
-  Derivable,
   Middleware,
   MiddlewareState,
   MiddlewareReturn,
   Coords,
+  Derivable,
 } from '../types';
 import {originSides} from '../constants';
 
-type OffsetValue =
+export type OffsetOptions =
   | number
   | {
       /**
@@ -17,58 +17,41 @@ type OffsetValue =
        * element.
        * @default 0
        */
-      mainAxis?: number;
+      sideAxis?: number;
       /**
        * The axis that runs along the align of the floating element.
        * Represents the skidding between the reference and floating element.
        * @default 0
        */
-      crossAxis?: number;
-      /**
-       * The same axis as `crossAxis` but applies only to aligned placements
-       * and inverts the `end` align. When set to a number, it overrides the
-       * `crossAxis` value.
-       *
-       * A positive number will move the floating element in the direction of
-       * the opposite edge to the one that is aligned, while a negative number
-       * the reverse.
-       * @default null
-       */
-      alignAxis?: number | null;
+      alignAxis?: number;
     };
-
-export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
 export function* offsetGen(
   state: MiddlewareState,
-  options: OffsetOptions = 0,
+  options: OffsetOptions | Derivable<OffsetOptions> = 0,
 ): Generator<any, MiddlewareReturn, any> {
   const {platform, elements, x, y, middlewareData, side, align} = state;
 
   const rtl = yield platform.isRTL?.(elements.floating);
 
   const isVertical = getSideAxis(side) === 'y';
-  const mainAxisMulti = originSides.has(side) ? -1 : 1;
-  const crossAxisMulti = rtl && isVertical ? -1 : 1;
+  const sideAxisMulti = originSides.has(side) ? -1 : 1;
+  const alignAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = evaluate(options, state);
 
   // eslint-disable-next-line prefer-const
-  let {mainAxis, crossAxis, alignAxis} =
+  let {sideAxis, alignAxis} =
     typeof rawValue === 'number'
-      ? {mainAxis: rawValue, crossAxis: 0, alignAxis: null}
-      : {
-          mainAxis: rawValue.mainAxis ?? 0,
-          crossAxis: rawValue.crossAxis ?? 0,
-          alignAxis: rawValue.alignAxis ?? null,
-        };
+      ? {sideAxis: rawValue, alignAxis: 0}
+      : {sideAxis: rawValue.sideAxis ?? 0, alignAxis: rawValue.alignAxis ?? 0};
 
   if (align !== 'center' && typeof alignAxis === 'number') {
-    crossAxis = align === 'end' ? -alignAxis : alignAxis;
+    alignAxis = align === 'end' ? -alignAxis : alignAxis;
   }
 
   const diffCoords: Coords = isVertical
-    ? {x: crossAxis * crossAxisMulti, y: mainAxis * mainAxisMulti}
-    : {x: mainAxis * mainAxisMulti, y: crossAxis * crossAxisMulti};
+    ? {x: alignAxis * alignAxisMulti, y: sideAxis * sideAxisMulti}
+    : {x: sideAxis * sideAxisMulti, y: alignAxis * alignAxisMulti};
 
   const offsetPlacement = middlewareData.offset?.placement;
 
@@ -97,11 +80,13 @@ export function* offsetGen(
 /**
  * Modifies the placement by translating the floating element along the
  * specified axes.
- * A number (shorthand for `mainAxis` or distance), or an axes configuration
+ * A number (shorthand for `sideAxis` or distance), or an axes configuration
  * object may be passed.
  * @see https://floating-ui.com/docs/offset
  */
-export const offset = (options: OffsetOptions = 0): Middleware => ({
+export const offset = (
+  options: OffsetOptions | Derivable<OffsetOptions> = 0,
+): Middleware => ({
   name: 'offset',
   options,
   fn(state) {

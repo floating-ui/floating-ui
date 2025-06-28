@@ -94,7 +94,7 @@ allPlacements.map(stringifyPlacement).forEach((placement) => {
   });
 });
 
-test('center aligned placements can fill the whole viewport along the crossAxis with shift', async ({
+test('center aligned placements can fill the whole viewport along the alignAxis with shift', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/size');
@@ -108,7 +108,7 @@ test('center aligned placements can fill the whole viewport along the crossAxis 
   );
 });
 
-test('edge aligned placements can fill the whole viewport along the crossAxis with shift', async ({
+test('edge aligned placements can fill the whole viewport along the alignAxis with shift', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/size');
@@ -141,7 +141,7 @@ test('edge aligned placements can fill the whole viewport along the crossAxis wi
   );
 });
 
-test('edge aligned placements can fill the whole viewport on one side along the crossAxis when shift is after', async ({
+test('edge aligned placements can fill the whole viewport on one side along the alignAxis when shift is after', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/size');
@@ -198,26 +198,26 @@ test('edge aligned placements can fill the whole viewport on one side along the 
   );
 });
 
-test('can fill the whole viewport along the main axis with shift.crossAxis', async ({
+test('can fill the whole viewport along the main axis with shift.alignAxis', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/size');
   await click(page, `[data-testid="shift-before"]`);
-  await click(page, `[data-testid="shift.crossAxis-true"]`);
+  await click(page, `[data-testid="shift.alignAxis-true"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `shift-crossAxis-whole.png`,
+    `shift-alignAxis-whole.png`,
   );
 
   await resize(page, {height: 170});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `shift-crossAxis-top-start.png`,
+    `shift-alignAxis-top-start.png`,
   );
 
   await resize(page, {height: 300});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `shift-crossAxis-top-end.png`,
+    `shift-alignAxis-top-end.png`,
   );
 });

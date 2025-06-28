@@ -9,10 +9,10 @@ allPlacements.map(stringifyPlacement).forEach((placement) => {
     '0',
     '10',
     '-10',
-    'cA: 10',
-    'mA: 5, cA: -10',
+    'aA: 10',
+    'sA: 5, aA: -10',
     '() => -f.height',
-    '() => cA: -f.width/2',
+    '() => aA: -f.width/2',
   ].forEach((name) => {
     [true, false].forEach((rtl) => {
       const rtlStr = rtl ? 'rtl' : 'ltr';

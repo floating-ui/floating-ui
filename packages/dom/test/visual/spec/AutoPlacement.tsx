@@ -37,7 +37,7 @@ export function AutoPlacement() {
   const [allowedPlacements, setAllowedPlacements] = useState<
     Placement[] | undefined
   >();
-  const [crossAxis, setCrossAxis] = useState(false);
+  const [alignAxis, setCrossAxis] = useState(false);
   const [addShift, setAddShift] = useState(false);
 
   const {x, y, strategy, update, refs} = useFloating({
@@ -47,7 +47,7 @@ export function AutoPlacement() {
         align,
         autoAlign,
         allowedPlacements,
-        crossAxis,
+        alignAxis,
       }),
       addShift && shift(),
     ],
@@ -150,15 +150,15 @@ export function AutoPlacement() {
         ))}
       </Controls>
 
-      <h2>crossAxis</h2>
+      <h2>alignAxis</h2>
       <Controls>
         {BOOLS.map((bool) => (
           <button
             key={String(bool)}
-            data-testid={`crossAxis-${bool}`}
+            data-testid={`alignAxis-${bool}`}
             onClick={() => setCrossAxis(bool)}
             style={{
-              backgroundColor: bool === crossAxis ? 'black' : '',
+              backgroundColor: bool === alignAxis ? 'black' : '',
             }}
           >
             {String(bool)}

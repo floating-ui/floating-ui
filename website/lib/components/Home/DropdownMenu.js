@@ -74,7 +74,7 @@ export const MenuComponent = forwardRef(function Menu(
     align: isNested ? 'start' : 'start',
     middleware: [
       offset({
-        mainAxis: isNested ? 0 : 4,
+        sideAxis: isNested ? 0 : 4,
         alignAxis: isNested ? -4 : 0,
       }),
       flip(),

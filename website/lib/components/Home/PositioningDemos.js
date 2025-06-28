@@ -439,9 +439,9 @@ export function Virtual() {
     align: 'start',
     strategy: 'fixed',
     middleware: [
-      offset({mainAxis: 10, crossAxis: 10}),
+      offset({sideAxis: 10, alignAxis: 10}),
       shift({
-        crossAxis: true,
+        alignAxis: true,
         padding: 5,
         rootBoundary: 'document',
       }),

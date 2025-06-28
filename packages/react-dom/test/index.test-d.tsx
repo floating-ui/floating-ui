@@ -11,7 +11,7 @@ function App() {
     transform: false,
     side: 'right',
     middleware: [
-      offset(() => ({mainAxis: 0})),
+      offset(() => ({sideAxis: 0})),
       shift(),
       arrow({element: arrowRef}),
       {

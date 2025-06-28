@@ -417,8 +417,8 @@ function TableOfContents({anchors, hash}) {
     transform: false,
     middleware: [
       offset({
-        mainAxis: isTopLevelAnchor ? -2 : 13,
-        crossAxis: 1,
+        sideAxis: isTopLevelAnchor ? -2 : 13,
+        alignAxis: 1,
       }),
     ],
   });
