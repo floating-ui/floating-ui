@@ -463,7 +463,7 @@ computePosition(button, tooltip, {
     shift({padding: 5}),
     arrow({element: arrowElement}),
   ],
-}).then(({x, y, placement, middlewareData}) => {
+}).then(({x, y, physicalSide, middlewareData}) => {
   Object.assign(tooltip.style, {
     left: `${x}px`,
     top: `${y}px`,
@@ -477,7 +477,7 @@ computePosition(button, tooltip, {
     right: 'left',
     bottom: 'top',
     left: 'right',
-  }[placement.split('-')[0]];
+  }[physicalSide];
 
   Object.assign(arrowElement.style, {
     left: arrowX != null ? `${arrowX}px` : '',

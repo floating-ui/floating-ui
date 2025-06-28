@@ -1,6 +1,5 @@
 {
   "name": "@floating-ui/core",
-  "type": "commonjs",
   "version": "1.7.1",
   "description": "Positioning library for floating elements: tooltips, popovers, dropdowns, and more",
   "publishConfig": {

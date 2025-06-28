@@ -10,12 +10,14 @@ const replaceVariables = () => async (tree) => {
   try {
     packageVersions = await Promise.all(
       ['core', 'dom'].map((name) =>
-        fetch(`https://registry.npmjs.org/@floating-ui/${name}/latest`)
+        fetch(
+          `https://registry.npmjs.org/@floating-ui/${name}/latest`,
+        )
           .then((res) => res.json())
           .then((res) => res.version),
       ),
     );
-  } catch (e) {
+  } catch (_e) {
     //
   }
 
@@ -30,11 +32,19 @@ const replaceVariables = () => async (tree) => {
 const rehypePrettyCodeOptions = {
   theme: {
     dark: JSON.parse(
-      readFileSync(new URL('./assets/floating-ui-theme.json', import.meta.url)),
+      readFileSync(
+        new URL(
+          './assets/floating-ui-theme.json',
+          import.meta.url,
+        ),
+      ),
     ),
     light: JSON.parse(
       readFileSync(
-        new URL('./assets/floating-ui-light-theme.json', import.meta.url),
+        new URL(
+          './assets/floating-ui-light-theme.json',
+          import.meta.url,
+        ),
       ),
     ),
   },
@@ -55,6 +65,8 @@ export default {
   output: 'export',
   reactStrictMode: true,
   experimental: {esmExternals: true, scrollRestoration: true},
+  // Ensure ESM modules in the workspace are transpiled by Next.js
+  transpilePackages: ['@floating-ui/react'],
   pageExtensions: ['md', 'mdx', 'tsx', 'ts', 'jsx', 'js'],
   webpack(config, options) {
     config.module.rules.push({

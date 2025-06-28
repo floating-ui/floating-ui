@@ -14,14 +14,19 @@ import {MDXProvider} from '@mdx-js/react';
 import cn from 'classnames';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {Fragment, useEffect, useRef, useState} from 'react';
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from 'react';
 import {
   ChevronDown,
   ExternalLink,
   GitHub,
   Menu,
 } from 'react-feather';
-import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 import Logo from '../../assets/logo.svg';
 import {useAppContext} from '../../pages/_app';
@@ -511,7 +516,7 @@ function NavbarItem({
   const [childrenCollapsed, setChildrenCollapsed] =
     useState(shouldCollapse);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (isReactContext || !shouldCollapse) {
       setChildrenCollapsed(false);
       return;
@@ -531,6 +536,7 @@ function NavbarItem({
     title,
     parent,
     packageContext,
+    isReactContext,
   ]);
 
   if (hide) return null;
@@ -609,17 +615,17 @@ function Navbar({activeLinkRef, parent, collapsed}) {
   const naturalHeightRef = useRef(null);
   const [transition, setTransition] = useState(false);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!ref.current) return;
     naturalHeightRef.current = ref.current.scrollHeight;
   }, []);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!ref.current || !parent) return;
     setHeight(collapsed ? 0 : naturalHeightRef.current);
   }, [collapsed, parent]);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     setTimeout(() => setTransition(true));
   }, []);
 
@@ -672,11 +678,11 @@ export default function Layout({children, className}) {
 
   const displayNavigation = nav[index] != null;
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     setYear(new Date().getFullYear());
   }, []);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     setHash(asPath.slice(asPath.indexOf('#')));
   }, [asPath]);
 
@@ -742,7 +748,7 @@ export default function Layout({children, className}) {
     ? {context, modal: false, initialFocus: refs.floating}
     : {};
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (isDrawer && !isMounted) return;
     if (!refs.floating.current) return;
     if (!activeLinkRef.current) return;
@@ -763,9 +769,9 @@ export default function Layout({children, className}) {
         activeLinkRef.current.scrollIntoView({block: 'center'});
       });
     }
-  }, [asPath, isDrawer, isMounted]);
+  }, [asPath, isDrawer, isMounted, refs.floating]);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     function onHashChange() {
       setHash(window.location.hash);
     }
@@ -777,7 +783,7 @@ export default function Layout({children, className}) {
     };
   }, [events, pathname]);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     const localAnchors = [];
     articleRef.current
       .querySelectorAll('h2,h3')

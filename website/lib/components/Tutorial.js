@@ -5,9 +5,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react';
-import React, {forwardRef} from 'react';
-import {useState} from 'react';
-import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+import {forwardRef, useLayoutEffect, useState} from 'react';
 
 import {Chrome} from './Chrome';
 
@@ -264,9 +262,9 @@ export const Result12 = () => {
     ],
   });
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     arrowEl && update();
-  }, [arrowEl]);
+  }, [arrowEl, update]);
 
   return (
     <Chrome>
@@ -322,9 +320,9 @@ export const Result13 = () => {
     ],
   });
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     arrowEl && update();
-  }, [arrowEl]);
+  }, [arrowEl, update]);
 
   return (
     <Chrome>

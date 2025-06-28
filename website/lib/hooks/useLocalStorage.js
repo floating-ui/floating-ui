@@ -1,5 +1,4 @@
-import {useCallback, useState} from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import {useCallback, useState, useLayoutEffect} from 'react';
 
 export function useLocalStorage(key, initialValue) {
   const [storedValue, setStoredValue] = useState(initialValue);
@@ -8,7 +7,7 @@ export function useLocalStorage(key, initialValue) {
     try {
       const item = localStorage.getItem(key);
       item != null && setStoredValue(JSON.parse(item));
-    } catch (e) {
+    } catch (_e) {
       //
     }
   }, [initialValue, key]);
@@ -23,7 +22,7 @@ export function useLocalStorage(key, initialValue) {
 
         localStorage.setItem(key, JSON.stringify(valueToStore));
         setStoredValue(valueToStore);
-      } catch (e) {
+      } catch (_e) {
         //
       }
     },

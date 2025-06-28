@@ -1,9 +1,5 @@
-import {
-  getOverflowAncestors,
-  offset,
-  shift,
-  useFloating,
-} from '@floating-ui/react';
+import {offset, shift, useFloating} from '@floating-ui/react';
+import {getOverflowAncestors} from '@floating-ui/react/utils';
 import classNames from 'classnames';
 import {
   forwardRef,

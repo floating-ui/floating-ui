@@ -1,6 +1,10 @@
 import cn from 'classnames';
-import {createContext, useContext, useRef} from 'react';
-import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+import {
+  createContext,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from 'react';
 
 const ChromeContext = createContext();
 export const useChromeContext = () => useContext(ChromeContext);
@@ -17,11 +21,13 @@ export const Chrome = ({
 }) => {
   const scrollableRef = useRef();
 
-  const scrollableX = scrollable === 'both' || scrollable === 'x';
-  const scrollableY = scrollable === 'both' || scrollable === 'y';
+  const scrollableX =
+    scrollable === 'both' || scrollable === 'x';
+  const scrollableY =
+    scrollable === 'both' || scrollable === 'y';
   const isScrollable = scrollableX || scrollableY;
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (scrollableY) {
       scrollableRef.current.scrollTop =
         scrollableRef.current.scrollHeight / 2 -
@@ -71,18 +77,23 @@ export const Chrome = ({
       <div className="will-change-transform">
         <div
           ref={scrollableRef}
-          className={cn('h-[20rem] overflow-hidden bg-gray-50 p-2', {
-            'grid place-items-center': center,
-            'overflow-y-auto': scrollableY,
-            'overflow-x-auto': scrollableX,
-            'h-[50rem] md:h-[30rem]': tall,
-            relative,
-          })}
+          className={cn(
+            'h-[20rem] overflow-hidden bg-gray-50 p-2',
+            {
+              'grid place-items-center': center,
+              'overflow-y-auto': scrollableY,
+              'overflow-x-auto': scrollableX,
+              'h-[50rem] md:h-[30rem]': tall,
+              relative,
+            },
+          )}
         >
           {isScrollable && (
             <div
               className={
-                scrollableX ? 'w-[180vw] md:w-[75rem] lg:w-[90rem]' : undefined
+                scrollableX
+                  ? 'w-[180vw] md:w-[75rem] lg:w-[90rem]'
+                  : undefined
               }
               style={{
                 height: scrollableY ? scrollHeight : 1,
@@ -95,7 +106,9 @@ export const Chrome = ({
           {isScrollable && (
             <div
               className={
-                scrollableX ? 'w-[180vw] md:w-[75rem] lg:w-[90rem]' : undefined
+                scrollableX
+                  ? 'w-[180vw] md:w-[75rem] lg:w-[90rem]'
+                  : undefined
               }
               style={{
                 height: scrollableY ? scrollHeight : 1,

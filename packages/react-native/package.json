@@ -1,6 +1,5 @@
 {
   "name": "@floating-ui/react-native",
-  "type": "commonjs",
   "version": "0.10.7",
   "description": "Floating UI for React Native",
   "publishConfig": {
@@ -70,12 +69,12 @@
     "react-native": ">=0.64.0"
   },
   "dependencies": {
-    "@floating-ui/core": "^1.0.0"
+    "@floating-ui/core": "workspace:^"
   },
   "devDependencies": {
-    "@types/react": "^18.3.19",
-    "@types/react-native": "^0.72.8",
-    "react": "^18.2.0",
-    "react-native": "0.72.1"
+    "@types/react": "^19.1.0",
+    "@types/react-native": "^0.73.0",
+    "react": "^19.1.0",
+    "react-native": "0.80.0"
   }
 }

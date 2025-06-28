@@ -25,7 +25,7 @@ export function Floating({
     middlewareData,
     refs,
     floatingStyles,
-    placement,
+    physicalSide,
     isPositioned,
   } = FloatingUI.useFloating({
     whileElementsMounted: FloatingUI.autoUpdate,
@@ -119,7 +119,7 @@ export function Floating({
     right: 'left',
     top: 'bottom',
     bottom: 'top',
-  }[placement.split('-')[0]];
+  }[physicalSide];
 
   const tooltipJsx = (
     <div

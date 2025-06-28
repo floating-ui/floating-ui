@@ -1,6 +1,5 @@
 {
   "name": "@floating-ui/dom",
-  "type": "commonjs",
   "version": "1.7.1",
   "description": "Floating UI for the web",
   "publishConfig": {
@@ -71,11 +70,11 @@
     "@floating-ui/core": "workspace:^"
   },
   "devDependencies": {
-    "@types/react": "^18.3.19",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
     "@vitejs/plugin-react": "^4.3.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-router-dom": "^6.21.1"
   }
 }
