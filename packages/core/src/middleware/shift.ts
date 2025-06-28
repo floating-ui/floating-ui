@@ -7,6 +7,7 @@ import {
   getSideAxis,
 } from '@floating-ui/utils';
 
+import {originSides} from '../constants';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
@@ -186,7 +187,7 @@ export const limitShift = (
 
     if (checkCrossAxis) {
       const len = mainAxis === 'y' ? 'width' : 'height';
-      const isOriginSide = ['top', 'left'].includes(getSide(placement));
+      const isOriginSide = originSides.has(getSide(placement));
       const limitMin =
         rects.reference[crossAxis] -
         rects.floating[len] +

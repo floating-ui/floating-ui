@@ -153,8 +153,10 @@ export function isWebKit(): boolean {
   return CSS.supports('-webkit-backdrop-filter', 'none');
 }
 
+const lastTraversableNodeNames = new Set(['html', 'body', '#document']);
+
 export function isLastTraversableNode(node: Node): boolean {
-  return ['html', 'body', '#document'].includes(getNodeName(node));
+  return lastTraversableNodeNames.has(getNodeName(node));
 }
 
 export function getComputedStyle(element: Element): CSSStyleDeclaration {

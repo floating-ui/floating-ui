@@ -83,8 +83,10 @@ export function getAxisLength(axis: Axis): Length {
   return axis === 'y' ? 'height' : 'width';
 }
 
+const yAxisSides = new Set(['top', 'bottom']);
+
 export function getSideAxis(placement: Placement): Axis {
-  return ['top', 'bottom'].includes(getSide(placement)) ? 'y' : 'x';
+  return yAxisSides.has(getSide(placement)) ? 'y' : 'x';
 }
 
 export function getAlignmentAxis(placement: Placement): Axis {
