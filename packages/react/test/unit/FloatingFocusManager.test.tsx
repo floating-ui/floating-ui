@@ -1049,6 +1049,8 @@ describe('modal', () => {
           />
           <div>
             <div data-testid="aria-live" aria-live="polite" />
+            <div data-testid="role-status" role="status" />
+            <output data-testid="el-output" />
             <button data-testid="btn-1" />
             <button data-testid="btn-2" />
           </div>
@@ -1072,6 +1074,10 @@ describe('modal', () => {
     );
     expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('role-status')).not.toHaveAttribute(
+      'aria-hidden',
+    );
+    expect(screen.getByTestId('el-output')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden', 'true');
     expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden', 'true');
 
@@ -1079,6 +1085,10 @@ describe('modal', () => {
 
     expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('role-status')).not.toHaveAttribute(
+      'aria-hidden',
+    );
+    expect(screen.getByTestId('el-output')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');
   });
@@ -1100,6 +1110,8 @@ describe('modal', () => {
           />
           <div>
             <div data-testid="aria-live" aria-live="polite" />
+            <div data-testid="role-status" role="status" />
+            <output data-testid="el-output" />
             <button data-testid="btn-1" />
             <button data-testid="btn-2" />
           </div>
@@ -1120,6 +1132,8 @@ describe('modal', () => {
     expect(screen.getByTestId('reference')).toHaveAttribute('inert');
     expect(screen.getByTestId('floating')).not.toHaveAttribute('inert');
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('role-status')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('el-output')).not.toHaveAttribute('inert');
     expect(screen.getByTestId('btn-1')).toHaveAttribute('inert');
     expect(screen.getByTestId('btn-2')).toHaveAttribute('inert');
 
@@ -1127,6 +1141,8 @@ describe('modal', () => {
 
     expect(screen.getByTestId('reference')).not.toHaveAttribute('inert');
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('role-status')).not.toHaveAttribute('inert');
+    expect(screen.getByTestId('el-output')).not.toHaveAttribute('inert');
     expect(screen.getByTestId('btn-1')).not.toHaveAttribute('inert');
     expect(screen.getByTestId('btn-2')).not.toHaveAttribute('inert');
   });
