@@ -334,8 +334,8 @@ importers:
   packages/react-dom:
     dependencies:
       '@floating-ui/dom':
-        specifier: ^1.0.0
-        version: 1.6.12
+        specifier: workspace:^
+        version: link:../dom
     devDependencies:
       '@babel/preset-react':
         specifier: ^7.23.3
@@ -399,8 +399,8 @@ importers:
   packages/vue:
     dependencies:
       '@floating-ui/dom':
-        specifier: ^1.0.0
-        version: 1.6.12
+        specifier: workspace:^
+        version: link:../dom
       '@floating-ui/utils':
         specifier: workspace:^
         version: link:../utils
