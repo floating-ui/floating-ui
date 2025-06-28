@@ -135,20 +135,20 @@ export function getOppositeAlignmentPlacement<T extends string>(
   ) as T;
 }
 
-function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
-  const lr: Placement[] = ['left', 'right'];
-  const rl: Placement[] = ['right', 'left'];
-  const tb: Placement[] = ['top', 'bottom'];
-  const bt: Placement[] = ['bottom', 'top'];
+const lrPlacement: Placement[] = ['left', 'right'];
+const rlPlacement: Placement[] = ['right', 'left'];
+const tbPlacement: Placement[] = ['top', 'bottom'];
+const btPlacement: Placement[] = ['bottom', 'top'];
 
+function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
   switch (side) {
     case 'top':
     case 'bottom':
-      if (rtl) return isStart ? rl : lr;
-      return isStart ? lr : rl;
+      if (rtl) return isStart ? rlPlacement : lrPlacement;
+      return isStart ? lrPlacement : rlPlacement;
     case 'left':
     case 'right':
-      return isStart ? tb : bt;
+      return isStart ? tbPlacement : btPlacement;
     default:
       return [];
   }
