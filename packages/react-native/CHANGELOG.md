@@ -1,5 +1,16 @@
 # @floating-ui/react-native
 
+## 0.11.0
+
+### Minor Changes
+
+- chore: new bundling strategy. UMD artifacts have been removed.
+
+### Patch Changes
+
+- feat: re-export utils across packages
+- Update dependencies: `@floating-ui/core@2.0.0`
+
 ## 0.10.7
 
 ### Patch Changes
