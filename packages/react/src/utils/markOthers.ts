@@ -160,7 +160,7 @@ export function markOthers(
   const body = getDocument(avoidElements[0]).body;
   return applyAttributeToOthers(
     avoidElements.concat(
-      Array.from(body.querySelectorAll('[aria-live], [role=status], output')),
+      Array.from(body.querySelectorAll('[aria-live],[role="status"],output')),
     ),
     body,
     ariaHidden,
