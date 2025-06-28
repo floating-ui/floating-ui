@@ -27,10 +27,10 @@ const PortalContext = React.createContext<null | {
   preserveTabOrder: boolean;
   portalNode: HTMLElement | null;
   setFocusManagerState: React.Dispatch<React.SetStateAction<FocusManagerState>>;
-  beforeInsideRef: React.RefObject<HTMLSpanElement>;
-  afterInsideRef: React.RefObject<HTMLSpanElement>;
-  beforeOutsideRef: React.RefObject<HTMLSpanElement>;
-  afterOutsideRef: React.RefObject<HTMLSpanElement>;
+  beforeInsideRef: React.RefObject<HTMLSpanElement | null>;
+  afterInsideRef: React.RefObject<HTMLSpanElement | null>;
+  beforeOutsideRef: React.RefObject<HTMLSpanElement | null>;
+  afterOutsideRef: React.RefObject<HTMLSpanElement | null>;
 }>(null);
 
 const attr = createAttribute('portal');
@@ -149,10 +149,10 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
   const [focusManagerState, setFocusManagerState] =
     React.useState<FocusManagerState>(null);
 
-  const beforeOutsideRef = React.useRef<HTMLSpanElement>(null);
-  const afterOutsideRef = React.useRef<HTMLSpanElement>(null);
-  const beforeInsideRef = React.useRef<HTMLSpanElement>(null);
-  const afterInsideRef = React.useRef<HTMLSpanElement>(null);
+  const beforeOutsideRef = React.useRef<HTMLSpanElement | null>(null);
+  const afterOutsideRef = React.useRef<HTMLSpanElement | null>(null);
+  const beforeInsideRef = React.useRef<HTMLSpanElement | null>(null);
+  const afterInsideRef = React.useRef<HTMLSpanElement | null>(null);
 
   const modal = focusManagerState?.modal;
   const open = focusManagerState?.open;

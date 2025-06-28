@@ -14,14 +14,14 @@ interface FloatingUICustomElement {
 
 type CustomElement<T> = Partial<T & HTMLAttributes<T> & {children: any}>;
 
-declare global {
+declare module 'react' {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      ['direct-host-child']: CustomElement<FloatingUICustomElement>;
-      ['deep-host-child']: CustomElement<FloatingUICustomElement>;
-      ['relative-position-host']: CustomElement<typeof HTMLElement>;
-      ['shadowed-floating-owner']: CustomElement<FloatingUICustomElement>;
+      'direct-host-child': CustomElement<FloatingUICustomElement>;
+      'deep-host-child': CustomElement<FloatingUICustomElement>;
+      'relative-position-host': CustomElement<FloatingUICustomElement>;
+      'shadowed-floating-owner': CustomElement<FloatingUICustomElement>;
     }
   }
 }
@@ -224,6 +224,69 @@ export function defineElements(): void {
 
       disconnectedCallback(): void {
         this.cleanup?.();
+      }
+    },
+  );
+
+  // React 19 sets *properties* (not attributes) on custom elements when they
+  // already exist on the instance. That bypasses `attributeChangedCallback`,
+  // which we rely on for re-positioning. Define reactive setters so updating
+  // the property directly also re-positions.
+  const reactiveProps = ['side', 'align', 'strategy', 'polyfill'] as const;
+
+  /**
+   * Adds reactive setters/getters for the given prototype so that mutating
+   * the property triggers a reposition and keeps an internal value.
+   */
+  function makeReactive(proto: any) {
+    reactiveProps.forEach((prop) => {
+      const internalKey = `__${prop}`;
+      if (Object.prototype.hasOwnProperty.call(proto, prop)) {
+        // property already defined on prototype; redefine with accessor
+        const originalValue = proto[prop];
+        proto[internalKey] = originalValue;
+      }
+      Object.defineProperty(proto, prop, {
+        get() {
+          return this[internalKey];
+        },
+        set(value) {
+          this[internalKey] = value;
+          // Mirror logic from attributeChangedCallback for strategy
+          if (prop === 'strategy' && this.floating) {
+            this.floating.style.position = value;
+          }
+          position(this);
+        },
+      });
+    });
+
+    // Handle style property specially since React 19 mutates element.style directly
+    const originalStyleDescriptor =
+      Object.getOwnPropertyDescriptor(proto, 'style') ||
+      Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style');
+
+    if (originalStyleDescriptor) {
+      Object.defineProperty(proto, 'style', {
+        get() {
+          return originalStyleDescriptor.get?.call(this);
+        },
+        set(value) {
+          if (originalStyleDescriptor.set) {
+            originalStyleDescriptor.set.call(this, value);
+          }
+          position(this);
+        },
+        configurable: true,
+      });
+    }
+  }
+
+  [directHostChildTag, deepHostChildTag, shadowedFloatingOwnerTag].forEach(
+    (tag) => {
+      const ctor = customElements.get(tag);
+      if (ctor) {
+        makeReactive(ctor.prototype);
       }
     },
   );

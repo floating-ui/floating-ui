@@ -53,7 +53,7 @@ interface MenuProps {
   label: string;
   nested?: boolean;
   children?: React.ReactNode;
-  virtualItemRef: React.RefObject<HTMLElement>;
+  virtualItemRef: React.RefObject<HTMLElement | null>;
 }
 
 export const MenuComponent = React.forwardRef<

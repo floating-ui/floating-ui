@@ -79,7 +79,9 @@ export function useClick(
     stickIfOpen = true,
   } = props;
 
-  const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
+  const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch' | undefined>(
+    undefined,
+  );
   const didKeyDownRef = React.useRef(false);
 
   const reference: ElementProps['reference'] = React.useMemo(
