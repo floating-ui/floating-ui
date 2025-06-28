@@ -6,6 +6,7 @@ import type {
   MiddlewareReturn,
   Coords,
 } from '../types';
+import {originSides} from '../constants';
 
 type OffsetValue =
   | number
@@ -47,7 +48,7 @@ export function* offsetGen(
   const rtl = yield platform.isRTL?.(elements.floating);
 
   const isVertical = getSideAxis(side) === 'y';
-  const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
+  const mainAxisMulti = originSides.has(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = evaluate(options, state);
 

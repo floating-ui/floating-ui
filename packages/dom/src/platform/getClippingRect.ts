@@ -27,6 +27,8 @@ import {getVisualOffsets} from '../utils/getVisualOffsets';
 import {getScale} from './getScale';
 import {isElement} from './isElement';
 
+const absoluteOrFixed = new Set(['absolute', 'fixed']);
+
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;
 };
@@ -130,9 +132,7 @@ function getClippingElementAncestors(
       : (!currentNodeIsContaining &&
           computedStyle.position === 'static' &&
           !!currentContainingBlockComputedStyle &&
-          ['absolute', 'fixed'].includes(
-            currentContainingBlockComputedStyle.position,
-          )) ||
+          absoluteOrFixed.has(currentContainingBlockComputedStyle.position)) ||
         (isOverflowElement(currentNode) &&
           !currentNodeIsContaining &&
           hasFixedPositionAncestor(element, currentNode));

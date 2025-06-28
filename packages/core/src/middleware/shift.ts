@@ -8,6 +8,7 @@ import type {
   MiddlewareReturn,
   Coords,
 } from '../types';
+import {originSides} from '../constants';
 
 export interface ShiftOptions extends DetectOverflowOptions {
   /**
@@ -191,7 +192,7 @@ export const limitShift = (
 
     if (checkCrossAxis) {
       const len = mainAxis === 'y' ? 'width' : 'height';
-      const isOriginSide = ['top', 'left'].includes(side);
+      const isOriginSide = originSides.has(side);
       const limitMin =
         rects.reference[crossAxis] -
         rects.floating[len] +
