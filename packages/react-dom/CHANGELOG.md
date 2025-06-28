@@ -1,5 +1,11 @@
 # @floating-ui/react-dom
 
+## 2.1.4
+
+### Patch Changes
+
+- Update dependencies: `@floating-ui/dom@1.7.2`
+
 ## 2.1.3
 
 ### Patch Changes

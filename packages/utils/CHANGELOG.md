@@ -1,5 +1,12 @@
 # @floating-ui/utils
 
+## 0.2.10
+
+### Patch Changes
+
+- refactor: small performance improvements
+- perf: reduce memory allocations
+
 ## 0.2.9
 
 ### Patch Changes
