@@ -676,8 +676,8 @@ export function FloatingFocusManager(
       const isFocusInsideFloatingTree =
         contains(floating, activeEl) ||
         (tree &&
-          getNodeChildren(tree.nodesRef.current, getNodeId()).some((node) =>
-            contains(node.context?.elements.floating, activeEl),
+          getNodeChildren(tree.nodesRef.current, getNodeId(), false).some(
+            (node) => contains(node.context?.elements.floating, activeEl),
           ));
 
       const returnElement = getReturnElement();
