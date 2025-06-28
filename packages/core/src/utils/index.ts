@@ -145,26 +145,26 @@ export function getOppositeAlignPlacement(placement: Placement): Placement {
   };
 }
 
+const lrPlacements: Placement[] = [leftCenter, rightCenter];
+const rlPlacements: Placement[] = [rightCenter, leftCenter];
+const tbPlacements: Placement[] = [topCenter, bottomCenter];
+const btPlacements: Placement[] = [bottomCenter, topCenter];
+
 function getSideList(
   side: LogicalSide,
   isStart: boolean,
   rtl?: boolean,
 ): Placement[] {
-  const lr: Placement[] = [leftCenter, rightCenter];
-  const rl: Placement[] = [rightCenter, leftCenter];
-  const tb: Placement[] = [topCenter, bottomCenter];
-  const bt: Placement[] = [bottomCenter, topCenter];
-
   switch (side) {
     case 'top':
     case 'bottom':
-      if (rtl) return isStart ? rl : lr;
-      return isStart ? lr : rl;
+      if (rtl) return isStart ? rlPlacements : lrPlacements;
+      return isStart ? lrPlacements : rlPlacements;
     case 'left':
     case 'right':
     case 'inline-start':
     case 'inline-end':
-      return isStart ? tb : bt;
+      return isStart ? tbPlacements : btPlacements;
     default:
       return [];
   }

@@ -63,20 +63,26 @@ export function isShadowRoot(value: unknown): value is ShadowRoot {
   );
 }
 
+const invalidOverflowDisplayValues = new Set(['inline', 'contents']);
+
 export function isOverflowElement(element: Element): boolean {
   const {overflow, overflowX, overflowY, display} = getComputedStyle(element);
   return (
     /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) &&
-    !['inline', 'contents'].includes(display)
+    !invalidOverflowDisplayValues.has(display)
   );
 }
 
+const tableElements = new Set(['table', 'td', 'th']);
+
 export function isTableElement(element: Element): boolean {
-  return ['table', 'td', 'th'].includes(getNodeName(element));
+  return tableElements.has(getNodeName(element));
 }
 
+const topLayerSelectors = [':popover-open', ':modal'];
+
 export function isTopLayer(element: Element): boolean {
-  return [':popover-open', ':modal'].some((selector) => {
+  return topLayerSelectors.some((selector) => {
     try {
       return element.matches(selector);
     } catch (_e) {
@@ -84,6 +90,25 @@ export function isTopLayer(element: Element): boolean {
     }
   });
 }
+
+const transformProperties = [
+  'transform',
+  'translate',
+  'scale',
+  'rotate',
+  'perspective',
+];
+
+const willChangeValues = [
+  'transform',
+  'translate',
+  'scale',
+  'rotate',
+  'perspective',
+  'filter',
+];
+
+const containValues = ['paint', 'layout', 'strict', 'content'];
 
 export function isContainingBlock(
   elementOrCss: Element | CSSStyleDeclaration,
@@ -96,21 +121,16 @@ export function isContainingBlock(
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   // https://drafts.csswg.org/css-transforms-2/#individual-transforms
   return (
-    ['transform', 'translate', 'scale', 'rotate', 'perspective'].some(
-      (value) =>
-        css[value as keyof CSSStyleDeclaration]
-          ? css[value as keyof CSSStyleDeclaration] !== 'none'
-          : false,
+    transformProperties.some((value) =>
+      css[value as keyof CSSStyleDeclaration]
+        ? css[value as keyof CSSStyleDeclaration] !== 'none'
+        : false,
     ) ||
     (css.containerType ? css.containerType !== 'normal' : false) ||
     (!webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
     (!webkit && (css.filter ? css.filter !== 'none' : false)) ||
-    ['transform', 'translate', 'scale', 'rotate', 'perspective', 'filter'].some(
-      (value) => (css.willChange || '').includes(value),
-    ) ||
-    ['paint', 'layout', 'strict', 'content'].some((value) =>
-      (css.contain || '').includes(value),
-    )
+    willChangeValues.some((value) => (css.willChange || '').includes(value)) ||
+    containValues.some((value) => (css.contain || '').includes(value))
   );
 }
 
@@ -135,8 +155,10 @@ export function isWebKit(): boolean {
   return CSS.supports('-webkit-backdrop-filter', 'none');
 }
 
+const lastTraversableNodeNames = new Set(['html', 'body', '#document']);
+
 export function isLastTraversableNode(node: Node): boolean {
-  return ['html', 'body', '#document'].includes(getNodeName(node));
+  return lastTraversableNodeNames.has(getNodeName(node));
 }
 
 export function getComputedStyle(element: Element): CSSStyleDeclaration {
