@@ -1,5 +1,12 @@
 # @floating-ui/core
 
+## 1.7.2
+
+### Patch Changes
+
+- perf: reduce memory allocations
+- Update dependencies: `@floating-ui/utils@0.2.10`
+
 ## 1.7.1
 
 ### Patch Changes

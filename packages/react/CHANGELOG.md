@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.27.13
+
+### Patch Changes
+
+- fix(FloatingFocusManager): ensure focus is always returned correctly in deep nested trees
+- fix(markOthers): exclude elements with `role="status"` and `output` elements
+- Update dependencies: `@floating-ui/utils@0.2.10`, `@floating-ui/react-dom@2.1.4`
+
 ## 0.27.12
 
 ### Patch Changes
