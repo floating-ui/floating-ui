@@ -3,24 +3,15 @@ import type {ReferenceType, FloatingNodeType} from '../types';
 export function getNodeChildren<RT extends ReferenceType = ReferenceType>(
   nodes: Array<FloatingNodeType<RT>>,
   id: string | undefined,
-) {
-  let allChildren = nodes.filter(
-    (node) => node.parentId === id && node.context?.open,
+  onlyOpenChildren = true,
+): Array<FloatingNodeType<RT>> {
+  const directChildren = nodes.filter(
+    (node) => node.parentId === id && (!onlyOpenChildren || node.context?.open),
   );
-  let currentChildren = allChildren;
-
-  while (currentChildren.length) {
-    currentChildren = nodes.filter(
-      (node) =>
-        currentChildren?.some(
-          (n) => node.parentId === n.id && node.context?.open,
-        ),
-    );
-
-    allChildren = allChildren.concat(currentChildren);
-  }
-
-  return allChildren;
+  return directChildren.flatMap((child) => [
+    child,
+    ...getNodeChildren(nodes, child.id, onlyOpenChildren),
+  ]);
 }
 
 export function getDeepestNode<RT extends ReferenceType = ReferenceType>(
