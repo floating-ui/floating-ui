@@ -74,7 +74,7 @@ export interface Platform {
   getDimensions: (element: Element) => Dimensions;
 
   // Optional
-  convertOffsetParentRelativeRectToViewportRelativeRect: (args: {
+  convertToViewportRelativeRect: (args: {
     elements?: Elements;
     rect: Rect;
     offsetParent: Element;
@@ -99,7 +99,7 @@ export interface NodeScroll {
 /**
  * The clipping boundary area of the floating element.
  */
-export type Boundary = 'clippingAncestors' | Element | Array<Element> | Rect;
+export type Boundary = 'clipping-ancestors' | Element | Array<Element> | Rect;
 
 export type DetectOverflowOptions = Prettify<
   Omit<CoreDetectOverflowOptions, 'boundary'> & {

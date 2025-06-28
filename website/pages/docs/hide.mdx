@@ -172,19 +172,19 @@ These are the options you can pass to `hide(){:js}`.
 
 ```ts
 interface HideOptions extends DetectOverflowOptions {
-  strategy?: 'referenceHidden' | 'escaped';
+  strategy?: 'reference-hidden' | 'escaped';
 }
 ```
 
 ### `strategy{:.key}`
 
-default: `'referenceHidden'{:js}`
+default: `'reference-hidden'{:js}`
 
 The strategy used to determine when to hide the floating element.
 
 ```js
 hide({
-  strategy: 'escaped', // 'referenceHidden' by default
+  strategy: 'escaped', // 'reference-hidden' by default
 });
 ```
 

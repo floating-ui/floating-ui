@@ -170,7 +170,7 @@ export function getClippingRect(
   },
 ): Rect {
   const elementClippingAncestors =
-    boundary === 'clippingAncestors'
+    boundary === 'clipping-ancestors'
       ? isTopLayer(element)
         ? []
         : getClippingElementAncestors(element, this._c)

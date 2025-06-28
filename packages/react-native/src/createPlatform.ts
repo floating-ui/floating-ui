@@ -90,7 +90,7 @@ export const createPlatform = ({
       ...(sameScrollView ? scrollOffsets : ORIGIN),
     });
   },
-  convertOffsetParentRelativeRectToViewportRelativeRect({rect}) {
+  convertToViewportRelativeRect({rect}) {
     return new Promise((resolve) => {
       const onMeasure = (offsetX = 0, offsetY = 0) => {
         resolve({...rect, x: rect.x + offsetX, y: rect.y + offsetY});

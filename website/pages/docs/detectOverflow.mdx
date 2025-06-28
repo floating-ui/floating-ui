@@ -111,7 +111,7 @@ interface DetectOverflowOptions {
 
 ```ts
 type Boundary =
-  | 'clippingAncestors'
+  | 'clipping-ancestors'
   | Element
   | Array<Element>
   | Rect;
@@ -119,7 +119,7 @@ type Boundary =
 
 This describes the clipping element(s) or area that overflow will
 be checked relative to. The default is
-`'clippingAncestors'{:js}`, which are the overflow ancestors
+`'clipping-ancestors'{:js}`, which are the overflow ancestors
 which will cause the element to be clipped.
 
 ```js
@@ -221,7 +221,7 @@ For instance, if the `elementContext{:.key}` is
 `'floating'{:js}`, and you enable this option, then the boundary
 in which overflow is checked for is the `'reference'{:js}`'s
 boundary. This only applies if you are using the default
-`'clippingAncestors'{:js}` string as the `boundary{:.key}`.
+`'clipping-ancestors'{:js}` string as the `boundary{:.key}`.
 
 ```js
 await detectOverflow(state, {

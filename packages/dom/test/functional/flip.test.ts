@@ -68,95 +68,95 @@ test('fallbackPlacements: all', async ({page}) => {
   await click(page, `[data-testid="fallbackPlacements-all"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-all-top-start.png`,
+    `failureStrategy-all-top-start.png`,
   );
 
   await scroll(page, {x: 675, y: 585});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-top.png`,
+    `failureStrategy-top.png`,
   );
 
   await scroll(page, {x: 735, y: 585});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-top-end.png`,
+    `failureStrategy-top-end.png`,
   );
 
   await scroll(page, {x: 735, y: 700});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-right-start.png`,
+    `failureStrategy-right-start.png`,
   );
 
   await scroll(page, {x: 735, y: 775});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-right.png`,
+    `failureStrategy-right.png`,
   );
 
   await scroll(page, {x: 735, y: 825});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-right-end.png`,
+    `failureStrategy-right-end.png`,
   );
 
   await scroll(page, {x: 735, y: 850});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-bottom-end.png`,
+    `failureStrategy-bottom-end.png`,
   );
 
   await scroll(page, {x: 375, y: 850});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-bottom.png`,
+    `failureStrategy-bottom.png`,
   );
 
   await scroll(page, {x: 325, y: 850});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-bottom-start.png`,
+    `failureStrategy-bottom-start.png`,
   );
 
   await scroll(page, {x: 250, y: 800});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-left-end.png`,
+    `failureStrategy-left-end.png`,
   );
 
   await scroll(page, {x: 250, y: 450});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-left.png`,
+    `failureStrategy-left.png`,
   );
 
   await scroll(page, {x: 250, y: 400});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-left-start.png`,
+    `failureStrategy-left-start.png`,
   );
 });
 
-test('fallbackStrategy: "bestFit"', async ({page}) => {
+test('failureStrategy: "best-fit"', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await click(page, `[data-testid="fallbackStrategy-bestFit"]`);
+  await click(page, `[data-testid="failureStrategy-best-fit"]`);
 
   await scroll(page, {x: 300, y: 315});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-bestFit.png`,
+    `failureStrategy-best-fit.png`,
   );
 });
 
-test('fallbackStrategy: "initialPlacement"', async ({page}) => {
+test('failureStrategy: "initial-placement"', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await click(page, `[data-testid="fallbackStrategy-initialPlacement"]`);
+  await click(page, `[data-testid="failureStrategy-initial-placement"]`);
 
   await scroll(page, {x: 300, y: 315});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-initialPlacement.png`,
+    `failureStrategy-initial-placement.png`,
   );
 });
 
