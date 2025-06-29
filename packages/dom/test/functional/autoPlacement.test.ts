@@ -165,9 +165,9 @@ test('only left, right allowed', async ({page}) => {
   );
 });
 
-test('most space for crossAxis', async ({page}) => {
+test('most space for alignAxis', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await click(page, `[data-testid="crossAxis-true"]`);
+  await click(page, `[data-testid="alignAxis-true"]`);
   await click(
     page,
     `[data-testid="allowedPlacements-top-start,top-end,bottom-start,bottom-end"]`,
@@ -176,25 +176,25 @@ test('most space for crossAxis', async ({page}) => {
   await scroll(page, {x: 525});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-top-start.png`,
+    `alignAxis-top-start.png`,
   );
 
   await scroll(page, {x: 550});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-top-end.png`,
+    `alignAxis-top-end.png`,
   );
 
   await scroll(page, {y: 650});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-bottom-end.png`,
+    `alignAxis-bottom-end.png`,
   );
 
   await scroll(page, {x: 500});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-bottom-start.png`,
+    `alignAxis-bottom-start.png`,
   );
 });
 

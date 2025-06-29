@@ -20,8 +20,8 @@ export function Flip() {
     side: 'bottom',
     align: 'center',
   });
-  const [mainAxis, setMainAxis] = useState(true);
-  const [crossAxis, setCrossAxis] = useState<FlipOptions['crossAxis']>(true);
+  const [sideAxis, setMainAxis] = useState(true);
+  const [alignAxis, setCrossAxis] = useState<FlipOptions['alignAxis']>(true);
   const [fallbackPlacements, setFallbackPlacements] = useState<Placement[]>();
   const [failureStrategy, setfailureStrategy] =
     useState<FlipOptions['failureStrategy']>('best-fit');
@@ -36,8 +36,8 @@ export function Flip() {
     whileElementsMounted: autoUpdate,
     middleware: [
       flip({
-        mainAxis,
-        crossAxis,
+        sideAxis,
+        alignAxis,
         fallbackPlacements:
           addShift && fallbackAxisSideDirection === 'none'
             ? [{side: 'bottom', align: 'center'}]
@@ -91,28 +91,28 @@ export function Flip() {
         setPlacement={setPlacement}
       />
 
-      <h2>mainAxis</h2>
+      <h2>sideAxis</h2>
       <Controls>
         {BOOLS.map((bool) => (
           <button
             key={String(bool)}
-            data-testid={`mainAxis-${bool}`}
+            data-testid={`sideAxis-${bool}`}
             onClick={() => setMainAxis(bool)}
-            style={{backgroundColor: mainAxis === bool ? 'black' : ''}}
+            style={{backgroundColor: sideAxis === bool ? 'black' : ''}}
           >
             {String(bool)}
           </button>
         ))}
       </Controls>
 
-      <h2>crossAxis</h2>
+      <h2>alignAxis</h2>
       <Controls>
         {([...BOOLS, 'align'] as const).map((value) => (
           <button
             key={String(value)}
-            data-testid={`crossAxis-${value}`}
+            data-testid={`alignAxis-${value}`}
             onClick={() => setCrossAxis(value)}
-            style={{backgroundColor: crossAxis === value ? 'black' : ''}}
+            style={{backgroundColor: alignAxis === value ? 'black' : ''}}
           >
             {String(value)}
           </button>

@@ -21,7 +21,7 @@ export function Perf() {
     middleware: [
       offset(1),
       flip(),
-      shift({crossAxis: true, limiter: limitShift()}),
+      shift({alignAxis: true, limiter: limitShift()}),
       hide(),
       arrow({element: arrowEl}),
     ],

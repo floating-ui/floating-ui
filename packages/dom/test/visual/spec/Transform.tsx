@@ -56,7 +56,7 @@ const NODES: Node[] = [
 export function Transform() {
   const [node, setNode] = useState<Node>(null);
   const {x, y, refs, strategy, update} = useFloating({
-    middleware: [shift({crossAxis: true})],
+    middleware: [shift({alignAxis: true})],
     whileElementsMounted: autoUpdate,
   });
   const offsetParentRef = useRef(null);

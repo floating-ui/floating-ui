@@ -1,23 +1,29 @@
-import type {OffsetOptions, Placement} from '@floating-ui/core';
-import {autoUpdate, offset, useFloating} from '@floating-ui/react-dom';
+import {
+  autoUpdate,
+  offset,
+  useFloating,
+  type Derivable,
+  type OffsetOptions,
+  type Placement,
+} from '@floating-ui/react-dom';
 import {useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 import {AllPlacementsControls} from '../utils/AllPlacementsControls';
 
 const VALUES: Array<{
-  offset: OffsetOptions;
+  offset: OffsetOptions | Derivable<OffsetOptions>;
   name: string;
 }> = [
   {offset: 0, name: '0'},
   {offset: 10, name: '10'},
   {offset: -10, name: '-10'},
-  {offset: {crossAxis: 10}, name: 'cA: 10'},
-  {offset: {mainAxis: 5, crossAxis: -10}, name: 'mA: 5, cA: -10'},
+  {offset: {alignAxis: 10}, name: 'aA: 10'},
+  {offset: {sideAxis: 5, alignAxis: -10}, name: 'sA: 5, aA: -10'},
   {offset: ({rects}) => -rects.floating.height, name: '() => -f.height'},
   {
-    offset: ({rects}) => ({crossAxis: -rects.floating.width / 2}),
-    name: '() => cA: -f.width/2',
+    offset: ({rects}) => ({alignAxis: -rects.floating.width / 2}),
+    name: '() => aA: -f.width/2',
   },
   {offset: {alignAxis: 5}, name: 'aA: 5'},
   {offset: {alignAxis: -10}, name: 'aA: -10'},
@@ -29,7 +35,9 @@ export function Offset() {
     side: 'bottom',
     align: 'center',
   });
-  const [offsetValue, setOffsetValue] = useState<OffsetOptions>(0);
+  const [offsetValue, setOffsetValue] = useState<
+    OffsetOptions | Derivable<OffsetOptions>
+  >(0);
   const {refs, floatingStyles} = useFloating({
     side: placement.side,
     align: placement.align,

@@ -33,7 +33,7 @@ export interface AutoPlacementOptions extends DetectOverflowOptions {
    * whether to check for most space along this axis.
    * @default false
    */
-  crossAxis?: boolean;
+  alignAxis?: boolean;
   /**
    * Choose placements with a particular align.
    * @default 'center'
@@ -60,7 +60,7 @@ export function* autoPlacementGen(
   const {rects, middlewareData, platform, elements} = state;
 
   const {
-    crossAxis = false,
+    alignAxis = false,
     align = 'center',
     allowedPlacements = ALL_PLACEMENTS,
     autoAlign = true,
@@ -128,10 +128,10 @@ export function* autoPlacementGen(
     .map((d) => {
       return [
         d.placement,
-        d.placement.align !== 'center' && crossAxis
-          ? // Check along the mainAxis and main crossAxis side.
+        d.placement.align !== 'center' && alignAxis
+          ? // Check along the sideAxis and main alignAxis side.
             d.overflows.slice(0, 2).reduce((acc, v) => acc + v, 0)
-          : // Check only the mainAxis.
+          : // Check only the sideAxis.
             d.overflows[0],
         d.overflows,
       ] as const;
@@ -142,7 +142,7 @@ export function* autoPlacementGen(
     d[2]
       .slice(
         0,
-        // Aligned placements should not check their opposite crossAxis
+        // Aligned placements should not check their opposite alignAxis
         // side.
         d[0].align !== 'center' ? 2 : 3,
       )

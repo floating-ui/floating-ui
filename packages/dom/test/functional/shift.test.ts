@@ -3,47 +3,47 @@ import {expect, test} from '@playwright/test';
 import {click} from './utils/click';
 import {scroll} from './utils/scroll';
 
-test('does not shift when `mainAxis` is false', async ({page}) => {
+test('does not shift when `alignAxis` is false', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
-  await click(page, `[data-testid="mainAxis-false"]`);
+  await click(page, `[data-testid="alignAxis-false"]`);
 
   await scroll(page, {x: 800});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `mainAxis-false.png`,
+    `alignAxis-false.png`,
   );
 });
 
-test('does shift when `mainAxis` is true', async ({page}) => {
+test('does shift when `alignAxis` is true', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
-  await click(page, `[data-testid="mainAxis-true"]`);
+  await click(page, `[data-testid="alignAxis-true"]`);
 
   await scroll(page, {x: 800});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `mainAxis-true.png`,
+    `alignAxis-true.png`,
   );
 });
 
-test('does not shift when `crossAxis` is false', async ({page}) => {
+test('does not shift when `sideAxis` is false', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
-  await click(page, `[data-testid="crossAxis-false"]`);
+  await click(page, `[data-testid="sideAxis-false"]`);
 
   await scroll(page, {y: 500});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-false.png`,
+    `sideAxis-false.png`,
   );
 });
 
-test('does shift when `crossAxis` is true', async ({page}) => {
+test('does shift when `sideAxis` is true', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
-  await click(page, `[data-testid="crossAxis-true"]`);
+  await click(page, `[data-testid="sideAxis-true"]`);
 
   await scroll(page, {y: 500});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-true.png`,
+    `sideAxis-true.png`,
   );
 });
 
@@ -73,46 +73,46 @@ test('stops shifting once opposite edges are aligned when `limitShift` is used a
   );
 });
 
-test('stops shifting on the crossAxis once opposite edges are aligned when `limitShift` is used as `limiter`', async ({
+test('stops shifting on the sideAxis once opposite edges are aligned when `limitShift` is used as `limiter`', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/shift');
-  await click(page, `[data-testid="crossAxis-true"]`);
+  await click(page, `[data-testid="sideAxis-true"]`);
   await click(page, `[data-testid="limitShift-true"]`);
 
   await scroll(page, {y: 250});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `limitShift.crossAxis.png`,
+    `limitShift.sideAxis.png`,
   );
 });
 
-test('limitShift does not limit shift when `crossAxis` is false', async ({
+test('limitShift does not limit shift when `sideAxis` is false', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/shift');
   await click(page, `[data-testid="limitShift-true"]`);
-  await click(page, `[data-testid="crossAxis-true"]`);
-  await click(page, `[data-testid="limitShift.crossAxis-false"]`);
+  await click(page, `[data-testid="sideAxis-true"]`);
+  await click(page, `[data-testid="limitShift.sideAxis-false"]`);
 
   await scroll(page, {y: 250});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `limitShift.crossAxis-false.png`,
+    `limitShift.sideAxis-false.png`,
   );
 });
 
-test('limitShift does not limit shift when `mainAxis` is false', async ({
+test('limitShift does not limit shift when `alignAxis` is false', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/shift');
   await click(page, `[data-testid="limitShift-true"]`);
-  await click(page, `[data-testid="limitShift.mainAxis-false"]`);
+  await click(page, `[data-testid="limitShift.alignAxis-false"]`);
 
   await scroll(page, {x: 900});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `limitShift.mainAxis-false.png`,
+    `limitShift.alignAxis-false.png`,
   );
 });
 
@@ -120,10 +120,10 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
   {name: '0', scrollLeft: 900},
   {name: '50', scrollLeft: 900},
   {name: '-50', scrollLeft: 950},
-  {name: 'mA: 50', scrollLeft: 800},
-  {name: 'cA: 50', scrollTop: 315},
+  {name: 'aA: 50', scrollLeft: 800},
+  {name: 'sA: 50', scrollTop: 315},
   {name: 'fn => r.width/2', scrollLeft: 800},
-  {name: 'fn => cA: f.width/2', scrollTop: 400},
+  {name: 'fn => sA: f.width/2', scrollTop: 400},
 ].forEach(({name, ...scrollOffsets}) => {
   ['top', 'bottom'].forEach((placement) => {
     test(`limitShift.offset works for value ${name} ${placement}`, async ({
@@ -132,7 +132,7 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
       await page.goto('http://localhost:1234/shift');
 
       await click(page, `[data-testid="placement-${placement}"]`);
-      await click(page, `[data-testid="crossAxis-true"]`);
+      await click(page, `[data-testid="sideAxis-true"]`);
       await click(page, `[data-testid="limitShift-true"]`);
       await click(page, `[data-testid="limitShift.offset-${name}"]`);
 
@@ -163,14 +163,14 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
     );
   });
 
-  test(`offset is correctly added when limitShift is enabled ${placement} crossAxis stop check`, async ({
+  test(`offset is correctly added when limitShift is enabled ${placement} sideAxis stop check`, async ({
     page,
   }) => {
     await page.goto('http://localhost:1234/shift');
 
     await click(page, `[data-testid="placement-${placement}"]`);
     await click(page, `[data-testid="offset-10"]`);
-    await click(page, `[data-testid="crossAxis-true"]`);
+    await click(page, `[data-testid="sideAxis-true"]`);
     await click(page, `[data-testid="limitShift-true"]`);
 
     await scroll(page, {

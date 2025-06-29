@@ -21,12 +21,12 @@ const LIMIT_SHIFT_OFFSET: Array<{
   {offset: 0, name: '0'},
   {offset: 50, name: '50'},
   {offset: -50, name: '-50'},
-  {offset: {mainAxis: 50}, name: 'mA: 50'},
-  {offset: {crossAxis: 50}, name: 'cA: 50'},
+  {offset: {alignAxis: 50}, name: 'aA: 50'},
+  {offset: {sideAxis: 50}, name: 'sA: 50'},
   {offset: ({rects}) => rects.reference.width / 2, name: 'fn => r.width/2'},
   {
-    offset: ({rects}) => ({crossAxis: rects.reference.width}),
-    name: 'fn => cA: f.width/2',
+    offset: ({rects}) => ({sideAxis: rects.reference.width}),
+    name: 'fn => sA: f.width/2',
   },
 ];
 
@@ -35,13 +35,13 @@ export function Shift() {
     side: 'bottom',
     align: 'center',
   });
-  const [mainAxis, setMainAxis] = useState(true);
-  const [crossAxis, setCrossAxis] = useState(false);
+  const [alignAxis, setalignAxis] = useState(true);
+  const [sideAxis, setsideAxis] = useState(false);
   const [limitShift, setLimitShift] = useState(false);
-  const [limitShiftMainAxis, setLimitShiftMainAxis] =
-    useState<LimitShiftOptions['mainAxis']>(true);
-  const [limitShiftCrossAxis, setLimitShiftCrossAxis] =
-    useState<LimitShiftOptions['crossAxis']>(true);
+  const [limitShiftAlignAxis, setLimitShiftAlignAxis] =
+    useState<LimitShiftOptions['alignAxis']>(true);
+  const [limitShiftSideAxis, setLimitShiftSideAxis] =
+    useState<LimitShiftOptions['sideAxis']>(true);
   const [limitShiftOffset, setLimitShiftOffset] =
     useState<LimitShiftOptions['offset']>(0);
   const [offsetValue, setOffsetValue] = useState(0);
@@ -52,12 +52,12 @@ export function Shift() {
     middleware: [
       offset(offsetValue),
       shift({
-        mainAxis,
-        crossAxis,
+        alignAxis,
+        sideAxis,
         limiter: limitShift
           ? limitShiftFn({
-              mainAxis: limitShiftMainAxis,
-              crossAxis: limitShiftCrossAxis,
+              alignAxis: limitShiftAlignAxis,
+              sideAxis: limitShiftSideAxis,
               offset: limitShiftOffset,
             })
           : undefined,
@@ -116,28 +116,28 @@ export function Shift() {
         ))}
       </Controls>
 
-      <h2>mainAxis</h2>
+      <h2>alignAxis</h2>
       <Controls>
         {BOOLS.map((bool) => (
           <button
             key={String(bool)}
-            data-testid={`mainAxis-${bool}`}
-            onClick={() => setMainAxis(bool)}
-            style={{backgroundColor: mainAxis === bool ? 'black' : ''}}
+            data-testid={`alignAxis-${bool}`}
+            onClick={() => setalignAxis(bool)}
+            style={{backgroundColor: alignAxis === bool ? 'black' : ''}}
           >
             {String(bool)}
           </button>
         ))}
       </Controls>
 
-      <h2>crossAxis</h2>
+      <h2>sideAxis</h2>
       <Controls>
         {BOOLS.map((bool) => (
           <button
             key={String(bool)}
-            data-testid={`crossAxis-${bool}`}
-            onClick={() => setCrossAxis(bool)}
-            style={{backgroundColor: crossAxis === bool ? 'black' : ''}}
+            data-testid={`sideAxis-${bool}`}
+            onClick={() => setsideAxis(bool)}
+            style={{backgroundColor: sideAxis === bool ? 'black' : ''}}
           >
             {String(bool)}
           </button>
@@ -160,15 +160,15 @@ export function Shift() {
 
       {limitShift && (
         <>
-          <h3>limitShift.mainAxis</h3>
+          <h3>limitShift.alignAxis</h3>
           <Controls>
             {BOOLS.map((bool) => (
               <button
                 key={String(bool)}
-                data-testid={`limitShift.mainAxis-${bool}`}
-                onClick={() => setLimitShiftMainAxis(bool)}
+                data-testid={`limitShift.alignAxis-${bool}`}
+                onClick={() => setLimitShiftAlignAxis(bool)}
                 style={{
-                  backgroundColor: limitShiftMainAxis === bool ? 'black' : '',
+                  backgroundColor: limitShiftAlignAxis === bool ? 'black' : '',
                 }}
               >
                 {String(bool)}
@@ -176,15 +176,15 @@ export function Shift() {
             ))}
           </Controls>
 
-          <h3>limitShift.crossAxis</h3>
+          <h3>limitShift.sideAxis</h3>
           <Controls>
             {BOOLS.map((bool) => (
               <button
                 key={String(bool)}
-                data-testid={`limitShift.crossAxis-${bool}`}
-                onClick={() => setLimitShiftCrossAxis(bool)}
+                data-testid={`limitShift.sideAxis-${bool}`}
+                onClick={() => setLimitShiftSideAxis(bool)}
                 style={{
-                  backgroundColor: limitShiftCrossAxis === bool ? 'black' : '',
+                  backgroundColor: limitShiftSideAxis === bool ? 'black' : '',
                 }}
               >
                 {String(bool)}

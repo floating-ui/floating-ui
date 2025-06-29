@@ -121,8 +121,8 @@ These are the options you can pass to `flip(){:js}`.
 
 ```ts
 interface FlipOptions extends DetectOverflowOptions {
-  mainAxis?: boolean;
-  crossAxis?: boolean | 'align';
+  sideAxis?: boolean;
+  alignAxis?: boolean | 'align';
   fallbackAxisSideDirection?: 'none' | 'start' | 'end';
   flipAlign?: boolean;
   fallbackPlacements?: Array<Placement>;
@@ -130,7 +130,7 @@ interface FlipOptions extends DetectOverflowOptions {
 }
 ```
 
-### `mainAxis{:.key}`
+### `sideAxis{:.key}`
 
 default: `true{:js}`
 
@@ -142,7 +142,7 @@ flip. By disabling this, it will ignore overflow.
 
 ```js
 flip({
-  mainAxis: false,
+  sideAxis: false,
 });
 ```
 
@@ -159,7 +159,7 @@ flip({
         {
           name: 'flip',
           options: {
-            mainAxis: false,
+            sideAxis: false,
           },
         },
       ]}
@@ -169,17 +169,17 @@ flip({
   </Chrome>
 </div>
 
-### `crossAxis{:.key}`
+### `alignAxis{:.key}`
 
 default: `true{:js}`
 
 This is the cross axis in which overflow is checked to perform a
-flip, the axis perpendicular to `mainAxis{:.key}`. By disabling
+flip, the axis perpendicular to `sideAxis{:.key}`. By disabling
 this, it will ignore overflow.
 
 ```js
 flip({
-  crossAxis: false,
+  alignAxis: false,
 });
 ```
 
@@ -197,7 +197,7 @@ flip({
         {
           name: 'flip',
           options: {
-            crossAxis: true,
+            alignAxis: true,
             rootBoundary: 'document'
           },
         },
@@ -220,7 +220,7 @@ flip({
         {
           name: 'flip',
           options: {
-            crossAxis: false,
+            alignAxis: false,
             rootBoundary: 'document'
           },
         },
@@ -541,7 +541,7 @@ const middleware = [offset(5)];
 const flipMiddleware = flip({
   // Ensure we flip to the perpendicular axis if it doesn't fit
   // on narrow viewports.
-  crossAxis: 'align',
+  alignAxis: 'align',
   fallbackAxisSideDirection: 'end', // or 'start'
 });
 const shiftMiddleware = shift();

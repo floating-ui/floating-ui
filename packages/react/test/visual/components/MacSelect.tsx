@@ -225,7 +225,7 @@ export function Main() {
     middleware: fallback
       ? [
           offset(5),
-          touch ? shift({crossAxis: true, padding: 10}) : flip({padding: 10}),
+          touch ? shift({alignAxis: true, padding: 10}) : flip({padding: 10}),
           size({
             apply({availableHeight, rects}) {
               Object.assign(scrollRef.current?.style ?? {}, {
@@ -255,7 +255,7 @@ export function Main() {
             minItemsVisible: touch ? 10 : 4,
             referenceOverflowThreshold: 20,
           }),
-          offset({crossAxis: -5}),
+          offset({alignAxis: -5}),
         ],
   });
 
