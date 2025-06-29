@@ -1,5 +1,16 @@
 # @floating-ui/react
 
+## 0.28.0
+
+### Minor Changes
+
+- chore: new bundling strategy. UMD artifacts have been removed.
+
+### Patch Changes
+
+- feat: re-export utils across packages
+- Update dependencies: `@floating-ui/react-dom@3.0.0`
+
 ## 0.27.12
 
 ### Patch Changes

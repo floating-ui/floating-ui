@@ -1,5 +1,16 @@
 # @floating-ui/vue
 
+## 2.0.0
+
+### Major Changes
+
+- chore: new bundling strategy. UMD artifacts have been removed.
+
+### Patch Changes
+
+- feat: re-export utils across packages
+- Update dependencies: `@floating-ui/dom@2.0.0`
+
 ## 1.1.6
 
 ### Patch Changes
