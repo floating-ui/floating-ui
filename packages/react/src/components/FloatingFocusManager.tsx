@@ -514,10 +514,6 @@ export function FloatingFocusManager(
     const ancestors = tree
       ? getNodeAncestors(tree.nodesRef.current, getNodeId())
       : [];
-    const ancestorFloatingNodes =
-      tree && !modal
-        ? ancestors.map((node) => node.context?.elements.floating)
-        : [];
     const rootAncestorComboboxDomReference = ancestors.find((node) =>
       isTypeableCombobox(node.context?.elements.domReference || null),
     )?.context?.elements.domReference;
@@ -526,7 +522,6 @@ export function FloatingFocusManager(
       floating,
       rootAncestorComboboxDomReference,
       ...portalNodes,
-      ...ancestorFloatingNodes,
       ...getInsideElements(),
       startDismissButtonRef.current,
       endDismissButtonRef.current,

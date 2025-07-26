@@ -564,26 +564,31 @@ export function useListNavigation(
         syncCurrentTarget(currentTarget);
       },
       onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
-      ...(focusItemOnHover && {
-        onMouseMove({currentTarget}) {
-          forceSyncFocusRef.current = true;
-          forceScrollIntoViewRef.current = false;
+      onMouseMove({currentTarget}) {
+        forceSyncFocusRef.current = true;
+        forceScrollIntoViewRef.current = false;
+        if (focusItemOnHover) {
           syncCurrentTarget(currentTarget);
-        },
-        onPointerLeave({pointerType}) {
-          if (!isPointerModalityRef.current || pointerType === 'touch') {
-            return;
-          }
+        }
+      },
+      onPointerLeave({pointerType}) {
+        if (!isPointerModalityRef.current || pointerType === 'touch') {
+          return;
+        }
 
-          forceSyncFocusRef.current = true;
-          indexRef.current = -1;
-          onNavigate();
+        forceSyncFocusRef.current = true;
 
-          if (!virtual) {
-            floatingFocusElementRef.current?.focus({preventScroll: true});
-          }
-        },
-      }),
+        if (!focusItemOnHover) {
+          return;
+        }
+
+        indexRef.current = -1;
+        onNavigate();
+
+        if (!virtual) {
+          floatingFocusElementRef.current?.focus({preventScroll: true});
+        }
+      },
     };
 
     return props;
