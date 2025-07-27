@@ -22,7 +22,6 @@ import {
 import {useFloatingTree} from '../components/FloatingTree';
 import type {ElementProps, FloatingRootContext} from '../types';
 import {createAttribute} from '../utils/createAttribute';
-import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 const bubbleHandlerKeys = {
   pointerdown: 'onPointerDown',
@@ -157,7 +156,6 @@ export function useDismiss(
     normalizeProp(capture);
 
   const isComposingRef = React.useRef(false);
-  const blurTimeoutRef = React.useRef(-1);
 
   const closeOnEscapeKeyDown = useEffectEvent(
     (event: React.KeyboardEvent<Element> | KeyboardEvent) => {
@@ -522,16 +520,8 @@ export function useDismiss(
       [captureHandlerKeys[outsidePressEvent]]: () => {
         dataRef.current.insideReactTree = true;
       },
-      onBlurCapture() {
-        if (tree) return;
-        clearTimeoutIfSet(blurTimeoutRef);
-        dataRef.current.insideReactTree = true;
-        blurTimeoutRef.current = window.setTimeout(() => {
-          dataRef.current.insideReactTree = false;
-        });
-      },
     }),
-    [closeOnEscapeKeyDown, outsidePressEvent, dataRef, tree],
+    [closeOnEscapeKeyDown, outsidePressEvent, dataRef],
   );
 
   return React.useMemo(
