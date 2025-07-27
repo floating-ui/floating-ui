@@ -35,11 +35,14 @@ import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 const LIST_LIMIT = 20;
 let previouslyFocusedElements: Element[] = [];
 
-function addPreviouslyFocusedElement(element: Element | null) {
+function clearDisconnectedPreviouslyFocusedElements() {
   previouslyFocusedElements = previouslyFocusedElements.filter(
     (el) => el.isConnected,
   );
+}
 
+function addPreviouslyFocusedElement(element: Element | null) {
+  clearDisconnectedPreviouslyFocusedElements();
   if (element && getNodeName(element) !== 'body') {
     previouslyFocusedElements.push(element);
     if (previouslyFocusedElements.length > LIST_LIMIT) {
@@ -49,10 +52,8 @@ function addPreviouslyFocusedElement(element: Element | null) {
 }
 
 function getPreviouslyFocusedElement() {
-  return previouslyFocusedElements
-    .slice()
-    .reverse()
-    .find((el) => el.isConnected);
+  clearDisconnectedPreviouslyFocusedElements();
+  return previouslyFocusedElements[previouslyFocusedElements.length - 1];
 }
 
 function getFirstTabbableElement(container: Element) {
@@ -737,6 +738,9 @@ export function FloatingFocusManager(
     queueMicrotask(() => {
       preventReturnFocusRef.current = false;
     });
+    return () => {
+      queueMicrotask(clearDisconnectedPreviouslyFocusedElements);
+    };
   }, [disabled]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
