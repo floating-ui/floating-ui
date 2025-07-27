@@ -2436,3 +2436,121 @@ test('standard tabbing back and forth of a non-modal floating element', async ()
   await userEvent.tab();
   expect(screen.getByTestId('inner')).toHaveFocus();
 });
+
+describe('closeOnFocusOut', () => {
+  describe('with FloatingPortal', () => {
+    function CloseOnFocusOut({
+      closeOnFocusOut = true,
+    }: {
+      closeOnFocusOut?: boolean;
+    }) {
+      const [isOpen, setIsOpen] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      return (
+        <>
+          <button
+            data-testid="reference"
+            ref={refs.setReference}
+            onClick={() => setIsOpen(true)}
+          />
+          {isOpen && (
+            <FloatingPortal>
+              <FloatingFocusManager
+                context={context}
+                modal={false}
+                closeOnFocusOut={closeOnFocusOut}
+              >
+                <div ref={refs.setFloating} data-testid="floating">
+                  <button>inside</button>
+                </div>
+              </FloatingFocusManager>
+            </FloatingPortal>
+          )}
+          <button>outside</button>
+        </>
+      );
+    }
+
+    it('true: closes when focus moves outside', async () => {
+      render(<CloseOnFocusOut />);
+
+      await userEvent.click(screen.getByTestId('reference'));
+      await act(async () => {});
+      await userEvent.tab();
+
+      expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
+    });
+
+    it('false: does not close when focus moves outside', async () => {
+      render(<CloseOnFocusOut closeOnFocusOut={false} />);
+
+      await userEvent.click(screen.getByTestId('reference'));
+      await act(async () => {});
+      await userEvent.tab();
+
+      expect(screen.getByTestId('floating')).toBeInTheDocument();
+    });
+  });
+
+  describe('without FloatingPortal', () => {
+    function CloseOnFocusOut({
+      closeOnFocusOut = true,
+    }: {
+      closeOnFocusOut?: boolean;
+    }) {
+      const [isOpen, setIsOpen] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      return (
+        <>
+          <button
+            data-testid="reference"
+            ref={refs.setReference}
+            onClick={() => setIsOpen(true)}
+          />
+          {isOpen && (
+            <FloatingFocusManager
+              context={context}
+              modal={false}
+              closeOnFocusOut={closeOnFocusOut}
+            >
+              <div ref={refs.setFloating} data-testid="floating">
+                <button>inside</button>
+              </div>
+            </FloatingFocusManager>
+          )}
+          <button>outside</button>
+        </>
+      );
+    }
+
+    it('true: closes when focus moves outside', async () => {
+      render(<CloseOnFocusOut />);
+
+      await userEvent.click(screen.getByTestId('reference'));
+      await act(async () => {});
+      await userEvent.tab();
+
+      expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
+    });
+
+    it('false: does not close when focus moves outside', async () => {
+      render(<CloseOnFocusOut closeOnFocusOut={false} />);
+
+      await userEvent.click(screen.getByTestId('reference'));
+      await act(async () => {});
+      await userEvent.tab();
+
+      expect(screen.getByTestId('floating')).toBeInTheDocument();
+    });
+  });
+});

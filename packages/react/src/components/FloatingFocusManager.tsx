@@ -30,6 +30,7 @@ import {usePortalContext} from './FloatingPortal';
 import {useFloatingTree} from './FloatingTree';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 import {useLiteMergeRefs} from '../utils/useLiteMergeRefs';
+import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 const LIST_LIMIT = 20;
 let previouslyFocusedElements: Element[] = [];
@@ -259,6 +260,7 @@ export function FloatingFocusManager(
   const preventReturnFocusRef = React.useRef(false);
   const isPointerDownRef = React.useRef(false);
   const tabbableIndexRef = React.useRef(-1);
+  const blurTimeoutRef = React.useRef(-1);
 
   const isInsidePortal = portalContext != null;
   const floatingFocusElement = getFloatingFocusElement(floating);
@@ -459,15 +461,33 @@ export function FloatingFocusManager(
       });
     }
 
+    const shouldHandleBlurCapture = Boolean(!tree && portalContext);
+
+    function markInsideReactTree() {
+      clearTimeoutIfSet(blurTimeoutRef);
+      dataRef.current.insideReactTree = true;
+      blurTimeoutRef.current = window.setTimeout(() => {
+        dataRef.current.insideReactTree = false;
+      });
+    }
+
     if (floating && isHTMLElement(domReference)) {
       domReference.addEventListener('focusout', handleFocusOutside);
       domReference.addEventListener('pointerdown', handlePointerDown);
       floating.addEventListener('focusout', handleFocusOutside);
 
+      if (shouldHandleBlurCapture) {
+        floating.addEventListener('focusout', markInsideReactTree, true);
+      }
+
       return () => {
         domReference.removeEventListener('focusout', handleFocusOutside);
         domReference.removeEventListener('pointerdown', handlePointerDown);
         floating.removeEventListener('focusout', handleFocusOutside);
+
+        if (shouldHandleBlurCapture) {
+          floating.removeEventListener('focusout', markInsideReactTree, true);
+        }
       };
     }
   }, [
