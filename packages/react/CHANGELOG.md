@@ -1,5 +1,15 @@
 # @floating-ui/react
 
+## 0.27.14
+
+### Patch Changes
+
+- fix(FloatingFocusManager): allow marking ancestor nodes with `data-floating-ui-inert`. Fixes outside presses not working when clicking on a parent ancestor node.
+- feat(FloatingPortal): support `ShadowRoot` containers
+- fix(useRole): ensure `aria-selected=true` is present without being active with `select` role
+- fix: only use blur capture to mark inside floating tree if `FloatingPortal` exists. Prevents blocking `closeOnFocusOut` behavior.
+- fix(FloatingFocusManager): clear previously focused elements that are disconnected more often
+
 ## 0.27.13
 
 ### Patch Changes
