@@ -240,8 +240,11 @@ export function useDismiss(
       return;
     }
 
+    const inertAttribute = createAttribute('inert');
+    const portalAttribute = createAttribute('portal');
+
     const target = getTarget(event);
-    const inertSelector = `[${createAttribute('inert')}]`;
+    const inertSelector = `[${inertAttribute}]`;
     const markers = getDocument(elements.floating).querySelectorAll(
       inertSelector,
     );
@@ -249,7 +252,11 @@ export function useDismiss(
     let targetRootAncestor = isElement(target) ? target : null;
     while (targetRootAncestor && !isLastTraversableNode(targetRootAncestor)) {
       const nextParent = getParentNode(targetRootAncestor);
-      if (isLastTraversableNode(nextParent) || !isElement(nextParent)) {
+      if (
+        isLastTraversableNode(nextParent) ||
+        !isElement(nextParent) ||
+        nextParent.hasAttribute(portalAttribute)
+      ) {
         break;
       }
 
