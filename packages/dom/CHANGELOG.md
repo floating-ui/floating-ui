@@ -1,5 +1,11 @@
 # @floating-ui/dom
 
+## 1.7.3
+
+### Patch Changes
+
+- Update dependencies: `@floating-ui/core@1.7.3`
+
 ## 1.7.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @floating-ui/core
 
+## 1.7.3
+
+### Patch Changes
+
+- fix(flip): ensure perpendicular axis flips with crossAxis alignment
+
 ## 1.7.2
 
 ### Patch Changes
