@@ -149,10 +149,10 @@ export const flip = (
           !ignoreCrossAxisOverflow ||
           // We leave the current main axis only if every placement on that axis
           // overflows the main axis.
-          overflowsData.every(
-            (d) =>
-              d.overflows[0] > 0 &&
-              getSideAxis(d.placement) === initialSideAxis,
+          overflowsData.every((d) =>
+            getSideAxis(d.placement) === initialSideAxis
+              ? d.overflows[0] > 0
+              : true,
           )
         ) {
           // Try next placement and re-run the lifecycle.
