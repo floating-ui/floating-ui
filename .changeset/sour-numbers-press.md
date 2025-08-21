@@ -1,5 +1,5 @@
 ---
-"@floating-ui/dom": patch
+'@floating-ui/dom': patch
 ---
 
-fix(getViewportRect): account for space left by scrollbar-gutter: stable
+fix(getViewportRect): account for space left by `scrollbar-gutter: stable`
