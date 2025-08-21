@@ -35,8 +35,9 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
     const body = html.ownerDocument.body;
     const bodyMarginInline =
       parseFloat(getComputedStyle(body).marginInline) || 0;
-    const clippingStableScrollbarWidth =
-      html.clientWidth - body.clientWidth - bodyMarginInline;
+    const clippingStableScrollbarWidth = Math.abs(
+      html.clientWidth - body.clientWidth - bodyMarginInline,
+    );
 
     // Safety check: ensure the scrollbar space is reasonable in case this
     // calculation is affected by unusual styles.
