@@ -31,7 +31,7 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
   // visual width of the <html> but this is not considered in the size
   // of `html.clientWidth`.
   // <body> margins can affect this calculation which should be ignored.
-  if (!windowScrollbarX) {
+  if (windowScrollbarX <= 0) {
     const body = html.ownerDocument.body;
     const bodyMarginInline =
       parseFloat(getComputedStyle(body).marginInline) || 0;
