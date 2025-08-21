@@ -35,13 +35,15 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
   // <html> `overflow: hidden` + `scrollbar-gutter: stable` reduces the
   // visual width of the <html> but this is not considered in the size
   // of `html.clientWidth`.
-  // <body> margins can affect this calculation which should be ignored.
   if (windowScrollbarX <= 0) {
-    const body = html.ownerDocument.body;
+    const doc = html.ownerDocument;
+    const body = doc.body;
     const bodyStyles = getComputedStyle(body);
     const bodyMarginInline =
-      parseFloat(bodyStyles.marginLeft) + parseFloat(bodyStyles.marginRight) ||
-      0;
+      doc.compatMode === 'CSS1Compat'
+        ? parseFloat(bodyStyles.marginLeft) +
+            parseFloat(bodyStyles.marginRight) || 0
+        : 0;
     const clippingStableScrollbarWidth = Math.abs(
       html.clientWidth - body.clientWidth - bodyMarginInline,
     );
