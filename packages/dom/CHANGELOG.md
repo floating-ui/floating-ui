@@ -1,5 +1,11 @@
 # @floating-ui/dom
 
+## 1.7.4
+
+### Patch Changes
+
+- fix(getViewportRect): account for space left by `scrollbar-gutter: stable`
+
 ## 1.7.3
 
 ### Patch Changes
