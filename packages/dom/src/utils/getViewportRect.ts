@@ -31,7 +31,7 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
     }
   }
 
-  const windowScrollbarX = getWindowScrollBarX(element);
+  const windowScrollbarX = getWindowScrollBarX(html);
   // <html> `overflow: hidden` + `scrollbar-gutter: stable` reduces the
   // visual width of the <html> but this is not considered in the size
   // of `html.clientWidth`.
