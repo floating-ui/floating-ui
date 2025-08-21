@@ -4,6 +4,11 @@ import {getWindow, isWebKit} from '@floating-ui/utils/dom';
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 
+// Safety check: ensure the scrollbar space is reasonable in case this
+// calculation is affected by unusual styles.
+// Most scrollbars leave 15-18px of space.
+const SCROLLBAR_MAX = 25;
+
 export function getViewportRect(element: Element, strategy: Strategy): Rect {
   const win = getWindow(element);
   const html = getDocumentElement(element);
@@ -39,13 +44,10 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
       html.clientWidth - body.clientWidth - bodyMarginInline,
     );
 
-    // Safety check: ensure the scrollbar space is reasonable in case this
-    // calculation is affected by unusual styles.
-    // Most scrollbars leave 15-18px of space.
-    if (clippingStableScrollbarWidth <= 25) {
+    if (clippingStableScrollbarWidth <= SCROLLBAR_MAX) {
       width -= clippingStableScrollbarWidth;
     }
-  } else {
+  } else if (windowScrollbarX <= SCROLLBAR_MAX) {
     // If the <body> scrollbar is on the left, the width needs to be extended
     // by the scrollbar amount so there isn't extra space on the right.
     width += windowScrollbarX;
