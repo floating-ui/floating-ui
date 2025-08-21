@@ -55,7 +55,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
 
   const htmlOffset =
     documentElement && !isOffsetParentAnElement && !isFixed
-      ? getHTMLOffset(documentElement, scroll, true)
+      ? getHTMLOffset(documentElement, scroll)
       : createCoords(0);
 
   return {
