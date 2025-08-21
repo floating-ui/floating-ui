@@ -38,8 +38,10 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
   // <body> margins can affect this calculation which should be ignored.
   if (windowScrollbarX <= 0) {
     const body = html.ownerDocument.body;
+    const bodyStyles = getComputedStyle(body);
     const bodyMarginInline =
-      parseFloat(getComputedStyle(body).marginInline) || 0;
+      parseFloat(bodyStyles.marginLeft) + parseFloat(bodyStyles.marginRight) ||
+      0;
     const clippingStableScrollbarWidth = Math.abs(
       html.clientWidth - body.clientWidth - bodyMarginInline,
     );
