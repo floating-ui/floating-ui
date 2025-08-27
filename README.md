@@ -150,6 +150,11 @@ The floating shapes in the banner image are made by the amazing artists
 [@killnicole](https://figma.com/@killnicole) and
 [@liiiiiiii](https://www.figma.com/@liiiiiii) on Figma — check out their work!
 
+## Contributor
+<a href="https://github.com/floating-ui/floating-ui/graphs/contributors">
+  <img alt="Contributors" src="https://contrib.rocks/image?repo=floating-ui/floating-ui" />
+</a>
+
 ## License
 
 MIT
