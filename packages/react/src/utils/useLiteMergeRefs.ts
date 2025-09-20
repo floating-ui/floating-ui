@@ -7,7 +7,7 @@ export function useLiteMergeRefs<T>(
     return (value) => {
       refs.forEach((ref) => {
         if (ref) {
-          (ref as React.MutableRefObject<T | null>).current = value;
+          ref.current = value;
         }
       });
     };
