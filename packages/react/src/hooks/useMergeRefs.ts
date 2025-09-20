@@ -2,7 +2,7 @@ import * as React from 'react';
 
 type Ref<Instance> =
   | Exclude<React.Ref<Instance>, React.RefObject<Instance>>
-  | React.MutableRefObject<Instance>;
+  | React.MutableRefObject<Instance | null>;
 
 /**
  * Merges an array of refs into a single memoized callback ref or `null`.
