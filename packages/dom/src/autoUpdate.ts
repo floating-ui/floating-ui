@@ -183,7 +183,12 @@ export function autoUpdate(
 
   if (elementResize && (referenceEl || floating)) {
     resizeObserver = new ResizeObserver(([firstEntry]) => {
-      if (firstEntry && firstEntry.target === referenceEl && resizeObserver && floating) {
+      if (
+        firstEntry &&
+        firstEntry.target === referenceEl &&
+        resizeObserver &&
+        floating
+      ) {
         // Prevent update loops when using the `size` middleware.
         // https://github.com/floating-ui/floating-ui/issues/1740
         resizeObserver.unobserve(floating);
