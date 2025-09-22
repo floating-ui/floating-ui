@@ -176,8 +176,6 @@ export function useDismiss(
         : [];
 
       if (!escapeKeyBubbles) {
-        event.stopPropagation();
-
         if (children.length > 0) {
           let shouldDismiss = true;
 
