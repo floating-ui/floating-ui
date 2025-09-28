@@ -44,6 +44,6 @@ this includes GitHub, and Twitter.
   human to err and blaming each other doesn't get us anywhere, rather offer to
   help resolving issues and to help learn from mistakes.
 
-Original text cortesy of the
+Original text courtesy of the
 [Django Project](https://www.djangoproject.com/conduct/) and of the
-[Speak Up! prokect](http://web.archive.org/web/20141109123859/http://speakup.io/coc.html).
+[Speak Up! project](http://web.archive.org/web/20141109123859/http://speakup.io/coc.html).
