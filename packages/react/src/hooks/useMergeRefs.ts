@@ -1,15 +1,19 @@
 import * as React from 'react';
 
+type Ref<Instance> =
+  | Exclude<React.Ref<Instance>, React.RefObject<Instance>>
+  | React.MutableRefObject<Instance | null>;
+
 /**
  * Merges an array of refs into a single memoized callback ref or `null`.
  * @see https://floating-ui.com/docs/react-utils#usemergerefs
  */
 export function useMergeRefs<Instance>(
-  refs: Array<React.Ref<Instance> | undefined>,
+  refs: Array<Ref<Instance> | undefined>,
 ): null | React.RefCallback<Instance> {
-  const cleanupRef = React.useRef<void | (() => void)>(undefined);
+  const cleanupRef = React.useRef<() => void>(undefined);
 
-  const refEffect = React.useCallback((instance: Instance | null) => {
+  const refEffect = React.useCallback((instance: Instance) => {
     const cleanups = refs.map((ref) => {
       if (ref == null) {
         return;
@@ -25,9 +29,9 @@ export function useMergeRefs<Instance>(
             };
       }
 
-      (ref as React.MutableRefObject<Instance | null>).current = instance;
+      ref.current = instance;
       return () => {
-        (ref as React.MutableRefObject<Instance | null>).current = null;
+        ref.current = null;
       };
     });
 
@@ -45,13 +49,11 @@ export function useMergeRefs<Instance>(
     return (value) => {
       if (cleanupRef.current) {
         cleanupRef.current();
-        (cleanupRef as React.MutableRefObject<void | (() => void)>).current =
-          undefined;
+        cleanupRef.current = undefined;
       }
 
       if (value != null) {
-        (cleanupRef as React.MutableRefObject<void | (() => void)>).current =
-          refEffect(value);
+        cleanupRef.current = refEffect(value);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
