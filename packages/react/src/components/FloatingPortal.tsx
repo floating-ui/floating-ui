@@ -13,7 +13,19 @@ import {
 import {useId} from '../hooks/useId';
 import type {OpenChangeReason} from '../types';
 import {createAttribute} from '../utils/createAttribute';
-import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
+import {FocusGuard} from './FocusGuard';
+
+// Special visually hidden styles for the aria-owns owner element
+// to ensure owned element accessibility in iOS/Safari/VoiceControl.
+// See https://github.com/floating-ui/floating-ui/issues/3403
+const HIDDEN_OWNER_STYLES: React.CSSProperties = {
+  clipPath: 'inset(50%)',
+  height: '2px',
+  overflow: 'hidden',
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: '1px',
+};
 
 type FocusManagerState = {
   modal: boolean;
@@ -241,7 +253,7 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
         />
       )}
       {shouldRenderGuards && portalNode && (
-        <span aria-owns={portalNode.id} style={HIDDEN_STYLES} />
+        <span aria-owns={portalNode.id} style={HIDDEN_OWNER_STYLES} />
       )}
       {portalNode && ReactDOM.createPortal(children, portalNode)}
       {shouldRenderGuards && portalNode && (
