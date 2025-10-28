@@ -1,5 +1,5 @@
 ---
-"@floating-ui/react": patch
+'@floating-ui/react': patch
 ---
 
-fix(FloatingPortal): ensure accessibility of non-portal dialogs with iOS/Safari/Voice Control
+fix(FloatingPortal): ensure accessibility of non-modal dialogs with iOS/Safari/Voice Control
