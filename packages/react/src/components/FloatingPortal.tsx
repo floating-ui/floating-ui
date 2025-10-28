@@ -17,14 +17,11 @@ import {FocusGuard} from './FocusGuard';
 
 // Special visually hidden styles for the aria-owns owner element
 // to ensure owned element accessibility in iOS/Safari/VoiceControl.
+// The owner element is an empty span, so most of the common visually hidden styles are not needed.
 // See https://github.com/floating-ui/floating-ui/issues/3403
 const HIDDEN_OWNER_STYLES: React.CSSProperties = {
   clipPath: 'inset(50%)',
-  height: '2px',
-  overflow: 'hidden',
   position: 'absolute',
-  whiteSpace: 'nowrap',
-  width: '1px',
 };
 
 type FocusManagerState = {
