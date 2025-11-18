@@ -11,7 +11,7 @@ type Ref<Instance> =
 export function useMergeRefs<Instance>(
   refs: Array<Ref<Instance> | undefined>,
 ): null | React.RefCallback<Instance> {
-  const cleanupRef = React.useRef<() => void | undefined>(undefined);
+  const cleanupRef = React.useRef<() => void>(undefined);
 
   const refEffect = React.useCallback((instance: Instance) => {
     const cleanups = refs.map((ref) => {
