@@ -21,7 +21,9 @@ import {FocusGuard} from './FocusGuard';
 // See https://github.com/floating-ui/floating-ui/issues/3403
 const HIDDEN_OWNER_STYLES: React.CSSProperties = {
   clipPath: 'inset(50%)',
-  position: 'absolute',
+  position: 'fixed',
+  top: 0,
+  left: 0,
 };
 
 type FocusManagerState = {
