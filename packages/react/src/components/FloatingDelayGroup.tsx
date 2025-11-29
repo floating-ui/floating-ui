@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useClientLayoutEffect} from '@floating-ui/react/utils';
 
 import {getDelay} from '../hooks/useHover';
 import type {FloatingRootContext} from '../types';
@@ -88,7 +88,7 @@ export function FloatingDelayGroup(
     setState({currentId});
   }, []);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (state.currentId) {
       if (initialCurrentIdRef.current === null) {
         initialCurrentIdRef.current = state.currentId;
@@ -141,7 +141,7 @@ export function useDelayGroup(
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     groupContext;
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!enabled) return;
     if (!currentId) return;
 
@@ -157,7 +157,7 @@ export function useDelayGroup(
     }
   }, [enabled, id, onOpenChange, setState, currentId, initialDelay]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     function unset() {
       onOpenChange(false);
       setState({delay: initialDelay, currentId: null});
@@ -187,7 +187,7 @@ export function useDelayGroup(
     timeoutMs,
   ]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!enabled) return;
     if (setCurrentId === NOOP || !open) return;
     setCurrentId(id);
