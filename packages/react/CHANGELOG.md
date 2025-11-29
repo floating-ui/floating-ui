@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.27.17
+
+### Patch Changes
+
+- fix(FloatingPortal): ensure accessibility of non-modal dialogs with iOS/Safari/Voice Control
+
 ## 0.27.16
 
 ### Patch Changes
