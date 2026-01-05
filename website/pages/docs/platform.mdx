@@ -272,6 +272,27 @@ function getScale(element) {
 }
 ```
 
+### `detectOverflow{:.function}`
+
+Determines how much the floating element is overflowing its
+clipping container.
+
+<Notice>
+  If defined, Floating UI's middleware will call this method
+  rather than [`detectOverflow`](/docs/detectOverflow)
+</Notice>
+
+```js
+function detectOverflow(state, options) {
+  return {
+    top: 10,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  };
+}
+```
+
 ## Usage
 
 All these methods are passed to `platform{:.key}`:
@@ -294,6 +315,7 @@ computePosition(referenceEl, floatingEl, {
     isElement,
     isRTL,
     getScale,
+    detectOverflow,
   },
 });
 ```

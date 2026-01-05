@@ -9,7 +9,6 @@ import {
 
 import {originSides} from '../constants';
 import type {DetectOverflowOptions} from '../detectOverflow';
-import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
 
 export interface ShiftOptions extends DetectOverflowOptions {
@@ -46,7 +45,7 @@ export const shift = (
   name: 'shift',
   options,
   async fn(state) {
-    const {x, y, placement} = state;
+    const {x, y, placement, platform} = state;
 
     const {
       mainAxis: checkMainAxis = true,
@@ -56,7 +55,10 @@ export const shift = (
     } = evaluate(options, state);
 
     const coords = {x, y};
-    const overflow = await detectOverflow(state, detectOverflowOptions);
+    const overflow = await platform.detectOverflow(
+      state,
+      detectOverflowOptions,
+    );
     const crossAxis = getSideAxis(getSide(placement));
     const mainAxis = getOppositeAxis(crossAxis);
 

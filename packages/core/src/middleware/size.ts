@@ -8,7 +8,6 @@ import {
 } from '@floating-ui/utils';
 
 import type {DetectOverflowOptions} from '../detectOverflow';
-import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
 
 export interface SizeOptions extends DetectOverflowOptions {
@@ -44,7 +43,10 @@ export const size = (
       state,
     );
 
-    const overflow = await detectOverflow(state, detectOverflowOptions);
+    const overflow = await platform.detectOverflow(
+      state,
+      detectOverflowOptions,
+    );
     const side = getSide(placement);
     const alignment = getAlignment(placement);
     const isYAxis = getSideAxis(placement) === 'y';
