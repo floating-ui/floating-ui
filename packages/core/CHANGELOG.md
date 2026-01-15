@@ -1,5 +1,11 @@
 # @floating-ui/core
 
+## 1.7.4
+
+### Patch Changes
+
+- feat: detectOverflow configurable via platform
+
 ## 1.7.3
 
 ### Patch Changes
