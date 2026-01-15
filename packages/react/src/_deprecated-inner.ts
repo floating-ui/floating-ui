@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {detectOverflow, offset, type Derivable} from '@floating-ui/react-dom';
+import {offset, type Derivable} from '@floating-ui/react-dom';
 import {evaluate, max, min, round} from '@floating-ui/utils';
 import {useEffectEvent, getUserAgent} from '@floating-ui/react/utils';
 
@@ -99,6 +99,7 @@ export const inner = (
 
     const {
       rects,
+      platform,
       elements: {floating},
     } = state;
 
@@ -140,14 +141,14 @@ export const inner = (
       ).fn(state)),
     };
 
-    const overflow = await detectOverflow(
+    const overflow = await platform.detectOverflow(
       getArgsWithCustomFloatingHeight(
         nextArgs,
         scrollEl.scrollHeight + clientTop + floating.clientTop,
       ),
       detectOverflowOptions,
     );
-    const refOverflow = await detectOverflow(nextArgs, {
+    const refOverflow = await platform.detectOverflow(nextArgs, {
       ...detectOverflowOptions,
       elementContext: 'reference',
     });
@@ -185,7 +186,7 @@ export const inner = (
     }
 
     if (overflowRef) {
-      overflowRef.current = await detectOverflow(
+      overflowRef.current = await platform.detectOverflow(
         getArgsWithCustomFloatingHeight(
           {...nextArgs, y: nextY},
           scrollEl.offsetHeight + clientTop + floating.clientTop,

@@ -10,7 +10,6 @@ import {
 } from '@floating-ui/utils';
 
 import type {DetectOverflowOptions} from '../detectOverflow';
-import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware} from '../types';
 
 export interface FlipOptions extends DetectOverflowOptions {
@@ -118,7 +117,10 @@ export const flip = (
 
     const placements = [initialPlacement, ...fallbackPlacements];
 
-    const overflow = await detectOverflow(state, detectOverflowOptions);
+    const overflow = await platform.detectOverflow(
+      state,
+      detectOverflowOptions,
+    );
 
     const overflows = [];
     let overflowsData = middlewareData.flip?.overflows || [];

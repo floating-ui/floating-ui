@@ -9,6 +9,7 @@ import type {
   SideObject,
   Strategy,
 } from '@floating-ui/utils';
+import type {detectOverflow} from './detectOverflow';
 
 type Promisable<T> = T | Promise<T>;
 
@@ -49,6 +50,7 @@ export interface Platform {
   getClientRects?: (element: any) => Promisable<Array<ClientRectObject>>;
   isRTL?: (element: any) => Promisable<boolean>;
   getScale?: (element: any) => Promisable<{x: number; y: number}>;
+  detectOverflow?: typeof detectOverflow;
 }
 
 export interface MiddlewareData {
@@ -157,7 +159,7 @@ export interface MiddlewareState extends Coords {
   middlewareData: MiddlewareData;
   elements: Elements;
   rects: ElementRects;
-  platform: Platform;
+  platform: {detectOverflow: typeof detectOverflow} & Platform;
 }
 /**
  * @deprecated use `MiddlewareState` instead.

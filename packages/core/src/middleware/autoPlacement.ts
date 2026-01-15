@@ -9,7 +9,6 @@ import {
 } from '@floating-ui/utils';
 
 import type {DetectOverflowOptions} from '../detectOverflow';
-import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware} from '../types';
 
 export function getPlacementList(
@@ -95,7 +94,10 @@ export const autoPlacement = (
         ? getPlacementList(alignment || null, autoAlignment, allowedPlacements)
         : allowedPlacements;
 
-    const overflow = await detectOverflow(state, detectOverflowOptions);
+    const overflow = await platform.detectOverflow(
+      state,
+      detectOverflowOptions,
+    );
 
     const currentIndex = middlewareData.autoPlacement?.index || 0;
     const currentPlacement = placements[currentIndex];

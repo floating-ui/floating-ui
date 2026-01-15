@@ -2,7 +2,6 @@ import type {Rect, SideObject} from '@floating-ui/utils';
 import {evaluate, sides} from '@floating-ui/utils';
 
 import type {DetectOverflowOptions} from '../detectOverflow';
-import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware} from '../types';
 
 function getSideOffsets(overflow: SideObject, rect: Rect) {
@@ -36,7 +35,7 @@ export const hide = (
   name: 'hide',
   options,
   async fn(state) {
-    const {rects} = state;
+    const {rects, platform} = state;
 
     const {strategy = 'referenceHidden', ...detectOverflowOptions} = evaluate(
       options,
@@ -45,7 +44,7 @@ export const hide = (
 
     switch (strategy) {
       case 'referenceHidden': {
-        const overflow = await detectOverflow(state, {
+        const overflow = await platform.detectOverflow(state, {
           ...detectOverflowOptions,
           elementContext: 'reference',
         });
@@ -58,7 +57,7 @@ export const hide = (
         };
       }
       case 'escaped': {
-        const overflow = await detectOverflow(state, {
+        const overflow = await platform.detectOverflow(state, {
           ...detectOverflowOptions,
           altBoundary: true,
         });

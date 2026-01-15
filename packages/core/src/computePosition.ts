@@ -1,4 +1,5 @@
 import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
+import {detectOverflow} from './detectOverflow';
 import type {ComputePosition, Middleware, MiddlewareData} from './types';
 
 /**
@@ -45,7 +46,10 @@ export const computePosition: ComputePosition = async (
       strategy,
       middlewareData,
       rects,
-      platform,
+      platform: {
+        ...platform,
+        detectOverflow: platform.detectOverflow ?? detectOverflow,
+      },
       elements: {reference, floating},
     });
 
