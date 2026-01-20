@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.27.17
+
+### Patch Changes
+
+- feat: detectOverflow configurable via platform
+- fix(FloatingPortal): ensure accessibility of non-modal dialogs with iOS/Safari/Voice Control
+- Update dependencies: `@floating-ui/react-dom@2.1.7`
+
 ## 0.27.16
 
 ### Patch Changes
