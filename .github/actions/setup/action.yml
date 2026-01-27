@@ -13,6 +13,10 @@ runs:
         cache: 'pnpm'
         registry-url: 'https://registry.npmjs.org'
 
+    - name: Install npm >= 11.5.1 (needed by OIDC)
+      shell: sh
+      run: npm install -g npm@^11.5.1
+
     - name: Install dependencies
       shell: sh
       run: pnpm install
