@@ -6,6 +6,10 @@ on:
   push:
     branches: [master]
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
 jobs:
   test:
     uses: ./.github/workflows/ci.yml
@@ -23,8 +27,8 @@ jobs:
         with:
           publish: pnpm run release
           version: node .github/changeset-version.js
-          commit: 'chore: version packages'
-          title: 'chore: version packages'
+          commit: "chore: version packages"
+          title: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
