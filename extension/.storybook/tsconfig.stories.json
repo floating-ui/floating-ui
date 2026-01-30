@@ -10,7 +10,7 @@
     "emitDeclarationOnly": true,
     "declarationMap": true,
     "jsx": "react-jsx",
-    "lib": ["DOM", "ES2020"],
+    "lib": ["DOM", "ES2021"],
     "rootDir": "../",
     "types": [],
     "skipLibCheck": true
