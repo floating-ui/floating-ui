@@ -107,7 +107,7 @@
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "puppeteer": "^2.1.0",
-    "rollup": "^1.30.0",
+    "rollup": "^2.79.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-flow-entry": "^0.3.3",
     "rollup-plugin-license": "^0.13.0",
