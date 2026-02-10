@@ -69,5 +69,8 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "resolutions": {
+    "chokidar": "^3.5.3"
   }
 }
