@@ -2,6 +2,16 @@
   <img src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/floating-ui-banner.png" alt="Floating UI" width="70%">
 <p>
 
+## Notice
+
+The web platform now has [CSS Anchor Positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning) supported across all modern browser engines as of January 2026, upon release of Firefox 147.
+
+The positioning part of this library is a JavaScript polyfill for this behavior, and we developed it from 2016-2025 before CSS natively added this functionality.
+
+The native behavior doesn't offer every feature, and it's not yet Baseline Widely Available, but it's gaining parity and improving quickly. We recommend exploring using native CSS functionality in the meantime, as `@floating-ui/dom` may not be necessary in the future.
+
+---
+
 > [!NOTE]
 > Popper is now Floating UI! For Popper v2, visit
 > [its dedicated branch](https://github.com/floating-ui/floating-ui/tree/v2.x) and [its documentation](https://popper.js.org/docs).
