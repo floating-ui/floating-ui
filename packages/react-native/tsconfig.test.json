@@ -1,7 +1,7 @@
 {
   "extends": "config/tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ES2020"],
+    "lib": ["ES2021"],
     "outDir": "out-tsc",
     "composite": true,
     "jsx": "react-jsx",

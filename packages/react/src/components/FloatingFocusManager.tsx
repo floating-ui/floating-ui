@@ -33,18 +33,18 @@ import {useLiteMergeRefs} from '../utils/useLiteMergeRefs';
 import {clearTimeoutIfSet} from '../utils/clearTimeoutIfSet';
 
 const LIST_LIMIT = 20;
-let previouslyFocusedElements: Element[] = [];
+let previouslyFocusedElements: WeakRef<Element>[] = [];
 
 function clearDisconnectedPreviouslyFocusedElements() {
   previouslyFocusedElements = previouslyFocusedElements.filter(
-    (el) => el.isConnected,
+    (elementRef) => elementRef.deref()?.isConnected,
   );
 }
 
 function addPreviouslyFocusedElement(element: Element | null) {
   clearDisconnectedPreviouslyFocusedElements();
   if (element && getNodeName(element) !== 'body') {
-    previouslyFocusedElements.push(element);
+    previouslyFocusedElements.push(new WeakRef(element));
     if (previouslyFocusedElements.length > LIST_LIMIT) {
       previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
     }
@@ -53,7 +53,9 @@ function addPreviouslyFocusedElement(element: Element | null) {
 
 function getPreviouslyFocusedElement() {
   clearDisconnectedPreviouslyFocusedElements();
-  return previouslyFocusedElements[previouslyFocusedElements.length - 1];
+  const elementRef =
+    previouslyFocusedElements[previouslyFocusedElements.length - 1];
+  return elementRef?.deref();
 }
 
 function getFirstTabbableElement(container: Element) {
