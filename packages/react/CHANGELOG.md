@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.27.18
+
+### Patch Changes
+
+- fix(FloatingFocusManager): use `WeakRef` for previously focused elements
+
 ## 0.27.17
 
 ### Patch Changes
