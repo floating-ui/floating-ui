@@ -56,6 +56,10 @@ export interface UseFloatingOptions {
    * rendering.
    */
   middleware?: Array<Middleware | null | undefined | false>;
+  /**
+   * Whether the reference and floating elements are in the same scroll view.
+   * @default false
+   */
   sameScrollView?: boolean;
   elements?: {
     reference?: any;
