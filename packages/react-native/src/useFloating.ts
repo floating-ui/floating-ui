@@ -14,7 +14,7 @@ export function useFloating(
   const {
     placement = 'bottom',
     middleware = [],
-    sameScrollView = true,
+    sameScrollView = false,
     elements: {
       reference: externalReference,
       floating: externalFloating,

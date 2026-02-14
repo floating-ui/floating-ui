@@ -12,7 +12,7 @@ function isView(reference: View | VirtualElement): reference is View {
 
 export const createPlatform = ({
   offsetParent,
-  sameScrollView = true,
+  sameScrollView = false,
   scrollOffsets = ORIGIN,
 }: {
   offsetParent: View;
