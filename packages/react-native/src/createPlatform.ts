@@ -10,6 +10,33 @@ function isView(reference: View | VirtualElement): reference is View {
   return 'measure' in reference;
 }
 
+function getOffsetParentOffset(
+  offsetParent: View | null | undefined,
+  measureInWindow: boolean,
+  cb: (x?: number, y?: number) => void,
+) {
+  if (!offsetParent) {
+    cb();
+    return;
+  }
+
+  offsetParent.measure(
+    (
+      x: number,
+      y: number,
+      _width: number,
+      _height: number,
+      pageX: number,
+      pageY: number,
+    ) => {
+      cb(
+        measureInWindow && pageX != null ? pageX : x,
+        measureInWindow && pageY != null ? pageY : y,
+      );
+    },
+  );
+}
+
 export const createPlatform = ({
   offsetParent,
   measureInWindow = true,
@@ -68,28 +95,11 @@ export const createPlatform = ({
         );
       };
 
-      if (offsetParent) {
-        offsetParent.measure(onMeasure);
-      } else {
-        onMeasure();
-      }
+      getOffsetParentOffset(offsetParent, measureInWindow, onMeasure);
     });
   },
   getClippingRect() {
-    const {width, height: windowHeight} = Dimensions.get('window');
-
-    let height: number;
-    if (isAndroid) {
-      // on Android, we need to add the status bar height to the window to address the issue
-      // mentioned at https://github.com/floating-ui/floating-ui/issues/2904
-      // Note: keeping like this for now to avoid breaking changes, but edge-to-edge apps
-      // on Android should have a different logic
-      const statusBarHeight = StatusBar.currentHeight || 0;
-      height = windowHeight + statusBarHeight;
-    } else {
-      // on web and iOS, no issue with status bar height
-      height = windowHeight;
-    }
+    const {width, height} = Dimensions.get('window');
 
     return Promise.resolve({
       width,
@@ -103,11 +113,7 @@ export const createPlatform = ({
         resolve({...rect, x: rect.x + offsetX, y: rect.y + offsetY});
       };
 
-      if (offsetParent) {
-        offsetParent.measure(onMeasure);
-      } else {
-        onMeasure();
-      }
+      getOffsetParentOffset(offsetParent, measureInWindow, onMeasure);
     });
   },
   getDimensions: (element) =>

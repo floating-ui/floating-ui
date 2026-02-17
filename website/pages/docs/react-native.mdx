@@ -29,10 +29,11 @@ function App() {
   });
 
   return (
-    <View>
+    <>
       <View ref={refs.setReference} collapsable={false}>
         <Text>Reference</Text>
       </View>
+
       <View
         ref={refs.setFloating}
         collapsable={false}
@@ -40,7 +41,7 @@ function App() {
       >
         <Text>Floating</Text>
       </View>
-    </View>
+    </>
   );
 }
 ```
@@ -48,14 +49,10 @@ function App() {
 This will position the floating element at the **bottom center**
 of the reference element by default.
 
-Positioning is relative to the window by default using React Native's
+Positioning is relative to the window by default using React
+Native's
 [`measureInWindow`](https://reactnative.dev/docs/0.77/the-new-architecture/layout-measurements#measureinwindowcallback)
-API. If both elements are in the same non-root parent or
-`<ScrollView />{:jsx}`, pass `measureInWindow: false`.
-
-See
-[ScrollView](/docs/react-native#scrollview) or
-[offsetParent](/docs/react-native#offsetparent) to adjust this.
+API.
 
 - `refs.setReference{:js}` is the reference (or anchor) element
   that is being referred to for positioning.
@@ -68,6 +65,19 @@ The refs are functions to make them **reactive** — this ensures
 changes to the reference or floating elements, such as with
 conditional rendering, are handled correctly by updating the
 position.
+
+### Platform behavior
+
+1. **Default (recommended)**: `measureInWindow: true{:.key}` and
+   render the floating element as a sibling of the app root
+   (portal it out of app content). This assumes window-origin
+   positioning (not inside an offset layout wrapper such as a
+   screen body/header container). This is the safest setup across
+   platforms, and required for Android positioning.
+2. **Non-default** `measureInWindow: false{:.key}`: use this when
+   the floating element is not portaled as a root sibling. This
+   path uses React Native's `measure(){:js}` API, which is broken
+   on Android. Use it only when Android support is not required.
 
 <Notice gap="above">
   `<View collapsable={false} />{:js}` allows measurements to work
@@ -107,10 +117,15 @@ function App() {
 }
 ```
 
-If both elements live in the same `<ScrollView />{:jsx}`, pass
-`measureInWindow: false`.
+For Android support, keep the default
+`measureInWindow: true{:.key}` and portal the floating element to
+the app root.
 
-On Android, `measureInWindow: false` is currently broken due to an
+If both elements live in the same `<ScrollView />{:jsx}` and
+Android support is not required, pass
+`measureInWindow: false{:.key}`.
+
+This non-default path is currently broken on Android due to an
 upstream React Native measurement bug. See
 [facebook/react-native#29712 (comment)](https://github.com/facebook/react-native/issues/29712#issuecomment-1086475698)
 and
@@ -193,6 +208,12 @@ function App() {
 
 Pass this to the floating element's `offsetParent`, if required
 for positioning:
+
+<Notice gap="above">
+  This nested `offsetParent` pattern is currently not reliable on
+  Android due to upstream measurement behavior. For Android
+  support, use a root-sibling portal layout instead.
+</Notice>
 
 ```jsx /offsetParent/
 import {View, Text, ScrollView} from 'react-native';
