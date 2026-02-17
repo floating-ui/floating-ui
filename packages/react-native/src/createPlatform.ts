@@ -76,20 +76,7 @@ export const createPlatform = ({
     });
   },
   getClippingRect() {
-    const {width, height: windowHeight} = Dimensions.get('window');
-
-    let height: number;
-    if (isAndroid) {
-      // on Android, we need to add the status bar height to the window to address the issue
-      // mentioned at https://github.com/floating-ui/floating-ui/issues/2904
-      // Note: keeping like this for now to avoid breaking changes, but edge-to-edge apps
-      // on Android should have a different logic
-      const statusBarHeight = StatusBar.currentHeight || 0;
-      height = windowHeight + statusBarHeight;
-    } else {
-      // on web and iOS, no issue with status bar height
-      height = windowHeight;
-    }
+    const {width, height} = Dimensions.get('window');
 
     return Promise.resolve({
       width,

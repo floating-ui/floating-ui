@@ -29,7 +29,7 @@ function App() {
   });
 
   return (
-    <View>
+    <>
       <View ref={refs.setReference} collapsable={false}>
         <Text>Reference</Text>
       </View>
@@ -40,7 +40,7 @@ function App() {
       >
         <Text>Floating</Text>
       </View>
-    </View>
+    </>
   );
 }
 ```
@@ -49,8 +49,9 @@ This will position the floating element at the **bottom center**
 of the reference element by default.
 
 Positioning is relative to the parent by default, see
-[ScrollView](/docs/react-native#scrollview) or
-[offsetParent](/docs/react-native#offsetparent) to adjust this.
+[ScrollView](/docs/react-native#scrollview) and
+[offsetParent](/docs/react-native#offsetparent) when a custom
+offset parent is needed.
 
 - `refs.setReference{:js}` is the reference (or anchor) element
   that is being referred to for positioning.
@@ -86,7 +87,7 @@ function App() {
   });
 
   return (
-    <View>
+    <>
       <ScrollView {...scrollProps}>
         <View ref={refs.setReference} collapsable={false}>
           <Text>Reference</Text>
@@ -100,7 +101,43 @@ function App() {
       >
         <Text>Floating</Text>
       </View>
-    </View>
+    </>
+  );
+}
+```
+
+## offsetParent
+
+If the floating element is contained within another
+`<View />{:jsx}`, set `ref={refs.setOffsetParent}{:jsx}` on that
+parent container along with `sameScrollView: false`, so
+positioning is relative to it:
+
+```jsx {6} /setOffsetParent/
+import {View, Text, ScrollView} from 'react-native';
+import {useFloating} from '@floating-ui/react-native';
+
+function App() {
+  const {refs, floatingStyles} = useFloating({
+    sameScrollView: false,
+  });
+
+  return (
+    <>
+      <View ref={refs.setReference} collapsable={false}>
+        <Text>Reference</Text>
+      </View>
+
+      <View ref={refs.setOffsetParent} collapsable={false}>
+        <View
+          ref={refs.setFloating}
+          collapsable={false}
+          style={floatingStyles}
+        >
+          <Text>Floating</Text>
+        </View>
+      </View>
+    </>
   );
 }
 ```
@@ -175,41 +212,5 @@ function App() {
   });
 
   // Pass the `arrowRef` to the element
-}
-```
-
-## offsetParent
-
-Pass this to the floating element's `offsetParent`, if required
-for positioning:
-
-```jsx /offsetParent/
-import {View, Text, ScrollView} from 'react-native';
-import {useFloating} from '@floating-ui/react-native';
-
-function App() {
-  const {refs, floatingStyles} = useFloating({
-    sameScrollView: false,
-  });
-
-  return (
-    <View>
-      <ScrollView>
-        <View ref={refs.setReference} collapsable={false}>
-          <Text>Reference</Text>
-        </View>
-      </ScrollView>
-
-      <View ref={refs.setOffsetParent} collapsable={false}>
-        <View
-          ref={refs.setFloating}
-          collapsable={false}
-          style={floatingStyles}
-        >
-          <Text>Floating</Text>
-        </View>
-      </View>
-    </View>
-  );
 }
 ```
