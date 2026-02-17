@@ -56,7 +56,13 @@ export interface UseFloatingOptions {
    * rendering.
    */
   middleware?: Array<Middleware | null | undefined | false>;
-  sameScrollView?: boolean;
+  /**
+   * Whether to use React Native's `measureInWindow` API to measure the reference
+   * element. Set to `false` when both elements are in the same non-root parent
+   * or same `ScrollView`.
+   * @default true
+   */
+  measureInWindow?: boolean;
   elements?: {
     reference?: any;
     floating?: any;

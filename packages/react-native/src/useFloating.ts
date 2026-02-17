@@ -14,7 +14,7 @@ export function useFloating(
   const {
     placement = 'bottom',
     middleware = [],
-    sameScrollView = true,
+    measureInWindow = true,
     elements: {
       reference: externalReference,
       floating: externalFloating,
@@ -75,9 +75,9 @@ export function useFloating(
       createPlatform({
         offsetParent: offsetParentEl,
         scrollOffsets,
-        sameScrollView,
+        measureInWindow,
       }),
-    [offsetParentEl, scrollOffsets, sameScrollView],
+    [offsetParentEl, scrollOffsets, measureInWindow],
   );
 
   const update = React.useCallback(() => {
