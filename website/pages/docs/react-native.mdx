@@ -48,7 +48,12 @@ function App() {
 This will position the floating element at the **bottom center**
 of the reference element by default.
 
-Positioning is relative to the parent by default, see
+Positioning is relative to the window by default using React Native's
+[`measureInWindow`](https://reactnative.dev/docs/0.77/the-new-architecture/layout-measurements#measureinwindowcallback)
+API. If both elements are in the same non-root parent or
+`<ScrollView />{:jsx}`, pass `measureInWindow: false`.
+
+See
 [ScrollView](/docs/react-native#scrollview) or
 [offsetParent](/docs/react-native#offsetparent) to adjust this.
 
@@ -72,18 +77,15 @@ position.
 ## ScrollView
 
 When your floating element is portaled to the app root, while the
-reference element is inside a `<ScrollView />{:jsx}`, pass the
-`sameScrollView{:.key}` option, and spread `scrollProps{:.const}`
-to the component:
+reference element is inside a `<ScrollView />{:jsx}`, spread
+`scrollProps{:.const}` to the component:
 
-```jsx /scrollProps/ {6}
+```jsx /scrollProps/ {5}
 import {View, Text, ScrollView} from 'react-native';
 import {useFloating} from '@floating-ui/react-native';
 
 function App() {
-  const {refs, floatingStyles, scrollProps} = useFloating({
-    sameScrollView: false,
-  });
+  const {refs, floatingStyles, scrollProps} = useFloating();
 
   return (
     <View>
@@ -104,6 +106,15 @@ function App() {
   );
 }
 ```
+
+If both elements live in the same `<ScrollView />{:jsx}`, pass
+`measureInWindow: false`.
+
+On Android, `measureInWindow: false` is currently broken due to an
+upstream React Native measurement bug. See
+[facebook/react-native#29712 (comment)](https://github.com/facebook/react-native/issues/29712#issuecomment-1086475698)
+and
+[floating-ui/floating-ui#2904](https://github.com/floating-ui/floating-ui/issues/2904).
 
 ## Anchoring
 
@@ -188,9 +199,7 @@ import {View, Text, ScrollView} from 'react-native';
 import {useFloating} from '@floating-ui/react-native';
 
 function App() {
-  const {refs, floatingStyles} = useFloating({
-    sameScrollView: false,
-  });
+  const {refs, floatingStyles} = useFloating();
 
   return (
     <View>

@@ -7,6 +7,11 @@ App;
 function App() {
   const arrowRef = React.useRef(null);
   useFloating();
+  useFloating({measureInWindow: false});
+  useFloating({
+    // @ts-expect-error `sameScrollView` was renamed to `measureInWindow`
+    sameScrollView: false,
+  });
   const {update, refs, elements} = useFloating({
     placement: 'right',
     middleware: [offset(() => 5), shift(), arrow({element: arrowRef})],

@@ -12,11 +12,11 @@ function isView(reference: View | VirtualElement): reference is View {
 
 export const createPlatform = ({
   offsetParent,
-  sameScrollView = true,
+  measureInWindow = true,
   scrollOffsets = ORIGIN,
 }: {
   offsetParent: View;
-  sameScrollView: boolean;
+  measureInWindow: boolean;
   scrollOffsets: {
     x: number;
     y: number;
@@ -34,13 +34,13 @@ export const createPlatform = ({
         floating.measure(
           (x: number, y: number, width: number, height: number) => {
             const floatingRect = {width, height, ...ORIGIN};
-            const method = sameScrollView ? 'measure' : 'measureInWindow';
+            const method = measureInWindow ? 'measureInWindow' : 'measure';
 
             if (isView(reference)) {
               reference[method](
                 (x: number, y: number, width: number, height: number) => {
                   y =
-                    isAndroid && !sameScrollView && StatusBar.currentHeight
+                    isAndroid && measureInWindow && StatusBar.currentHeight
                       ? y + StatusBar.currentHeight
                       : y;
                   const referenceRect = {
@@ -94,7 +94,7 @@ export const createPlatform = ({
     return Promise.resolve({
       width,
       height,
-      ...(sameScrollView ? scrollOffsets : ORIGIN),
+      ...(measureInWindow ? ORIGIN : scrollOffsets),
     });
   },
   convertOffsetParentRelativeRectToViewportRelativeRect({rect}) {
