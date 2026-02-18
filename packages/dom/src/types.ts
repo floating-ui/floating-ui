@@ -16,6 +16,7 @@ import type {
   ShiftOptions as CoreShiftOptions,
   SizeOptions as CoreSizeOptions,
   Strategy,
+  detectOverflow,
 } from '@floating-ui/core';
 
 type Prettify<T> = {
@@ -58,7 +59,7 @@ export type OffsetValue =
 // backwards-compatibility, re-define it here to use the DOM Derivable type.
 export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
-export interface Platform {
+export type Platform = {
   // Required
   getElementRects: (args: {
     reference: ReferenceElement;
@@ -89,7 +90,8 @@ export interface Platform {
   getClientRects: (element: Element) => Promisable<Array<ClientRectObject>>;
   isRTL: (element: Element) => Promisable<boolean>;
   getScale: (element: HTMLElement) => Promisable<{x: number; y: number}>;
-}
+  detectOverflow?: typeof detectOverflow;
+};
 
 export interface NodeScroll {
   scrollLeft: number;
