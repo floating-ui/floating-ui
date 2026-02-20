@@ -271,11 +271,17 @@ export function useDismiss(
       return;
     }
 
-    // Check if the click occurred on the scrollbar
-    if (isHTMLElement(target) && floating) {
-      const lastTraversableNode = isLastTraversableNode(target);
-      const style = getComputedStyle(target);
+    // Helper function to check if a click occurred on an element's scrollbar
+    function isScrollbarClick(
+      element: HTMLElement,
+      clientX: number,
+      clientY: number,
+    ): boolean {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
       const scrollRe = /auto|scroll/;
+      const lastTraversableNode = isLastTraversableNode(element);
+
       const isScrollableX =
         lastTraversableNode || scrollRe.test(style.overflowX);
       const isScrollableY =
@@ -283,12 +289,16 @@ export function useDismiss(
 
       const canScrollX =
         isScrollableX &&
-        target.clientWidth > 0 &&
-        target.scrollWidth > target.clientWidth;
+        element.clientWidth > 0 &&
+        element.scrollWidth > element.clientWidth;
       const canScrollY =
         isScrollableY &&
-        target.clientHeight > 0 &&
-        target.scrollHeight > target.clientHeight;
+        element.clientHeight > 0 &&
+        element.scrollHeight > element.clientHeight;
+
+      // Traditional scrollbar detection (scrollbars that take up layout space)
+      const scrollbarWidth = element.offsetWidth - element.clientWidth;
+      const scrollbarHeight = element.offsetHeight - element.clientHeight;
 
       const isRTL = style.direction === 'rtl';
 
@@ -297,16 +307,63 @@ export function useDismiss(
       // scrollbar to the left side, but is very rare and is difficult to
       // check for. Plus, for modal dialogs with backdrops, it is more
       // important that the backdrop is checked but not so much the window.
-      const pressedVerticalScrollbar =
+      const pressedTraditionalVerticalScrollbar =
         canScrollY &&
+        scrollbarWidth > 0 &&
         (isRTL
-          ? event.offsetX <= target.offsetWidth - target.clientWidth
-          : event.offsetX > target.clientWidth);
+          ? clientX - rect.left <= scrollbarWidth
+          : clientX >= rect.right - scrollbarWidth);
 
-      const pressedHorizontalScrollbar =
-        canScrollX && event.offsetY > target.clientHeight;
+      const pressedTraditionalHorizontalScrollbar =
+        canScrollX &&
+        scrollbarHeight > 0 &&
+        clientY >= rect.bottom - scrollbarHeight;
 
-      if (pressedVerticalScrollbar || pressedHorizontalScrollbar) {
+      // Overlay scrollbar detection (macOS style, no layout space)
+      // Use a 15px threshold from the edges when scrollbars don't take layout space
+      const overlayScrollbarThreshold = 15;
+      const pressedOverlayVerticalScrollbar =
+        canScrollY &&
+        scrollbarWidth === 0 &&
+        (isRTL
+          ? clientX - rect.left <= overlayScrollbarThreshold
+          : rect.right - clientX <= overlayScrollbarThreshold);
+
+      const pressedOverlayHorizontalScrollbar =
+        canScrollX &&
+        scrollbarHeight === 0 &&
+        rect.bottom - clientY <= overlayScrollbarThreshold;
+
+      return (
+        pressedTraditionalVerticalScrollbar ||
+        pressedTraditionalHorizontalScrollbar ||
+        pressedOverlayVerticalScrollbar ||
+        pressedOverlayHorizontalScrollbar
+      );
+    }
+
+    // Check if the click occurred on the scrollbar of the target element
+    if (isHTMLElement(target) && elements.floating) {
+      if (isScrollbarClick(target, event.clientX, event.clientY)) {
+        return;
+      }
+    }
+
+    // Check if the click occurred on scrollbars within the floating element
+    if (isHTMLElement(elements.floating)) {
+      let element: HTMLElement | null = isHTMLElement(target) ? target : null;
+
+      // Walk up the DOM tree from the click target to the floating element
+      while (element && element !== elements.floating) {
+        if (isScrollbarClick(element, event.clientX, event.clientY)) {
+          return;
+        }
+        const parent = element.parentElement;
+        element = parent && isHTMLElement(parent) ? parent : null;
+      }
+
+      // Also check the floating element itself
+      if (isScrollbarClick(elements.floating, event.clientX, event.clientY)) {
         return;
       }
     }
