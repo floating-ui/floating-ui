@@ -124,7 +124,6 @@ export function isContainingBlock(
         ? css[value as keyof CSSStyleDeclaration] !== 'none'
         : false,
     ) ||
-    (css.containerType ? css.containerType !== 'normal' : false) ||
     (!webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
     (!webkit && (css.filter ? css.filter !== 'none' : false)) ||
     willChangeValues.some((value) => (css.willChange || '').includes(value)) ||
