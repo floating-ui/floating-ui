@@ -44,11 +44,6 @@ import {click} from './utils/click';
   test(`should be positioned on bottom with container-type ${containerType}`, async ({
     page,
   }) => {
-    test.skip(
-      ['inline-size', 'size'].includes(containerType),
-      'Behaviour of `container-type` has changed in Chrome (https://github.com/floating-ui/floating-ui/issues/3067).',
-    );
-
     await page.goto('http://localhost:1234/containing-block');
 
     await click(page, `[data-testid="container-type-${containerType}"]`);
