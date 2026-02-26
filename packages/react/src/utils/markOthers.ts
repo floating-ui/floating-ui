@@ -24,19 +24,13 @@ let lockCount = 0;
 export const supportsInert = (): boolean =>
   typeof HTMLElement !== 'undefined' && 'inert' in HTMLElement.prototype;
 
-const unwrapHost = (
-  node: Element | ShadowRoot | null,
-): Element | null => {
-  if (node == null) {
+function unwrapHost(node: Node | null): Element | null {
+  if (!node) {
     return null;
   }
 
-  if (isShadowRoot(node)) {
-    return node.host;
-  }
-
-  return unwrapHost(node.parentNode as Element | ShadowRoot | null);
-};
+  return isShadowRoot(node) ? node.host : unwrapHost(node.parentNode);
+}
 
 const correctElements = (parent: HTMLElement, targets: Element[]): Element[] =>
   targets
