@@ -33,10 +33,14 @@ import {arrow as baseArrow, type ArrowOptions} from './arrow';
 export const offset = (
   options?: OffsetOptions,
   deps?: React.DependencyList,
-): Middleware => ({
-  ...baseOffset(options),
-  options: [options, deps],
-});
+): Middleware => {
+  const result = baseOffset(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
 
 /**
  * Optimizes the visibility of the floating element by shifting it in order to
@@ -46,10 +50,14 @@ export const offset = (
 export const shift = (
   options?: ShiftOptions | Derivable<ShiftOptions>,
   deps?: React.DependencyList,
-): Middleware => ({
-  ...baseShift(options),
-  options: [options, deps],
-});
+): Middleware => {
+  const result = baseShift(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
 
 /**
  * Built-in `limiter` that will stop `shift()` at a certain point.
@@ -60,10 +68,13 @@ export const limitShift = (
 ): {
   fn: (state: MiddlewareState) => Coords;
   options: any;
-} => ({
-  ...baseLimitShift(options),
-  options: [options, deps],
-});
+} => {
+  const result = baseLimitShift(options);
+  return {
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
 
 /**
  * Optimizes the visibility of the floating element by flipping the `placement`
@@ -74,10 +85,14 @@ export const limitShift = (
 export const flip = (
   options?: FlipOptions | Derivable<FlipOptions>,
   deps?: React.DependencyList,
-): Middleware => ({
-  ...baseFlip(options),
-  options: [options, deps],
-});
+): Middleware => {
+  const result = baseFlip(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
 
 /**
  * Provides data that allows you to change the size of the floating element —
@@ -88,10 +103,14 @@ export const flip = (
 export const size = (
   options?: SizeOptions | Derivable<SizeOptions>,
   deps?: React.DependencyList,
-): Middleware => ({
-  ...baseSize(options),
-  options: [options, deps],
-});
+): Middleware => {
+  const result = baseSize(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement
@@ -102,10 +121,14 @@ export const size = (
 export const autoPlacement = (
   options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>,
   deps?: React.DependencyList,
-): Middleware => ({
-  ...baseAutoPlacement(options),
-  options: [options, deps],
-});
+): Middleware => {
+  const result = baseAutoPlacement(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
 
 /**
  * Provides data to hide the floating element in applicable situations, such as
@@ -115,10 +138,14 @@ export const autoPlacement = (
 export const hide = (
   options?: HideOptions | Derivable<HideOptions>,
   deps?: React.DependencyList,
-): Middleware => ({
-  ...baseHide(options),
-  options: [options, deps],
-});
+): Middleware => {
+  const result = baseHide(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
 
 /**
  * Provides improved positioning for inline reference elements that can span
@@ -128,10 +155,14 @@ export const hide = (
 export const inline = (
   options?: InlineOptions | Derivable<InlineOptions>,
   deps?: React.DependencyList,
-): Middleware => ({
-  ...baseInline(options),
-  options: [options, deps],
-});
+): Middleware => {
+  const result = baseInline(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
 
 /**
  * Provides data to position an inner element of the floating element so that it
@@ -142,7 +173,11 @@ export const inline = (
 export const arrow = (
   options: ArrowOptions | Derivable<ArrowOptions>,
   deps?: React.DependencyList,
-): Middleware => ({
-  ...baseArrow(options),
-  options: [options, deps],
-});
+): Middleware => {
+  const result = baseArrow(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
+};
