@@ -34,8 +34,12 @@ export const offset = (
   options?: OffsetOptions,
   deps?: React.DependencyList,
 ): Middleware => {
-  const {options: _, ...rest} = baseOffset(options);
-  return {...rest, options: [options, deps]};
+  const result = baseOffset(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
 
 /**
@@ -47,8 +51,12 @@ export const shift = (
   options?: ShiftOptions | Derivable<ShiftOptions>,
   deps?: React.DependencyList,
 ): Middleware => {
-  const {options: _, ...rest} = baseShift(options);
-  return {...rest, options: [options, deps]};
+  const result = baseShift(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
 
 /**
@@ -61,8 +69,11 @@ export const limitShift = (
   fn: (state: MiddlewareState) => Coords;
   options: any;
 } => {
-  const {options: _, ...rest} = baseLimitShift(options);
-  return {...rest, options: [options, deps]};
+  const result = baseLimitShift(options);
+  return {
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
 
 /**
@@ -75,8 +86,12 @@ export const flip = (
   options?: FlipOptions | Derivable<FlipOptions>,
   deps?: React.DependencyList,
 ): Middleware => {
-  const {options: _, ...rest} = baseFlip(options);
-  return {...rest, options: [options, deps]};
+  const result = baseFlip(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
 
 /**
@@ -89,8 +104,12 @@ export const size = (
   options?: SizeOptions | Derivable<SizeOptions>,
   deps?: React.DependencyList,
 ): Middleware => {
-  const {options: _, ...rest} = baseSize(options);
-  return {...rest, options: [options, deps]};
+  const result = baseSize(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
 
 /**
@@ -103,8 +122,12 @@ export const autoPlacement = (
   options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>,
   deps?: React.DependencyList,
 ): Middleware => {
-  const {options: _, ...rest} = baseAutoPlacement(options);
-  return {...rest, options: [options, deps]};
+  const result = baseAutoPlacement(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
 
 /**
@@ -116,8 +139,12 @@ export const hide = (
   options?: HideOptions | Derivable<HideOptions>,
   deps?: React.DependencyList,
 ): Middleware => {
-  const {options: _, ...rest} = baseHide(options);
-  return {...rest, options: [options, deps]};
+  const result = baseHide(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
 
 /**
@@ -129,8 +156,12 @@ export const inline = (
   options?: InlineOptions | Derivable<InlineOptions>,
   deps?: React.DependencyList,
 ): Middleware => {
-  const {options: _, ...rest} = baseInline(options);
-  return {...rest, options: [options, deps]};
+  const result = baseInline(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
 
 /**
@@ -143,6 +174,10 @@ export const arrow = (
   options: ArrowOptions | Derivable<ArrowOptions>,
   deps?: React.DependencyList,
 ): Middleware => {
-  const {options: _, ...rest} = baseArrow(options);
-  return {...rest, options: [options, deps]};
+  const result = baseArrow(options);
+  return {
+    name: result.name,
+    fn: result.fn,
+    options: [options, deps],
+  };
 };
