@@ -24,7 +24,9 @@ let lockCount = 0;
 export const supportsInert = (): boolean =>
   typeof HTMLElement !== 'undefined' && 'inert' in HTMLElement.prototype;
 
-const unwrapHost = (node: Element | ShadowRoot): Element | null => {
+const unwrapHost = (
+  node: Element | ShadowRoot | null,
+): Element | null => {
   if (node == null) {
     return null;
   }
@@ -33,7 +35,7 @@ const unwrapHost = (node: Element | ShadowRoot): Element | null => {
     return node.host;
   }
 
-  return unwrapHost(node);
+  return unwrapHost(node.parentNode as Element | ShadowRoot | null);
 };
 
 const correctElements = (parent: HTMLElement, targets: Element[]): Element[] =>
