@@ -1,6 +1,6 @@
 // Modified to add conditional `aria-hidden` support:
 // https://github.com/theKashey/aria-hidden/blob/9220c8f4a4fd35f63bee5510a9f41a37264382d4/src/index.ts
-import {getNodeName} from '@floating-ui/utils/dom';
+import {getNodeName, isShadowRoot} from '@floating-ui/utils/dom';
 import {getDocument} from './element';
 
 type Undo = () => void;
@@ -24,8 +24,13 @@ let lockCount = 0;
 export const supportsInert = (): boolean =>
   typeof HTMLElement !== 'undefined' && 'inert' in HTMLElement.prototype;
 
-const unwrapHost = (node: Element | ShadowRoot): Element | null =>
-  node && ((node as ShadowRoot).host || unwrapHost(node.parentNode as Element));
+function unwrapHost(node: Node | null): Element | null {
+  if (!node) {
+    return null;
+  }
+
+  return isShadowRoot(node) ? node.host : unwrapHost(node.parentNode);
+}
 
 const correctElements = (parent: HTMLElement, targets: Element[]): Element[] =>
   targets

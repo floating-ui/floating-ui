@@ -164,3 +164,45 @@ test('mixed controlAttribute usage (aria-hidden/inert/none)', () => {
   expect(other.hasAttribute('inert')).toBe(false);
   expect(other.hasAttribute('data-floating-ui-inert')).toBe(false);
 });
+
+test('does not recurse infinitely with target inside anchor in shadow root', () => {
+  const host = document.createElement('div');
+  document.body.appendChild(host);
+
+  const shadowRoot = host.attachShadow({mode: 'open'});
+  const anchor = document.createElement('a');
+  anchor.href = 'https://floating-ui.com';
+
+  const target = document.createElement('button');
+  anchor.appendChild(target);
+  shadowRoot.appendChild(anchor);
+
+  const cleanup = markOthers([target], true);
+
+  cleanup();
+});
+
+test('uses shadow root host as avoid element when parent chain includes anchor', () => {
+  const outside = document.createElement('div');
+  document.body.appendChild(outside);
+
+  const host = document.createElement('div');
+  document.body.appendChild(host);
+
+  const shadowRoot = host.attachShadow({mode: 'open'});
+  const anchor = document.createElement('a');
+  anchor.href = 'https://floating-ui.com';
+
+  const target = document.createElement('button');
+  anchor.appendChild(target);
+  shadowRoot.appendChild(anchor);
+
+  const cleanup = markOthers([target], true);
+
+  expect(outside.getAttribute('aria-hidden')).toBe('true');
+  expect(host.getAttribute('aria-hidden')).toBe(null);
+
+  cleanup();
+
+  expect(outside.getAttribute('aria-hidden')).toBe(null);
+});
