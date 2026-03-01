@@ -181,7 +181,7 @@ export function autoUpdate(
   let reobserveFrame = -1;
   let resizeObserver: ResizeObserver | null = null;
 
-  if (elementResize && (referenceEl || floating)) {
+  if (elementResize) {
     resizeObserver = new ResizeObserver(([firstEntry]) => {
       if (
         firstEntry &&
