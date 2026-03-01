@@ -147,7 +147,7 @@ function observeMove(element: Element, onMove: () => void) {
  */
 export function autoUpdate(
   reference: ReferenceElement,
-  floating: FloatingElement,
+  floating: FloatingElement | null,
   update: () => void,
   options: AutoUpdateOptions = {},
 ) {
@@ -165,7 +165,7 @@ export function autoUpdate(
     ancestorScroll || ancestorResize
       ? [
           ...(referenceEl ? getOverflowAncestors(referenceEl) : []),
-          ...getOverflowAncestors(floating),
+          ...(floating ? getOverflowAncestors(floating) : []),
         ]
       : [];
 
@@ -183,7 +183,12 @@ export function autoUpdate(
 
   if (elementResize) {
     resizeObserver = new ResizeObserver(([firstEntry]) => {
-      if (firstEntry && firstEntry.target === referenceEl && resizeObserver) {
+      if (
+        firstEntry &&
+        firstEntry.target === referenceEl &&
+        resizeObserver &&
+        floating
+      ) {
         // Prevent update loops when using the `size` middleware.
         // https://github.com/floating-ui/floating-ui/issues/1740
         resizeObserver.unobserve(floating);
@@ -198,7 +203,10 @@ export function autoUpdate(
     if (referenceEl && !animationFrame) {
       resizeObserver.observe(referenceEl);
     }
-    resizeObserver.observe(floating);
+
+    if (floating) {
+      resizeObserver.observe(floating);
+    }
   }
 
   let frameId: number;
