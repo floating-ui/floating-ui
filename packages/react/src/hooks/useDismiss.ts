@@ -508,21 +508,24 @@ export function useDismiss(
     [closeOnEscapeKeyDown, onOpenChange, referencePress, referencePressEvent],
   );
 
-  const floating: ElementProps['floating'] = React.useMemo(
-    () => ({
+  const floating: ElementProps['floating'] = React.useMemo(() => {
+    function setMouseDownOrUpInside(event: React.MouseEvent) {
+      if (event.button !== 0) {
+        return;
+      }
+
+      endedOrStartedInsideRef.current = true;
+    }
+
+    return {
       onKeyDown: closeOnEscapeKeyDown,
-      onMouseDown() {
-        endedOrStartedInsideRef.current = true;
-      },
-      onMouseUp() {
-        endedOrStartedInsideRef.current = true;
-      },
+      onMouseDown: setMouseDownOrUpInside,
+      onMouseUp: setMouseDownOrUpInside,
       [captureHandlerKeys[outsidePressEvent]]: () => {
         dataRef.current.insideReactTree = true;
       },
-    }),
-    [closeOnEscapeKeyDown, outsidePressEvent, dataRef],
-  );
+    };
+  }, [closeOnEscapeKeyDown, outsidePressEvent, dataRef]);
 
   return React.useMemo(
     () => (enabled ? {reference, floating} : {}),

@@ -928,6 +928,16 @@ describe('outsidePressEvent click', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     cleanup();
   });
+
+  test('right clicking inside the floating element then clicking outside closes', () => {
+    render(<App outsidePressEvent="click" />);
+    const floatingEl = screen.getByRole('tooltip');
+    fireEvent.mouseDown(floatingEl, {button: 2});
+    fireEvent.mouseUp(floatingEl, {button: 2});
+    fireEvent.click(document.body);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    cleanup();
+  });
 });
 
 test('nested floating elements with different portal roots', async () => {
