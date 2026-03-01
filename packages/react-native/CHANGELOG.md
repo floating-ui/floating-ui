@@ -1,5 +1,11 @@
 # @floating-ui/react-native
 
+## 0.10.9
+
+### Patch Changes
+
+- fix(react): avoid duplicate `options` key warning in reactive middleware wrappers
+
 ## 0.10.8
 
 ### Patch Changes
