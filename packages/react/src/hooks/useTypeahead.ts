@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   useEffectEvent,
   useLatestRef,
-  useModernLayoutEffect,
+  useClientLayoutEffect,
   stopEvent,
 } from '@floating-ui/react/utils';
 
@@ -97,7 +97,7 @@ export function useTypeahead(
   const findMatchRef = useLatestRef(findMatch);
   const ignoreKeysRef = useLatestRef(ignoreKeys);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (open) {
       clearTimeoutIfSet(timeoutIdRef);
       matchIndexRef.current = null;
@@ -105,7 +105,7 @@ export function useTypeahead(
     }
   }, [open]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     // Sync arrow key navigation but not typeahead navigation.
     if (open && stringRef.current === '') {
       prevIndexRef.current = selectedIndex ?? activeIndex ?? -1;
