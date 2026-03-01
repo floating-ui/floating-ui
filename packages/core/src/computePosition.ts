@@ -1,6 +1,14 @@
 import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
 import {detectOverflow} from './detectOverflow';
-import type {ComputePosition, Middleware, MiddlewareData} from './types';
+import type {
+  ComputePosition,
+  Middleware,
+  MiddlewareData,
+  Platform,
+} from './types';
+
+// Maximum number of resets that can occur before bailing to avoid infinite reset loops.
+const MAX_RESET_COUNT = 50;
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
@@ -21,17 +29,26 @@ export const computePosition: ComputePosition = async (
     platform,
   } = config;
 
-  const validMiddleware = middleware.filter(Boolean) as Middleware[];
+  const platformWithDetectOverflow = (
+    platform.detectOverflow ? platform : {...platform, detectOverflow}
+  ) as Platform & {detectOverflow: typeof detectOverflow};
   const rtl = await platform.isRTL?.(floating);
 
   let rects = await platform.getElementRects({reference, floating, strategy});
   let {x, y} = computeCoordsFromPlacement(rects, placement, rtl);
   let statefulPlacement = placement;
-  let middlewareData: MiddlewareData = {};
   let resetCount = 0;
 
-  for (let i = 0; i < validMiddleware.length; i++) {
-    const {name, fn} = validMiddleware[i];
+  const middlewareData: MiddlewareData = {};
+
+  for (let i = 0; i < middleware.length; i++) {
+    const currentMiddleware = middleware[i] as Middleware | undefined;
+
+    if (!currentMiddleware) {
+      continue;
+    }
+
+    const {name, fn} = currentMiddleware;
 
     const {
       x: nextX,
@@ -46,25 +63,19 @@ export const computePosition: ComputePosition = async (
       strategy,
       middlewareData,
       rects,
-      platform: {
-        ...platform,
-        detectOverflow: platform.detectOverflow ?? detectOverflow,
-      },
+      platform: platformWithDetectOverflow,
       elements: {reference, floating},
     });
 
     x = nextX ?? x;
     y = nextY ?? y;
 
-    middlewareData = {
-      ...middlewareData,
-      [name]: {
-        ...middlewareData[name],
-        ...data,
-      },
+    middlewareData[name] = {
+      ...middlewareData[name],
+      ...data,
     };
 
-    if (reset && resetCount <= 50) {
+    if (reset && resetCount < MAX_RESET_COUNT) {
       resetCount++;
 
       if (typeof reset === 'object') {

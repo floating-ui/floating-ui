@@ -45,7 +45,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
       scroll = getNodeScroll(offsetParent);
     }
 
-    if (isHTMLElement(offsetParent)) {
+    if (isOffsetParentAnElement) {
       const offsetRect = getBoundingClientRect(offsetParent);
       scale = getScale(offsetParent);
       offsets.x = offsetRect.x + offsetParent.clientLeft;

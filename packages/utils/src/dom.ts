@@ -61,57 +61,43 @@ export function isShadowRoot(value: unknown): value is ShadowRoot {
   );
 }
 
-const invalidOverflowDisplayValues = new Set(['inline', 'contents']);
-
 export function isOverflowElement(element: Element): boolean {
   const {overflow, overflowX, overflowY, display} = getComputedStyle(element);
   return (
     /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) &&
-    !invalidOverflowDisplayValues.has(display)
+    display !== 'inline' &&
+    display !== 'contents'
   );
 }
 
-const tableElements = new Set(['table', 'td', 'th']);
-
 export function isTableElement(element: Element): boolean {
-  return tableElements.has(getNodeName(element));
+  return /^(table|td|th)$/.test(getNodeName(element));
 }
-
-const topLayerSelectors = [':popover-open', ':modal'];
 
 export function isTopLayer(element: Element): boolean {
-  return topLayerSelectors.some((selector) => {
-    try {
-      return element.matches(selector);
-    } catch (_e) {
-      return false;
+  try {
+    if (element.matches(':popover-open')) {
+      return true;
     }
-  });
+  } catch (_e) {
+    // no-op
+  }
+
+  try {
+    return element.matches(':modal');
+  } catch (_e) {
+    return false;
+  }
 }
 
-const transformProperties = [
-  'transform',
-  'translate',
-  'scale',
-  'rotate',
-  'perspective',
-];
-
-const willChangeValues = [
-  'transform',
-  'translate',
-  'scale',
-  'rotate',
-  'perspective',
-  'filter',
-];
-
-const containValues = ['paint', 'layout', 'strict', 'content'];
+const willChangeRe = /transform|translate|scale|rotate|perspective|filter/;
+const containRe = /paint|layout|strict|content/;
+const isNotNone = (value: string) => !!value && value !== 'none';
+let isWebKitValue: boolean | undefined;
 
 export function isContainingBlock(
   elementOrCss: Element | CSSStyleDeclaration,
 ): boolean {
-  const webkit = isWebKit();
   const css = isElement(elementOrCss)
     ? getComputedStyle(elementOrCss)
     : elementOrCss;
@@ -119,15 +105,14 @@ export function isContainingBlock(
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   // https://drafts.csswg.org/css-transforms-2/#individual-transforms
   return (
-    transformProperties.some((value) =>
-      css[value as keyof CSSStyleDeclaration]
-        ? css[value as keyof CSSStyleDeclaration] !== 'none'
-        : false,
-    ) ||
-    (!webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
-    (!webkit && (css.filter ? css.filter !== 'none' : false)) ||
-    willChangeValues.some((value) => (css.willChange || '').includes(value)) ||
-    containValues.some((value) => (css.contain || '').includes(value))
+    isNotNone(css.transform) ||
+    isNotNone(css.translate) ||
+    isNotNone(css.scale) ||
+    isNotNone(css.rotate) ||
+    isNotNone(css.perspective) ||
+    (!isWebKit() && (isNotNone(css.backdropFilter) || isNotNone(css.filter))) ||
+    willChangeRe.test(css.willChange || '') ||
+    containRe.test(css.contain || '')
   );
 }
 
@@ -148,14 +133,18 @@ export function getContainingBlock(element: Element): HTMLElement | null {
 }
 
 export function isWebKit(): boolean {
-  if (typeof CSS === 'undefined' || !CSS.supports) return false;
-  return CSS.supports('-webkit-backdrop-filter', 'none');
+  if (isWebKitValue == null) {
+    isWebKitValue =
+      typeof CSS !== 'undefined' &&
+      CSS.supports &&
+      CSS.supports('-webkit-backdrop-filter', 'none');
+  }
+
+  return isWebKitValue;
 }
 
-const lastTraversableNodeNames = new Set(['html', 'body', '#document']);
-
 export function isLastTraversableNode(node: Node): boolean {
-  return lastTraversableNodeNames.has(getNodeName(node));
+  return /^(html|body|#document)$/.test(getNodeName(node));
 }
 
 export function getComputedStyle(element: Element): CSSStyleDeclaration {
@@ -230,12 +219,12 @@ export function getOverflowAncestors(
       isOverflowElement(scrollableAncestor) ? scrollableAncestor : [],
       frameElement && traverseIframes ? getOverflowAncestors(frameElement) : [],
     );
+  } else {
+    return list.concat(
+      scrollableAncestor,
+      getOverflowAncestors(scrollableAncestor, [], traverseIframes),
+    );
   }
-
-  return list.concat(
-    scrollableAncestor,
-    getOverflowAncestors(scrollableAncestor, [], traverseIframes),
-  );
 }
 
 export function getFrameElement(win: Window): Element | null {

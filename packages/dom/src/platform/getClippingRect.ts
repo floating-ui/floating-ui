@@ -28,8 +28,6 @@ import {getVisualOffsets} from '../utils/getVisualOffsets';
 import {getScale} from './getScale';
 import {isElement} from './isElement';
 
-const absoluteOrFixed = new Set(['absolute', 'fixed']);
-
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;
 };
@@ -133,7 +131,8 @@ function getClippingElementAncestors(
       : (!currentNodeIsContaining &&
           computedStyle.position === 'static' &&
           !!currentContainingBlockComputedStyle &&
-          absoluteOrFixed.has(currentContainingBlockComputedStyle.position)) ||
+          (currentContainingBlockComputedStyle.position === 'absolute' ||
+            currentContainingBlockComputedStyle.position === 'fixed')) ||
         (isOverflowElement(currentNode) &&
           !currentNodeIsContaining &&
           hasFixedPositionAncestor(element, currentNode));
@@ -177,30 +176,33 @@ export function getClippingRect(
         : getClippingElementAncestors(element, this._c)
       : [].concat(boundary);
   const clippingAncestors = [...elementClippingAncestors, rootBoundary];
-  const firstClippingAncestor = clippingAncestors[0];
 
-  const clippingRect = clippingAncestors.reduce(
-    (accRect: ClientRectObject, clippingAncestor) => {
-      const rect = getClientRectFromClippingAncestor(
-        element,
-        clippingAncestor,
-        strategy,
-      );
-
-      accRect.top = max(rect.top, accRect.top);
-      accRect.right = min(rect.right, accRect.right);
-      accRect.bottom = min(rect.bottom, accRect.bottom);
-      accRect.left = max(rect.left, accRect.left);
-
-      return accRect;
-    },
-    getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy),
+  const firstRect = getClientRectFromClippingAncestor(
+    element,
+    clippingAncestors[0],
+    strategy,
   );
+  let top = firstRect.top;
+  let right = firstRect.right;
+  let bottom = firstRect.bottom;
+  let left = firstRect.left;
+
+  for (let i = 1; i < clippingAncestors.length; i++) {
+    const rect = getClientRectFromClippingAncestor(
+      element,
+      clippingAncestors[i],
+      strategy,
+    );
+    top = max(rect.top, top);
+    right = min(rect.right, right);
+    bottom = min(rect.bottom, bottom);
+    left = max(rect.left, left);
+  }
 
   return {
-    width: clippingRect.right - clippingRect.left,
-    height: clippingRect.bottom - clippingRect.top,
-    x: clippingRect.left,
-    y: clippingRect.top,
+    width: right - left,
+    height: bottom - top,
+    x: left,
+    y: top,
   };
 }
