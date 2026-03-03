@@ -1,5 +1,12 @@
 # @floating-ui/utils
 
+## 0.2.11
+
+### Patch Changes
+
+- fix(utils): stop treating `container-type` as creating a containing block
+- perf: bundle and runtime improvements
+
 ## 0.2.10
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.27.19
+
+### Patch Changes
+
+- fix(useDismiss): ignore non-primary inside mouse presses for click outside dismissal
+- fix(react): fix shadow root host lookup when one of the parent elements is an anchor
+- Update dependencies: `@floating-ui/utils@0.2.11`, `@floating-ui/react-dom@2.1.8`
+
 ## 0.27.18
 
 ### Patch Changes

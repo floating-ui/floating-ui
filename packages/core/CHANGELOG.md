@@ -1,5 +1,12 @@
 # @floating-ui/core
 
+## 1.7.5
+
+### Patch Changes
+
+- perf: bundle and runtime improvements
+- Update dependencies: `@floating-ui/utils@0.2.11`
+
 ## 1.7.4
 
 ### Patch Changes

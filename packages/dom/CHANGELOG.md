@@ -1,5 +1,14 @@
 # @floating-ui/dom
 
+## 1.7.6
+
+### Patch Changes
+
+- fix(types): ensure `Platform` type contains `detectOverflow` type
+- perf: bundle and runtime improvements
+- feat(autoUpdate): allow not passing a floating element
+- Update dependencies: `@floating-ui/utils@0.2.11`, `@floating-ui/core@1.7.5`
+
 ## 1.7.5
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @floating-ui/react-dom
 
+## 2.1.8
+
+### Patch Changes
+
+- fix(react): avoid duplicate `options` key warning in reactive middleware wrappers
+- Update dependencies: `@floating-ui/dom@1.7.6`
+
 ## 2.1.7
 
 ### Patch Changes
