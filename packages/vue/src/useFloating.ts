@@ -12,6 +12,7 @@ import {
   ref,
   shallowReadonly,
   shallowRef,
+  toValue,
   watch,
 } from 'vue';
 
@@ -23,7 +24,6 @@ import type {
 import {getDPR} from './utils/getDPR';
 import {roundByDPR} from './utils/roundByDPR';
 import {unwrapElement} from './utils/unwrapElement';
-import {toValue} from './utils/toValue';
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element next to a reference element when it is given a certain CSS positioning strategy.
