@@ -1,5 +1,5 @@
-import {unref} from 'vue-demi';
-import type {Ref} from 'vue-demi';
+import {unref} from 'vue';
+import type {Ref} from 'vue';
 
 type MaybeRef<T> = T | Ref<T>;
 type MaybeRefOrGetter<T> = MaybeRef<T> | (() => T);

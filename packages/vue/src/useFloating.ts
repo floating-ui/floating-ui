@@ -4,7 +4,7 @@ import type {
   ReferenceElement,
 } from '@floating-ui/dom';
 import {computePosition} from '@floating-ui/dom';
-import type {Ref} from 'vue-demi';
+import type {Ref} from 'vue';
 import {
   computed,
   getCurrentScope,
@@ -13,7 +13,7 @@ import {
   shallowReadonly,
   shallowRef,
   watch,
-} from 'vue-demi';
+} from 'vue';
 
 import type {
   MaybeElement,

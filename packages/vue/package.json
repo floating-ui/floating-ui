@@ -58,15 +58,16 @@
   ],
   "dependencies": {
     "@floating-ui/dom": "workspace:^",
-    "@floating-ui/utils": "workspace:^",
-    "vue-demi": ">=0.13.0"
+    "@floating-ui/utils": "workspace:^"
   },
   "devDependencies": {
-    "@parcel/transformer-vue": "^2.10.3",
     "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/vue": "^6.6.1",
     "@vitejs/plugin-vue": "^5.2.3",
     "config": "workspace:*",
     "vue": "^3.4.4"
+  },
+  "peerDependencies": {
+    "vue": ">=3.3.0"
   }
 }
