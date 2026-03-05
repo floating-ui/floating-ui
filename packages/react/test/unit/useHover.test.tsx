@@ -8,6 +8,8 @@ import {Popover} from '../visual/components/Popover';
 import {Button} from '../visual/lib/Button';
 import userEvent from '@testing-library/user-event';
 
+import {hoverEnter} from './utils';
+
 vi.useFakeTimers();
 
 function App({
@@ -38,7 +40,7 @@ function App({
 test('opens on mouseenter', () => {
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByRole('button'));
+  hoverEnter(screen.getByRole('button'));
   expect(screen.queryByRole('tooltip')).toBeInTheDocument();
 
   cleanup();
@@ -47,7 +49,7 @@ test('opens on mouseenter', () => {
 test('closes on mouseleave', () => {
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByRole('button'));
+  hoverEnter(screen.getByRole('button'));
   fireEvent.mouseLeave(screen.getByRole('button'));
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
@@ -58,7 +60,7 @@ describe('delay', () => {
   test('symmetric number', async () => {
     render(<App delay={1000} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
+    hoverEnter(screen.getByRole('button'));
 
     await act(async () => {
       vi.advanceTimersByTime(999);
@@ -78,7 +80,7 @@ describe('delay', () => {
   test('open', async () => {
     render(<App delay={{open: 500}} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
+    hoverEnter(screen.getByRole('button'));
 
     await act(async () => {
       vi.advanceTimersByTime(499);
@@ -98,7 +100,7 @@ describe('delay', () => {
   test('close', async () => {
     render(<App delay={{close: 500}} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
+    hoverEnter(screen.getByRole('button'));
     fireEvent.mouseLeave(screen.getByRole('button'));
 
     await act(async () => {
@@ -119,7 +121,7 @@ describe('delay', () => {
   test('open with close 0', async () => {
     render(<App delay={{open: 500}} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
+    hoverEnter(screen.getByRole('button'));
 
     await act(async () => {
       vi.advanceTimersByTime(499);
@@ -139,7 +141,7 @@ describe('delay', () => {
   test('restMs + nullish open delay should respect restMs', async () => {
     render(<App restMs={100} delay={{close: 100}} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
+    hoverEnter(screen.getByRole('button'));
 
     await act(async () => {
       vi.advanceTimersByTime(99);
@@ -244,7 +246,7 @@ test('restMs does not reset timer for minor mouse movement', async () => {
 test('mouseleave on the floating element closes it (mouse)', async () => {
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByRole('button'));
+  hoverEnter(screen.getByRole('button'));
   await act(async () => {});
 
   fireEvent(
@@ -260,7 +262,7 @@ test('mouseleave on the floating element closes it (mouse)', async () => {
 test('does not show after delay if domReference changes', async () => {
   const {rerender} = render(<App delay={1000} />);
 
-  fireEvent.mouseEnter(screen.getByRole('button'));
+  hoverEnter(screen.getByRole('button'));
 
   await act(async () => {
     vi.advanceTimersByTime(1);
@@ -303,9 +305,26 @@ test('reason string', async () => {
 
   render(<App />);
   const button = screen.getByRole('button');
-  fireEvent.mouseEnter(button);
+  hoverEnter(button);
   await act(async () => {});
   fireEvent.mouseLeave(button);
+});
+
+test('does not open on ghost mouseenter from portal unmount', () => {
+  render(<App />);
+
+  // When an overlay (drawer, modal) unmounts, the browser fires a synthetic
+  // mouseenter on elements now under the pointer. This mouseenter is NOT
+  // preceded by a pointerenter because there is no active pointer after the
+  // touch ends. The tooltip should not open in this case.
+  fireEvent.mouseEnter(screen.getByRole('button'));
+  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+  // A real hover (with pointerenter) should still work.
+  hoverEnter(screen.getByRole('button'));
+  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+  cleanup();
 });
 
 test('cleans up blockPointerEvents if trigger changes', async () => {
