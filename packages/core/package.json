@@ -29,7 +29,7 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "lint": "eslint .",
-    "format": "prettier --write .",
+    "format": "prettier --ignore-path ../../.gitignore --write .",
     "clean": "rimraf dist out-tsc",
     "dev": "rollup -c -w",
     "build": "rollup -c",

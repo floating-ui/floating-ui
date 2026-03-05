@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "format": "prettier --write .",
+    "format": "prettier --ignore-path ../../.gitignore --write .",
     "clean": "rimraf dist out-tsc test-results",
     "dev": "vite",
     "build": "rollup -c",
