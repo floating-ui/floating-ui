@@ -3,7 +3,7 @@
   "version": "0.2.3",
   "scripts": {
     "lint": "eslint .",
-    "format": "prettier --write .",
+    "format": "prettier --ignore-path ../../.gitignore --write .",
     "clean": "rimraf dist out-tsc",
     "dev": "rollup -c -w",
     "build": "rollup -c",

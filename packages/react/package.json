@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "format": "prettier --write .",
+    "format": "prettier --ignore-path ../../.gitignore --write .",
     "clean": "rimraf dist out-tsc utils",
     "test": "vitest run",
     "test:watch": "vitest watch",

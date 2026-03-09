@@ -8,7 +8,7 @@ import prettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default defineConfig(
   {
-    ignores: ['**/dist/'],
+    ignores: ['**/dist/', '**/out-tsc/'],
   },
   eslint.configs.recommended,
   react.configs.flat.recommended,
