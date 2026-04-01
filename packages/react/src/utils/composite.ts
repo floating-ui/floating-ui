@@ -47,10 +47,10 @@ export function findNonDisabledListIndex(
     disabledIndices,
     amount = 1,
   }: {
-    startingIndex?: number;
-    decrement?: boolean;
-    disabledIndices?: DisabledIndices;
-    amount?: number;
+    startingIndex?: number | undefined;
+    decrement?: boolean | undefined;
+    disabledIndices?: DisabledIndices | undefined;
+    amount?: number | undefined;
   } = {},
 ): number {
   let index = startingIndex;

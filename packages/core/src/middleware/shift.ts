@@ -17,21 +17,23 @@ export interface ShiftOptions extends DetectOverflowOptions {
    * whether overflow along this axis is checked to perform shifting.
    * @default true
    */
-  mainAxis?: boolean;
+  mainAxis?: boolean | undefined;
   /**
    * The axis that runs along the side of the floating element. Determines
    * whether overflow along this axis is checked to perform shifting.
    * @default false
    */
-  crossAxis?: boolean;
+  crossAxis?: boolean | undefined;
   /**
    * Accepts a function that limits the shifting done in order to prevent
    * detachment.
    */
-  limiter?: {
-    fn: (state: MiddlewareState) => Coords;
-    options?: any;
-  };
+  limiter?:
+    | {
+        fn: (state: MiddlewareState) => Coords;
+        options?: any;
+      }
+    | undefined;
 }
 
 /**
@@ -110,12 +112,12 @@ type LimitShiftOffset =
        * Offset the limiting of the axis that runs along the alignment of the
        * floating element.
        */
-      mainAxis?: number;
+      mainAxis?: number | undefined;
       /**
        * Offset the limiting of the axis that runs along the side of the
        * floating element.
        */
-      crossAxis?: number;
+      crossAxis?: number | undefined;
     };
 
 export interface LimitShiftOptions {
@@ -125,16 +127,16 @@ export interface LimitShiftOptions {
    * - positive = start limiting earlier
    * - negative = start limiting later
    */
-  offset?: LimitShiftOffset | Derivable<LimitShiftOffset>;
+  offset?: LimitShiftOffset | Derivable<LimitShiftOffset> | undefined;
   /**
    * Whether to limit the axis that runs along the alignment of the floating
    * element.
    */
-  mainAxis?: boolean;
+  mainAxis?: boolean | undefined;
   /**
    * Whether to limit the axis that runs along the side of the floating element.
    */
-  crossAxis?: boolean;
+  crossAxis?: boolean | undefined;
 }
 
 /**
@@ -167,7 +169,10 @@ export const limitShift = (
     const computedOffset =
       typeof rawOffset === 'number'
         ? {mainAxis: rawOffset, crossAxis: 0}
-        : {mainAxis: 0, crossAxis: 0, ...rawOffset};
+        : {
+            mainAxis: rawOffset.mainAxis ?? 0,
+            crossAxis: rawOffset.crossAxis ?? 0,
+          };
 
     if (checkMainAxis) {
       const len = mainAxis === 'y' ? 'height' : 'width';

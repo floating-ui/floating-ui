@@ -17,35 +17,35 @@ export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
    * Width of the arrow.
    * @default 14
    */
-  width?: number;
+  width?: number | undefined;
   /**
    * Height of the arrow.
    * @default 7
    */
-  height?: number;
+  height?: number | undefined;
   /**
    * The corner radius (rounding) of the arrow tip.
    * @default 0 (sharp)
    */
-  tipRadius?: number;
+  tipRadius?: number | undefined;
   /**
    * Forces a static offset over dynamic positioning under a certain condition.
    * If the shift() middleware causes the popover to shift, this value will be
    * ignored.
    */
-  staticOffset?: string | number | null;
+  staticOffset?: string | number | null | undefined;
   /**
    * Custom path string.
    */
-  d?: string;
+  d?: string | undefined;
   /**
    * Stroke (border) color of the arrow.
    */
-  stroke?: string;
+  stroke?: string | undefined;
   /**
    * Stroke (border) width of the arrow.
    */
-  strokeWidth?: number;
+  strokeWidth?: number | undefined;
 }
 
 /**

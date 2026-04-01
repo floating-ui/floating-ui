@@ -127,29 +127,33 @@ export type UseFloatingOptions<RT extends ReferenceType = ReferenceType> =
        * mounted, and cleaned up when either is unmounted. This is useful for
        * setting up event listeners (e.g. pass `autoUpdate`).
        */
-      whileElementsMounted?: (
-        reference: RT,
-        floating: HTMLElement,
-        update: () => void,
-      ) => () => void;
+      whileElementsMounted?:
+        | ((
+            reference: RT,
+            floating: HTMLElement,
+            update: () => void,
+          ) => () => void)
+        | undefined;
       /**
        * Object containing the reference and floating elements.
        */
-      elements?: {
-        reference?: RT | null;
-        floating?: HTMLElement | null;
-      };
+      elements?:
+        | {
+            reference?: RT | null | undefined;
+            floating?: HTMLElement | null | undefined;
+          }
+        | undefined;
       /**
        * The `open` state of the floating element to synchronize with the
        * `isPositioned` value.
        * @default false
        */
-      open?: boolean;
+      open?: boolean | undefined;
       /**
        * Whether to use `transform` for positioning instead of `top` and `left`
        * (layout) in the `floatingStyles` object.
        * @default true
        */
-      transform?: boolean;
+      transform?: boolean | undefined;
     }
   >;

@@ -1,7 +1,9 @@
 {
   "extends": "config/tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "out-tsc"
+    "outDir": "out-tsc",
+    // TODO: move to config/tsconfig.base.json after https://github.com/vitejs/vite/issues/21715 is resolved.
+    "exactOptionalPropertyTypes": true
   },
   "include": ["src"],
   "references": [{"path": "../utils/tsconfig.lib.json"}]
