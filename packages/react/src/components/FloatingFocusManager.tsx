@@ -261,6 +261,7 @@ export function FloatingFocusManager(
   const startDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const endDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const preventReturnFocusRef = React.useRef(false);
+  const isKeyboardCloseRef = React.useRef(false);
   const isPointerDownRef = React.useRef(false);
   const tabbableIndexRef = React.useRef(-1);
   const blurTimeoutRef = React.useRef(-1);
@@ -634,6 +635,11 @@ export function FloatingFocusManager(
       event: Event;
       nested: boolean;
     }) {
+      // Track whether the close was keyboard-initiated so we can
+      // conditionally suppress :focus-visible when returning focus.
+      isKeyboardCloseRef.current =
+        reason === 'escape-key' || event instanceof KeyboardEvent;
+
       if (
         ['hover', 'safe-polygon'].includes(reason) &&
         event.type === 'mouseleave'
@@ -715,7 +721,14 @@ export function FloatingFocusManager(
             ? isFocusInsideFloatingTree
             : true)
         ) {
-          tabbableReturnElement.focus({preventScroll: true});
+          tabbableReturnElement.focus({
+            preventScroll: true,
+            // Suppress :focus-visible when the floating element was closed
+            // by a pointer interaction (e.g. clicking a menu item).
+            // Only show :focus-visible for keyboard-initiated closes
+            // (e.g. pressing Escape). GH #3394
+            ...(isKeyboardCloseRef.current ? undefined : {focusVisible: false}),
+          });
         }
 
         fallbackEl.remove();
