@@ -53,26 +53,26 @@ useFloating({
 
 ```ts
 interface UseFloatingOptions {
-  placement?: Placement;
-  strategy?: 'fixed' | 'absolute';
-  transform?: boolean;
-  middleware?: Array<Middleware | undefined | null | false>;
+  placement?: Placement | undefined;
+  strategy?: 'fixed' | 'absolute' | undefined;
+  transform?: boolean | undefined;
+  middleware?: Array<Middleware | undefined | null | false> | undefined;
   open?: boolean;
-  onOpenChange?(
-    open: boolean,
-    event?: Event,
-    reason?: OpenChangeReason,
-  ): void;
+  onOpenChange?:
+    | ((open: boolean, event?: Event, reason?: OpenChangeReason) => void)
+    | undefined;
   elements?: {
-    reference?: ReferenceElement | null;
-    floating?: FloatingElement | null;
-  };
-  whileElementsMounted?(
-    reference: ReferenceElement,
-    floating: FloatingElement,
-    update: () => void,
-  ): () => void;
-  nodeId?: string;
+    reference?: ReferenceElement | null | undefined;
+    floating?: FloatingElement | null | undefined;
+  } | undefined;
+  whileElementsMounted?:
+    | ((
+        reference: ReferenceElement,
+        floating: FloatingElement,
+        update: () => void,
+      ) => () => void)
+    | undefined;
+  nodeId?: string | undefined;
 }
 ```
 
@@ -82,20 +82,22 @@ interface UseFloatingOptions {
 
 ```ts
 interface UseFloatingOptions {
-  placement?: Placement;
-  strategy?: 'fixed' | 'absolute';
-  transform?: boolean;
-  middleware?: Array<Middleware | undefined | null | false>;
-  open?: boolean;
+  placement?: Placement | undefined;
+  strategy?: 'fixed' | 'absolute' | undefined;
+  transform?: boolean | undefined;
+  middleware?: Array<Middleware | undefined | null | false> | undefined;
+  open?: boolean | undefined;
   elements?: {
-    reference?: ReferenceElement | null;
-    floating?: FloatingElement | null;
-  };
-  whileElementsMounted?(
-    reference: ReferenceElement,
-    floating: FloatingElement,
-    update: () => void,
-  ): () => void;
+    reference?: ReferenceElement | null | undefined;
+    floating?: FloatingElement | null | undefined;
+  } | undefined;
+  whileElementsMounted?:
+    | ((
+        reference: ReferenceElement,
+        floating: FloatingElement,
+        update: () => void,
+      ) => () => void)
+    | undefined;
 }
 ```
 

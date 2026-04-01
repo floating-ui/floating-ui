@@ -307,7 +307,7 @@ These are the options you can pass to `arrow(){:js}`.
 ```ts
 interface ArrowOptions {
   element: Element;
-  padding?: Padding;
+  padding?: Padding | undefined;
 }
 ```
 
@@ -321,7 +321,7 @@ interface ArrowOptions {
     | Element
     | null
     | React.MutableRefObject<Element | null>;
-  padding?: Padding;
+  padding?: Padding | undefined;
 }
 ```
 
@@ -332,7 +332,7 @@ interface ArrowOptions {
 ```ts
 interface ArrowOptions {
   element: MaybeReadonlyRef<MaybeElement<Element>>;
-  padding?: Padding;
+  padding?: Padding | undefined;
 }
 ```
 
@@ -453,8 +453,8 @@ The following data is available in `middlewareData.arrow{:js}`:
 
 ```ts
 interface Data {
-  x?: number;
-  y?: number;
+  x?: number | undefined;
+  y?: number | undefined;
   centerOffset: number;
 }
 ```

@@ -97,18 +97,19 @@ function App() {
 interface UseTypeaheadProps {
   listRef: React.MutableRefObject<Array<string | null>>;
   activeIndex: number | null;
-  onMatch?(index: number): void;
-  enabled?: boolean;
-  resetMs?: number;
-  ignoreKeys?: Array<string>;
-  selectedIndex?: number | null;
-  onTypingChange?(isTyping: boolean): void;
+  onMatch?: ((index: number) => void) | undefined;
+  enabled?: boolean | undefined;
+  resetMs?: number | undefined;
+  ignoreKeys?: Array<string> | undefined;
+  selectedIndex?: number | null | undefined;
+  onTypingChange?: ((isTyping: boolean) => void) | undefined;
   findMatch?:
     | null
     | ((
         list: Array<string | null>,
         typedString: string,
-      ) => string | null | undefined);
+      ) => string | null | undefined)
+    | undefined;
 }
 ```
 
