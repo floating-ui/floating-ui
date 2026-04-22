@@ -21,7 +21,7 @@ export function getCSSZoom(element: Element | VirtualElement): number {
 
   while (current) {
     if (isHTMLElement(current)) {
-      const z = parseFloat(getComputedStyle(current).zoom);
+      const z = parseFloat((getComputedStyle(current) as CSSStyleDeclaration & {zoom?: string}).zoom ?? '1');
       if (z && z !== 1) {
         zoom *= z;
       }

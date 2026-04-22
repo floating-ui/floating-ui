@@ -8,7 +8,7 @@ export function getHTMLOffset(
   scroll: NodeScroll,
 ) {
   const htmlRect = documentElement.getBoundingClientRect();
-  const zoom = parseFloat(getComputedStyle(documentElement).zoom) || 1;
+  const zoom = parseFloat((getComputedStyle(documentElement) as CSSStyleDeclaration & {zoom?: string}).zoom ?? '1') || 1;
   const x =
     htmlRect.left / zoom +
     scroll.scrollLeft -
