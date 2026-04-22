@@ -1,3 +1,5 @@
+import {getComputedStyle} from '@floating-ui/utils/dom';
+
 import type {NodeScroll} from '../types';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 
@@ -6,11 +8,12 @@ export function getHTMLOffset(
   scroll: NodeScroll,
 ) {
   const htmlRect = documentElement.getBoundingClientRect();
+  const zoom = parseFloat(getComputedStyle(documentElement).zoom) || 1;
   const x =
-    htmlRect.left +
+    htmlRect.left / zoom +
     scroll.scrollLeft -
     getWindowScrollBarX(documentElement, htmlRect);
-  const y = htmlRect.top + scroll.scrollTop;
+  const y = htmlRect.top / zoom + scroll.scrollTop;
 
   return {
     x,
