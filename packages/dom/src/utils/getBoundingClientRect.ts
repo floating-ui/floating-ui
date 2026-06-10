@@ -5,6 +5,7 @@ import {getComputedStyle, getWindow} from '@floating-ui/utils/dom';
 
 import {getScale} from '../platform/getScale';
 import {isElement} from '../platform/isElement';
+import {getCSSZoom} from './getCSSZoom';
 import {getVisualOffsets, shouldAddVisualOffsets} from './getVisualOffsets';
 import {unwrapElement} from './unwrapElement';
 import type {VirtualElement} from '../types';
@@ -24,6 +25,13 @@ export function getBoundingClientRect(
     if (offsetParent) {
       if (isElement(offsetParent)) {
         scale = getScale(offsetParent);
+      } else {
+        // offsetParent is a Window — account for CSS zoom on body/html.
+        // CSS zoom (standardised in Chrome 128+) makes getBoundingClientRect()
+        // return zoomed viewport pixels, so we must divide by the cumulative
+        // CSS zoom to recover un-zoomed CSS-layout coordinates.
+        const cssZoom = getCSSZoom(element);
+        scale = {x: cssZoom, y: cssZoom};
       }
     } else {
       scale = getScale(element);
