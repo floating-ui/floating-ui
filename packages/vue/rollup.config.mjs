@@ -10,7 +10,7 @@ export default defineRollupConfig({
     },
   ],
   globals: {
-    'vue-demi': 'VueDemi',
+    vue: 'Vue',
     '@floating-ui/dom': 'FloatingUIDOM',
     '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
   },

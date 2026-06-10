@@ -4,7 +4,7 @@ import type {
   ReferenceElement,
 } from '@floating-ui/dom';
 import {computePosition} from '@floating-ui/dom';
-import type {Ref} from 'vue-demi';
+import type {Ref} from 'vue';
 import {
   computed,
   getCurrentScope,
@@ -12,8 +12,9 @@ import {
   ref,
   shallowReadonly,
   shallowRef,
+  toValue,
   watch,
-} from 'vue-demi';
+} from 'vue';
 
 import type {
   MaybeElement,
@@ -23,7 +24,6 @@ import type {
 import {getDPR} from './utils/getDPR';
 import {roundByDPR} from './utils/roundByDPR';
 import {unwrapElement} from './utils/unwrapElement';
-import {toValue} from './utils/toValue';
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element next to a reference element when it is given a certain CSS positioning strategy.
