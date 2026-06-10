@@ -1,4 +1,4 @@
-import type {Placement, Side} from '@floating-ui/utils';
+import type {Placement} from '@floating-ui/utils';
 import {
   evaluate,
   getAlignmentSides,
@@ -122,7 +122,7 @@ export const flip = (
     // view, while overflow toward the opposite sides remains reachable by
     // scrolling. In RTL, the horizontal scroll origin is the right side.
     // https://github.com/floating-ui/floating-ui/issues/3014
-    const clippedSides = new Set<Side>(['top', rtl ? 'right' : 'left']);
+    const clippedSide = rtl ? 'right' : 'left';
 
     const getBestFitPlacement = (
       overflowsData: Array<{placement: Placement; overflows: Array<number>}>,
@@ -141,22 +141,23 @@ export const flip = (
           }
           return true;
         })
-        .map(
-          (d) =>
-            [
-              d.placement,
-              // Whether the placement's main axis side overflows toward the
-              // clipped scroll origin, making the overflowing portion
-              // unreachable.
-              preferReachableSide &&
-                checkMainAxis &&
-                d.overflows[0] > 0 &&
-                clippedSides.has(getSide(d.placement)),
-              d.overflows
-                .filter((overflow) => overflow > 0)
-                .reduce((acc, overflow) => acc + overflow, 0),
-            ] as const,
-        )
+        .map((d) => {
+          const side = getSide(d.placement);
+
+          return [
+            d.placement,
+            // Whether the placement's main axis side overflows toward the
+            // clipped scroll origin, making the overflowing portion
+            // unreachable.
+            preferReachableSide &&
+              checkMainAxis &&
+              d.overflows[0] > 0 &&
+              (side === 'top' || side === clippedSide),
+            d.overflows
+              .filter((overflow) => overflow > 0)
+              .reduce((acc, overflow) => acc + overflow, 0),
+          ] as const;
+        })
         .sort((a, b) => Number(a[1]) - Number(b[1]) || a[2] - b[2])[0]?.[0];
 
     // The best-fit fallback was biased toward the scrollable direction, but
