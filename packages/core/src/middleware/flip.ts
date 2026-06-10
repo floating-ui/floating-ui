@@ -9,6 +9,7 @@ import {
   getSideAxis,
 } from '@floating-ui/utils';
 
+import {originSides} from '../constants';
 import type {DetectOverflowOptions} from '../detectOverflow';
 import type {Derivable, Middleware} from '../types';
 
@@ -200,9 +201,20 @@ export const flip = (
                     d.overflows
                       .filter((overflow) => overflow > 0)
                       .reduce((acc, overflow) => acc + overflow, 0),
+                    // Whether the main axis side overflows toward the origin
+                    // (top/left). Overflow in that direction clips the floating
+                    // element so it cannot be scrolled into view, whereas
+                    // overflow toward the opposite side (bottom/right) remains
+                    // reachable. Used to break ties in favor of the scrollable
+                    // direction.
+                    originSides.has(getSide(d.placement)) && d.overflows[0] > 0,
                   ] as const,
               )
-              .sort((a, b) => a[1] - b[1])[0]?.[0];
+              // Sort by least overflow first, then break ties by preferring the
+              // placement that does not overflow toward the clipped origin side.
+              .sort(
+                (a, b) => a[1] - b[1] || Number(a[2]) - Number(b[2]),
+              )[0]?.[0];
             if (placement) {
               resetPlacement = placement;
             }
