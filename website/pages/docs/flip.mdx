@@ -458,8 +458,12 @@ default: `'bestFit'{:js}`
 
 When no placements fit, then you'll want to decide what happens.
 `'bestFit'{:js}` will use the placement which fits best on the
-checked axes. `'initialPlacement'{:js}` will use the initial
-`placement{:.key}` specified.
+checked axes, preferring a placement whose overflow can be
+scrolled into view over one that gets clipped behind the
+boundary's scroll origin (unless [`size`](/docs/size) is also
+used, in which case the floating element can be resized to fit).
+`'initialPlacement'{:js}` will use the initial `placement{:.key}`
+specified.
 
 ```js
 flip({

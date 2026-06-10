@@ -72,6 +72,11 @@ export interface MiddlewareData {
       placement: Placement;
       overflows: Array<number>;
     }>;
+    /**
+     * Whether the `bestFit` fallback placement was biased toward the side
+     * whose overflow remains reachable by scrolling.
+     */
+    biasedFallback?: boolean;
   };
   hide?: {
     referenceHidden?: boolean;

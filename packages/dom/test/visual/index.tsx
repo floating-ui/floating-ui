@@ -18,6 +18,7 @@ import {Border} from './spec/Border';
 import {ContainingBlock} from './spec/ContainingBlock';
 import {DecimalSize} from './spec/DecimalSize';
 import {Flip} from './spec/Flip';
+import {FlipBestFit} from './spec/FlipBestFit';
 import {Hide} from './spec/Hide';
 import {IFrame} from './spec/IFrame';
 import {Inline} from './spec/Inline';
@@ -47,6 +48,7 @@ const ROUTES = [
   {path: 'scrollbars', component: Scrollbars},
   {path: 'shift', component: Shift},
   {path: 'flip', component: Flip},
+  {path: 'flip-best-fit', component: FlipBestFit},
   {path: 'size', component: Size},
   {path: 'arrow', component: Arrow},
   {path: 'offset', component: Offset},
