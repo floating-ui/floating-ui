@@ -12,7 +12,7 @@ import {
   useEffectEvent,
   useLatestRef,
   getFloatingFocusElement,
-  useModernLayoutEffect,
+  useClientLayoutEffect,
   isIndexOutOfListBounds,
   getMinListIndex,
   getMaxListIndex,
@@ -307,7 +307,7 @@ export function useListNavigation(
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     context.dataRef.current.orientation = orientation;
   }, [context, orientation]);
 
@@ -394,7 +394,7 @@ export function useListNavigation(
 
   // Sync `selectedIndex` to be the `activeIndex` upon opening the floating
   // element. Also, reset `activeIndex` upon closing the floating element.
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!enabled) return;
 
     if (open && elements.floating) {
@@ -416,7 +416,7 @@ export function useListNavigation(
 
   // Sync `activeIndex` to be the focused item while the floating element is
   // open.
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!enabled) return;
     if (!open) return;
     if (!elements.floating) return;
@@ -488,7 +488,7 @@ export function useListNavigation(
 
   // Ensure the parent floating element has focus when a nested child closes
   // to allow arrow key navigation to work after the pointer leaves the child.
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (
       !enabled ||
       elements.floating ||
@@ -513,7 +513,7 @@ export function useListNavigation(
     }
   }, [enabled, elements.floating, tree, parentId, virtual]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!enabled) return;
     if (!tree) return;
     if (!virtual) return;
@@ -533,13 +533,13 @@ export function useListNavigation(
     };
   }, [enabled, tree, virtual, parentId, virtualItemRef]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     previousOnNavigateRef.current = onNavigate;
     previousOpenRef.current = open;
     previousMountedRef.current = !!elements.floating;
   });
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!open) {
       keyRef.current = null;
       focusItemOnOpenRef.current = focusItemOnOpen;
