@@ -249,6 +249,13 @@ export function useHover(
       blockMouseMoveRef.current = false;
 
       if (
+        // When a portal (e.g. a drawer or modal overlay) unmounts, the browser
+        // re-evaluates hit-testing and fires a synthetic mouseenter on elements
+        // now exposed at the last pointer position. These "ghost" mouseenter
+        // events are NOT preceded by a pointerenter (because there is no active
+        // pointer after the touch ends), so pointerTypeRef is still undefined.
+        // Ignore these to prevent tooltips from opening unexpectedly.
+        pointerTypeRef.current == null ||
         (mouseOnly && !isMouseLikePointerType(pointerTypeRef.current)) ||
         (getRestMs(restMsRef.current) > 0 &&
           !getDelay(delayRef.current, 'open'))
