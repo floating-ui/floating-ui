@@ -73,10 +73,11 @@ export interface MiddlewareData {
       overflows: Array<number>;
     }>;
     /**
-     * Whether the `bestFit` fallback placement was biased toward the side
-     * whose overflow remains reachable by scrolling.
+     * The floating element's main-axis dimension when the `bestFit` fallback
+     * placement was chosen, used to detect whether `size()` has since shrunk
+     * the element, making its overflow recoverable by resizing.
      */
-    biasedFallback?: boolean;
+    fallbackDimension?: number;
   };
   hide?: {
     referenceHidden?: boolean;

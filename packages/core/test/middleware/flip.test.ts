@@ -225,5 +225,34 @@ describe('flip fallbackStrategy "bestFit"', () => {
 
       expect(placement).toBe('top');
     });
+
+    test('keeps the scrollable bias when `size()` does not shrink the overflowing axis', async () => {
+      const platform = createSizePlatform({
+        top: {top: 10},
+        bottom: {bottom: 150},
+      });
+
+      const {placement} = await computePosition(
+        {},
+        {},
+        {
+          placement: 'top',
+          middleware: [
+            flip(),
+            size({
+              apply() {
+                // Only the cross axis (width) is constrained; the y-axis
+                // overflow remains unrecoverable by resizing, so the bias
+                // toward the scrollable direction must be kept.
+                platform.setDimensions({width: 60, height: 200});
+              },
+            }),
+          ],
+          platform,
+        },
+      );
+
+      expect(placement).toBe('bottom');
+    });
   });
 });
