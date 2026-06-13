@@ -72,6 +72,12 @@ export interface MiddlewareData {
       placement: Placement;
       overflows: Array<number>;
     }>;
+    /**
+     * The floating element's main-axis dimension when the `bestFit` fallback
+     * placement was chosen, used to detect whether `size()` has since shrunk
+     * the element, making its overflow recoverable by resizing.
+     */
+    fallbackDimension?: number;
   };
   hide?: {
     referenceHidden?: boolean;

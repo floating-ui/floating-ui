@@ -117,6 +117,77 @@ export const flip = (
 
     const placements = [initialPlacement, ...fallbackPlacements];
 
+    // Overflow toward these sides displaces the floating element behind the
+    // clipping boundary's scroll origin, where it can't be scrolled into
+    // view, while overflow toward the opposite sides remains reachable by
+    // scrolling. In RTL, the horizontal scroll origin is the right side.
+    // https://github.com/floating-ui/floating-ui/issues/3014
+    const clippedSide = rtl ? 'right' : 'left';
+
+    const getBestFitPlacement = (
+      overflowsData: Array<{placement: Placement; overflows: Array<number>}>,
+      preferReachableSide: boolean,
+    ) =>
+      overflowsData
+        .filter((d) => {
+          if (hasFallbackAxisSideDirection) {
+            const currentSideAxis = getSideAxis(d.placement);
+            return (
+              currentSideAxis === initialSideAxis ||
+              // Create a bias to the `y` side axis due to horizontal
+              // reading directions favoring greater width.
+              currentSideAxis === 'y'
+            );
+          }
+          return true;
+        })
+        .map((d) => {
+          const side = getSide(d.placement);
+
+          return [
+            d.placement,
+            // Whether the placement's main axis side overflows toward the
+            // clipped scroll origin, making the overflowing portion
+            // unreachable.
+            preferReachableSide &&
+              checkMainAxis &&
+              d.overflows[0] > 0 &&
+              (side === 'top' || side === clippedSide),
+            d.overflows
+              .filter((overflow) => overflow > 0)
+              .reduce((acc, overflow) => acc + overflow, 0),
+          ] as const;
+        })
+        .sort((a, b) => Number(a[1]) - Number(b[1]) || a[2] - b[2])[0]?.[0];
+
+    const getMainAxisDimension = (p: Placement) =>
+      rects.floating[getSideAxis(p) === 'y' ? 'height' : 'width'];
+
+    const fallbackDimension = middlewareData.flip?.fallbackDimension;
+    // Whether `size()` has shrunk the floating element on the fallback
+    // placement's overflowing axis since the placement was chosen. The
+    // overflow is then recoverable by resizing, so clipping toward the
+    // scroll origin no longer matters and the best-fitting placement should
+    // win with no bias toward the scrollable direction.
+    const sizeShrankFallback =
+      fallbackDimension !== undefined &&
+      middlewareData.size != null &&
+      getMainAxisDimension(placement) < fallbackDimension;
+
+    if (sizeShrankFallback) {
+      const neutralPlacement = getBestFitPlacement(
+        middlewareData.flip?.overflows || [],
+        false,
+      );
+      if (neutralPlacement && neutralPlacement !== placement) {
+        return {
+          reset: {
+            placement: neutralPlacement,
+          },
+        };
+      }
+    }
+
     const overflow = await platform.detectOverflow(
       state,
       detectOverflowOptions,
@@ -175,36 +246,26 @@ export const flip = (
       let resetPlacement = overflowsData
         .filter((d) => d.overflows[0] <= 0)
         .sort((a, b) => a.overflows[1] - b.overflows[1])[0]?.placement;
+      let fallbackData;
 
       // Otherwise fallback.
       if (!resetPlacement) {
         switch (fallbackStrategy) {
           case 'bestFit': {
-            const placement = overflowsData
-              .filter((d) => {
-                if (hasFallbackAxisSideDirection) {
-                  const currentSideAxis = getSideAxis(d.placement);
-                  return (
-                    currentSideAxis === initialSideAxis ||
-                    // Create a bias to the `y` side axis due to horizontal
-                    // reading directions favoring greater width.
-                    currentSideAxis === 'y'
-                  );
-                }
-                return true;
-              })
-              .map(
-                (d) =>
-                  [
-                    d.placement,
-                    d.overflows
-                      .filter((overflow) => overflow > 0)
-                      .reduce((acc, overflow) => acc + overflow, 0),
-                  ] as const,
-              )
-              .sort((a, b) => a[1] - b[1])[0]?.[0];
-            if (placement) {
-              resetPlacement = placement;
+            const bestFitPlacement = getBestFitPlacement(
+              overflowsData,
+              !sizeShrankFallback,
+            );
+            if (bestFitPlacement) {
+              resetPlacement = bestFitPlacement;
+              // Persist the overflow data and the pre-resize main-axis
+              // dimension so the placement can be re-resolved neutrally if
+              // `size()` shrinks the floating element afterward.
+              fallbackData = {
+                overflows: overflowsData,
+                fallbackDimension:
+                  fallbackDimension ?? getMainAxisDimension(bestFitPlacement),
+              };
             }
             break;
           }
@@ -217,9 +278,16 @@ export const flip = (
 
       if (placement !== resetPlacement) {
         return {
+          data: fallbackData,
           reset: {
             placement: resetPlacement,
           },
+        };
+      }
+
+      if (fallbackData) {
+        return {
+          data: fallbackData,
         };
       }
     }
