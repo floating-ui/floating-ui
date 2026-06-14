@@ -47,24 +47,24 @@ export interface AutoPlacementOptions extends DetectOverflowOptions {
    * whether to check for most space along this axis.
    * @default false
    */
-  crossAxis?: boolean;
+  crossAxis?: boolean | undefined;
   /**
    * Choose placements with a particular alignment.
    * @default undefined
    */
-  alignment?: Alignment | null;
+  alignment?: Alignment | null | undefined;
   /**
    * Whether to choose placements with the opposite alignment if the preferred
    * alignment does not fit.
    * @default true
    */
-  autoAlignment?: boolean;
+  autoAlignment?: boolean | undefined;
   /**
    * Which placements are allowed to be chosen. Placements must be within the
    * `alignment` option if explicitly set.
    * @default allPlacements (variable)
    */
-  allowedPlacements?: Array<Placement>;
+  allowedPlacements?: Array<Placement> | undefined;
 }
 
 /**

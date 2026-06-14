@@ -36,13 +36,13 @@ export type OffsetValue =
        * element.
        * @default 0
        */
-      mainAxis?: number;
+      mainAxis?: number | undefined;
       /**
        * The axis that runs along the alignment of the floating element.
        * Represents the skidding between the reference and floating element.
        * @default 0
        */
-      crossAxis?: number;
+      crossAxis?: number | undefined;
       /**
        * The same axis as `crossAxis` but applies only to aligned placements
        * and inverts the `end` alignment. When set to a number, it overrides the
@@ -53,7 +53,7 @@ export type OffsetValue =
        * the reverse.
        * @default null
        */
-      alignmentAxis?: number | null;
+      alignmentAxis?: number | null | undefined;
     };
 // `OffsetOptions` in the core library were originally already `Derivable`. For
 // backwards-compatibility, re-define it here to use the DOM Derivable type.
@@ -76,7 +76,7 @@ export interface Platform {
 
   // Optional
   convertOffsetParentRelativeRectToViewportRelativeRect: (args: {
-    elements?: Elements;
+    elements?: Elements | undefined;
     rect: Rect;
     offsetParent: Element;
     strategy: Strategy;
@@ -90,7 +90,7 @@ export interface Platform {
   getClientRects: (element: Element) => Promisable<Array<ClientRectObject>>;
   isRTL: (element: Element) => Promisable<boolean>;
   getScale: (element: HTMLElement) => Promisable<{x: number; y: number}>;
-  detectOverflow?: typeof detectOverflow;
+  detectOverflow?: typeof detectOverflow | undefined;
 }
 
 export interface NodeScroll {
@@ -105,7 +105,7 @@ export type Boundary = 'clippingAncestors' | Element | Array<Element> | Rect;
 
 export type DetectOverflowOptions = Prettify<
   Omit<CoreDetectOverflowOptions, 'boundary'> & {
-    boundary?: Boundary;
+    boundary?: Boundary | undefined;
   }
 >;
 
@@ -115,11 +115,11 @@ export type ComputePositionConfig = Prettify<
      * Array of middleware objects to modify the positioning or provide data for
      * rendering.
      */
-    middleware?: Array<Middleware | null | undefined | false>;
+    middleware?: Array<Middleware | null | undefined | false> | undefined;
     /**
      * Custom or extended platform object.
      */
-    platform?: Platform;
+    platform?: Platform | undefined;
   }
 >;
 
@@ -129,8 +129,8 @@ export type ComputePositionConfig = Prettify<
  */
 export interface VirtualElement {
   getBoundingClientRect(): ClientRectObject;
-  getClientRects?(): Array<ClientRectObject> | DOMRectList;
-  contextElement?: Element;
+  getClientRects?: (() => Array<ClientRectObject> | DOMRectList) | undefined;
+  contextElement?: Element | undefined;
 }
 
 export type ReferenceElement = Element | VirtualElement;

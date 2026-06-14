@@ -69,16 +69,16 @@ props are spread/passed:
 
 ```js
 interface CompositeProps {
-  render?: RenderProp;
-  orientation?: 'horizontal' | 'vertical' | 'both';
-  loop?: boolean;
-  rtl?: boolean;
-  cols?: number;
-  disabledIndices?: number[];
-  activeIndex?: number;
-  onNavigate?(index: number): void;
-  itemSizes?: Dimensions[];
-  dense?: boolean;
+  render?: RenderProp | undefined;
+  orientation?: 'horizontal' | 'vertical' | 'both' | undefined;
+  loop?: boolean | undefined;
+  rtl?: boolean | undefined;
+  cols?: number | undefined;
+  disabledIndices?: number[] | undefined;
+  activeIndex?: number | undefined;
+  onNavigate?: ((index: number) => void) | undefined;
+  itemSizes?: Dimensions[] | undefined;
+  dense?: boolean | undefined;
 }
 ```
 

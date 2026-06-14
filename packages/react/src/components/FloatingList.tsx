@@ -26,7 +26,7 @@ export const FloatingListContext = React.createContext<{
   unregister: (node: Node) => void;
   map: Map<Node, number | null>;
   elementsRef: React.MutableRefObject<Array<HTMLElement | null>>;
-  labelsRef?: React.MutableRefObject<Array<string | null>>;
+  labelsRef?: React.MutableRefObject<Array<string | null>> | undefined;
 }>({
   register: () => {},
   unregister: () => {},
@@ -45,7 +45,7 @@ interface FloatingListProps {
    * A ref to the list of element labels, ordered by their index.
    * `useTypeahead`'s `listRef` prop.
    */
-  labelsRef?: React.MutableRefObject<Array<string | null>>;
+  labelsRef?: React.MutableRefObject<Array<string | null>> | undefined;
 }
 
 /**
@@ -93,7 +93,7 @@ export function FloatingList(props: FloatingListProps): React.JSX.Element {
 }
 
 export interface UseListItemProps {
-  label?: string | null;
+  label?: string | null | undefined;
 }
 
 /**

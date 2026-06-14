@@ -63,37 +63,39 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
      * Represents the open/close state of the floating element.
      * @default true
      */
-    open?: MaybeReadonlyRefOrGetter<boolean | undefined>;
+    open?: MaybeReadonlyRefOrGetter<boolean | undefined> | undefined;
     /**
      * Where to place the floating element relative to its reference element.
      * @default 'bottom'
      */
-    placement?: MaybeReadonlyRefOrGetter<Placement | undefined>;
+    placement?: MaybeReadonlyRefOrGetter<Placement | undefined> | undefined;
     /**
      * The type of CSS position property to use.
      * @default 'absolute'
      */
-    strategy?: MaybeReadonlyRefOrGetter<Strategy | undefined>;
+    strategy?: MaybeReadonlyRefOrGetter<Strategy | undefined> | undefined;
     /**
      * These are plain objects that modify the positioning coordinates in some fashion, or provide useful data for the consumer to use.
      * @default undefined
      */
-    middleware?: MaybeReadonlyRefOrGetter<Middleware[] | undefined>;
+    middleware?: MaybeReadonlyRefOrGetter<Middleware[] | undefined> | undefined;
     /**
      * Whether to use `transform` instead of `top` and `left` styles to
      * position the floating element (`floatingStyles`).
      * @default true
      */
-    transform?: MaybeReadonlyRefOrGetter<boolean | undefined>;
+    transform?: MaybeReadonlyRefOrGetter<boolean | undefined> | undefined;
     /**
      * Callback to handle mounting/unmounting of the elements.
      * @default undefined
      */
-    whileElementsMounted?: (
-      reference: T,
-      floating: FloatingElement,
-      update: () => void,
-    ) => () => void;
+    whileElementsMounted?:
+      | ((
+          reference: T,
+          floating: FloatingElement,
+          update: () => void,
+        ) => () => void)
+      | undefined;
   };
 
 export type UseFloatingReturn = {
@@ -129,8 +131,8 @@ export type UseFloatingReturn = {
       position: Strategy;
       top: string;
       left: string;
-      transform?: string;
-      willChange?: string;
+      transform?: string | undefined;
+      willChange?: string | undefined;
     }>
   >;
   /**
@@ -149,5 +151,5 @@ export type ArrowOptions = {
    * The padding between the arrow element and the floating element edges. Useful when the floating element has rounded corners.
    * @default 0
    */
-  padding?: Padding;
+  padding?: Padding | undefined;
 };

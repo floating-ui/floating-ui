@@ -34,9 +34,9 @@ function isInside(point: Point, rect: Rect) {
 }
 
 export interface SafePolygonOptions {
-  buffer?: number;
-  blockPointerEvents?: boolean;
-  requireIntent?: boolean;
+  buffer?: number | undefined;
+  blockPointerEvents?: boolean | undefined;
+  requireIntent?: boolean | undefined;
 }
 
 /**

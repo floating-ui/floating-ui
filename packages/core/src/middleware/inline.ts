@@ -45,17 +45,17 @@ export interface InlineOptions {
    * Viewport-relative `x` coordinate to choose a `ClientRect`.
    * @default undefined
    */
-  x?: number;
+  x?: number | undefined;
   /**
    * Viewport-relative `y` coordinate to choose a `ClientRect`.
    * @default undefined
    */
-  y?: number;
+  y?: number | undefined;
   /**
    * Represents the padding around a disjoined rect when choosing it.
    * @default 2
    */
-  padding?: Padding;
+  padding?: Padding | undefined;
 }
 
 /**

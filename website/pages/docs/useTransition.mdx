@@ -95,11 +95,11 @@ duration of 250ms.
 
 ```ts
 interface UseTransitionStylesProps {
-  duration?: number | Partial<{open: number; close: number}>;
-  initial?: CSSStylesProperty;
-  open?: CSSStylesProperty;
-  close?: CSSStylesProperty;
-  common?: CSSStylesProperty;
+  duration?: number | Partial<{open: number; close: number}> | undefined;
+  initial?: CSSStylesProperty | undefined;
+  open?: CSSStylesProperty | undefined;
+  close?: CSSStylesProperty | undefined;
+  common?: CSSStylesProperty | undefined;
 }
 ```
 
@@ -402,7 +402,7 @@ return (
 
 ```ts
 interface UseTransitionStatusProps {
-  duration?: number | Partial<{open: number; close: number}>;
+  duration?: number | Partial<{open: number; close: number}> | undefined;
 }
 ```
 

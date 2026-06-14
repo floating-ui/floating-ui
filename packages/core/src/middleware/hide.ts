@@ -21,7 +21,7 @@ export interface HideOptions extends DetectOverflowOptions {
   /**
    * The strategy used to determine when to hide the floating element.
    */
-  strategy?: 'referenceHidden' | 'escaped';
+  strategy?: 'referenceHidden' | 'escaped' | undefined;
 }
 
 /**

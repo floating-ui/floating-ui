@@ -46,21 +46,23 @@ function App() {
 ```ts
 interface FloatingFocusManagerProps {
   context: FloatingContext;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
   initialFocus?:
     | number
-    | React.MutableRefObject<HTMLElement | null>;
+    | React.MutableRefObject<HTMLElement | null>
+    | undefined;
   returnFocus?:
     | boolean
-    | React.MutableRefObject<HTMLElement | null>;
-  restoreFocus?: boolean;
-  guards?: boolean;
-  modal?: boolean;
-  visuallyHiddenDismiss?: boolean | string;
-  closeOnFocusOut?: boolean;
-  outsideElementsInert?: boolean;
-  getInsideElements?: () => Element[];
-  order?: Array<'reference' | 'floating' | 'content'>;
+    | React.MutableRefObject<HTMLElement | null>
+    | undefined;
+  restoreFocus?: boolean | undefined;
+  guards?: boolean | undefined;
+  modal?: boolean | undefined;
+  visuallyHiddenDismiss?: boolean | string | undefined;
+  closeOnFocusOut?: boolean | undefined;
+  outsideElementsInert?: boolean | undefined;
+  getInsideElements?: (() => Element[]) | undefined;
+  order?: Array<'reference' | 'floating' | 'content'> | undefined;
 }
 ```
 
