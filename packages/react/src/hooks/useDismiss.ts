@@ -262,6 +262,12 @@ export function useDismiss(
       !isRootElement(target) &&
       // Clicked on a direct ancestor (e.g. FloatingOverlay).
       !contains(target, elements.floating) &&
+      // If the target root ancestor contains the floating element, the target
+      // shares the same root tree as the floating element (e.g. both are
+      // rendered inside the same FloatingPortal container). Such a target was
+      // not injected after the floating element rendered, so it should not be
+      // treated as a third-party element.
+      !contains(targetRootAncestor, elements.floating) &&
       // If the target root element contains none of the markers, then the
       // element was injected after the floating element rendered.
       Array.from(markers).every(
