@@ -119,7 +119,7 @@ export function getExpandedPlacements(placement: Placement): Array<Placement> {
     getOppositeAlignmentPlacement(placement),
     oppositePlacement,
     getOppositeAlignmentPlacement(oppositePlacement),
-  ];
+  ].filter((p, i, arr) => p !== placement && arr.indexOf(p) === i);
 }
 
 export function getOppositeAlignmentPlacement<T extends string>(
