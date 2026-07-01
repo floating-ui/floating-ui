@@ -1,14 +1,32 @@
 import {floor, max, min} from '@floating-ui/utils';
 import {
+  getComputedStyle,
   getDocumentElement,
   getOverflowAncestors,
   getWindow,
+  isHTMLElement,
+  isLastTraversableNode,
 } from '@floating-ui/utils/dom';
 
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {unwrapElement} from './utils/unwrapElement';
 import {rectsAreEqual} from './utils/rectsAreEqual';
+
+function getContainerTypeAncestors(element: Element): Element[] {
+  const result: Element[] = [];
+  let node: Node | null = element.parentNode;
+  while (node && !isLastTraversableNode(node)) {
+    if (isHTMLElement(node)) {
+      const {containerType} = getComputedStyle(node);
+      if (containerType === 'size' || containerType === 'inline-size') {
+        result.push(node);
+      }
+    }
+    node = node.parentNode;
+  }
+  return result;
+}
 
 export interface AutoUpdateOptions {
   /**
@@ -199,6 +217,9 @@ export function autoUpdate(
   let reobserveFrame = -1;
   let resizeObserver: ResizeObserver | null = null;
 
+  const containerAncestors =
+    elementResize && referenceEl ? getContainerTypeAncestors(referenceEl) : [];
+
   if (elementResize) {
     resizeObserver = new ResizeObserver(([firstEntry]) => {
       if (
@@ -225,6 +246,14 @@ export function autoUpdate(
     if (floating) {
       resizeObserver.observe(floating);
     }
+
+    // Ancestors with `container-type: size/inline-size` create a CSS
+    // containment context. When they resize, the reference element's position
+    // changes even if the reference itself doesn't resize, so we must observe
+    // them too. See https://github.com/floating-ui/floating-ui/issues/3206
+    containerAncestors.forEach((ancestor) => {
+      resizeObserver?.observe(ancestor);
+    });
   }
 
   let frameId: number;
