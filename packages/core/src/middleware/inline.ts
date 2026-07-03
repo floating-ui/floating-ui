@@ -79,6 +79,13 @@ export const inline = (
       (await platform.getClientRects?.(elements.reference)) || [],
     );
 
+    // No rects (e.g. a hidden or detached reference, or a collapsed range) —
+    // keep the existing reference rect rather than resetting to an invalid
+    // one with non-finite values.
+    if (!nativeClientRects.length) {
+      return {};
+    }
+
     const clientRects = getRectsByLine(nativeClientRects);
     const fallback = rectToClientRect(getBoundingRect(nativeClientRects));
     const paddingObject = getPaddingObject(padding);
@@ -87,7 +94,8 @@ export const inline = (
       // There are two rects and they are disjoined.
       if (
         clientRects.length === 2 &&
-        clientRects[0].left > clientRects[1].right &&
+        (clientRects[0].left > clientRects[1].right ||
+          clientRects[1].left > clientRects[0].right) &&
         x != null &&
         y != null
       ) {
