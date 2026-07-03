@@ -6,7 +6,7 @@ import type {
   Strategy,
 } from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
-import {createCoords, max, min} from '@floating-ui/utils';
+import {max, min} from '@floating-ui/utils';
 import {
   getComputedStyle,
   getDocumentElement,
@@ -14,7 +14,6 @@ import {
   getOverflowAncestors,
   getParentNode,
   isContainingBlock,
-  isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
   isTopLayer,
@@ -40,7 +39,7 @@ function getInnerBoundingClientRect(
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
+  const scale = getScale(element);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
   const x = left * scale.x;

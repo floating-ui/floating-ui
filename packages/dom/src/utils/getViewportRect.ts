@@ -23,9 +23,7 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
     width = visualViewport.width;
     height = visualViewport.height;
 
-    const visualViewportBased = isWebKit();
-
-    if (!visualViewportBased || (visualViewportBased && strategy === 'fixed')) {
+    if (!isWebKit() || strategy === 'fixed') {
       x = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
     }
