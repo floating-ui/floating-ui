@@ -51,6 +51,15 @@ export function FixedClipping() {
     }
   }, [scenario]);
 
+  // Shaded so screenshots show the overflow ancestor's box; the background
+  // does not affect geometry.
+  const overflowAncestorStyle = {
+    overflow: 'hidden',
+    width: 100,
+    height: 100,
+    background: 'rgba(255, 99, 71, 0.4)',
+  } as const;
+
   // `top`/`left` resolve against the element's containing block, so they
   // are chosen per scenario to make the element visibly overflow its
   // clipper (or visibly escape it) in screenshots.
@@ -71,19 +80,14 @@ export function FixedClipping() {
   let scenarioJsx = (
     // Fixed element with no containing block ancestor escapes the overflow
     // ancestor's clipping.
-    <div style={{overflow: 'hidden', width: 100, height: 100}}>
-      {element(60, 400)}
-    </div>
+    <div style={overflowAncestorStyle}>{element(60, 400)}</div>
   );
 
   if (scenario === 'static-cb-overflow') {
     // The static containing block's clip chain passes through the overflow
     // ancestor, which clips the fixed element.
     scenarioJsx = (
-      <div
-        data-testid="clipper"
-        style={{overflow: 'hidden', width: 100, height: 100}}
-      >
+      <div data-testid="clipper" style={overflowAncestorStyle}>
         <div style={{transform: 'translateZ(0)'}}>{element(80, 80)}</div>
       </div>
     );
@@ -92,7 +96,7 @@ export function FixedClipping() {
     // between it and its positioned ancestor, and so does the fixed element.
     scenarioJsx = (
       <div style={{position: 'relative'}}>
-        <div style={{overflow: 'hidden', width: 100, height: 100}}>
+        <div style={overflowAncestorStyle}>
           <div
             style={{
               position: 'absolute',
@@ -110,7 +114,7 @@ export function FixedClipping() {
     // A fixed containing block (e.g. a transformed drawer or modal) escapes
     // the overflow ancestor above it, and so does the fixed element (#2934).
     scenarioJsx = (
-      <div style={{overflow: 'hidden', width: 100, height: 100}}>
+      <div style={overflowAncestorStyle}>
         <div
           style={{
             position: 'fixed',
@@ -130,12 +134,10 @@ export function FixedClipping() {
       <div
         data-testid="clipper"
         style={{
+          ...overflowAncestorStyle,
           position: 'fixed',
           top: 50,
           left: 400,
-          width: 100,
-          height: 100,
-          overflow: 'hidden',
         }}
       >
         <div style={{transform: 'translateZ(0)'}}>{element(80, 80)}</div>
@@ -147,12 +149,10 @@ export function FixedClipping() {
     scenarioJsx = (
       <div
         style={{
+          ...overflowAncestorStyle,
           position: 'fixed',
           top: 50,
           left: 400,
-          width: 100,
-          height: 100,
-          overflow: 'hidden',
         }}
       >
         {element(60, 550)}
