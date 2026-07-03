@@ -16,8 +16,9 @@ const SCENARIOS = [
 type Scenario = (typeof SCENARIOS)[number];
 
 // Computes the clipping rect of the element alongside the plain viewport
-// rect (no clipping ancestors) so tests can compare the two.
-function getRects(element: Element) {
+// rect (no clipping ancestors) so tests can compare the two. The DOM
+// platform is synchronous, so the `Promisable` return type is cast away.
+function getRects(element: Element): {clipping: Rect; viewport: Rect} {
   const platformWithCache = {...platform, _c: new Map()};
   const args = {
     element,
@@ -28,11 +29,11 @@ function getRects(element: Element) {
     clipping: platform.getClippingRect.call(platformWithCache, {
       ...args,
       boundary: 'clippingAncestors',
-    }),
+    }) as Rect,
     viewport: platform.getClippingRect.call(platformWithCache, {
       ...args,
       boundary: [],
-    }),
+    }) as Rect,
   };
 }
 
