@@ -79,15 +79,16 @@ export const size = (
       maximumClippingWidth,
     );
 
-    const noShift = !state.middlewareData.shift;
+    const shiftData = state.middlewareData.shift;
+    const noShift = !shiftData;
 
     let availableHeight = overflowAvailableHeight;
     let availableWidth = overflowAvailableWidth;
 
-    if (state.middlewareData.shift?.enabled.x) {
+    if (shiftData?.enabled.x) {
       availableWidth = maximumClippingWidth;
     }
-    if (state.middlewareData.shift?.enabled.y) {
+    if (shiftData?.enabled.y) {
       availableHeight = maximumClippingHeight;
     }
 

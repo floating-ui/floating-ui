@@ -94,23 +94,12 @@ export const autoPlacement = (
         ? getPlacementList(alignment || null, autoAlignment, allowedPlacements)
         : allowedPlacements;
 
-    const overflow = await platform.detectOverflow(
-      state,
-      detectOverflowOptions,
-    );
-
     const currentIndex = middlewareData.autoPlacement?.index || 0;
     const currentPlacement = placements[currentIndex];
 
     if (currentPlacement == null) {
       return {};
     }
-
-    const alignmentSides = getAlignmentSides(
-      currentPlacement,
-      rects,
-      await platform.isRTL?.(elements.floating),
-    );
 
     // Make `computeCoords` start from the right place.
     if (placement !== currentPlacement) {
@@ -120,6 +109,17 @@ export const autoPlacement = (
         },
       };
     }
+
+    const overflow = await platform.detectOverflow(
+      state,
+      detectOverflowOptions,
+    );
+
+    const alignmentSides = getAlignmentSides(
+      currentPlacement,
+      rects,
+      await platform.isRTL?.(elements.floating),
+    );
 
     const currentOverflows = [
       overflow[getSide(currentPlacement)],
