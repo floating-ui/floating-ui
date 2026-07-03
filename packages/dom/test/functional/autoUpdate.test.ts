@@ -35,6 +35,22 @@ import {click} from './utils/click';
   });
 });
 
+test(`layoutShift: does not wait for the 1s throttle when the reference moves during a refresh`, async ({
+  page,
+}) => {
+  await page.goto('http://localhost:1234/autoUpdate');
+  await click(page, `[data-testid="layoutShift-init"]`);
+  await click(page, `[data-testid="layoutShift-moveTwice"]`);
+
+  // Well under the 1s ratio-0 refresh throttle: the floating element must
+  // already be anchored to the reference's final position.
+  await page.waitForTimeout(600);
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `layoutShift-moveTwice.png`,
+  );
+});
+
 test(`reactive whileElementsMounted`, async ({page}) => {
   await page.goto('http://localhost:1234/autoUpdate');
 
