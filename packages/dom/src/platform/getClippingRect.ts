@@ -120,21 +120,24 @@ function getClippingElementAncestors(
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const computedStyle = getComputedStyle(currentNode);
     const currentNodeIsContaining = isContainingBlock(currentNode);
+    // Position of the containing block chain below the current node. A fixed
+    // element whose containing block hasn't been found yet is a fixed chain.
+    const lastPosition = currentContainingBlockComputedStyle
+      ? currentContainingBlockComputedStyle.position
+      : elementIsFixed
+        ? 'fixed'
+        : '';
 
-    if (!currentNodeIsContaining && computedStyle.position === 'fixed') {
-      currentContainingBlockComputedStyle = null;
-    }
-
-    const shouldDropCurrentNode = elementIsFixed
-      ? !currentNodeIsContaining && !currentContainingBlockComputedStyle
-      : (!currentNodeIsContaining &&
-          computedStyle.position === 'static' &&
-          !!currentContainingBlockComputedStyle &&
-          (currentContainingBlockComputedStyle.position === 'absolute' ||
-            currentContainingBlockComputedStyle.position === 'fixed')) ||
-        (isOverflowElement(currentNode) &&
-          !currentNodeIsContaining &&
-          hasFixedPositionAncestor(element, currentNode));
+    // A non-containing ancestor does not clip the element when the chain
+    // below it escapes it: a fixed chain escapes all ancestors up to the
+    // next containing block, an absolute chain escapes static ancestors.
+    const shouldDropCurrentNode =
+      !currentNodeIsContaining &&
+      (lastPosition === 'fixed' ||
+        (lastPosition === 'absolute' && computedStyle.position === 'static') ||
+        (!elementIsFixed &&
+          isOverflowElement(currentNode) &&
+          hasFixedPositionAncestor(element, currentNode)));
 
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
