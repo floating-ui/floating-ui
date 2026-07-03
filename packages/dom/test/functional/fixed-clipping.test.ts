@@ -31,6 +31,10 @@ import {click} from './utils/click';
         .textContent()) ?? '{}',
     );
 
+    // The computed clipping rect is drawn as a dashed outline; the fixed
+    // element must never render outside it.
+    expect(await page.screenshot()).toMatchSnapshot(`${scenario}.png`);
+
     if (expected === 'viewport') {
       expect(clipping).toEqual(viewport);
     } else {

@@ -1,3 +1,4 @@
+import type {Rect} from '@floating-ui/core';
 import {platform} from '@floating-ui/dom';
 import {useLayoutEffect, useRef, useState} from 'react';
 
@@ -39,23 +40,26 @@ export function FixedClipping() {
   const [scenario, setScenario] = useState<Scenario>('no-cb');
   const [result, setResult] = useState<{
     scenario: Scenario;
-    json: string;
+    rects: {clipping: Rect; viewport: Rect};
   } | null>(null);
   const elementRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     if (elementRef.current) {
-      setResult({scenario, json: JSON.stringify(getRects(elementRef.current))});
+      setResult({scenario, rects: getRects(elementRef.current)});
     }
   }, [scenario]);
 
-  const element = (
+  // `top`/`left` resolve against the element's containing block, so they
+  // are chosen per scenario to make the element visibly overflow its
+  // clipper (or visibly escape it) in screenshots.
+  const element = (top: number, left: number) => (
     <div
       ref={elementRef}
       style={{
         position: 'fixed',
-        top: 10,
-        left: 10,
+        top,
+        left,
         width: 40,
         height: 40,
         background: 'royalblue',
@@ -66,7 +70,9 @@ export function FixedClipping() {
   let scenarioJsx = (
     // Fixed element with no containing block ancestor escapes the overflow
     // ancestor's clipping.
-    <div style={{overflow: 'hidden', width: 100, height: 100}}>{element}</div>
+    <div style={{overflow: 'hidden', width: 100, height: 100}}>
+      {element(60, 400)}
+    </div>
   );
 
   if (scenario === 'static-cb-overflow') {
@@ -77,7 +83,7 @@ export function FixedClipping() {
         data-testid="clipper"
         style={{overflow: 'hidden', width: 100, height: 100}}
       >
-        <div style={{transform: 'translateZ(0)'}}>{element}</div>
+        <div style={{transform: 'translateZ(0)'}}>{element(80, 80)}</div>
       </div>
     );
   } else if (scenario === 'absolute-cb') {
@@ -94,7 +100,7 @@ export function FixedClipping() {
               transform: 'translateZ(0)',
             }}
           >
-            {element}
+            {element(80, 80)}
           </div>
         </div>
       </div>
@@ -108,11 +114,11 @@ export function FixedClipping() {
           style={{
             position: 'fixed',
             top: 50,
-            left: 50,
+            left: 400,
             transform: 'translateZ(0)',
           }}
         >
-          {element}
+          {element(80, 80)}
         </div>
       </div>
     );
@@ -125,13 +131,13 @@ export function FixedClipping() {
         style={{
           position: 'fixed',
           top: 50,
-          left: 50,
+          left: 400,
           width: 100,
           height: 100,
           overflow: 'hidden',
         }}
       >
-        <div style={{transform: 'translateZ(0)'}}>{element}</div>
+        <div style={{transform: 'translateZ(0)'}}>{element(80, 80)}</div>
       </div>
     );
   } else if (scenario === 'fixed-overflow-no-cb') {
@@ -142,13 +148,13 @@ export function FixedClipping() {
         style={{
           position: 'fixed',
           top: 50,
-          left: 50,
+          left: 400,
           width: 100,
           height: 100,
           overflow: 'hidden',
         }}
       >
-        {element}
+        {element(60, 550)}
       </div>
     );
   }
@@ -161,8 +167,24 @@ export function FixedClipping() {
         chain.
       </p>
       {scenarioJsx}
+      {result && (
+        // Visualizes the computed clipping rect: the blue element should
+        // never render outside the dashed outline.
+        <div
+          style={{
+            position: 'fixed',
+            left: result.rects.clipping.x,
+            top: result.rects.clipping.y,
+            width: result.rects.clipping.width,
+            height: result.rects.clipping.height,
+            outline: '2px dashed red',
+            outlineOffset: -2,
+            pointerEvents: 'none',
+          }}
+        />
+      )}
       <pre data-testid="rects" data-scenario={result?.scenario}>
-        {result?.json}
+        {result ? JSON.stringify(result.rects) : ''}
       </pre>
 
       <h2>Scenario</h2>
