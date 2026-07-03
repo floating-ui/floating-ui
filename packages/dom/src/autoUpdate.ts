@@ -170,8 +170,7 @@ export function autoUpdate(
       : [];
 
   ancestors.forEach((ancestor) => {
-    ancestorScroll &&
-      ancestor.addEventListener('scroll', update, {passive: true});
+    ancestorScroll && ancestor.addEventListener('scroll', update);
     ancestorResize && ancestor.addEventListener('resize', update);
   });
 

@@ -437,7 +437,7 @@ export function useDismiss(
     );
 
     ancestors.forEach((ancestor) => {
-      ancestor.addEventListener('scroll', onScroll, {passive: true});
+      ancestor.addEventListener('scroll', onScroll);
     });
 
     return () => {
