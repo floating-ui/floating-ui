@@ -147,14 +147,16 @@ A roving tabIndex is the recommended strategy:
 interface UseListNavigationProps {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   activeIndex: number | null;
-  onNavigate?: ((index: number | null) => void) | undefined | undefined;
+  onNavigate?: ((index: number | null) => void) | undefined;
   enabled?: boolean | undefined;
   selectedIndex?: number | null | undefined;
   loop?: boolean | undefined;
   nested?: boolean | undefined;
   rtl?: boolean | undefined;
   virtual?: boolean | undefined;
-  virtualItemRef?: React.MutableRefObject<HTMLElement | null> | undefined;
+  virtualItemRef?:
+    | React.MutableRefObject<HTMLElement | null>
+    | undefined;
   allowEscape?: boolean | undefined;
   orientation?: 'vertical' | 'horizontal' | 'both' | undefined;
   cols?: number | undefined;
@@ -162,7 +164,10 @@ interface UseListNavigationProps {
   focusItemOnHover?: boolean | undefined;
   openOnArrowKeyDown?: boolean | undefined;
   disabledIndices?: Array<number> | undefined;
-  scrollItemIntoView?: boolean | ScrollIntoViewOptions | undefined;
+  scrollItemIntoView?:
+    | boolean
+    | ScrollIntoViewOptions
+    | undefined;
   itemSizes?: Dimensions[] | undefined;
   dense?: boolean | undefined;
 }

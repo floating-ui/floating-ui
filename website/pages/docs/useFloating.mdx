@@ -56,15 +56,23 @@ interface UseFloatingOptions {
   placement?: Placement | undefined;
   strategy?: 'fixed' | 'absolute' | undefined;
   transform?: boolean | undefined;
-  middleware?: Array<Middleware | undefined | null | false> | undefined;
-  open?: boolean;
-  onOpenChange?:
-    | ((open: boolean, event?: Event, reason?: OpenChangeReason) => void)
+  middleware?:
+    | Array<Middleware | undefined | null | false>
     | undefined;
-  elements?: {
-    reference?: ReferenceElement | null | undefined;
-    floating?: FloatingElement | null | undefined;
-  } | undefined;
+  open?: boolean | undefined;
+  onOpenChange?:
+    | ((
+        open: boolean,
+        event?: Event,
+        reason?: OpenChangeReason,
+      ) => void)
+    | undefined;
+  elements?:
+    | {
+        reference?: ReferenceElement | null | undefined;
+        floating?: FloatingElement | null | undefined;
+      }
+    | undefined;
   whileElementsMounted?:
     | ((
         reference: ReferenceElement,
@@ -85,12 +93,16 @@ interface UseFloatingOptions {
   placement?: Placement | undefined;
   strategy?: 'fixed' | 'absolute' | undefined;
   transform?: boolean | undefined;
-  middleware?: Array<Middleware | undefined | null | false> | undefined;
+  middleware?:
+    | Array<Middleware | undefined | null | false>
+    | undefined;
   open?: boolean | undefined;
-  elements?: {
-    reference?: ReferenceElement | null | undefined;
-    floating?: FloatingElement | null | undefined;
-  } | undefined;
+  elements?:
+    | {
+        reference?: ReferenceElement | null | undefined;
+        floating?: FloatingElement | null | undefined;
+      }
+    | undefined;
   whileElementsMounted?:
     | ((
         reference: ReferenceElement,

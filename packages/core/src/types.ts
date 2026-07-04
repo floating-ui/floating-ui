@@ -86,9 +86,9 @@ export interface MiddlewareData {
   hide?:
     | {
         referenceHidden?: boolean | undefined;
-        escaped?: boolean;
-        referenceHiddenOffsets?: SideObject;
-        escapedOffsets?: SideObject;
+        escaped?: boolean | undefined;
+        referenceHiddenOffsets?: SideObject | undefined;
+        escapedOffsets?: SideObject | undefined;
       }
     | undefined;
   offset?: (Coords & {placement: Placement}) | undefined;
