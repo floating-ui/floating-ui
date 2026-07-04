@@ -1,5 +1,9 @@
 import {floor, max, min} from '@floating-ui/utils';
-import {getDocumentElement, getOverflowAncestors} from '@floating-ui/utils/dom';
+import {
+  getDocumentElement,
+  getOverflowAncestors,
+  getWindow,
+} from '@floating-ui/utils/dom';
 
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
@@ -129,9 +133,17 @@ function observeMove(element: Element, onMove: () => void) {
     io.observe(element);
   }
 
+  const win = getWindow(element);
+  const handleResize = () => refresh();
+
+  win.addEventListener('resize', handleResize);
+
   refresh(true);
 
-  return cleanup;
+  return () => {
+    win.removeEventListener('resize', handleResize);
+    cleanup();
+  };
 }
 
 /**
