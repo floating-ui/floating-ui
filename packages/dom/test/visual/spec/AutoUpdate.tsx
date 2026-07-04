@@ -164,6 +164,23 @@ export function AutoUpdate() {
             {str}
           </button>
         ))}
+        <button
+          onClick={() => {
+            // Move the reference twice on consecutive frames, with the
+            // second move landing after the IntersectionObserver measured
+            // the intermediate position but before its first callback.
+            const el = refs.reference.current as HTMLElement;
+            el.style.left = '40px';
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                el.style.left = '280px';
+              });
+            });
+          }}
+          data-testid="layoutShift-moveTwice"
+        >
+          moveTwice
+        </button>
       </Controls>
 
       <h2>animationFrame</h2>
