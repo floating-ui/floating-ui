@@ -410,10 +410,10 @@ describe('focusItemOnOpen', () => {
 
   describe.skipIf(isJSDOM())('browser tests', () => {
     test('does not override "auto" setting when using Enter/Space', async () => {
-      const {userEvent} = await import('@vitest/browser/context');
+      const {userEvent} = await import('vitest/browser');
       const {render: vbrRender, cleanup} = await import('vitest-browser-react');
 
-      vbrRender(<Menubar />);
+      await vbrRender(<Menubar />);
 
       // focusing the trigger will open the menu
       screen.getByRole('button', {name: 'File'}).focus();
@@ -453,7 +453,14 @@ describe('selectedIndex', () => {
     HTMLElement.prototype.scrollIntoView = scrollIntoView;
 
     onTestFinished(() => {
-      requestAnimationFrame.mockRestore();
+      // `vi.spyOn` returns the spy created in `setupTests.ts`, so restore the
+      // sync implementation from there instead of the native async one.
+      requestAnimationFrame.mockImplementation(
+        (callback: FrameRequestCallback): number => {
+          callback(0);
+          return 0;
+        },
+      );
       HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
     });
 

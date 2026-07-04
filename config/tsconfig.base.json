@@ -5,6 +5,7 @@
     "module": "ES2020",
     "moduleResolution": "Bundler",
     "strict": true,
+    "types": ["node", "vitest/globals"],
     "esModuleInterop": true,
     "noEmitOnError": true,
     "declaration": true,
