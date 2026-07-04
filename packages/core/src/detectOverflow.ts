@@ -83,9 +83,8 @@ export async function detectOverflow(
       : rects.reference;
 
   const offsetParent = await platform.getOffsetParent?.(elements.floating);
-  const offsetScale = (await platform.isElement?.(offsetParent))
-    ? (await platform.getScale?.(offsetParent)) || {x: 1, y: 1}
-    : {x: 1, y: 1};
+  const offsetScale = ((await platform.isElement?.(offsetParent)) &&
+    (await platform.getScale?.(offsetParent))) || {x: 1, y: 1};
 
   const elementClientRect = rectToClientRect(
     platform.convertOffsetParentRelativeRectToViewportRelativeRect

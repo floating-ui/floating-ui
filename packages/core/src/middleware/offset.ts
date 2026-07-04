@@ -42,7 +42,7 @@ type OffsetValue =
 // Derivable.
 export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
-export async function convertValueToCoords(
+async function convertValueToCoords(
   state: MiddlewareState,
   options: OffsetOptions,
 ): Promise<Coords> {

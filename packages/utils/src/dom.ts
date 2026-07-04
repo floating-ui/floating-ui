@@ -190,9 +190,7 @@ export function getNearestOverflowAncestor(node: Node): HTMLElement {
   const parentNode = getParentNode(node);
 
   if (isLastTraversableNode(parentNode)) {
-    return node.ownerDocument
-      ? node.ownerDocument.body
-      : (node as Document).body;
+    return (node.ownerDocument || (node as Document)).body;
   }
 
   if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
