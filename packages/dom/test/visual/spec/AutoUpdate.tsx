@@ -221,3 +221,57 @@ export function AutoUpdate() {
     </>
   );
 }
+
+export function AutoUpdateRootResize() {
+  const [moved, setMoved] = useState(false);
+
+  const {x, y, strategy, refs, update} = useFloating({
+    strategy: 'fixed',
+  });
+
+  useLayoutEffect(() => {
+    if (!refs.reference.current || !refs.floating.current) {
+      return;
+    }
+
+    return autoUpdate(refs.reference.current, refs.floating.current, update, {
+      ancestorResize: false,
+      elementResize: false,
+      layoutShift: true,
+    });
+  }, [refs.floating, refs.reference, update]);
+
+  return (
+    <>
+      <h1>AutoUpdate Root Resize</h1>
+      <button
+        ref={refs.setReference}
+        data-testid="rootResize-reference"
+        onClick={() => setMoved(true)}
+        style={{
+          position: 'fixed',
+          top: 32,
+          left: moved ? 650 : 'calc(100vw - 220px)',
+          width: 75,
+          height: 22,
+        }}
+      >
+        Toggle
+      </button>
+      <div
+        ref={refs.setFloating}
+        className="floating"
+        data-testid="rootResize-floating"
+        style={{
+          position: strategy,
+          top: y ?? '',
+          left: x ?? '',
+          width: 75,
+          height: 22,
+        }}
+      >
+        Floating
+      </div>
+    </>
+  );
+}
