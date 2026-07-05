@@ -5,6 +5,8 @@
 "@floating-ui/react-dom": minor
 "@floating-ui/react-native": minor
 "@floating-ui/react": minor
+"@floating-ui/utils": minor
+"@floating-ui/vue": minor
 ---
 
-feat: add additional `undefined` value for every optional properties
+feat: add an explicit `undefined` to every optional property (`exactOptionalPropertyTypes` support)
