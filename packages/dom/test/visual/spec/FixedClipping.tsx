@@ -12,6 +12,8 @@ const SCENARIOS = [
   'static-cb-fixed-overflow',
   'fixed-overflow-no-cb',
   'absolute-in-fixed-static-cb',
+  'fixed-cb-nested-cb',
+  'absolute-cb-relative-overflow',
 ] as const;
 
 type Scenario = (typeof SCENARIOS)[number];
@@ -158,6 +160,49 @@ export function FixedClipping() {
           <div style={{position: 'fixed', top: 0, left: 0}}>
             {element(80, 80, 'absolute')}
           </div>
+        </div>
+      </div>
+    );
+  } else if (scenario === 'fixed-cb-nested-cb') {
+    // A fixed containing block escapes ancestors only up to the next
+    // containing block (the inner overflow ancestor is escaped), and that
+    // containing block clips when it is itself an overflow element.
+    scenarioJsx = (
+      <div
+        data-testid="clipper"
+        style={{...overflowAncestorStyle, transform: 'translateZ(0)'}}
+      >
+        <div style={{...overflowAncestorStyle, width: 50, height: 50}}>
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              transform: 'translateZ(0)',
+            }}
+          >
+            {element(80, 80)}
+          </div>
+        </div>
+      </div>
+    );
+  } else if (scenario === 'absolute-cb-relative-overflow') {
+    // An absolute containing block escapes only static ancestors: its
+    // positioned (relative) overflow ancestor clips.
+    scenarioJsx = (
+      <div
+        data-testid="clipper"
+        style={{...overflowAncestorStyle, position: 'relative'}}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            transform: 'translateZ(0)',
+          }}
+        >
+          {element(80, 80)}
         </div>
       </div>
     );

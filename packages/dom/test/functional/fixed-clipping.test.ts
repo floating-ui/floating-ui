@@ -24,6 +24,12 @@ import {click} from './utils/click';
   // the fixed ancestor's containing block; the overflow ancestor above that
   // containing block clips.
   {scenario: 'absolute-in-fixed-static-cb', expected: 'clipper'},
+  // A fixed containing block escapes ancestors only up to the next
+  // containing block, which clips when it is itself an overflow element.
+  {scenario: 'fixed-cb-nested-cb', expected: 'clipper'},
+  // An absolute containing block escapes only static ancestors: its
+  // positioned (relative) overflow ancestor clips.
+  {scenario: 'absolute-cb-relative-overflow', expected: 'clipper'},
 ].forEach(({scenario, expected}) => {
   test(`${scenario} clipping rect is the ${expected}`, async ({page}) => {
     await page.goto('http://localhost:1234/fixed-clipping');
