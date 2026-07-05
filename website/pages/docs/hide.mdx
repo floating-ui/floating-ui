@@ -172,7 +172,7 @@ These are the options you can pass to `hide(){:js}`.
 
 ```ts
 interface HideOptions extends DetectOverflowOptions {
-  strategy?: 'referenceHidden' | 'escaped' | undefined;
+  strategy?: 'referenceHidden' | 'escaped';
 }
 ```
 
@@ -217,10 +217,10 @@ hide((state) => ({
 
 ```ts
 interface Data {
-  referenceHidden?: boolean | undefined;
-  referenceHiddenOffsets?: SideObject | undefined;
-  escaped?: boolean | undefined;
-  escapedOffsets?: SideObject | undefined;
+  referenceHidden?: boolean;
+  referenceHiddenOffsets?: SideObject;
+  escaped?: boolean;
+  escapedOffsets?: SideObject;
 }
 ```
 

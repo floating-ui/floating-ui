@@ -63,7 +63,7 @@ function App() {
 
 ```ts
 interface UseRoleProps {
-  enabled?: boolean | undefined;
+  enabled?: boolean;
   role?:
     // Native ARIA roles
     | 'dialog'
@@ -74,10 +74,9 @@ interface UseRoleProps {
     | 'tree'
     // Custom component roles
     | 'alertdialog'
-    | 'label'
+    | 'label';
     | 'select'
     | 'combobox'
-    | undefined;
 }
 ```
 

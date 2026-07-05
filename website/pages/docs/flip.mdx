@@ -121,12 +121,12 @@ These are the options you can pass to `flip(){:js}`.
 
 ```ts
 interface FlipOptions extends DetectOverflowOptions {
-  mainAxis?: boolean | undefined;
-  crossAxis?: boolean | 'alignment' | undefined;
-  fallbackAxisSideDirection?: 'none' | 'start' | 'end' | undefined;
-  flipAlignment?: boolean | undefined;
-  fallbackPlacements?: Array<Placement> | undefined;
-  fallbackStrategy?: 'bestFit' | 'initialPlacement' | undefined;
+  mainAxis?: boolean;
+  crossAxis?: boolean | 'alignment';
+  fallbackAxisSideDirection?: 'none' | 'start' | 'end';
+  flipAlignment?: boolean;
+  fallbackPlacements?: Array<Placement>;
+  fallbackStrategy?: 'bestFit' | 'initialPlacement';
 }
 ```
 

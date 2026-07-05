@@ -110,14 +110,12 @@ These are the options you can pass to `shift(){:js}`.
 
 ```ts
 interface ShiftOptions extends DetectOverflowOptions {
-  mainAxis?: boolean | undefined;
-  crossAxis?: boolean | undefined;
-  limiter?:
-    | {
-        fn: (state: MiddlewareState) => Coords;
-        options?: any;
-      }
-    | undefined;
+  mainAxis?: boolean;
+  crossAxis?: boolean;
+  limiter?: {
+    fn: (state: MiddlewareState) => Coords;
+    options?: any;
+  };
 }
 ```
 

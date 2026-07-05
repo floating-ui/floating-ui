@@ -70,21 +70,19 @@ function App() {
 
 ```ts
 interface UseDismissProps {
-  enabled?: boolean | undefined;
-  escapeKey?: boolean | undefined;
-  referencePress?: boolean | undefined;
-  referencePressEvent?: 'pointerdown' | 'mousedown' | 'click' | undefined;
-  outsidePress?: boolean | ((event: MouseEvent) => boolean) | undefined;
-  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click' | undefined;
-  ancestorScroll?: boolean | undefined;
+  enabled?: boolean;
+  escapeKey?: boolean;
+  referencePress?: boolean;
+  referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
+  outsidePress?: boolean | ((event: MouseEvent) => boolean);
+  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
+  ancestorScroll?: boolean;
   bubbles?:
     | boolean
-    | {escapeKey?: boolean | undefined; outsidePress?: boolean | undefined}
-    | undefined;
+    | {escapeKey?: boolean; outsidePress?: boolean};
   capture?:
     | boolean
-    | {escapeKey?: boolean | undefined; outsidePress?: boolean | undefined}
-    | undefined;
+    | {escapeKey?: boolean; outsidePress?: boolean};
 }
 ```
 

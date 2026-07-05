@@ -358,11 +358,11 @@ returned object from `fn{:.function}`.
 type Reset =
   | true
   | {
-      placement?: Placement | undefined;
+      placement?: Placement;
       // `true` will compute the new `rects` if the
       // dimensions were mutated. Otherwise, you can
       // return your own new rects.
-      rects?: true | ElementRects | undefined;
+      rects?: true | ElementRects;
     };
 ```
 

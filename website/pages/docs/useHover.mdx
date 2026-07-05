@@ -86,12 +86,12 @@ ensure you always spread the props onto the reference element.
 
 ```ts
 interface UseHoverProps {
-  enabled?: boolean | undefined;
-  mouseOnly?: boolean | undefined;
-  delay?: number | Partial<{open: number; close: number}> | undefined;
-  restMs?: number | undefined;
-  move?: boolean | undefined;
-  handleClose?: null | HandleCloseFn | undefined;
+  enabled?: boolean;
+  mouseOnly?: boolean;
+  delay?: number | Partial<{open: number; close: number}>;
+  restMs?: number;
+  move?: boolean;
+  handleClose?: null | HandleCloseFn;
 }
 ```
 

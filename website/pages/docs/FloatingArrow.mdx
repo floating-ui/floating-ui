@@ -82,17 +82,17 @@ some additional props:
 ```ts
 interface Props extends React.SVGAttributes<SVGSVGElement> {
   context: FloatingContext;
-  width?: number | undefined;
-  height?: number | undefined;
-  tipRadius?: number | undefined;
-  staticOffset?: number | string | null | undefined;
+  width?: number;
+  height?: number;
+  tipRadius?: number;
+  staticOffset?: number | string | null;
 
   // Inherited SVG props that are intercepted and passed
   // to the <path>s
-  d?: string | undefined;
-  fill?: string | undefined;
-  stroke?: string | undefined;
-  strokeWidth?: number | undefined;
+  d?: string;
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
 }
 ```
 
