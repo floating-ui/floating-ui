@@ -123,7 +123,7 @@ function getClippingElementAncestors(
       // Drop non-containing blocks.
       result = result.filter((ancestor) => ancestor !== currentNode);
     } else {
-      // Record last containing block for next iteration.
+      // The kept node carries the chain position for the next iteration.
       currentContainingBlockComputedStyle = computedStyle;
     }
 
