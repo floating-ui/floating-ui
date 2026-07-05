@@ -20,6 +20,10 @@ import {click} from './utils/click';
   // A fixed overflow ancestor that is not the containing block of the fixed
   // element does not clip it (#2291).
   {scenario: 'fixed-overflow-no-cb', expected: 'viewport'},
+  // An absolute element inside a fixed ancestor escapes with it only up to
+  // the fixed ancestor's containing block; the overflow ancestor above that
+  // containing block clips.
+  {scenario: 'absolute-in-fixed-static-cb', expected: 'clipper'},
 ].forEach(({scenario, expected}) => {
   test(`${scenario} clipping rect is the ${expected}`, async ({page}) => {
     await page.goto('http://localhost:1234/fixed-clipping');

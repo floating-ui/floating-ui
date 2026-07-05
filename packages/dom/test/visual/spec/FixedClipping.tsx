@@ -11,6 +11,7 @@ const SCENARIOS = [
   'fixed-cb',
   'static-cb-fixed-overflow',
   'fixed-overflow-no-cb',
+  'absolute-in-fixed-static-cb',
 ] as const;
 
 type Scenario = (typeof SCENARIOS)[number];
@@ -63,11 +64,15 @@ export function FixedClipping() {
   // `top`/`left` resolve against the element's containing block, so they
   // are chosen per scenario to make the element visibly overflow its
   // clipper (or visibly escape it) in screenshots.
-  const element = (top: number, left: number) => (
+  const element = (
+    top: number,
+    left: number,
+    position: 'fixed' | 'absolute' = 'fixed',
+  ) => (
     <div
       ref={elementRef}
       style={{
-        position: 'fixed',
+        position,
         top,
         left,
         width: 40,
@@ -141,6 +146,19 @@ export function FixedClipping() {
         }}
       >
         <div style={{transform: 'translateZ(0)'}}>{element(80, 80)}</div>
+      </div>
+    );
+  } else if (scenario === 'absolute-in-fixed-static-cb') {
+    // An absolute element inside a fixed ancestor escapes with it only up to
+    // the fixed ancestor's containing block; the overflow ancestor above
+    // that containing block clips.
+    scenarioJsx = (
+      <div data-testid="clipper" style={overflowAncestorStyle}>
+        <div style={{transform: 'translateZ(0)'}}>
+          <div style={{position: 'fixed', top: 0, left: 0}}>
+            {element(80, 80, 'absolute')}
+          </div>
+        </div>
       </div>
     );
   } else if (scenario === 'fixed-overflow-no-cb') {

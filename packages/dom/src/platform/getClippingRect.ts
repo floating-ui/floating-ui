@@ -15,7 +15,6 @@ import {
   getParentNode,
   isContainingBlock,
   isLastTraversableNode,
-  isOverflowElement,
   isTopLayer,
 } from '@floating-ui/utils/dom';
 
@@ -79,22 +78,6 @@ function getClientRectFromClippingAncestor(
   return rectToClientRect(rect);
 }
 
-function hasFixedPositionAncestor(element: Element, stopNode: Node): boolean {
-  const parentNode = getParentNode(element);
-  if (
-    parentNode === stopNode ||
-    !isElement(parentNode) ||
-    isLastTraversableNode(parentNode)
-  ) {
-    return false;
-  }
-
-  return (
-    getComputedStyle(parentNode).position === 'fixed' ||
-    hasFixedPositionAncestor(parentNode, stopNode)
-  );
-}
-
 // A "clipping ancestor" is an `overflow` element with the characteristic of
 // clipping (or hiding) child elements. This returns all clipping ancestors
 // of the given element up the tree.
@@ -134,10 +117,7 @@ function getClippingElementAncestors(
     const shouldDropCurrentNode =
       !currentNodeIsContaining &&
       (lastPosition === 'fixed' ||
-        (lastPosition === 'absolute' && computedStyle.position === 'static') ||
-        (!elementIsFixed &&
-          isOverflowElement(currentNode) &&
-          hasFixedPositionAncestor(element, currentNode)));
+        (lastPosition === 'absolute' && computedStyle.position === 'static'));
 
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
