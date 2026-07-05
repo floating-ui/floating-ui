@@ -93,7 +93,7 @@ function getClippingElementAncestors(
   let result = getOverflowAncestors(element, [], false).filter(
     (el) => isElement(el) && getNodeName(el) !== 'body',
   ) as Array<Element>;
-  let currentContainingBlockComputedStyle: CSSStyleDeclaration | null = null;
+  let lastKeptComputedStyle: CSSStyleDeclaration | null = null;
   const elementIsFixed = getComputedStyle(element).position === 'fixed';
   let currentNode: Node | null = elementIsFixed
     ? getParentNode(element)
@@ -105,8 +105,8 @@ function getClippingElementAncestors(
     const currentNodeIsContaining = isContainingBlock(currentNode);
     // Position of the containing block chain below the current node. A fixed
     // element whose containing block hasn't been found yet is a fixed chain.
-    const lastPosition = currentContainingBlockComputedStyle
-      ? currentContainingBlockComputedStyle.position
+    const lastPosition = lastKeptComputedStyle
+      ? lastKeptComputedStyle.position
       : elementIsFixed
         ? 'fixed'
         : '';
@@ -124,7 +124,7 @@ function getClippingElementAncestors(
       result = result.filter((ancestor) => ancestor !== currentNode);
     } else {
       // The kept node carries the chain position for the next iteration.
-      currentContainingBlockComputedStyle = computedStyle;
+      lastKeptComputedStyle = computedStyle;
     }
 
     currentNode = getParentNode(currentNode);
