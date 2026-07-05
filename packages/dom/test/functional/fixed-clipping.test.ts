@@ -30,6 +30,12 @@ import {click} from './utils/click';
   // An absolute containing block escapes only static ancestors: its
   // positioned (relative) overflow ancestor clips.
   {scenario: 'absolute-cb-relative-overflow', expected: 'clipper'},
+  // A sticky ancestor is the absolute containing block; sticky does not
+  // escape, so the static overflow ancestor above it clips.
+  {scenario: 'sticky-chain', expected: 'clipper'},
+  // A static (in-flow) element inside a fixed ancestor escapes only up to the
+  // fixed ancestor's containing block; the overflow ancestor above it clips.
+  {scenario: 'static-in-fixed', expected: 'clipper'},
 ].forEach(({scenario, expected}) => {
   test(`${scenario} clipping rect is the ${expected}`, async ({page}) => {
     await page.goto('http://localhost:1234/fixed-clipping');

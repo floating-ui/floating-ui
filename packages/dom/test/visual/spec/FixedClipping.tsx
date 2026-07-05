@@ -14,6 +14,8 @@ const SCENARIOS = [
   'absolute-in-fixed-static-cb',
   'fixed-cb-nested-cb',
   'absolute-cb-relative-overflow',
+  'sticky-chain',
+  'static-in-fixed',
 ] as const;
 
 type Scenario = (typeof SCENARIOS)[number];
@@ -69,7 +71,7 @@ export function FixedClipping() {
   const element = (
     top: number,
     left: number,
-    position: 'fixed' | 'absolute' = 'fixed',
+    position: 'fixed' | 'absolute' | 'static' = 'fixed',
   ) => (
     <div
       ref={elementRef}
@@ -219,6 +221,38 @@ export function FixedClipping() {
         }}
       >
         {element(60, 550)}
+      </div>
+    );
+  } else if (scenario === 'sticky-chain') {
+    // A sticky ancestor is the absolute containing block; sticky does not
+    // escape, so the static overflow ancestor above it clips.
+    scenarioJsx = (
+      <div data-testid="clipper" style={overflowAncestorStyle}>
+        <div style={{position: 'sticky', top: 0}}>
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              transform: 'translateZ(0)',
+            }}
+          >
+            {element(80, 80)}
+          </div>
+        </div>
+      </div>
+    );
+  } else if (scenario === 'static-in-fixed') {
+    // A static (in-flow) element inside a fixed ancestor escapes with it only
+    // up to the fixed ancestor's containing block; the overflow ancestor above
+    // that containing block clips.
+    scenarioJsx = (
+      <div data-testid="clipper" style={overflowAncestorStyle}>
+        <div style={{transform: 'translateZ(0)'}}>
+          <div style={{position: 'fixed', top: 0, left: 0}}>
+            {element(0, 0, 'static')}
+          </div>
+        </div>
       </div>
     );
   }
