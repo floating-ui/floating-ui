@@ -167,5 +167,5 @@ export interface MiddlewareState extends Coords {
 export type MiddlewareArguments = MiddlewareState;
 
 export type Boundary = any;
-export type RootBoundary = 'viewport' | 'document' | Rect;
+export type RootBoundary = 'viewport' | 'layoutViewport' | 'document' | Rect;
 export type ElementContext = 'reference' | 'floating';

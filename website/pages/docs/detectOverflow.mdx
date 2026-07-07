@@ -131,7 +131,7 @@ await detectOverflow(state, {
 ### `rootBoundary{:.key}`
 
 ```ts
-type RootBoundary = 'viewport' | 'document' | Rect;
+type RootBoundary = 'viewport' | 'layoutViewport' | 'document' | Rect;
 ```
 
 This describes the root boundary that the element will be checked
@@ -142,8 +142,14 @@ the
 which correctly handles pinch-zooming and mobile viewports when
 the keyboard is open.
 
-The other string option is `'document'{:js}`, which is the entire
-page outside the viewport.
+`'layoutViewport'{:js}` is the
+[Layout Viewport](https://developer.mozilla.org/en-US/docs/Glossary/Layout_viewport),
+which remains stable while pinch-zooming or when the mobile
+keyboard is open. This is useful when the floating element should
+stay anchored in place rather than shift around as the visual
+viewport changes, such as for context menus.
+
+`'document'{:js}` is the entire page outside the viewport.
 
 ```js
 await detectOverflow(state, {
@@ -156,12 +162,11 @@ boundary area (relative to the viewport).
 
 ```js
 await detectOverflow(state, {
-  // Layout viewport, instead of the visual viewport
   rootBoundary: {
     x: 0,
     y: 0,
-    width: document.documentElement.clientWidth,
-    height: document.documentElement.clientHeight,
+    width: 250,
+    height: 250,
   },
 });
 ```

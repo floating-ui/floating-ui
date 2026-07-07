@@ -22,6 +22,7 @@ import {Flip} from './spec/Flip';
 import {Hide} from './spec/Hide';
 import {IFrame} from './spec/IFrame';
 import {Inline} from './spec/Inline';
+import {LayoutViewport} from './spec/LayoutViewport';
 import {Offset} from './spec/Offset';
 import {Perf} from './spec/Perf';
 import {Placement} from './spec/Placement';
@@ -63,6 +64,7 @@ const ROUTES = [
   {path: 'perf', component: Perf},
   {path: 'iframe', component: IFrame},
   {path: 'top-layer', component: TopLayer},
+  {path: 'layout-viewport', component: LayoutViewport},
 ];
 
 function App() {

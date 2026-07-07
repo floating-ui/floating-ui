@@ -9,7 +9,11 @@ import {getWindowScrollBarX} from './getWindowScrollBarX';
 // Most scrollbars leave 15-18px of space.
 const SCROLLBAR_MAX = 25;
 
-export function getViewportRect(element: Element, strategy: Strategy): Rect {
+export function getViewportRect(
+  element: Element,
+  strategy: Strategy,
+  layout = false,
+): Rect {
   const win = getWindow(element);
   const html = getDocumentElement(element);
   const visualViewport = win.visualViewport;
@@ -20,12 +24,24 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
   let y = 0;
 
   if (visualViewport) {
-    width = visualViewport.width;
-    height = visualViewport.height;
+    // Client coordinates are relative to the layout viewport, except in
+    // WebKit with an `absolute` strategy, where they are relative to the
+    // visual viewport.
+    const layoutRelativeClientCoords = !isWebKit() || strategy === 'fixed';
 
-    if (!isWebKit() || strategy === 'fixed') {
-      x = visualViewport.offsetLeft;
-      y = visualViewport.offsetTop;
+    if (layout) {
+      if (!layoutRelativeClientCoords) {
+        x = -visualViewport.offsetLeft;
+        y = -visualViewport.offsetTop;
+      }
+    } else {
+      width = visualViewport.width;
+      height = visualViewport.height;
+
+      if (layoutRelativeClientCoords) {
+        x = visualViewport.offsetLeft;
+        y = visualViewport.offsetTop;
+      }
     }
   }
 
