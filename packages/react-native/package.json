@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "format": "prettier --write .",
+    "format": "prettier --ignore-path ../../.gitignore --write .",
     "clean": "rimraf dist out-tsc",
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json",

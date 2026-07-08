@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "lint": "eslint .",
-    "format": "prettier --write .",
+    "format": "prettier --ignore-path ../../.gitignore --write .",
     "clean": "rimraf dist out-tsc utils",
     "test": "vitest run",
     "test:watch": "vitest watch",
@@ -95,6 +95,6 @@
     "react-router-dom": "^6.21.1",
     "resize-observer-polyfill": "^1.5.1",
     "use-isomorphic-layout-effect": "^1.2.1",
-    "vitest-browser-react": "^0.1.1"
+    "vitest-browser-react": "^2.2.0"
   }
 }

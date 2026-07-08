@@ -93,6 +93,58 @@ allPlacements.forEach((placement) => {
   });
 });
 
+['bottom', 'top'].forEach((verticalPlacement) => {
+  test(`fits the boundary when overflowing both sides for placement ${verticalPlacement}`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/size');
+    await click(page, `[data-testid="placement-${verticalPlacement}"]`);
+
+    // The floating element is more than twice as wide as the boundary, so the
+    // available width used to be computed as negative and it did not shrink
+    // at all.
+    await resize(page, {width: 150});
+    await scroll(page, {x: 675, y: 605});
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `${verticalPlacement}-both-sides-extreme.png`,
+    );
+
+    await resize(page, {width: 250});
+    await scroll(page, {x: 625, y: 605});
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `${verticalPlacement}-both-sides.png`,
+    );
+  });
+});
+
+['right', 'left'].forEach((horizontalPlacement) => {
+  test(`fits the boundary when overflowing both sides for placement ${horizontalPlacement}`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/size');
+    await click(page, `[data-testid="placement-${horizontalPlacement}"]`);
+
+    // The floating element is more than twice as tall as the boundary, so the
+    // available height used to be computed as negative and it did not shrink
+    // at all.
+    await resize(page, {height: 150});
+    await scroll(page, {y: 755});
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `${horizontalPlacement}-both-sides-extreme.png`,
+    );
+
+    await resize(page, {height: 250});
+    await scroll(page, {y: 705});
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `${horizontalPlacement}-both-sides.png`,
+    );
+  });
+});
+
 test('center aligned placements can fill the whole viewport along the crossAxis with shift', async ({
   page,
 }) => {

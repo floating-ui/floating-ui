@@ -61,28 +61,25 @@ export const shift = (
       state,
       detectOverflowOptions,
     );
-    const crossAxis = getSideAxis(getSide(placement));
+    const crossAxis = getSideAxis(placement);
     const mainAxis = getOppositeAxis(crossAxis);
 
     let mainAxisCoord = coords[mainAxis];
     let crossAxisCoord = coords[crossAxis];
 
-    if (checkMainAxis) {
-      const minSide = mainAxis === 'y' ? 'top' : 'left';
-      const maxSide = mainAxis === 'y' ? 'bottom' : 'right';
-      const min = mainAxisCoord + overflow[minSide];
-      const max = mainAxisCoord - overflow[maxSide];
+    const clampCoord = (axis: 'x' | 'y', coord: number) =>
+      clamp(
+        coord + overflow[axis === 'y' ? 'top' : 'left'],
+        coord,
+        coord - overflow[axis === 'y' ? 'bottom' : 'right'],
+      );
 
-      mainAxisCoord = clamp(min, mainAxisCoord, max);
+    if (checkMainAxis) {
+      mainAxisCoord = clampCoord(mainAxis, mainAxisCoord);
     }
 
     if (checkCrossAxis) {
-      const minSide = crossAxis === 'y' ? 'top' : 'left';
-      const maxSide = crossAxis === 'y' ? 'bottom' : 'right';
-      const min = crossAxisCoord + overflow[minSide];
-      const max = crossAxisCoord - overflow[maxSide];
-
-      crossAxisCoord = clamp(min, crossAxisCoord, max);
+      crossAxisCoord = clampCoord(crossAxis, crossAxisCoord);
     }
 
     const limitedCoords = limiter.fn({

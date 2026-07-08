@@ -1,5 +1,9 @@
 import {floor, max, min} from '@floating-ui/utils';
-import {getDocumentElement, getOverflowAncestors} from '@floating-ui/utils/dom';
+import {
+  getDocumentElement,
+  getOverflowAncestors,
+  getWindow,
+} from '@floating-ui/utils/dom';
 
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
@@ -81,37 +85,34 @@ function observeMove(element: Element, onMove: () => void) {
     function handleObserve(entries: IntersectionObserverEntry[]) {
       const ratio = entries[0].intersectionRatio;
 
+      // The entry is a snapshot, so the reference may have moved since the
+      // intersection was computed (under performance constraints, or between
+      // consecutive frames of a multi-frame layout shift). The reported ratio
+      // and the observed area are stale in that case and cannot be trusted to
+      // detect subsequent movement, so refresh regardless of the ratio.
+      if (
+        !rectsAreEqual(
+          elementRectForRootMargin,
+          element.getBoundingClientRect(),
+        )
+      ) {
+        return refresh();
+      }
+
       if (ratio !== threshold) {
         if (!isFirstUpdate) {
           return refresh();
         }
 
         if (!ratio) {
-          // If the reference is clipped, the ratio is 0. Throttle the refresh
-          // to prevent an infinite loop of updates.
+          // If the reference is clipped in place, the ratio is 0. Throttle
+          // the refresh to prevent an infinite loop of updates.
           timeoutId = setTimeout(() => {
             refresh(false, 1e-7);
           }, 1000);
         } else {
           refresh(false, ratio);
         }
-      }
-
-      if (
-        ratio === 1 &&
-        !rectsAreEqual(
-          elementRectForRootMargin,
-          element.getBoundingClientRect(),
-        )
-      ) {
-        // It's possible that even though the ratio is reported as 1, the
-        // element is not actually fully within the IntersectionObserver's root
-        // area anymore. This can happen under performance constraints. This may
-        // be a bug in the browser's IntersectionObserver implementation. To
-        // work around this, we compare the element's bounding rect now with
-        // what it was at the time we created the IntersectionObserver. If they
-        // are not equal then the element moved, so we refresh.
-        refresh();
       }
 
       isFirstUpdate = false;
@@ -132,9 +133,17 @@ function observeMove(element: Element, onMove: () => void) {
     io.observe(element);
   }
 
+  const win = getWindow(element);
+  const handleResize = () => refresh();
+
+  win.addEventListener('resize', handleResize);
+
   refresh(true);
 
-  return cleanup;
+  return () => {
+    win.removeEventListener('resize', handleResize);
+    cleanup();
+  };
 }
 
 /**
@@ -170,8 +179,7 @@ export function autoUpdate(
       : [];
 
   ancestors.forEach((ancestor) => {
-    ancestorScroll &&
-      ancestor.addEventListener('scroll', update, {passive: true});
+    ancestorScroll && ancestor.addEventListener('scroll', update);
     ancestorResize && ancestor.addEventListener('resize', update);
   });
 

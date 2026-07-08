@@ -7,7 +7,7 @@ import type {
   ReferenceElement,
   Strategy,
 } from '@floating-ui/dom';
-import type {ComponentPublicInstance, Ref} from 'vue-demi';
+import type {ComponentPublicInstance, Ref} from 'vue';
 
 export type {
   AlignedPlacement,

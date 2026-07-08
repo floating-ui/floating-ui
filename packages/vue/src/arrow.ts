@@ -3,7 +3,7 @@ import {arrow as apply} from '@floating-ui/dom';
 
 import type {ArrowOptions} from './types';
 import {unwrapElement} from './utils/unwrapElement';
-import {toValue} from './utils/toValue';
+import {toValue} from 'vue';
 
 /**
  * Positions an inner element of the floating element such that it is centered to the reference element.

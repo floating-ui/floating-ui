@@ -164,6 +164,23 @@ export function AutoUpdate() {
             {str}
           </button>
         ))}
+        <button
+          onClick={() => {
+            // Move the reference twice on consecutive frames, with the
+            // second move landing after the IntersectionObserver measured
+            // the intermediate position but before its first callback.
+            const el = refs.reference.current as HTMLElement;
+            el.style.left = '40px';
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                el.style.left = '280px';
+              });
+            });
+          }}
+          data-testid="layoutShift-moveTwice"
+        >
+          moveTwice
+        </button>
       </Controls>
 
       <h2>animationFrame</h2>
@@ -201,6 +218,60 @@ export function AutoUpdate() {
           </button>
         ))}
       </Controls>
+    </>
+  );
+}
+
+export function AutoUpdateRootResize() {
+  const [moved, setMoved] = useState(false);
+
+  const {x, y, strategy, refs, update} = useFloating({
+    strategy: 'fixed',
+  });
+
+  useLayoutEffect(() => {
+    if (!refs.reference.current || !refs.floating.current) {
+      return;
+    }
+
+    return autoUpdate(refs.reference.current, refs.floating.current, update, {
+      ancestorResize: false,
+      elementResize: false,
+      layoutShift: true,
+    });
+  }, [refs.floating, refs.reference, update]);
+
+  return (
+    <>
+      <h1>AutoUpdate Root Resize</h1>
+      <button
+        ref={refs.setReference}
+        data-testid="rootResize-reference"
+        onClick={() => setMoved(true)}
+        style={{
+          position: 'fixed',
+          top: 32,
+          left: moved ? 650 : 'calc(100vw - 220px)',
+          width: 75,
+          height: 22,
+        }}
+      >
+        Toggle
+      </button>
+      <div
+        ref={refs.setFloating}
+        className="floating"
+        data-testid="rootResize-floating"
+        style={{
+          position: strategy,
+          top: y ?? '',
+          left: x ?? '',
+          width: 75,
+          height: 22,
+        }}
+      >
+        Floating
+      </div>
     </>
   );
 }

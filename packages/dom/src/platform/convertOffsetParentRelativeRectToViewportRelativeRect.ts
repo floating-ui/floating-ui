@@ -37,7 +37,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   const offsets = createCoords(0);
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
 
-  if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
+  if (isOffsetParentAnElement || !isFixed) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)
