@@ -1,11 +1,11 @@
 ---
-"@floating-ui/core": minor
-"@floating-ui/dom": minor
-"@floating-ui/react-dom": minor
-"@floating-ui/react-native": minor
-"@floating-ui/react": minor
-"@floating-ui/utils": minor
-"@floating-ui/vue": minor
+"@floating-ui/core": patch
+"@floating-ui/dom": patch
+"@floating-ui/react-dom": patch
+"@floating-ui/react-native": patch
+"@floating-ui/react": patch
+"@floating-ui/utils": patch
+"@floating-ui/vue": patch
 ---
 
-feat: add an explicit `undefined` to every optional property (`exactOptionalPropertyTypes` support)
+fix: support explicit `undefined` for optional properties with `exactOptionalPropertyTypes`
