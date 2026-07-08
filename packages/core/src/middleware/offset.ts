@@ -18,13 +18,13 @@ type OffsetValue =
        * element.
        * @default 0
        */
-      mainAxis?: number;
+      mainAxis?: number | undefined;
       /**
        * The axis that runs along the alignment of the floating element.
        * Represents the skidding between the reference and floating element.
        * @default 0
        */
-      crossAxis?: number;
+      crossAxis?: number | undefined;
       /**
        * The same axis as `crossAxis` but applies only to aligned placements
        * and inverts the `end` alignment. When set to a number, it overrides the
@@ -35,14 +35,14 @@ type OffsetValue =
        * the reverse.
        * @default null
        */
-      alignmentAxis?: number | null;
+      alignmentAxis?: number | null | undefined;
     };
 
 // For type backwards-compatibility, the `OffsetOptions` type was also
 // Derivable.
 export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
-export async function convertValueToCoords(
+async function convertValueToCoords(
   state: MiddlewareState,
   options: OffsetOptions,
 ): Promise<Coords> {

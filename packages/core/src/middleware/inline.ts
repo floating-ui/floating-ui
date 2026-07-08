@@ -45,17 +45,17 @@ export interface InlineOptions {
    * Viewport-relative `x` coordinate to choose a `ClientRect`.
    * @default undefined
    */
-  x?: number;
+  x?: number | undefined;
   /**
    * Viewport-relative `y` coordinate to choose a `ClientRect`.
    * @default undefined
    */
-  y?: number;
+  y?: number | undefined;
   /**
    * Represents the padding around a disjoined rect when choosing it.
    * @default 2
    */
-  padding?: Padding;
+  padding?: Padding | undefined;
 }
 
 /**
@@ -122,19 +122,13 @@ export const inline = (
           const bottom = lastRect.bottom;
           const left = isTop ? firstRect.left : lastRect.left;
           const right = isTop ? firstRect.right : lastRect.right;
-          const width = right - left;
-          const height = bottom - top;
 
-          return {
-            top,
-            bottom,
-            left,
-            right,
-            width,
-            height,
+          return rectToClientRect({
             x: left,
             y: top,
-          };
+            width: right - left,
+            height: bottom - top,
+          });
         }
 
         const isLeftSide = getSide(placement) === 'left';
@@ -146,21 +140,13 @@ export const inline = (
 
         const top = measureRects[0].top;
         const bottom = measureRects[measureRects.length - 1].bottom;
-        const left = minLeft;
-        const right = maxRight;
-        const width = right - left;
-        const height = bottom - top;
 
-        return {
-          top,
-          bottom,
-          left,
-          right,
-          width,
-          height,
-          x: left,
+        return rectToClientRect({
+          x: minLeft,
           y: top,
-        };
+          width: maxRight - minLeft,
+          height: bottom - top,
+        });
       }
 
       return fallback;

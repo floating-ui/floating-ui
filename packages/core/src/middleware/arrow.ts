@@ -6,7 +6,7 @@ import {
   getAlignmentAxis,
   getAxisLength,
   getPaddingObject,
-  min as mathMin,
+  min,
 } from '@floating-ui/utils';
 
 import type {Derivable, Middleware} from '../types';
@@ -22,7 +22,7 @@ export interface ArrowOptions {
    * Useful when the floating element has rounded corners.
    * @default 0
    */
-  padding?: Padding;
+  padding?: Padding | undefined;
 }
 
 /**
@@ -75,16 +75,15 @@ export const arrow = (
     // centered, modify the padding so that it is centered.
     const largestPossiblePadding =
       clientSize / 2 - arrowDimensions[length] / 2 - 1;
-    const minPadding = mathMin(paddingObject[minProp], largestPossiblePadding);
-    const maxPadding = mathMin(paddingObject[maxProp], largestPossiblePadding);
+    const minPadding = min(paddingObject[minProp], largestPossiblePadding);
+    const maxPadding = min(paddingObject[maxProp], largestPossiblePadding);
 
     // Make sure the arrow doesn't overflow the floating element if the center
     // point is outside the floating element's bounds.
-    const min = minPadding;
     const max = clientSize - arrowDimensions[length] - maxPadding;
     const center =
       clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
-    const offset = clamp(min, center, max);
+    const offset = clamp(minPadding, center, max);
 
     // If the reference is small enough that the arrow's padding causes it to
     // to point to nothing for an aligned placement, adjust the offset of the
@@ -95,12 +94,12 @@ export const arrow = (
       getAlignment(placement) != null &&
       center !== offset &&
       rects.reference[length] / 2 -
-        (center < min ? minPadding : maxPadding) -
+        (center < minPadding ? minPadding : maxPadding) -
         arrowDimensions[length] / 2 <
         0;
     const alignmentOffset = shouldAddOffset
-      ? center < min
-        ? center - min
+      ? center < minPadding
+        ? center - minPadding
         : center - max
       : 0;
 

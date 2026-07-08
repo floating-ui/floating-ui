@@ -8,7 +8,9 @@
       "@floating-ui/dom/*": ["../dom/src/*"],
       "extension": ["../../extension/src/index.ts"],
       "extension/*": ["../../extension/src/*"]
-    }
+    },
+    // TODO: move to config/tsconfig.base.json after https://github.com/vitejs/vite/issues/21715 is resolved.
+    "exactOptionalPropertyTypes": true
   },
   "include": ["src"],
   "references": [

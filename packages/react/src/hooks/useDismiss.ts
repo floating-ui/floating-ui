@@ -36,7 +36,9 @@ const captureHandlerKeys = {
 };
 
 export const normalizeProp = (
-  normalizable?: boolean | {escapeKey?: boolean; outsidePress?: boolean},
+  normalizable?:
+    | boolean
+    | {escapeKey?: boolean | undefined; outsidePress?: boolean | undefined},
 ) => {
   return {
     escapeKey:
@@ -56,19 +58,19 @@ export interface UseDismissProps {
    * handlers.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   /**
    * Whether to dismiss the floating element upon pressing the `esc` key.
    * @default true
    */
-  escapeKey?: boolean;
+  escapeKey?: boolean | undefined;
   /**
    * Whether to dismiss the floating element upon pressing the reference
    * element. You likely want to ensure the `move` option in the `useHover()`
    * Hook has been disabled when this is in use.
    * @default false
    */
-  referencePress?: boolean;
+  referencePress?: boolean | undefined;
   /**
    * The type of event to use to determine a “press”.
    * - `pointerdown` is eager on both mouse + touch input.
@@ -76,7 +78,7 @@ export interface UseDismissProps {
    * - `click` is lazy on both mouse + touch input.
    * @default 'pointerdown'
    */
-  referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
+  referencePressEvent?: 'pointerdown' | 'mousedown' | 'click' | undefined;
   /**
    * Whether to dismiss the floating element upon pressing outside of the
    * floating element.
@@ -90,7 +92,7 @@ export interface UseDismissProps {
    * ```
    * @default true
    */
-  outsidePress?: boolean | ((event: MouseEvent) => boolean);
+  outsidePress?: boolean | ((event: MouseEvent) => boolean) | undefined;
   /**
    * The type of event to use to determine an outside “press”.
    * - `pointerdown` is eager on both mouse + touch input.
@@ -98,22 +100,28 @@ export interface UseDismissProps {
    * - `click` is lazy on both mouse + touch input.
    * @default 'pointerdown'
    */
-  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
+  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click' | undefined;
   /**
    * Whether to dismiss the floating element upon scrolling an overflow
    * ancestor.
    * @default false
    */
-  ancestorScroll?: boolean;
+  ancestorScroll?: boolean | undefined;
   /**
    * Determines whether event listeners bubble upwards through a tree of
    * floating elements.
    */
-  bubbles?: boolean | {escapeKey?: boolean; outsidePress?: boolean};
+  bubbles?:
+    | boolean
+    | {escapeKey?: boolean | undefined; outsidePress?: boolean | undefined}
+    | undefined;
   /**
    * Determines whether to use capture phase event listeners.
    */
-  capture?: boolean | {escapeKey?: boolean; outsidePress?: boolean};
+  capture?:
+    | boolean
+    | {escapeKey?: boolean | undefined; outsidePress?: boolean | undefined}
+    | undefined;
 }
 
 /**
@@ -437,7 +445,7 @@ export function useDismiss(
     );
 
     ancestors.forEach((ancestor) => {
-      ancestor.addEventListener('scroll', onScroll, {passive: true});
+      ancestor.addEventListener('scroll', onScroll);
     });
 
     return () => {

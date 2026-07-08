@@ -26,13 +26,7 @@ export function getRectRelativeToOffsetParent(
   let scroll = {scrollLeft: 0, scrollTop: 0};
   const offsets = createCoords(0);
 
-  // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
-  // Firefox with layout.scrollbar.side = 3 in about:config to test this.
-  function setLeftRTLScrollbarOffset() {
-    offsets.x = getWindowScrollBarX(documentElement);
-  }
-
-  if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
+  if (isOffsetParentAnElement || !isFixed) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)
@@ -49,13 +43,13 @@ export function getRectRelativeToOffsetParent(
       );
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
-    } else if (documentElement) {
-      setLeftRTLScrollbarOffset();
     }
   }
 
-  if (isFixed && !isOffsetParentAnElement && documentElement) {
-    setLeftRTLScrollbarOffset();
+  // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
+  // Firefox with layout.scrollbar.side = 3 in about:config to test this.
+  if (!isOffsetParentAnElement && documentElement) {
+    offsets.x = getWindowScrollBarX(documentElement);
   }
 
   const htmlOffset =

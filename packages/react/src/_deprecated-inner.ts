@@ -44,33 +44,33 @@ export interface InnerProps extends DetectOverflowOptions {
   /**
    * Callback invoked when the fallback state changes.
    */
-  onFallbackChange?: null | ((fallback: boolean) => void);
+  onFallbackChange?: null | ((fallback: boolean) => void) | undefined;
   /**
    * The offset to apply to the floating element.
    * @default 0
    */
-  offset?: number;
+  offset?: number | undefined;
   /**
    * A ref which contains the overflow of the floating element.
    */
-  overflowRef?: React.MutableRefObject<SideObject | null>;
+  overflowRef?: React.MutableRefObject<SideObject | null> | undefined;
   /**
    * An optional ref containing an HTMLElement. This may be used as the
    * scrolling container instead of the floating element — for instance,
    * to position inner elements as direct children without being interfered by
    * scrolling layout.
    */
-  scrollRef?: React.MutableRefObject<HTMLElement | null>;
+  scrollRef?: React.MutableRefObject<HTMLElement | null> | undefined;
   /**
    * The minimum number of items that should be visible in the list.
    * @default 4
    */
-  minItemsVisible?: number;
+  minItemsVisible?: number | undefined;
   /**
    * The threshold for the reference element's overflow in pixels.
    * @default 0
    */
-  referenceOverflowThreshold?: number;
+  referenceOverflowThreshold?: number | undefined;
 }
 
 /**
@@ -207,7 +207,7 @@ export interface UseInnerOffsetProps {
    * handlers.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   /**
    * A ref which contains the overflow of the floating element.
    */
@@ -218,7 +218,7 @@ export interface UseInnerOffsetProps {
    * to position inner elements as direct children without being interfered by
    * scrolling layout.
    */
-  scrollRef?: React.MutableRefObject<HTMLElement | null>;
+  scrollRef?: React.MutableRefObject<HTMLElement | null> | undefined;
   /**
    * Callback invoked when the offset changes.
    */

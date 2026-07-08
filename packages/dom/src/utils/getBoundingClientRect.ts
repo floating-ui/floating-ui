@@ -1,14 +1,17 @@
 import type {ClientRectObject} from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
 import {createCoords} from '@floating-ui/utils';
-import {getComputedStyle, getWindow} from '@floating-ui/utils/dom';
+import {
+  getComputedStyle,
+  getFrameElement,
+  getWindow,
+} from '@floating-ui/utils/dom';
 
 import {getScale} from '../platform/getScale';
 import {isElement} from '../platform/isElement';
 import {getVisualOffsets, shouldAddVisualOffsets} from './getVisualOffsets';
 import {unwrapElement} from './unwrapElement';
 import type {VirtualElement} from '../types';
-import {getFrameElement} from '@floating-ui/utils/dom';
 
 export function getBoundingClientRect(
   element: Element | VirtualElement,
@@ -43,16 +46,15 @@ export function getBoundingClientRect(
   let width = clientRect.width / scale.x;
   let height = clientRect.height / scale.y;
 
-  if (domElement) {
+  if (domElement && offsetParent) {
     const win = getWindow(domElement);
-    const offsetWin =
-      offsetParent && isElement(offsetParent)
-        ? getWindow(offsetParent)
-        : offsetParent;
+    const offsetWin = isElement(offsetParent)
+      ? getWindow(offsetParent)
+      : offsetParent;
 
     let currentWin = win;
     let currentIFrame = getFrameElement(currentWin);
-    while (currentIFrame && offsetParent && offsetWin !== currentWin) {
+    while (currentIFrame && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
       const css = getComputedStyle(currentIFrame);

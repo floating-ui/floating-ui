@@ -122,36 +122,36 @@ export interface UseListNavigationProps {
    * A callback that is called when the user navigates to a new active item,
    * passed in a new `activeIndex`.
    */
-  onNavigate?: (activeIndex: number | null) => void;
+  onNavigate?: ((activeIndex: number | null) => void) | undefined;
   /**
    * Whether the Hook is enabled, including all internal Effects and event
    * handlers.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   /**
    * The currently selected item index, which may or may not be active.
    * @default null
    */
-  selectedIndex?: number | null;
+  selectedIndex?: number | null | undefined;
   /**
    * Whether to focus the item upon opening the floating element. 'auto' infers
    * what to do based on the input type (keyboard vs. pointer), while a boolean
    * value will force the value.
    * @default 'auto'
    */
-  focusItemOnOpen?: boolean | 'auto';
+  focusItemOnOpen?: boolean | 'auto' | undefined;
   /**
    * Whether hovering an item synchronizes the focus.
    * @default true
    */
-  focusItemOnHover?: boolean;
+  focusItemOnHover?: boolean | undefined;
   /**
    * Whether pressing an arrow key on the navigation’s main axis opens the
    * floating element.
    * @default true
    */
-  openOnArrowKeyDown?: boolean;
+  openOnArrowKeyDown?: boolean | undefined;
   /**
    * By default elements with either a `disabled` or `aria-disabled` attribute
    * are skipped in the list navigation — however, this requires the items to
@@ -162,7 +162,7 @@ export interface UseListNavigationProps {
    * navigating via arrow keys, specify an empty array.
    * @default undefined
    */
-  disabledIndices?: Array<number> | ((index: number) => boolean);
+  disabledIndices?: Array<number> | ((index: number) => boolean) | undefined;
   /**
    * Determines whether focus can escape the list, such that nothing is selected
    * after navigating beyond the boundary of the list. In some
@@ -171,32 +171,32 @@ export interface UseListNavigationProps {
    * `loop` must be `true`.
    * @default false
    */
-  allowEscape?: boolean;
+  allowEscape?: boolean | undefined;
   /**
    * Determines whether focus should loop around when navigating past the first
    * or last item.
    * @default false
    */
-  loop?: boolean;
+  loop?: boolean | undefined;
   /**
    * If the list is nested within another one (e.g. a nested submenu), the
    * navigation semantics change.
    * @default false
    */
-  nested?: boolean;
+  nested?: boolean | undefined;
   /**
    * Allows to specify the orientation of the parent list, which is used to
    * determine the direction of the navigation.
    * This is useful when list navigation is used within a Composite,
    * as the hook can't determine the orientation of the parent list automatically.
    */
-  parentOrientation?: UseListNavigationProps['orientation'];
+  parentOrientation?: UseListNavigationProps['orientation'] | undefined;
   /**
    * Whether the direction of the floating element’s navigation is in RTL
    * layout.
    * @default false
    */
-  rtl?: boolean;
+  rtl?: boolean | undefined;
   /**
    * Whether the focus is virtual (using `aria-activedescendant`).
    * Use this if you need focus to remain on the reference element
@@ -207,12 +207,12 @@ export interface UseListNavigationProps {
    * generated automatically.
    * @default false
    */
-  virtual?: boolean;
+  virtual?: boolean | undefined;
   /**
    * The orientation in which navigation occurs.
    * @default 'vertical'
    */
-  orientation?: 'vertical' | 'horizontal' | 'both';
+  orientation?: 'vertical' | 'horizontal' | 'both' | undefined;
   /**
    * Specifies how many columns the list has (i.e., it’s a grid). Use an
    * orientation of 'horizontal' (e.g. for an emoji picker/date picker, where
@@ -221,12 +221,12 @@ export interface UseListNavigationProps {
    * and ArrowDown).
    * @default 1
    */
-  cols?: number;
+  cols?: number | undefined;
   /**
    * Whether to scroll the active item into view when navigating. The default
    * value uses nearest options.
    */
-  scrollItemIntoView?: boolean | ScrollIntoViewOptions;
+  scrollItemIntoView?: boolean | ScrollIntoViewOptions | undefined;
   /**
    * When using virtual focus management, this holds a ref to the
    * virtually-focused item. This allows nested virtual navigation to be
@@ -234,18 +234,18 @@ export interface UseListNavigationProps {
    * the root reference handling the events. Requires `FloatingTree` to be
    * setup.
    */
-  virtualItemRef?: React.MutableRefObject<HTMLElement | null>;
+  virtualItemRef?: React.MutableRefObject<HTMLElement | null> | undefined;
   /**
    * Only for `cols > 1`, specify sizes for grid items.
    * `{ width: 2, height: 2 }` means an item is 2 columns wide and 2 rows tall.
    */
-  itemSizes?: Dimensions[];
+  itemSizes?: Dimensions[] | undefined;
   /**
    * Only relevant for `cols > 1` and items with different sizes, specify if
    * the grid is dense (as defined in the CSS spec for `grid-auto-flow`).
    * @default false
    */
-  dense?: boolean;
+  dense?: boolean | undefined;
 }
 
 /**

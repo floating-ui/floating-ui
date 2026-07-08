@@ -117,7 +117,9 @@ export type OpenChangeReason =
   | 'list-navigation'
   | 'safe-polygon';
 
-export type Delay = number | Partial<{open: number; close: number}>;
+export type Delay =
+  | number
+  | Partial<{open: number | undefined; close: number | undefined}>;
 
 export type NarrowedElement<T> = T extends Element ? T : Element;
 
@@ -143,10 +145,10 @@ export interface FloatingEvents {
 }
 
 export interface ContextData {
-  openEvent?: Event;
-  floatingContext?: FloatingContext;
+  openEvent?: Event | undefined;
+  floatingContext?: FloatingContext | undefined;
   /** @deprecated use `onTypingChange` prop in `useTypeahead` */
-  typing?: boolean;
+  typing?: boolean | undefined;
   [key: string]: any;
 }
 
@@ -187,7 +189,7 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
 export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
   id: string | undefined;
   parentId: string | null;
-  context?: FloatingContext<RT>;
+  context?: FloatingContext<RT> | undefined;
 }
 
 export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
@@ -198,11 +200,12 @@ export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
 }
 
 export interface ElementProps {
-  reference?: React.HTMLProps<Element>;
-  floating?: React.HTMLProps<HTMLElement>;
+  reference?: React.HTMLProps<Element> | undefined;
+  floating?: React.HTMLProps<HTMLElement> | undefined;
   item?:
     | React.HTMLProps<HTMLElement>
-    | ((props: ExtendedUserProps) => React.HTMLProps<HTMLElement>);
+    | ((props: ExtendedUserProps) => React.HTMLProps<HTMLElement>)
+    | undefined;
 }
 
 export type ReferenceType = Element | VirtualElement;
@@ -226,27 +229,31 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
 
 export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
   extends Omit<UsePositionOptions<RT>, 'elements'> {
-  rootContext?: FloatingRootContext<RT>;
+  rootContext?: FloatingRootContext<RT> | undefined;
   /**
    * Object of external elements as an alternative to the `refs` object setters.
    */
-  elements?: {
-    /**
-     * Externally passed reference element. Store in state.
-     */
-    reference?: Element | null;
-    /**
-     * Externally passed floating element. Store in state.
-     */
-    floating?: HTMLElement | null;
-  };
+  elements?:
+    | {
+        /**
+         * Externally passed reference element. Store in state.
+         */
+        reference?: Element | null | undefined;
+        /**
+         * Externally passed floating element. Store in state.
+         */
+        floating?: HTMLElement | null | undefined;
+      }
+    | undefined;
   /**
    * An event callback that is invoked when the floating element is opened or
    * closed.
    */
-  onOpenChange?(open: boolean, event?: Event, reason?: OpenChangeReason): void;
+  onOpenChange?:
+    | ((open: boolean, event?: Event, reason?: OpenChangeReason) => void)
+    | undefined;
   /**
    * Unique node id when using `FloatingTree`.
    */
-  nodeId?: string;
+  nodeId?: string | undefined;
 }

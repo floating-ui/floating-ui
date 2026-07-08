@@ -8,8 +8,8 @@ import {
 } from '../utils/constants';
 
 export type ExtendedUserProps = {
-  [ACTIVE_KEY]?: boolean;
-  [SELECTED_KEY]?: boolean;
+  [ACTIVE_KEY]?: boolean | undefined;
+  [SELECTED_KEY]?: boolean | undefined;
 };
 
 function mergeProps<Key extends keyof ElementProps>(

@@ -4,7 +4,9 @@ import {useModernLayoutEffect} from '@floating-ui/react/utils';
 import {getDelay} from '../hooks/useHover';
 import type {FloatingRootContext} from '../types';
 
-type Delay = number | Partial<{open: number; close: number}>;
+type Delay =
+  | number
+  | Partial<{open: number | undefined; close: number | undefined}>;
 
 interface GroupState {
   delay: Delay;
@@ -55,7 +57,7 @@ export interface FloatingDelayGroupProps {
    * This is useful if you want grouping to “last” longer than the close delay,
    * for example if there is no close delay at all.
    */
-  timeoutMs?: number;
+  timeoutMs?: number | undefined;
 }
 
 /**
@@ -120,7 +122,7 @@ interface UseGroupOptions {
    * Whether delay grouping should be enabled.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   id?: any;
 }
 

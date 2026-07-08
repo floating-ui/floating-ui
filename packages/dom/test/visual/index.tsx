@@ -13,10 +13,11 @@ import {
 
 import {Arrow} from './spec/Arrow';
 import {AutoPlacement} from './spec/AutoPlacement';
-import {AutoUpdate} from './spec/AutoUpdate';
+import {AutoUpdate, AutoUpdateRootResize} from './spec/AutoUpdate';
 import {Border} from './spec/Border';
 import {ContainingBlock} from './spec/ContainingBlock';
 import {DecimalSize} from './spec/DecimalSize';
+import {FixedClipping} from './spec/FixedClipping';
 import {Flip} from './spec/Flip';
 import {Hide} from './spec/Hide';
 import {IFrame} from './spec/IFrame';
@@ -54,8 +55,10 @@ const ROUTES = [
   {path: 'autoPlacement', component: AutoPlacement},
   {path: 'inline', component: Inline},
   {path: 'AutoUpdate', component: AutoUpdate},
+  {path: 'AutoUpdate-root-resize', component: AutoUpdateRootResize},
   {path: 'shadow-DOM', component: ShadowDOM},
   {path: 'containing-block', component: ContainingBlock},
+  {path: 'fixed-clipping', component: FixedClipping},
   {path: 'virtual-element', component: VirtualElement},
   {path: 'perf', component: Perf},
   {path: 'iframe', component: IFrame},

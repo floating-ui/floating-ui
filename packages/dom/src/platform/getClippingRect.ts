@@ -6,7 +6,7 @@ import type {
   Strategy,
 } from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
-import {createCoords, max, min} from '@floating-ui/utils';
+import {max, min} from '@floating-ui/utils';
 import {
   getComputedStyle,
   getDocumentElement,
@@ -14,9 +14,7 @@ import {
   getOverflowAncestors,
   getParentNode,
   isContainingBlock,
-  isHTMLElement,
   isLastTraversableNode,
-  isOverflowElement,
   isTopLayer,
 } from '@floating-ui/utils/dom';
 
@@ -40,7 +38,7 @@ function getInnerBoundingClientRect(
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
+  const scale = getScale(element);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
   const x = left * scale.x;
@@ -80,22 +78,6 @@ function getClientRectFromClippingAncestor(
   return rectToClientRect(rect);
 }
 
-function hasFixedPositionAncestor(element: Element, stopNode: Node): boolean {
-  const parentNode = getParentNode(element);
-  if (
-    parentNode === stopNode ||
-    !isElement(parentNode) ||
-    isLastTraversableNode(parentNode)
-  ) {
-    return false;
-  }
-
-  return (
-    getComputedStyle(parentNode).position === 'fixed' ||
-    hasFixedPositionAncestor(parentNode, stopNode)
-  );
-}
-
 // A "clipping ancestor" is an `overflow` element with the characteristic of
 // clipping (or hiding) child elements. This returns all clipping ancestors
 // of the given element up the tree.
@@ -111,7 +93,7 @@ function getClippingElementAncestors(
   let result = getOverflowAncestors(element, [], false).filter(
     (el) => isElement(el) && getNodeName(el) !== 'body',
   ) as Array<Element>;
-  let currentContainingBlockComputedStyle: CSSStyleDeclaration | null = null;
+  let lastKeptComputedStyle: CSSStyleDeclaration | null = null;
   const elementIsFixed = getComputedStyle(element).position === 'fixed';
   let currentNode: Node | null = elementIsFixed
     ? getParentNode(element)
@@ -121,28 +103,28 @@ function getClippingElementAncestors(
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const computedStyle = getComputedStyle(currentNode);
     const currentNodeIsContaining = isContainingBlock(currentNode);
+    // Position of the containing block chain below the current node. A fixed
+    // element whose containing block hasn't been found yet is a fixed chain.
+    const lastPosition = lastKeptComputedStyle
+      ? lastKeptComputedStyle.position
+      : elementIsFixed
+        ? 'fixed'
+        : '';
 
-    if (!currentNodeIsContaining && computedStyle.position === 'fixed') {
-      currentContainingBlockComputedStyle = null;
-    }
-
-    const shouldDropCurrentNode = elementIsFixed
-      ? !currentNodeIsContaining && !currentContainingBlockComputedStyle
-      : (!currentNodeIsContaining &&
-          computedStyle.position === 'static' &&
-          !!currentContainingBlockComputedStyle &&
-          (currentContainingBlockComputedStyle.position === 'absolute' ||
-            currentContainingBlockComputedStyle.position === 'fixed')) ||
-        (isOverflowElement(currentNode) &&
-          !currentNodeIsContaining &&
-          hasFixedPositionAncestor(element, currentNode));
+    // A non-containing ancestor does not clip the element when the chain
+    // below it escapes it: a fixed chain escapes all ancestors up to the
+    // next containing block, an absolute chain escapes static ancestors.
+    const shouldDropCurrentNode =
+      !currentNodeIsContaining &&
+      (lastPosition === 'fixed' ||
+        (lastPosition === 'absolute' && computedStyle.position === 'static'));
 
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
       result = result.filter((ancestor) => ancestor !== currentNode);
     } else {
-      // Record last containing block for next iteration.
-      currentContainingBlockComputedStyle = computedStyle;
+      // The kept node carries the chain position for the next iteration.
+      lastKeptComputedStyle = computedStyle;
     }
 
     currentNode = getParentNode(currentNode);

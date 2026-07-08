@@ -24,7 +24,7 @@ export function isHTMLElement<
      * Can be used to provide a custom constructor instead of `HTMLElement`,
      * Like `HTMLInputElement` for example.
      */
-    constructorName?: ConstructorName;
+    constructorName?: ConstructorName | undefined;
   },
 ): element is InstanceType<(typeof globalThis)[ConstructorName]> {
   const typedElement = element as Node | null | undefined;

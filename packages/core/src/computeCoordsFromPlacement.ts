@@ -40,14 +40,12 @@ export function computeCoordsFromPlacement(
       coords = {x: reference.x, y: reference.y};
   }
 
-  switch (getAlignment(placement)) {
-    case 'start':
-      coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
-      break;
-    case 'end':
-      coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
-      break;
-    default:
+  const alignment = getAlignment(placement);
+  if (alignment) {
+    coords[alignmentAxis] +=
+      commonAlign *
+      (alignment === 'end' ? 1 : -1) *
+      (rtl && isVertical ? -1 : 1);
   }
 
   return coords;

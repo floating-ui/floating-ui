@@ -22,12 +22,12 @@ export interface UseRoleProps {
    * handlers.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   /**
    * The role of the floating element.
    * @default 'dialog'
    */
-  role?: AriaRole | ComponentRole;
+  role?: AriaRole | ComponentRole | undefined;
 }
 
 const componentRoleToAriaRoleMap = new Map<

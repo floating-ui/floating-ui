@@ -4,6 +4,7 @@ import {platform} from './platform';
 import type {
   ComputePositionConfig,
   FloatingElement,
+  Platform,
   ReferenceElement,
 } from './types';
 
@@ -20,8 +21,12 @@ export const computePosition = (
   // multiple lifecycle resets re-use the same result. It only lives for a
   // single call. If other functions become expensive, we can add them as well.
   const cache = new Map<ReferenceElement, Array<Element>>();
-  const mergedOptions = {platform, ...options};
-  const platformWithCache = {...mergedOptions.platform, _c: cache};
+  const mergedOptions = options ?? {};
+  const platformWithCache: Platform & {_c: typeof cache} = {
+    ...platform,
+    ...mergedOptions.platform,
+    _c: cache,
+  };
   return computePositionCore(reference, floating, {
     ...mergedOptions,
     platform: platformWithCache,
