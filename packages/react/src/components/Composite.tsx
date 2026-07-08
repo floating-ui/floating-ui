@@ -324,7 +324,7 @@ export interface CompositeItemProps {
    * <CompositeItem render={(htmlProps) => <li {...htmlProps} />} />
    * ```
    */
-  render?: RenderProp;
+  render?: RenderProp | undefined;
 }
 
 /**

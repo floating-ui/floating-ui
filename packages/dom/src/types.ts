@@ -165,12 +165,14 @@ export type SizeOptions = Prettify<
        * to change its size.
        * @default undefined
        */
-      apply?(
-        args: MiddlewareState & {
-          availableWidth: number;
-          availableHeight: number;
-        },
-      ): Promisable<void>;
+      apply?:
+        | ((
+            args: MiddlewareState & {
+              availableWidth: number;
+              availableHeight: number;
+            },
+          ) => Promisable<void>)
+        | undefined;
     }
 >;
 export type ArrowOptions = Prettify<
