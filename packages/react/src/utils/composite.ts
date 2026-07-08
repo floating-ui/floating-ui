@@ -88,7 +88,7 @@ export function getGridNavigatedIndex(
     minIndex: number;
     maxIndex: number;
     prevIndex: number;
-    stopEvent?: boolean;
+    stopEvent?: boolean | undefined;
   },
 ) {
   let nextIndex = prevIndex;
