@@ -29,13 +29,13 @@ const safePolygonIdentifier = createAttribute('safe-polygon');
 
 export interface HandleCloseContext extends FloatingContext {
   onClose: () => void;
-  tree?: FloatingTreeType | null;
-  leave?: boolean;
+  tree?: FloatingTreeType | null | undefined;
+  leave?: boolean | undefined;
 }
 
 export interface HandleClose {
   (context: HandleCloseContext): (event: MouseEvent) => void;
-  __options?: SafePolygonOptions;
+  __options?: SafePolygonOptions | undefined;
 }
 
 export function getDelay(
@@ -75,37 +75,37 @@ export interface UseHoverProps {
    * handlers.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   /**
    * Accepts an event handler that runs on `mousemove` to control when the
    * floating element closes once the cursor leaves the reference element.
    * @default null
    */
-  handleClose?: HandleClose | null;
+  handleClose?: HandleClose | null | undefined;
   /**
    * Waits until the user’s cursor is at “rest” over the reference element
    * before changing the `open` state.
    * @default 0
    */
-  restMs?: number | (() => number);
+  restMs?: number | (() => number) | undefined;
   /**
    * Waits for the specified time when the event listener runs before changing
    * the `open` state.
    * @default 0
    */
-  delay?: Delay | (() => Delay);
+  delay?: Delay | (() => Delay) | undefined;
   /**
    * Whether the logic only runs for mouse input, ignoring touch input.
    * Note: due to a bug with Linux Chrome, "pen" inputs are considered "mouse".
    * @default false
    */
-  mouseOnly?: boolean;
+  mouseOnly?: boolean | undefined;
   /**
    * Whether moving the cursor over the floating element will open it, without a
    * regular hover event required.
    * @default true
    */
-  move?: boolean;
+  move?: boolean | undefined;
 }
 
 /**

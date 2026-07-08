@@ -18,7 +18,7 @@ export interface FlipOptions extends DetectOverflowOptions {
    * whether overflow along this axis is checked to perform a flip.
    * @default true
    */
-  mainAxis?: boolean;
+  mainAxis?: boolean | undefined;
   /**
    * The axis that runs along the alignment of the floating element. Determines
    * whether overflow along this axis is checked to perform a flip.
@@ -27,29 +27,29 @@ export interface FlipOptions extends DetectOverflowOptions {
    * - `'alignment'`: Whether to check cross axis overflow for alignment flipping only.
    * @default true
    */
-  crossAxis?: boolean | 'alignment';
+  crossAxis?: boolean | 'alignment' | undefined;
   /**
    * Placements to try sequentially if the preferred `placement` does not fit.
    * @default [oppositePlacement] (computed)
    */
-  fallbackPlacements?: Array<Placement>;
+  fallbackPlacements?: Array<Placement> | undefined;
   /**
    * What strategy to use when no placements fit.
    * @default 'bestFit'
    */
-  fallbackStrategy?: 'bestFit' | 'initialPlacement';
+  fallbackStrategy?: 'bestFit' | 'initialPlacement' | undefined;
   /**
    * Whether to allow fallback to the perpendicular axis of the preferred
    * placement, and if so, which side direction along the axis to prefer.
    * @default 'none' (disallow fallback)
    */
-  fallbackAxisSideDirection?: 'none' | 'start' | 'end';
+  fallbackAxisSideDirection?: 'none' | 'start' | 'end' | undefined;
   /**
    * Whether to flip to placements with the opposite alignment if they fit
    * better.
    * @default true
    */
-  flipAlignment?: boolean;
+  flipAlignment?: boolean | undefined;
 }
 
 /**

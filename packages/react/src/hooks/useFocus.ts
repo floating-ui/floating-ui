@@ -29,13 +29,13 @@ export interface UseFocusProps {
    * handlers.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   /**
    * Whether the open state only changes if the focus event is considered
    * visible (`:focus-visible` CSS selector).
    * @default true
    */
-  visibleOnly?: boolean;
+  visibleOnly?: boolean | undefined;
 }
 
 /**

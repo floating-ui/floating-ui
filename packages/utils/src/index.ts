@@ -27,7 +27,7 @@ export interface ElementRects {
  */
 export interface VirtualElement {
   getBoundingClientRect(): ClientRectObject;
-  getClientRects?(): Array<ClientRectObject>;
+  getClientRects?: (() => Array<ClientRectObject>) | undefined;
   contextElement?: any;
 }
 

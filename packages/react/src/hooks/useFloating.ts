@@ -20,17 +20,17 @@ import {useFloatingRootContext} from './useFloatingRootContext';
  * Provides data to position a floating element and context to add interactions.
  * @see https://floating-ui.com/docs/useFloating
  */
-export function useFloating<RT extends ReferenceType = ReferenceType>(
-  options: UseFloatingOptions = {},
-): UseFloatingReturn<RT> {
+export function useFloating<RT extends ReferenceType = ReferenceType>({
+  elements: elementsOption,
+  ...options
+}: UseFloatingOptions = {}): UseFloatingReturn<RT> {
   const {nodeId} = options;
 
   const internalRootContext = useFloatingRootContext({
     ...options,
     elements: {
-      reference: null,
-      floating: null,
-      ...options.elements,
+      reference: elementsOption?.reference ?? null,
+      floating: elementsOption?.floating ?? null,
     },
   });
 

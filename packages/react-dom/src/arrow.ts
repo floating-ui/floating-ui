@@ -13,7 +13,7 @@ export interface ArrowOptions {
    * Useful when the floating element has rounded corners.
    * @default 0
    */
-  padding?: Padding;
+  padding?: Padding | undefined;
 }
 
 /**

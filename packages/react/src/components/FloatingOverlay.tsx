@@ -9,7 +9,7 @@ export interface FloatingOverlayProps {
    * Whether the overlay should lock scrolling on the document body.
    * @default false
    */
-  lockScroll?: boolean;
+  lockScroll?: boolean | undefined;
 }
 
 function enableScrollLock() {
