@@ -1,3 +1,5 @@
-export function getClientRects(element: Element) {
-  return Array.from(element.getClientRects());
+import type {VirtualElement} from '../types';
+
+export function getClientRects(element: Element | VirtualElement) {
+  return element.getClientRects ? Array.from(element.getClientRects()) : [];
 }
