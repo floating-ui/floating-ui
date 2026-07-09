@@ -52,9 +52,14 @@ export function getViewportRect(
   }
 
   const windowScrollbarX = getWindowScrollBarX(html);
-  // <html> `overflow: hidden` + `scrollbar-gutter: stable` reduces the
-  // visual width of the <html> but this is not considered in the size
-  // of `html.clientWidth`.
+  // With `overflow: hidden` + `scrollbar-gutter: stable` on the <html>, the
+  // reserved gutter reduces the visual width but is not reflected in
+  // `html.clientWidth`, so subtract it. This only applies when the gutter is
+  // on the inline-end (right) edge, i.e. there is no left-side scrollbar. A
+  // left-side scrollbar (`windowScrollbarX > 0`) is already excluded from
+  // `visualViewport.width` and accounted for by `getHTMLOffset`, so it needs
+  // no adjustment here — adding it back would push the right edge (and the
+  // floating element) past the viewport.
   if (windowScrollbarX <= 0) {
     const doc = html.ownerDocument;
     const body = doc.body;
@@ -71,10 +76,6 @@ export function getViewportRect(
     if (clippingStableScrollbarWidth <= SCROLLBAR_MAX) {
       width -= clippingStableScrollbarWidth;
     }
-  } else if (windowScrollbarX <= SCROLLBAR_MAX) {
-    // If the <body> scrollbar is on the left, the width needs to be extended
-    // by the scrollbar amount so there isn't extra space on the right.
-    width += windowScrollbarX;
   }
 
   return {
