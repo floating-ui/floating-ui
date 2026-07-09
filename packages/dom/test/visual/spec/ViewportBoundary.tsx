@@ -37,6 +37,7 @@ export function ViewportBoundary() {
   const [strategy, setStrategy] = useState<Strategy>('absolute');
   const [gutter, setGutter] = useState(true);
   const [scrollLock, setScrollLock] = useState(false);
+  const [rtl, setRtl] = useState(false);
 
   const rootBoundary = toRootBoundary(boundary);
 
@@ -58,11 +59,15 @@ export function ViewportBoundary() {
     const html = document.documentElement;
     html.style.scrollbarGutter = gutter ? 'stable' : '';
     html.style.overflowY = scrollLock ? 'hidden' : '';
+    // `rtl` moves the document scrollbar to the left in browsers with
+    // classic (non-overlay) scrollbars.
+    html.dir = rtl ? 'rtl' : 'ltr';
     return () => {
       html.style.scrollbarGutter = '';
       html.style.overflowY = '';
+      html.dir = 'ltr';
     };
-  }, [gutter, scrollLock]);
+  }, [gutter, scrollLock, rtl]);
 
   const [box, setBox] = useState<Box | null>(null);
 
@@ -149,6 +154,13 @@ export function ViewportBoundary() {
           style={{backgroundColor: scrollLock ? 'black' : ''}}
         >
           scroll lock {scrollLock ? 'on' : 'off'}
+        </button>
+        <button
+          data-testid="rtl"
+          onClick={() => setRtl((r) => !r)}
+          style={{backgroundColor: rtl ? 'black' : ''}}
+        >
+          rtl {rtl ? 'on' : 'off'}
         </button>
       </Controls>
 
