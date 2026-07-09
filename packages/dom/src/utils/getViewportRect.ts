@@ -1,4 +1,4 @@
-import type {Rect, Strategy} from '@floating-ui/core';
+import type {Rect, RootBoundary, Strategy} from '@floating-ui/core';
 import {getWindow, isWebKit} from '@floating-ui/utils/dom';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
@@ -9,11 +9,17 @@ import {getWindowScrollBarX} from './getWindowScrollBarX';
 // Most scrollbars leave 15-18px of space.
 const SCROLLBAR_MAX = 25;
 
+type ViewportRootBoundary = Extract<
+  RootBoundary,
+  'viewport' | 'layoutViewport'
+>;
+
 export function getViewportRect(
   element: Element,
   strategy: Strategy,
-  layout = false,
+  rootBoundary: ViewportRootBoundary = 'viewport',
 ): Rect {
+  const isLayoutViewport = rootBoundary === 'layoutViewport';
   const win = getWindow(element);
   const html = getDocumentElement(element);
   const visualViewport = win.visualViewport;
@@ -29,7 +35,7 @@ export function getViewportRect(
     // visual viewport.
     const layoutRelativeClientCoords = !isWebKit() || strategy === 'fixed';
 
-    if (layout) {
+    if (isLayoutViewport) {
       if (!layoutRelativeClientCoords) {
         x = -visualViewport.offsetLeft;
         y = -visualViewport.offsetTop;

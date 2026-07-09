@@ -13,8 +13,9 @@ const BOUNDARY_OPTIONS: BoundaryOption[] = [
 ];
 
 export function LayoutViewport() {
-  const [boundaryOption, setBoundaryOption] =
-    useState<BoundaryOption>('viewport');
+  const [boundaryOption, setBoundaryOption] = useState<BoundaryOption | null>(
+    null,
+  );
 
   // The raw rect emulates the documented workaround for a layout viewport
   // boundary before `layoutViewport` existed. It does not account for
@@ -27,7 +28,7 @@ export function LayoutViewport() {
           width: document.documentElement.clientWidth,
           height: document.documentElement.clientHeight,
         }
-      : boundaryOption;
+      : boundaryOption ?? 'viewport';
 
   const {x, y, refs, strategy} = useFloating({
     placement: 'bottom',
