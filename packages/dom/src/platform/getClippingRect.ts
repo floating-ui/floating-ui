@@ -59,8 +59,11 @@ function getClientRectFromClippingAncestor(
 ): ClientRectObject {
   let rect: Rect;
 
-  if (clippingAncestor === 'viewport') {
-    rect = getViewportRect(element, strategy);
+  if (
+    clippingAncestor === 'viewport' ||
+    clippingAncestor === 'layoutViewport'
+  ) {
+    rect = getViewportRect(element, strategy, clippingAncestor);
   } else if (clippingAncestor === 'document') {
     rect = getDocumentRect(getDocumentElement(element));
   } else if (isElement(clippingAncestor)) {

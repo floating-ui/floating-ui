@@ -108,6 +108,7 @@ shift({
 shift({boundary: document.body});
 shift({boundary: [document.body]});
 shift({boundary: 'clippingAncestors'});
+shift({rootBoundary: 'layoutViewport'});
 shift({limiter: limitShift()});
 shift({limiter: limitShift({offset: 5})});
 shift({limiter: limitShift({offset: {mainAxis: 5}})});
@@ -219,6 +220,13 @@ const middlewareWDetectOverflow: Middleware = {
       boundary: 'clippingAncestors',
       rootBoundary: 'document',
       padding: {bottom: 5},
+      altBoundary: true,
+    });
+    detectOverflow(args, {
+      elementContext: 'reference',
+      boundary: 'clippingAncestors',
+      rootBoundary: 'layoutViewport',
+      padding: 5,
       altBoundary: true,
     });
 

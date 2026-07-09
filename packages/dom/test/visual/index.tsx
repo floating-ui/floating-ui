@@ -22,6 +22,7 @@ import {Flip} from './spec/Flip';
 import {Hide} from './spec/Hide';
 import {IFrame} from './spec/IFrame';
 import {Inline} from './spec/Inline';
+import {LayoutViewport} from './spec/LayoutViewport';
 import {Offset} from './spec/Offset';
 import {Perf} from './spec/Perf';
 import {Placement} from './spec/Placement';
@@ -33,6 +34,7 @@ import {Shift} from './spec/Shift';
 import {Size} from './spec/Size';
 import {Table} from './spec/Table';
 import {Transform} from './spec/Transform';
+import {ViewportBoundary} from './spec/ViewportBoundary';
 import {VirtualElement} from './spec/VirtualElement';
 import {New} from './utils/New';
 import {TopLayer} from './spec/TopLayer';
@@ -63,6 +65,8 @@ const ROUTES = [
   {path: 'perf', component: Perf},
   {path: 'iframe', component: IFrame},
   {path: 'top-layer', component: TopLayer},
+  {path: 'layout-viewport', component: LayoutViewport},
+  {path: 'viewport-boundary', component: ViewportBoundary},
 ];
 
 function App() {
