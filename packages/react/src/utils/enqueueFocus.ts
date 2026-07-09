@@ -1,9 +1,9 @@
 import type {FocusableElement} from 'tabbable';
 
 interface Options {
-  preventScroll?: boolean;
-  cancelPrevious?: boolean;
-  sync?: boolean;
+  preventScroll?: boolean | undefined;
+  cancelPrevious?: boolean | undefined;
+  sync?: boolean | undefined;
 }
 
 let rafId = 0;

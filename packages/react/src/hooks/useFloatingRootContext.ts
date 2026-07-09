@@ -10,12 +10,10 @@ import {useFloatingParentNodeId} from '../components/FloatingTree';
 import {error} from '../utils/log';
 
 export interface UseFloatingRootContextOptions {
-  open?: boolean;
-  onOpenChange?: (
-    open: boolean,
-    event?: Event,
-    reason?: OpenChangeReason,
-  ) => void;
+  open?: boolean | undefined;
+  onOpenChange?:
+    | ((open: boolean, event?: Event, reason?: OpenChangeReason) => void)
+    | undefined;
   elements: {
     reference: Element | null;
     floating: HTMLElement | null;

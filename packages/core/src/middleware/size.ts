@@ -16,12 +16,14 @@ export interface SizeOptions extends DetectOverflowOptions {
    * to change its size.
    * @default undefined
    */
-  apply?(
-    args: MiddlewareState & {
-      availableWidth: number;
-      availableHeight: number;
-    },
-  ): void | Promise<void>;
+  apply?:
+    | ((
+        args: MiddlewareState & {
+          availableWidth: number;
+          availableHeight: number;
+        },
+      ) => void | Promise<void>)
+    | undefined;
 }
 
 /**

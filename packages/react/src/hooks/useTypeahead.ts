@@ -24,17 +24,17 @@ export interface UseTypeaheadProps {
   /**
    * Callback invoked with the matching index if found as the user types.
    */
-  onMatch?: (index: number) => void;
+  onMatch?: ((index: number) => void) | undefined;
   /**
    * Callback invoked with the typing state as the user types.
    */
-  onTypingChange?: (isTyping: boolean) => void;
+  onTypingChange?: ((isTyping: boolean) => void) | undefined;
   /**
    * Whether the Hook is enabled, including all internal Effects and event
    * handlers.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   /**
    * A function that returns the matching string from the list.
    * @default lowercase-finder
@@ -44,22 +44,23 @@ export interface UseTypeaheadProps {
     | ((
         list: Array<string | null>,
         typedString: string,
-      ) => string | null | undefined);
+      ) => string | null | undefined)
+    | undefined;
   /**
    * The number of milliseconds to wait before resetting the typed string.
    * @default 750
    */
-  resetMs?: number;
+  resetMs?: number | undefined;
   /**
    * An array of keys to ignore when typing.
    * @default []
    */
-  ignoreKeys?: Array<string>;
+  ignoreKeys?: Array<string> | undefined;
   /**
    * The index of the selected item in the list, if available.
    * @default null
    */
-  selectedIndex?: number | null;
+  selectedIndex?: number | null | undefined;
 }
 
 /**

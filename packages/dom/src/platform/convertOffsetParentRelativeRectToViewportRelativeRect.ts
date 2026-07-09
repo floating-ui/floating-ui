@@ -19,7 +19,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   offsetParent,
   strategy,
 }: {
-  elements?: Elements;
+  elements?: Elements | undefined;
   rect: Rect;
   offsetParent: Element | Window;
   strategy: Strategy;

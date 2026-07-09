@@ -50,18 +50,20 @@ export interface UseFloatingOptions {
   /**
    * Where to place the floating element relative to the reference element.
    */
-  placement?: Placement;
+  placement?: Placement | undefined;
   /**
    * Array of middleware objects to modify the positioning or provide data for
    * rendering.
    */
-  middleware?: Array<Middleware | null | undefined | false>;
-  sameScrollView?: boolean;
-  elements?: {
-    reference?: any;
-    floating?: any;
-    offsetParent?: any;
-  };
+  middleware?: Array<Middleware | null | undefined | false> | undefined;
+  sameScrollView?: boolean | undefined;
+  elements?:
+    | {
+        reference?: any;
+        floating?: any;
+        offsetParent?: any;
+      }
+    | undefined;
 }
 
 export interface UseFloatingReturn extends ComputePositionReturn {

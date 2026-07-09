@@ -38,51 +38,65 @@ export interface Platform {
   getDimensions: (element: any) => Promisable<Dimensions>;
 
   // Optional
-  convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
-    elements?: Elements;
-    rect: Rect;
-    offsetParent: any;
-    strategy: Strategy;
-  }) => Promisable<Rect>;
-  getOffsetParent?: (element: any) => Promisable<any>;
-  isElement?: (value: any) => Promisable<boolean>;
-  getDocumentElement?: (element: any) => Promisable<any>;
-  getClientRects?: (element: any) => Promisable<Array<ClientRectObject>>;
-  isRTL?: (element: any) => Promisable<boolean>;
-  getScale?: (element: any) => Promisable<{x: number; y: number}>;
-  detectOverflow?: typeof detectOverflow;
+  convertOffsetParentRelativeRectToViewportRelativeRect?:
+    | ((args: {
+        elements?: Elements | undefined;
+        rect: Rect;
+        offsetParent: any;
+        strategy: Strategy;
+      }) => Promisable<Rect>)
+    | undefined;
+  getOffsetParent?: ((element: any) => Promisable<any>) | undefined;
+  isElement?: ((value: any) => Promisable<boolean>) | undefined;
+  getDocumentElement?: ((element: any) => Promisable<any>) | undefined;
+  getClientRects?:
+    | ((element: any) => Promisable<Array<ClientRectObject>>)
+    | undefined;
+  isRTL?: ((element: any) => Promisable<boolean>) | undefined;
+  getScale?: ((element: any) => Promisable<{x: number; y: number}>) | undefined;
+  detectOverflow?: typeof detectOverflow | undefined;
 }
 
 export interface MiddlewareData {
   [key: string]: any;
-  arrow?: Partial<Coords> & {
-    centerOffset: number;
-    alignmentOffset?: number;
-  };
-  autoPlacement?: {
-    index?: number;
-    overflows: Array<{
-      placement: Placement;
-      overflows: Array<number>;
-    }>;
-  };
-  flip?: {
-    index?: number;
-    overflows: Array<{
-      placement: Placement;
-      overflows: Array<number>;
-    }>;
-  };
-  hide?: {
-    referenceHidden?: boolean;
-    escaped?: boolean;
-    referenceHiddenOffsets?: SideObject;
-    escapedOffsets?: SideObject;
-  };
-  offset?: Coords & {placement: Placement};
-  shift?: Coords & {
-    enabled: {[key in Axis]: boolean};
-  };
+  arrow?:
+    | (Partial<Coords> & {
+        centerOffset: number;
+        alignmentOffset?: number | undefined;
+      })
+    | undefined;
+  autoPlacement?:
+    | {
+        index?: number | undefined;
+        overflows: Array<{
+          placement: Placement;
+          overflows: Array<number>;
+        }>;
+      }
+    | undefined;
+  flip?:
+    | {
+        index?: number | undefined;
+        overflows: Array<{
+          placement: Placement;
+          overflows: Array<number>;
+        }>;
+      }
+    | undefined;
+  hide?:
+    | {
+        referenceHidden?: boolean | undefined;
+        escaped?: boolean | undefined;
+        referenceHiddenOffsets?: SideObject | undefined;
+        escapedOffsets?: SideObject | undefined;
+      }
+    | undefined;
+  offset?: (Coords & {placement: Placement}) | undefined;
+  shift?:
+    | (Coords & {
+        enabled: {[key in Axis]: boolean};
+      })
+    | undefined;
 }
 
 export interface ComputePositionConfig {
@@ -93,16 +107,16 @@ export interface ComputePositionConfig {
   /**
    * Where to place the floating element relative to the reference element.
    */
-  placement?: Placement;
+  placement?: Placement | undefined;
   /**
    * The strategy to use when positioning the floating element.
    */
-  strategy?: Strategy;
+  strategy?: Strategy | undefined;
   /**
    * Array of middleware objects to modify the positioning or provide data for
    * rendering.
    */
-  middleware?: Array<Middleware | null | undefined | false>;
+  middleware?: Array<Middleware | null | undefined | false> | undefined;
 }
 
 export interface ComputePositionReturn extends Coords {
@@ -127,15 +141,18 @@ export type ComputePosition = (
 ) => Promise<ComputePositionReturn>;
 
 export interface MiddlewareReturn extends Partial<Coords> {
-  data?: {
-    [key: string]: any;
-  };
+  data?:
+    | {
+        [key: string]: any;
+      }
+    | undefined;
   reset?:
     | boolean
     | {
-        placement?: Placement;
-        rects?: boolean | ElementRects;
-      };
+        placement?: Placement | undefined;
+        rects?: boolean | ElementRects | undefined;
+      }
+    | undefined;
 }
 
 export type Middleware = {

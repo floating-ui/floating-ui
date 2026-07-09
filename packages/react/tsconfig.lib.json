@@ -2,7 +2,9 @@
   "extends": "config/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "out-tsc",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    // TODO: move to config/tsconfig.base.json after https://github.com/vitejs/vite/issues/21715 is resolved.
+    "exactOptionalPropertyTypes": true
   },
   "include": ["src"],
   "references": [

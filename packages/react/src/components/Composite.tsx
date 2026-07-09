@@ -56,50 +56,50 @@ export interface CompositeProps {
    * <Composite render={(htmlProps) => <ul {...htmlProps} />} />
    * ```
    */
-  render?: RenderProp;
+  render?: RenderProp | undefined;
   /**
    * Determines the orientation of the composite.
    */
-  orientation?: 'horizontal' | 'vertical' | 'both';
+  orientation?: 'horizontal' | 'vertical' | 'both' | undefined;
   /**
    * Determines whether focus should loop around when navigating past the first
    * or last item.
    */
-  loop?: boolean;
+  loop?: boolean | undefined;
   /**
    * Whether the direction of the composite’s navigation is in RTL layout.
    */
-  rtl?: boolean;
+  rtl?: boolean | undefined;
   /**
    * Determines the number of columns there are in the composite
    * (i.e. it’s a grid).
    */
-  cols?: number;
+  cols?: number | undefined;
   /**
    * Determines which items are disabled. The `disabled` or `aria-disabled`
    * attributes are used by default.
    */
-  disabledIndices?: number[] | ((index: number) => boolean);
+  disabledIndices?: number[] | ((index: number) => boolean) | undefined;
   /**
    * Determines which item is active. Used to externally control the active
    * item.
    */
-  activeIndex?: number;
+  activeIndex?: number | undefined;
   /**
    * Called when the user navigates to a new item. Used to externally control
    * the active item.
    */
-  onNavigate?(index: number): void;
+  onNavigate?: ((index: number) => void) | undefined;
   /**
    * Only for `cols > 1`, specify sizes for grid items.
    * `{ width: 2, height: 2 }` means an item is 2 columns wide and 2 rows tall.
    */
-  itemSizes?: Dimensions[];
+  itemSizes?: Dimensions[] | undefined;
   /**
    * Only relevant for `cols > 1` and items with different sizes, specify if
    * the grid is dense (as defined in the CSS spec for grid-auto-flow).
    */
-  dense?: boolean;
+  dense?: boolean | undefined;
 }
 
 const horizontalKeys = [ARROW_LEFT, ARROW_RIGHT];
@@ -324,7 +324,7 @@ export interface CompositeItemProps {
    * <CompositeItem render={(htmlProps) => <li {...htmlProps} />} />
    * ```
    */
-  render?: RenderProp;
+  render?: RenderProp | undefined;
 }
 
 /**

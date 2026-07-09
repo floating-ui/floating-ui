@@ -130,24 +130,27 @@ export interface FloatingFocusManagerProps {
    * state.
    * @default false
    */
-  disabled?: boolean;
+  disabled?: boolean | undefined;
   /**
    * The order in which focus cycles.
    * @default ['content']
    */
-  order?: Array<'reference' | 'floating' | 'content'>;
+  order?: Array<'reference' | 'floating' | 'content'> | undefined;
   /**
    * Which element to initially focus. Can be either a number (tabbable index as
    * specified by the `order`) or a ref.
    * @default 0
    */
-  initialFocus?: number | React.MutableRefObject<HTMLElement | null>;
+  initialFocus?:
+    | number
+    | React.MutableRefObject<HTMLElement | null>
+    | undefined;
   /**
    * Determines if the focus guards are rendered. If not, focus can escape into
    * the address bar/console/browser UI, like in native dialogs.
    * @default true
    */
-  guards?: boolean;
+  guards?: boolean | undefined;
   /**
    * Determines if focus should be returned to the reference element once the
    * floating element closes/unmounts (or if that is not available, the
@@ -156,21 +159,24 @@ export interface FloatingFocusManagerProps {
    * It can be also set to a ref to explicitly control the element to return focus to.
    * @default true
    */
-  returnFocus?: boolean | React.MutableRefObject<HTMLElement | null>;
+  returnFocus?:
+    | boolean
+    | React.MutableRefObject<HTMLElement | null>
+    | undefined;
   /**
    * Determines if focus should be restored to the nearest tabbable element if
    * focus inside the floating element is lost (such as due to the removal of
    * the currently focused element from the DOM).
    * @default false
    */
-  restoreFocus?: boolean;
+  restoreFocus?: boolean | undefined;
   /**
    * Determines if focus is “modal”, meaning focus is fully trapped inside the
    * floating element and outside content cannot be accessed. This includes
    * screen reader virtual cursors.
    * @default true
    */
-  modal?: boolean;
+  modal?: boolean | undefined;
   /**
    * If your focus management is modal and there is no explicit close button
    * available, you can use this prop to render a visually-hidden dismiss
@@ -179,7 +185,7 @@ export interface FloatingFocusManagerProps {
    * an `esc` key.
    * @default undefined
    */
-  visuallyHiddenDismiss?: boolean | string;
+  visuallyHiddenDismiss?: boolean | string | undefined;
   /**
    * Determines whether `focusout` event listeners that control whether the
    * floating element should be closed if the focus moves outside of it are
@@ -187,18 +193,18 @@ export interface FloatingFocusManagerProps {
    * focus management.
    * @default true
    */
-  closeOnFocusOut?: boolean;
+  closeOnFocusOut?: boolean | undefined;
   /**
    * Determines whether outside elements are `inert` when `modal` is enabled.
    * This enables pointer modality without a backdrop.
    * @default false
    */
-  outsideElementsInert?: boolean;
+  outsideElementsInert?: boolean | undefined;
   /**
    * Returns a list of elements that should be considered part of the
    * floating element.
    */
-  getInsideElements?: () => Element[];
+  getInsideElements?: (() => Element[]) | undefined;
 }
 
 /**

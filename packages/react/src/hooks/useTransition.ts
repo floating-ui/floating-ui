@@ -4,7 +4,9 @@ import {useLatestRef, useModernLayoutEffect} from '@floating-ui/react/utils';
 
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 
-type Duration = number | {open?: number; close?: number};
+type Duration =
+  | number
+  | {open?: number | undefined; close?: number | undefined};
 
 // Converts a JS style key like `backgroundColor` to a CSS transition-property
 // like `background-color`.
@@ -43,7 +45,7 @@ export interface UseTransitionStatusProps {
    * The duration of the transition in milliseconds, or an object containing
    * `open` and `close` keys for different durations.
    */
-  duration?: Duration;
+  duration?: Duration | undefined;
 }
 
 type TransitionStatus = 'unmounted' | 'initial' | 'open' | 'close';
@@ -113,21 +115,21 @@ export interface UseTransitionStylesProps extends UseTransitionStatusProps {
   /**
    * The styles to apply when the floating element is initially mounted.
    */
-  initial?: CSSStylesProperty;
+  initial?: CSSStylesProperty | undefined;
   /**
    * The styles to apply when the floating element is transitioning to the
    * `open` state.
    */
-  open?: CSSStylesProperty;
+  open?: CSSStylesProperty | undefined;
   /**
    * The styles to apply when the floating element is transitioning to the
    * `close` state.
    */
-  close?: CSSStylesProperty;
+  close?: CSSStylesProperty | undefined;
   /**
    * The styles to apply to all states.
    */
-  common?: CSSStylesProperty;
+  common?: CSSStylesProperty | undefined;
 }
 
 /**

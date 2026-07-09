@@ -95,24 +95,24 @@ export interface UseClientPointProps {
    * handlers.
    * @default true
    */
-  enabled?: boolean;
+  enabled?: boolean | undefined;
   /**
    * Whether to restrict the client point to an axis and use the reference
    * element (if it exists) as the other axis. This can be useful if the
    * floating element is also interactive.
    * @default 'both'
    */
-  axis?: 'x' | 'y' | 'both';
+  axis?: 'x' | 'y' | 'both' | undefined;
   /**
    * An explicitly defined `x` client coordinate.
    * @default null
    */
-  x?: number | null;
+  x?: number | null | undefined;
   /**
    * An explicitly defined `y` client coordinate.
    * @default null
    */
-  y?: number | null;
+  y?: number | null | undefined;
 }
 
 /**
