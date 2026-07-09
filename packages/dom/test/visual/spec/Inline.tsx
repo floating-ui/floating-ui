@@ -19,10 +19,26 @@ const CONNECTED_STATUSES: ConnectedStatus[] = [
   '3',
 ];
 
+// Hebrew (RTL script) copy used to exercise right-to-left line wrapping. In a
+// disjoined wrap the two line fragments are ordered opposite to LTR: the top
+// fragment sits to the *left* of the bottom fragment.
+const RTL_BEFORE =
+  'לורם איפסום דולור סיט אמט קונסקטטור אדיפיסינג עלית סד דו איואיסמוד ';
+const RTL_AFTER =
+  ' אוט אאו מגנה אאו אאוגה אפיקיטור ביבנדום איד קומודו טלוס נולם גרבידה מי נק סודלס טינסידונט לורם אורסי אליקום אקס איד קומודו אראט ליברו אוט ריסוס נאם מולסטיה נון לקטוס סיט אמט טמפוס';
+const RTL_TEXT: Record<ConnectedStatus, string> = {
+  '1': 'בדיקה',
+  '2-disjoined': 'נולה רוטרום דפיבוס טורפיס אאו וולוטפאט',
+  '2-joined':
+    'נולה רוטרום דפיבוס טורפיס אאו וולוטפאט דואיס קורסוס ניסי מאסה נון דיקטום',
+  '3': 'נולה רוטרום דפיבוס טורפיס אאו וולוטפאט דואיס קורסוס ניסי מאסה נון דיקטום טורפיס אינטרדום אט נולה רוטרום דפיבוס טורפיס אאו וולוטפאט',
+};
+
 export function Inline() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<ConnectedStatus>('2-disjoined');
+  const [rtl, setRtl] = useState(false);
   const [mouseCoords, setMouseCoords] = useState<Coords | undefined>();
   const {x, y, strategy, refs} = useFloating({
     placement,
@@ -111,22 +127,43 @@ export function Inline() {
       <h1>Inline</h1>
       <p>The floating element should choose the most appropriate rect.</p>
       <div className="container">
-        <p className="prose" style={{padding: 10}}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.{' '}
-          <strong
-            ref={refs.setReference}
-            style={{color: 'royalblue'}}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            {text}
-          </strong>
-          . Ut eu magna eu augue efficitur bibendum id commodo tellus. Nullam
-          gravida, mi nec sodales tincidunt, lorem orci aliquam ex, id commodo
-          erat libero ut risus. Nam molestie non lectus sit amet tempus. Vivamus
-          accumsan{' '}
-          <strong style={{color: 'red'}}>nunc quis faucibus egestas</strong>.
-          Duis cursus nisi massa, non dictum turpis interdum at.
+        <p
+          className="prose"
+          dir={rtl ? 'rtl' : undefined}
+          style={{padding: 10}}
+        >
+          {rtl ? (
+            <>
+              {RTL_BEFORE}
+              <strong
+                ref={refs.setReference}
+                style={{color: 'royalblue'}}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                {RTL_TEXT[status]}
+              </strong>
+              {RTL_AFTER}
+            </>
+          ) : (
+            <>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.{' '}
+              <strong
+                ref={refs.setReference}
+                style={{color: 'royalblue'}}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                {text}
+              </strong>
+              . Ut eu magna eu augue efficitur bibendum id commodo tellus.
+              Nullam gravida, mi nec sodales tincidunt, lorem orci aliquam ex,
+              id commodo erat libero ut risus. Nam molestie non lectus sit amet
+              tempus. Vivamus accumsan{' '}
+              <strong style={{color: 'red'}}>nunc quis faucibus egestas</strong>
+              . Duis cursus nisi massa, non dictum turpis interdum at.
+            </>
+          )}
         </p>
         {open && (
           <div
@@ -193,6 +230,22 @@ export function Inline() {
             }}
           >
             {localStatus}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>RTL</h2>
+      <Controls>
+        {[false, true].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`rtl-${bool}`}
+            onClick={() => setRtl(bool)}
+            style={{
+              backgroundColor: rtl === bool ? 'black' : '',
+            }}
+          >
+            {String(bool)}
           </button>
         ))}
       </Controls>
