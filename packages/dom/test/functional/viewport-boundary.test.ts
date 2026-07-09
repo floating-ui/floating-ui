@@ -39,12 +39,13 @@ test('layoutViewport ignores pinch zoom while viewport tracks it', async ({
     .toBeLessThan(1);
 });
 
-// An RTL document places the scrollbar on the left in browsers with classic
-// scrollbars (Linux CI). Guards the removed `width += windowScrollbarX`
-// inflation: the right floating element must not get pushed past the
-// viewport's right edge.
+// RTL smoke test: both floating elements must stay inside the viewport with
+// the document in RTL mode. Note that Chromium keeps the root scrollbar on
+// the right even in RTL, so this does NOT exercise the left-side scrollbar
+// path (Firefox-only; covered by the getViewportRect unit tests and the
+// manual /viewport-boundary route).
 ['viewport', 'layoutViewport'].forEach((boundary) => {
-  test(`handles a left-side document scrollbar with ${boundary} rootBoundary`, async ({
+  test(`stays inside the viewport in RTL with ${boundary} rootBoundary`, async ({
     page,
   }) => {
     await page.goto('http://localhost:1234/viewport-boundary');

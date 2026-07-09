@@ -59,8 +59,9 @@ export function ViewportBoundary() {
     const html = document.documentElement;
     html.style.scrollbarGutter = gutter ? 'stable' : '';
     html.style.overflowY = scrollLock ? 'hidden' : '';
-    // `rtl` moves the document scrollbar to the left in browsers with
-    // classic (non-overlay) scrollbars.
+    // `rtl` moves the document scrollbar to the left in Firefox with classic
+    // (non-overlay) scrollbars; Chromium keeps the root scrollbar on the
+    // right even in RTL.
     html.dir = rtl ? 'rtl' : 'ltr';
     return () => {
       html.style.scrollbarGutter = '';
