@@ -46,7 +46,7 @@
     "react-native": ">=0.64.0"
   },
   "dependencies": {
-    "@floating-ui/core": "^1.0.0"
+    "@floating-ui/core": "workspace:^1.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.19",
