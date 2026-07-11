@@ -13,7 +13,7 @@ export type Length = 'width' | 'height';
 export type Dimensions = {[key in Length]: number};
 export type SideObject = {[key in Side]: number};
 export type Rect = Prettify<Coords & Dimensions>;
-export type Padding = number | Prettify<Partial<SideObject>>;
+export type Padding = number | Prettify<{[K in Side]?: number | undefined}>;
 export type ClientRectObject = Prettify<Rect & SideObject>;
 
 export interface ElementRects {
@@ -174,8 +174,15 @@ export function getOppositePlacement<T extends string>(placement: T): T {
   return (oppositeSideMap[side] + placement.slice(side.length)) as T;
 }
 
-export function expandPaddingObject(padding: Partial<SideObject>): SideObject {
-  return {top: 0, right: 0, bottom: 0, left: 0, ...padding};
+export function expandPaddingObject(
+  padding: Exclude<Padding, number>,
+): SideObject {
+  return {
+    top: padding.top ?? 0,
+    right: padding.right ?? 0,
+    bottom: padding.bottom ?? 0,
+    left: padding.left ?? 0,
+  };
 }
 
 export function getPaddingObject(padding: Padding): SideObject {
