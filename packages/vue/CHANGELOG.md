@@ -1,5 +1,12 @@
 # @floating-ui/vue
 
+## 2.0.1
+
+### Patch Changes
+
+- fix: support explicit `undefined` for optional properties with `exactOptionalPropertyTypes`
+- Update dependencies: `@floating-ui/dom@1.8.0`, `@floating-ui/utils@0.2.12`
+
 ## 2.0.0
 
 ### Major Changes

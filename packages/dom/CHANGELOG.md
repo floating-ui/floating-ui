@@ -1,5 +1,24 @@
 # @floating-ui/dom
 
+## 1.8.0
+
+### Minor Changes
+
+- feat: add `'layoutViewport'` string option to `rootBoundary`. Unlike the visual `'viewport'` boundary, it remains stable while pinch-zooming or when a mobile software keyboard is open, and unlike a manually passed `Rect` of the documentElement's client size, it accounts for space reserved by `scrollbar-gutter: stable`.
+
+### Patch Changes
+
+- fix: remove redundant passive options from scroll listeners
+- fix: support explicit `undefined` for optional properties with `exactOptionalPropertyTypes`
+- fix(autoUpdate): update immediately instead of waiting for the 1s `layoutShift` refresh throttle when the reference moved during an observer refresh
+- fix(getClippingRect): correct clipping-ancestor filtering for fixed-position elements
+- perf(dom): reduce bundle size and skip redundant per-call work in positioning utilities
+- fix(getViewportRect): account for `scrollbar-gutter: stable both-edges` reserved space
+- fix(getViewportRect): don't overflow past a left-side document scrollbar
+- fix(platform): don't throw in `getClientRects` when a virtual element without a `getClientRects` method is used with the `inline()` middleware
+- fix(autoUpdate): refresh layout shift observer on root resize
+- Update dependencies: `@floating-ui/core@1.8.0`, `@floating-ui/utils@0.2.12`
+
 ## 1.7.6
 
 ### Patch Changes

@@ -1,5 +1,19 @@
 # @floating-ui/core
 
+## 1.8.0
+
+### Minor Changes
+
+- feat: add `'layoutViewport'` string option to `rootBoundary`. Unlike the visual `'viewport'` boundary, it remains stable while pinch-zooming or when a mobile software keyboard is open, and unlike a manually passed `Rect` of the documentElement's client size, it accounts for space reserved by `scrollbar-gutter: stable`.
+
+### Patch Changes
+
+- fix(inline): no-op on empty client rects and detect RTL disjoined line rects
+- fix: support explicit `undefined` for optional properties with `exactOptionalPropertyTypes`
+- fix(size): correctly compute available size for centered elements overflowing both sides
+- perf(core): reduce bundle size with behavior-identical middleware simplifications
+- Update dependencies: `@floating-ui/utils@0.2.12`
+
 ## 1.7.5
 
 ### Patch Changes
