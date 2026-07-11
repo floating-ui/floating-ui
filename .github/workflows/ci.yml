@@ -32,7 +32,7 @@ jobs:
       - uses: ./.github/actions/functional
 
   browser-tests:
-    name: Browser tests (React)
+    name: Browser tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,6 +40,8 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Run browser tests for @floating-ui/react
         run: pnpm --filter @floating-ui/react run test:browser
+      - name: Run browser tests for @floating-ui/dom
+        run: pnpm --filter @floating-ui/dom run test:browser
 
   canary-publish:
     name: Publish canary packages

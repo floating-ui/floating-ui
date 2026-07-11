@@ -34,6 +34,7 @@
     "build:api": "build-api --tsc tsconfig.lib.json",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "test:browser": "TEST_ENV=browser vitest --browser",
     "publint": "publint",
     "playwright": "playwright test ./test/functional",
     "prepack": "compat-exports",

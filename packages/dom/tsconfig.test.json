@@ -2,7 +2,10 @@
   "extends": "config/tsconfig.base.json",
   "compilerOptions": {
     "outDir": "out-tsc",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    // The `@vitest/browser` types (pulled in by vite.config.mts for browser
+    // mode) conflict with the resolved DOM/node typings.
+    "skipLibCheck": true
   },
   "include": ["test", "vite.config.mts"],
   "references": [
