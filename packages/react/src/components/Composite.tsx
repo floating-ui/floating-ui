@@ -22,6 +22,15 @@ import {
   ARROW_UP,
 } from '../utils/constants';
 
+// Method syntax keeps callback parameters bivariant, but expressing the
+// explicit `| undefined` required by `exactOptionalPropertyTypes` needs
+// property syntax, which is contravariant under `strictFunctionTypes`.
+// Extracting the function from a method position restores that bivariance so
+// consumers can still assign callbacks with narrower parameter types.
+type BivariantCallback<T extends (...args: any[]) => any> = {
+  bivariance(...args: Parameters<T>): ReturnType<T>;
+}['bivariance'];
+
 function renderJsx(
   render: RenderProp | undefined,
   computedProps: React.HTMLAttributes<HTMLElement>,
@@ -89,7 +98,7 @@ export interface CompositeProps {
    * Called when the user navigates to a new item. Used to externally control
    * the active item.
    */
-  onNavigate?: ((index: number) => void) | undefined;
+  onNavigate?: BivariantCallback<(index: number) => void> | undefined;
   /**
    * Only for `cols > 1`, specify sizes for grid items.
    * `{ width: 2, height: 2 }` means an item is 2 columns wide and 2 rows tall.

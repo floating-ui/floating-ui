@@ -25,6 +25,15 @@ type Prettify<T> = {
 
 type Promisable<T> = T | Promise<T>;
 
+// Method syntax keeps callback parameters bivariant, but expressing the
+// explicit `| undefined` required by `exactOptionalPropertyTypes` needs
+// property syntax, which is contravariant under `strictFunctionTypes`.
+// Extracting the function from a method position restores that bivariance so
+// consumers can still assign callbacks with narrower parameter types.
+type BivariantCallback<T extends (...args: any[]) => any> = {
+  bivariance(...args: Parameters<T>): ReturnType<T>;
+}['bivariance'];
+
 export type Derivable<T> = (state: MiddlewareState) => T;
 
 export type OffsetValue =
@@ -166,12 +175,14 @@ export type SizeOptions = Prettify<
        * @default undefined
        */
       apply?:
-        | ((
-            args: MiddlewareState & {
-              availableWidth: number;
-              availableHeight: number;
-            },
-          ) => Promisable<void>)
+        | BivariantCallback<
+            (
+              args: MiddlewareState & {
+                availableWidth: number;
+                availableHeight: number;
+              },
+            ) => Promisable<void>
+          >
         | undefined;
     }
 >;

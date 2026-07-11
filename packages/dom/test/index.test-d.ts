@@ -1,4 +1,4 @@
-import type {Middleware} from '../src';
+import type {Middleware, MiddlewareState} from '../src';
 import {
   arrow,
   autoPlacement,
@@ -249,3 +249,19 @@ computePosition(document.body, document.body, {
       Promise.resolve((element as HTMLElement).offsetParent || window),
   },
 });
+
+// A callback with a narrower parameter type stays assignable to `apply`,
+// matching the behavior before optional callbacks gained an explicit
+// `| undefined` for `exactOptionalPropertyTypes`. Regresses to a TS2322 error
+// if `apply` loses its bivariant callback treatment.
+const narrowSizeApply = (
+  args: MiddlewareState & {
+    availableWidth: number;
+    availableHeight: number;
+    custom: true;
+  },
+) => {
+  args.custom;
+};
+
+size({apply: narrowSizeApply});

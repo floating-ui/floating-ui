@@ -7,6 +7,15 @@ import type * as React from 'react';
 
 import type {ExtendedUserProps} from './hooks/useInteractions';
 
+// Method syntax keeps callback parameters bivariant, but expressing the
+// explicit `| undefined` required by `exactOptionalPropertyTypes` needs
+// property syntax, which is contravariant under `strictFunctionTypes`.
+// Extracting the function from a method position restores that bivariance so
+// consumers can still assign callbacks with narrower parameter types.
+type BivariantCallback<T extends (...args: any[]) => any> = {
+  bivariance(...args: Parameters<T>): ReturnType<T>;
+}['bivariance'];
+
 export * from '.';
 export type {FloatingArrowProps} from './components/FloatingArrow';
 export type {FloatingDelayGroupProps} from './components/FloatingDelayGroup';
@@ -250,7 +259,9 @@ export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
    * closed.
    */
   onOpenChange?:
-    | ((open: boolean, event?: Event, reason?: OpenChangeReason) => void)
+    | BivariantCallback<
+        (open: boolean, event?: Event, reason?: OpenChangeReason) => void
+      >
     | undefined;
   /**
    * Unique node id when using `FloatingTree`.

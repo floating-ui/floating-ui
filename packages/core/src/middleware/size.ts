@@ -10,6 +10,15 @@ import {
 import type {DetectOverflowOptions} from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
 
+// Method syntax keeps callback parameters bivariant, but expressing the
+// explicit `| undefined` required by `exactOptionalPropertyTypes` needs
+// property syntax, which is contravariant under `strictFunctionTypes`.
+// Extracting the function from a method position restores that bivariance so
+// consumers can still assign callbacks with narrower parameter types.
+type BivariantCallback<T extends (...args: any[]) => any> = {
+  bivariance(...args: Parameters<T>): ReturnType<T>;
+}['bivariance'];
+
 export interface SizeOptions extends DetectOverflowOptions {
   /**
    * Function that is called to perform style mutations to the floating element
@@ -17,12 +26,14 @@ export interface SizeOptions extends DetectOverflowOptions {
    * @default undefined
    */
   apply?:
-    | ((
-        args: MiddlewareState & {
-          availableWidth: number;
-          availableHeight: number;
-        },
-      ) => void | Promise<void>)
+    | BivariantCallback<
+        (
+          args: MiddlewareState & {
+            availableWidth: number;
+            availableHeight: number;
+          },
+        ) => void | Promise<void>
+      >
     | undefined;
 }
 
