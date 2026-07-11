@@ -356,12 +356,13 @@ export function useListNavigation(
 
     const initialItem = listRef.current[indexRef.current];
     const forceScrollIntoView = forceScrollIntoViewRef.current;
+    const isSyncScheduler = forceSyncFocusRef.current;
 
     if (initialItem) {
       runFocus(initialItem);
     }
 
-    const scheduler = forceSyncFocusRef.current
+    const scheduler = isSyncScheduler
       ? (v: () => void) => v()
       : requestAnimationFrame;
 
@@ -381,13 +382,23 @@ export function useListNavigation(
         (forceScrollIntoView || !isPointerModalityRef.current);
 
       if (shouldScrollIntoView) {
-        // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
-        // by all browsers.
-        waitedItem.scrollIntoView?.(
-          typeof scrollIntoViewOptions === 'boolean'
-            ? {block: 'nearest', inline: 'nearest'}
-            : scrollIntoViewOptions,
-        );
+        const doScroll = () => {
+          // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
+          // by all browsers.
+          waitedItem.scrollIntoView?.(
+            typeof scrollIntoViewOptions === 'boolean'
+              ? {block: 'nearest', inline: 'nearest'}
+              : scrollIntoViewOptions,
+          );
+        };
+        // When opening with a pre-selected index, the floating element's
+        // position may not yet be applied (async middleware). Defer one extra
+        // frame so the element is visible before scrolling.
+        if (forceScrollIntoView && !isSyncScheduler) {
+          requestAnimationFrame(doScroll);
+        } else {
+          doScroll();
+        }
       }
     });
   });

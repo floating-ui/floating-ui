@@ -467,8 +467,15 @@ describe('selectedIndex', () => {
     render(<App selectedIndex={0} />);
     fireEvent.click(screen.getByRole('button'));
     expect(requestAnimationFrame).toHaveBeenCalled();
-    // Run the timer
-    requestAnimationFrame.mock.calls.forEach((call) => call[0](0));
+    // First rAF pass: focuses the item and schedules the deferred scroll rAF.
+    const firstPassCount = requestAnimationFrame.mock.calls.length;
+    requestAnimationFrame.mock.calls
+      .slice(0, firstPassCount)
+      .forEach((call) => call[0](0));
+    // Second rAF pass: runs the deferred scroll scheduled for initial open.
+    requestAnimationFrame.mock.calls
+      .slice(firstPassCount)
+      .forEach((call) => call[0](0));
     expect(scrollIntoView).toHaveBeenCalled();
     cleanup();
   });
