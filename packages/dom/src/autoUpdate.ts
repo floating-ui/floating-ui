@@ -43,7 +43,11 @@ export interface AutoUpdateOptions {
 }
 
 // https://samthor.au/2021/observing-dom/
-function observeMove(element: Element, onMove: () => void) {
+function observeMove(
+  element: Element,
+  onMove: () => void,
+  ancestorResize: boolean,
+) {
   let io: IntersectionObserver | null = null;
   let timeoutId: NodeJS.Timeout;
 
@@ -134,7 +138,11 @@ function observeMove(element: Element, onMove: () => void) {
   }
 
   const win = getWindow(element);
-  const handleResize = () => refresh();
+  // The window is a resize ancestor, so when `ancestorResize` is enabled its
+  // listener already runs the update on resize. Here we only need to rebuild
+  // the `IntersectionObserver` for the new root size, skipping a redundant
+  // update. When `ancestorResize` is disabled, this becomes the sole update.
+  const handleResize = () => refresh(ancestorResize);
 
   win.addEventListener('resize', handleResize);
 
@@ -184,7 +192,9 @@ export function autoUpdate(
   });
 
   const cleanupIo =
-    referenceEl && layoutShift ? observeMove(referenceEl, update) : null;
+    referenceEl && layoutShift
+      ? observeMove(referenceEl, update, ancestorResize)
+      : null;
 
   let reobserveFrame = -1;
   let resizeObserver: ResizeObserver | null = null;
