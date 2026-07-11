@@ -68,6 +68,7 @@ afterEach(() => {
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
   document.body.style.margin = '';
+  html.style.scrollbarGutter = '';
   mocks.isWebKit = false;
 });
 
@@ -88,6 +89,47 @@ test('subtracts a right-side reserved gutter from the width', () => {
 
   expect(rect.x).toBe(0);
   expect(rect.width).toBe(792);
+});
+
+// `scrollbar-gutter: stable both-edges` reserves a gutter on BOTH inline edges,
+// but only the inline-end (right) one can hold the scrollbar. The empty
+// inline-start gutter clips nothing, so only the single scrollbar-side gutter
+// is excluded — width shrinks by one gutter and the origin stays put.
+test('subtracts only the scrollbar-side gutter for both-edges', () => {
+  mockViewport({
+    htmlClientWidth: 800,
+    htmlClientHeight: 800,
+    htmlBCRLeft: 0,
+    htmlScrollLeft: 0,
+    bodyClientWidth: 770, // two 15px gutters reserved
+    visualViewportWidth: 800,
+  });
+  html.style.scrollbarGutter = 'stable both-edges';
+
+  const rect = getViewportRect(html, 'absolute', 'layoutViewport');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(785);
+});
+
+// The safety cap applies per edge: `both-edges` halves the measured total first,
+// so a legitimate two-gutter total isn't rejected, but an implausibly large
+// single gutter still is.
+test('caps the both-edges gutter per edge, not on the total', () => {
+  mockViewport({
+    htmlClientWidth: 800,
+    htmlClientHeight: 800,
+    htmlBCRLeft: 0,
+    htmlScrollLeft: 0,
+    bodyClientWidth: 720, // two 40px "gutters" — 40 > SCROLLBAR_MAX per edge
+    visualViewportWidth: 800,
+  });
+  html.style.scrollbarGutter = 'stable both-edges';
+
+  const rect = getViewportRect(html, 'absolute', 'layoutViewport');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(800);
 });
 
 // A left-side scrollbar (e.g. Firefox `layout.scrollbar.side`) shifts the
