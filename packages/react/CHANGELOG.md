@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.27.20
+
+### Patch Changes
+
+- fix: remove redundant passive options from scroll listeners
+- fix: support explicit `undefined` for optional properties with `exactOptionalPropertyTypes`
+- Update dependencies: `@floating-ui/react-dom@2.1.9`, `@floating-ui/utils@0.2.12`
+
 ## 0.27.19
 
 ### Patch Changes

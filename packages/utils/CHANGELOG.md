@@ -1,5 +1,13 @@
 # @floating-ui/utils
 
+## 0.2.12
+
+### Patch Changes
+
+- fix: support explicit `undefined` for optional properties with `exactOptionalPropertyTypes`
+- fix(getPaddingObject): coalesce explicit `undefined` padding members to `0`
+- perf(utils): reduce bundle size in `getNearestOverflowAncestor`
+
 ## 0.2.11
 
 ### Patch Changes

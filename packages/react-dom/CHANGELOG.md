@@ -1,5 +1,12 @@
 # @floating-ui/react-dom
 
+## 2.1.9
+
+### Patch Changes
+
+- fix: support explicit `undefined` for optional properties with `exactOptionalPropertyTypes`
+- Update dependencies: `@floating-ui/dom@1.8.0`
+
 ## 2.1.8
 
 ### Patch Changes

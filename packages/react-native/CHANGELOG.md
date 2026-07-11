@@ -1,5 +1,12 @@
 # @floating-ui/react-native
 
+## 0.10.10
+
+### Patch Changes
+
+- fix: support explicit `undefined` for optional properties with `exactOptionalPropertyTypes`
+- Update dependencies: `@floating-ui/core@1.8.0`
+
 ## 0.10.9
 
 ### Patch Changes

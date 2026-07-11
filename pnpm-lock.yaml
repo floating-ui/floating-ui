@@ -365,7 +365,7 @@ importers:
   packages/react-native:
     dependencies:
       '@floating-ui/core':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^1.8.0
         version: link:../core
     devDependencies:
       '@types/react':
