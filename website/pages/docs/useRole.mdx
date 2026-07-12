@@ -113,6 +113,13 @@ the floating element.
 
 #### `label{:.string}`
 
+<Notice type="warning" title="Deprecated">
+  `aria-labelledby` is only applied to the reference element
+  while the floating element is open, so the reference element
+  loses its accessible name while closed. Use `aria-label` on
+  the reference element instead.
+</Notice>
+
 This role should be used for floating elements that act as a
 label for a reference element with no text/label (e.g. an icon
 button).
