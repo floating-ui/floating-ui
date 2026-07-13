@@ -1017,3 +1017,96 @@ test('nested floating elements with different portal roots', async () => {
   expect(screen.queryByText('open 2')).toBeInTheDocument();
   expect(screen.queryByText('nested')).toBeInTheDocument();
 });
+
+describe('inline floating element inside a modal portal', () => {
+  // A modal rendered via FloatingPortal + FloatingFocusManager(modal) with its
+  // own useDismiss disabled. The modal places its floating element in a portal
+  // container under <body>, and marks every other body-level subtree with
+  // `data-floating-ui-inert`. An inline Popover (no FloatingPortal) rendered
+  // inside the Modal lives in the same portal container, so its floating
+  // element shares the same root ancestor as the Modal's other children.
+  function Modal({children}: {children: ReactNode}) {
+    const [open] = useState(true);
+    const {refs, context} = useFloating({open});
+    const {getFloatingProps} = useInteractions([
+      useDismiss(context, {enabled: false}),
+    ]);
+
+    return (
+      <FloatingPortal>
+        <FloatingFocusManager context={context} modal>
+          <div ref={refs.setFloating} role="dialog" {...getFloatingProps()}>
+            {children}
+          </div>
+        </FloatingFocusManager>
+      </FloatingPortal>
+    );
+  }
+
+  function InlinePopover() {
+    const [open, setOpen] = useState(true);
+    const {refs, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+    });
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      useDismiss(context),
+    ]);
+
+    return (
+      <>
+        <button
+          {...getReferenceProps({ref: refs.setReference})}
+          data-testid="trigger"
+        >
+          trigger
+        </button>
+        {open && (
+          <div
+            {...getFloatingProps({ref: refs.setFloating})}
+            role="tooltip"
+            data-testid="floating"
+          >
+            floating
+          </div>
+        )}
+      </>
+    );
+  }
+
+  test('outsidePress closes when pressing a sibling outside the floating element', async () => {
+    render(
+      <Modal>
+        <InlinePopover />
+        <div data-testid="other">other row</div>
+      </Modal>,
+    );
+    await act(async () => {});
+
+    expect(screen.queryByTestId('floating')).toBeInTheDocument();
+
+    // Previously this was misidentified as a third-party element injected after
+    // the floating element rendered, because the target root ancestor (the
+    // portal container) contained no markers.
+    fireEvent.pointerDown(screen.getByTestId('other'));
+    await act(async () => {});
+
+    expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
+    cleanup();
+  });
+
+  test('outsidePress does not close when pressing inside the floating element', async () => {
+    render(
+      <Modal>
+        <InlinePopover />
+      </Modal>,
+    );
+    await act(async () => {});
+
+    fireEvent.pointerDown(screen.getByTestId('floating'));
+    await act(async () => {});
+
+    expect(screen.queryByTestId('floating')).toBeInTheDocument();
+    cleanup();
+  });
+});
