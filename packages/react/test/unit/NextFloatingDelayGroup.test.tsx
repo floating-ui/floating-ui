@@ -11,6 +11,8 @@ import {
   useInteractions,
 } from '../../src';
 
+import {hoverEnter} from './utils';
+
 vi.useFakeTimers();
 
 interface Props {
@@ -86,7 +88,7 @@ function App() {
 test('groups delays correctly', async () => {
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-one'));
+  hoverEnter(screen.getByTestId('reference-one'));
 
   await act(async () => {
     vi.advanceTimersByTime(1);
@@ -100,7 +102,7 @@ test('groups delays correctly', async () => {
 
   expect(screen.queryByTestId('floating-one')).toBeInTheDocument();
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-two'));
+  hoverEnter(screen.getByTestId('reference-two'));
 
   await act(async () => {
     vi.advanceTimersByTime(1);
@@ -109,7 +111,7 @@ test('groups delays correctly', async () => {
   expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
   expect(screen.queryByTestId('floating-two')).toBeInTheDocument();
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-three'));
+  hoverEnter(screen.getByTestId('reference-three'));
 
   await act(async () => {
     vi.advanceTimersByTime(1);
@@ -152,7 +154,7 @@ test('timeoutMs', async () => {
 
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-one'));
+  hoverEnter(screen.getByTestId('reference-one'));
 
   await act(async () => {
     vi.advanceTimersByTime(1000);
@@ -168,7 +170,7 @@ test('timeoutMs', async () => {
 
   expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-two'));
+  hoverEnter(screen.getByTestId('reference-two'));
 
   await act(async () => {
     vi.advanceTimersByTime(1);
@@ -176,7 +178,7 @@ test('timeoutMs', async () => {
 
   expect(screen.queryByTestId('floating-two')).toBeInTheDocument();
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-three'));
+  hoverEnter(screen.getByTestId('reference-three'));
 
   await act(async () => {
     vi.advanceTimersByTime(1);
@@ -219,7 +221,7 @@ it('does not re-render unrelated consumers', async () => {
 
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-one'));
+  hoverEnter(screen.getByTestId('reference-one'));
 
   await act(async () => {
     vi.advanceTimersByTime(1000);
@@ -235,7 +237,7 @@ it('does not re-render unrelated consumers', async () => {
 
   expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-two'));
+  hoverEnter(screen.getByTestId('reference-two'));
 
   await act(async () => {
     vi.advanceTimersByTime(1);
