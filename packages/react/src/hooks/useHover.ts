@@ -6,7 +6,7 @@ import {
   isMouseLikePointerType,
   useLatestRef,
   useEffectEvent,
-  useModernLayoutEffect,
+  useClientLayoutEffect,
 } from '@floating-ui/react/utils';
 
 import {
@@ -425,7 +425,7 @@ export function useHover(
   // while the floating element is open and has a `handleClose` handler. Also
   // handles nested floating elements.
   // https://github.com/floating-ui/floating-ui/issues/1722
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!enabled) return;
 
     if (
@@ -465,7 +465,7 @@ export function useHover(
     }
   }, [enabled, open, parentId, elements, tree, handleCloseRef, isHoverOpen]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!open) {
       pointerTypeRef.current = undefined;
       restTimeoutPendingRef.current = false;

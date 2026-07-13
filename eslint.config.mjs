@@ -47,7 +47,7 @@ export default defineConfig(
       'react-hooks/exhaustive-deps': [
         'error',
         {
-          additionalHooks: 'useModernLayoutEffect',
+          additionalHooks: 'useClientLayoutEffect',
         },
       ],
       '@typescript-eslint/consistent-type-imports': [
