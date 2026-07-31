@@ -1,5 +1,5 @@
 import type {Strategy} from '@floating-ui/dom';
-import {useFloating} from '@floating-ui/react-dom';
+import {shift, size, useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
@@ -8,24 +8,52 @@ type Node = null | 'html' | 'body' | 'container';
 export const NODES: Node[] = [null, 'html', 'body', 'container'];
 export const ZOOMS = [0.8, 1.5, 2];
 export const STRATEGIES: Strategy[] = ['absolute', 'fixed'];
+export const SCROLLS = [0, 250];
 
 export function Zoom() {
   const [node, setNode] = useState<Node>(null);
   const [zoom, setZoom] = useState(1.5);
   const [strategy, setStrategy] = useState<Strategy>('absolute');
-  const {x, y, refs, update} = useFloating({strategy});
+  const [scroll, setScroll] = useState(0);
+  const [overflow, setOverflow] = useState(false);
+
+  const {x, y, refs, update} = useFloating({
+    strategy,
+    middleware: overflow
+      ? [
+          shift({padding: 4}),
+          size({
+            apply({availableWidth, availableHeight, elements}) {
+              Object.assign(elements.floating.style, {
+                maxWidth: `${availableWidth}px`,
+                maxHeight: `${availableHeight}px`,
+              });
+            },
+            padding: 4,
+          }),
+        ]
+      : [],
+  });
 
   useLayoutEffect(() => {
-    if (node === null) {
-      return;
+    const floating = refs.floating.current;
+    if (floating && !overflow) {
+      Object.assign(floating.style, {maxWidth: '', maxHeight: ''});
     }
 
-    const element = node === 'html' ? document.documentElement : document.body;
+    // Zoom first: it changes the document height the scroll is applied against.
+    const element =
+      node === 'html'
+        ? document.documentElement
+        : node === 'body'
+          ? document.body
+          : document.querySelector<HTMLElement>('.container');
 
-    if (element) {
+    if (node !== null && element) {
       element.style.zoom = String(zoom);
     }
 
+    window.scrollTo(0, scroll);
     update();
 
     return () => {
@@ -33,7 +61,7 @@ export function Zoom() {
         element.style.zoom = '';
       }
     };
-  }, [node, zoom, strategy, update]);
+  }, [node, zoom, strategy, scroll, overflow, refs, update]);
 
   return (
     <>
@@ -63,14 +91,17 @@ export function Zoom() {
             position: strategy,
             top: y ?? '',
             left: x ?? '',
-            width: 60,
-            height: 40,
+            width: overflow ? 300 : 60,
+            height: overflow ? 400 : 40,
             fontSize: 12,
+            overflow: 'hidden',
           }}
         >
           Floating
         </div>
       </div>
+      {/* Makes the document scrollable at every zoom factor. */}
+      <div style={{height: 1200}} />
 
       <h2>Node</h2>
       <Controls>
@@ -116,6 +147,38 @@ export function Zoom() {
             }}
           >
             {localStrategy}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Scroll</h2>
+      <Controls>
+        {SCROLLS.map((localScroll) => (
+          <button
+            key={localScroll}
+            data-testid={`zoom-scroll-${localScroll}`}
+            onClick={() => setScroll(localScroll)}
+            style={{
+              backgroundColor: scroll === localScroll ? 'black' : '',
+            }}
+          >
+            {localScroll}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Overflow middleware</h2>
+      <Controls>
+        {[false, true].map((localOverflow) => (
+          <button
+            key={String(localOverflow)}
+            data-testid={`zoom-overflow-${localOverflow}`}
+            onClick={() => setOverflow(localOverflow)}
+            style={{
+              backgroundColor: overflow === localOverflow ? 'black' : '',
+            }}
+          >
+            {String(localOverflow)}
           </button>
         ))}
       </Controls>
