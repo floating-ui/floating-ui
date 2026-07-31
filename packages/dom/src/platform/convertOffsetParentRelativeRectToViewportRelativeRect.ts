@@ -12,6 +12,7 @@ import {
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
 import {getHTMLOffset} from '../utils/getHTMLOffset';
+import {getZoom} from '../utils/getZoom';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   elements,
@@ -57,6 +58,11 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
     documentElement && !isOffsetParentAnElement && !isFixed
       ? getHTMLOffset(documentElement, scroll)
       : createCoords(0);
+
+  if (!isOffsetParentAnElement && elements) {
+    const zoom = getZoom(elements.floating as Element);
+    scale = {x: scale.x * zoom, y: scale.y * zoom};
+  }
 
   return {
     width: rect.width * scale.x,

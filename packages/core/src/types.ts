@@ -53,7 +53,9 @@ export interface Platform {
     | ((element: any) => Promisable<Array<ClientRectObject>>)
     | undefined;
   isRTL?: ((element: any) => Promisable<boolean>) | undefined;
-  getScale?: ((element: any) => Promisable<{x: number; y: number}>) | undefined;
+  getScale?:
+    | ((element: any, floating?: any) => Promisable<{x: number; y: number}>)
+    | undefined;
   detectOverflow?: typeof detectOverflow | undefined;
 }
 

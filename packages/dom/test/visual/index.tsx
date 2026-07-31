@@ -36,6 +36,7 @@ import {Table} from './spec/Table';
 import {Transform} from './spec/Transform';
 import {ViewportBoundary} from './spec/ViewportBoundary';
 import {VirtualElement} from './spec/VirtualElement';
+import {Zoom} from './spec/Zoom';
 import {New} from './utils/New';
 import {TopLayer} from './spec/TopLayer';
 
@@ -67,6 +68,7 @@ const ROUTES = [
   {path: 'top-layer', component: TopLayer},
   {path: 'layout-viewport', component: LayoutViewport},
   {path: 'viewport-boundary', component: ViewportBoundary},
+  {path: 'zoom', component: Zoom},
 ];
 
 function App() {
