@@ -20,12 +20,7 @@ export function Zoom() {
       return;
     }
 
-    const element =
-      node === 'html'
-        ? document.documentElement
-        : node === 'body'
-          ? document.body
-          : document.querySelector<HTMLElement>('.container');
+    const element = node === 'html' ? document.documentElement : document.body;
 
     if (element) {
       element.style.zoom = String(zoom);
@@ -47,8 +42,18 @@ export function Zoom() {
         The floating element should be anchored to the bottom of the reference
         when the CSS <code>zoom</code> property is applied to an ancestor.
       </p>
-      <div className="container">
-        <div ref={refs.setReference} className="reference">
+      {/* Kept deliberately small: at `zoom: 2` a full-size container would
+          overflow the viewport, and screenshotting it scrolls the page, which
+          drags a `fixed` floating element out of the captured region. */}
+      <div
+        className="container"
+        style={{width: 260, height: 160, placeItems: 'start', padding: 10}}
+      >
+        <div
+          ref={refs.setReference}
+          className="reference"
+          style={{width: 70, height: 40, fontSize: 12}}
+        >
           Reference
         </div>
         <div
@@ -58,6 +63,9 @@ export function Zoom() {
             position: strategy,
             top: y ?? '',
             left: x ?? '',
+            width: 60,
+            height: 40,
+            fontSize: 12,
           }}
         >
           Floating
