@@ -5,39 +5,56 @@ import {useLayoutEffect, useState} from 'react';
 import {Controls} from '../utils/Controls';
 
 type Node = null | 'html' | 'body' | 'container';
+// `shift` keeps the floating element small enough to stay fully in the
+// viewport; `both` adds `size()` and a floating element tall enough that the
+// clamp actually binds.
+type Overflow = 'off' | 'shift' | 'both';
+
 export const NODES: Node[] = [null, 'html', 'body', 'container'];
 export const ZOOMS = [0.8, 1.5, 2];
 export const STRATEGIES: Strategy[] = ['absolute', 'fixed'];
 export const SCROLLS = [0, 250];
+export const OVERFLOWS: Overflow[] = ['off', 'shift', 'both'];
+
+const FLOATING_SIZE: Record<Overflow, {width: number; height: number}> = {
+  off: {width: 60, height: 40},
+  shift: {width: 140, height: 60},
+  both: {width: 300, height: 400},
+};
 
 export function Zoom() {
   const [node, setNode] = useState<Node>(null);
   const [zoom, setZoom] = useState(1.5);
   const [strategy, setStrategy] = useState<Strategy>('absolute');
   const [scroll, setScroll] = useState(0);
-  const [overflow, setOverflow] = useState(false);
+  const [overflow, setOverflow] = useState<Overflow>('off');
 
   const {x, y, refs, update} = useFloating({
     strategy,
-    middleware: overflow
-      ? [
-          shift({padding: 4}),
-          size({
-            apply({availableWidth, availableHeight, elements}) {
-              Object.assign(elements.floating.style, {
-                maxWidth: `${availableWidth}px`,
-                maxHeight: `${availableHeight}px`,
-              });
-            },
-            padding: 4,
-          }),
-        ]
-      : [],
+    middleware:
+      overflow === 'off'
+        ? []
+        : [
+            shift({padding: 4}),
+            ...(overflow === 'both'
+              ? [
+                  size({
+                    apply({availableWidth, availableHeight, elements}) {
+                      Object.assign(elements.floating.style, {
+                        maxWidth: `${availableWidth}px`,
+                        maxHeight: `${availableHeight}px`,
+                      });
+                    },
+                    padding: 4,
+                  }),
+                ]
+              : []),
+          ],
   });
 
   useLayoutEffect(() => {
     const floating = refs.floating.current;
-    if (floating && !overflow) {
+    if (floating && overflow !== 'both') {
       Object.assign(floating.style, {maxWidth: '', maxHeight: ''});
     }
 
@@ -91,8 +108,7 @@ export function Zoom() {
             position: strategy,
             top: y ?? '',
             left: x ?? '',
-            width: overflow ? 300 : 60,
-            height: overflow ? 400 : 40,
+            ...FLOATING_SIZE[overflow],
             fontSize: 12,
             overflow: 'hidden',
           }}
@@ -110,9 +126,7 @@ export function Zoom() {
             key={String(localNode)}
             data-testid={`zoom-node-${localNode}`}
             onClick={() => setNode(localNode)}
-            style={{
-              backgroundColor: node === localNode ? 'black' : '',
-            }}
+            style={{backgroundColor: node === localNode ? 'black' : ''}}
           >
             {localNode ?? 'None'}
           </button>
@@ -126,9 +140,7 @@ export function Zoom() {
             key={localZoom}
             data-testid={`zoom-${localZoom}`}
             onClick={() => setZoom(localZoom)}
-            style={{
-              backgroundColor: zoom === localZoom ? 'black' : '',
-            }}
+            style={{backgroundColor: zoom === localZoom ? 'black' : ''}}
           >
             {localZoom}
           </button>
@@ -158,9 +170,7 @@ export function Zoom() {
             key={localScroll}
             data-testid={`zoom-scroll-${localScroll}`}
             onClick={() => setScroll(localScroll)}
-            style={{
-              backgroundColor: scroll === localScroll ? 'black' : '',
-            }}
+            style={{backgroundColor: scroll === localScroll ? 'black' : ''}}
           >
             {localScroll}
           </button>
@@ -169,16 +179,16 @@ export function Zoom() {
 
       <h2>Overflow middleware</h2>
       <Controls>
-        {[false, true].map((localOverflow) => (
+        {OVERFLOWS.map((localOverflow) => (
           <button
-            key={String(localOverflow)}
+            key={localOverflow}
             data-testid={`zoom-overflow-${localOverflow}`}
             onClick={() => setOverflow(localOverflow)}
             style={{
               backgroundColor: overflow === localOverflow ? 'black' : '',
             }}
           >
-            {String(localOverflow)}
+            {localOverflow}
           </button>
         ))}
       </Controls>

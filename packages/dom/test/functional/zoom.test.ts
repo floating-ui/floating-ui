@@ -16,7 +16,7 @@ async function setup(
     zoom?: number;
     strategy: string;
     scroll?: number;
-    overflow?: boolean;
+    overflow?: 'shift' | 'both';
   },
 ) {
   await page.goto('http://localhost:1234/zoom');
@@ -25,7 +25,7 @@ async function setup(
     await click(page, `[data-testid="zoom-${zoom}"]`);
   }
   if (overflow) {
-    await click(page, '[data-testid="zoom-overflow-true"]');
+    await click(page, `[data-testid="zoom-overflow-${overflow}"]`);
   }
   await click(page, `[data-testid="zoom-node-${node}"]`);
   if (scroll) {
@@ -79,25 +79,37 @@ test('anchored with zoom 2 on a mid-tree element using the fixed strategy', asyn
 // `detectOverflow()` must scale the rect without scaling the scroll
 // subtraction. These capture the viewport rather than the container, because
 // an element screenshot scrolls it into view and would undo the scroll.
-(
-  [
-    [1.5, 'absolute'],
-    [2, 'absolute'],
-    [2, 'fixed'],
-  ] as const
-).forEach(([zoom, strategy]) => {
-  test(`shift() and size() with zoom ${zoom} on body using the ${strategy} strategy on a scrolled document`, async ({
+//
+// `size()` is only paired with `fixed`: under `absolute` the clipping boundary
+// is the document, so the granted height legitimately exceeds the viewport and
+// a viewport screenshot could never pin it. `absolute` uses `shift()` with a
+// floating element small enough to stay wholly in frame.
+[1.5, 2].forEach((zoom) => {
+  test(`shift() and size() with zoom ${zoom} on body using the fixed strategy on a scrolled document`, async ({
     page,
   }) => {
     await setup(page, {
       node: 'body',
       zoom,
-      strategy,
+      strategy: 'fixed',
       scroll: 250,
-      overflow: true,
+      overflow: 'both',
     });
     expect(await page.screenshot()).toMatchSnapshot(
-      `scrolled-${zoom}-${strategy}.png`,
+      `scrolled-${zoom}-fixed.png`,
     );
   });
+});
+
+test('shift() with zoom 2 on body using the absolute strategy on a scrolled document', async ({
+  page,
+}) => {
+  await setup(page, {
+    node: 'body',
+    zoom: 2,
+    strategy: 'absolute',
+    scroll: 250,
+    overflow: 'shift',
+  });
+  expect(await page.screenshot()).toMatchSnapshot('scrolled-2-absolute.png');
 });
