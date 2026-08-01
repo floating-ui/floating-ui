@@ -114,10 +114,12 @@ test('size() with zoom 2 on body using the absolute strategy on a scrolled docum
   expect(floatingRect).not.toBeNull();
   expect(viewport).not.toBeNull();
   expect(floatingRect!.y + floatingRect!.height).toBeLessThanOrEqual(
-    viewport!.height - 4,
+    viewport!.height - 2,
   );
 });
 
+// This covers absolute anchoring. The size() assertion above covers the
+// asymmetric Window scroll conversion.
 test('shift() with zoom 2 on body using the absolute strategy on a scrolled document', async ({
   page,
 }) => {

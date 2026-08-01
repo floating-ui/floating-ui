@@ -95,10 +95,16 @@ export async function detectOverflow(
       : rect,
   );
 
+  // CSS zoom is uniform, so either non-zero axis can provide its scale.
+  const scale = rect.width
+    ? elementClientRect.width / rect.width
+    : rect.height
+      ? elementClientRect.height / rect.height
+      : 1;
   const offsetScale = ((await platform.isElement?.(offsetParent)) &&
     (await platform.getScale?.(offsetParent))) || {
-    x: elementClientRect.width / rect.width || 1,
-    y: elementClientRect.height / rect.height || 1,
+    x: scale,
+    y: scale,
   };
 
   return {

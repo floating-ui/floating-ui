@@ -1,4 +1,4 @@
-import {computePosition, shift} from '../src';
+import {computePosition, detectOverflow} from '../src';
 import type {Platform} from '../src/types';
 
 const reference = {};
@@ -73,22 +73,44 @@ test('middlewareData', async () => {
   expect(middlewareData.test).toEqual({hello: true});
 });
 
-test('does not pass a non-element offset parent to getScale', async () => {
+test('derives non-element scale without passing it to getScale', async () => {
   let getScaleCalled = false;
+  let overflow: Awaited<ReturnType<typeof detectOverflow>> | undefined;
 
   await computePosition(reference, floating, {
     platform: {
       ...platform,
+      getElementRects: () => ({
+        reference: {x: 75, y: 25, width: 0, height: 10},
+        floating: floatingRect,
+      }),
       getClippingRect: () => ({x: 0, y: 0, width: 100, height: 100}),
       getOffsetParent: () => ({}),
       isElement: () => false,
+      convertOffsetParentRelativeRectToViewportRelativeRect: ({rect}) => ({
+        x: rect.x * 2,
+        y: rect.y * 2,
+        width: rect.width * 2,
+        height: rect.height * 2,
+      }),
       getScale: () => {
         getScaleCalled = true;
         throw new Error('getScale() received a non-element');
       },
     },
-    middleware: [shift()],
+    middleware: [
+      {
+        name: 'test',
+        async fn(state) {
+          overflow = await detectOverflow(state, {
+            elementContext: 'reference',
+          });
+          return {};
+        },
+      },
+    ],
   });
 
   expect(getScaleCalled).toBe(false);
+  expect(overflow).toEqual({top: -25, bottom: -15, left: -75, right: 25});
 });
