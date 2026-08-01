@@ -74,16 +74,8 @@ test('anchored with zoom 2 on a mid-tree element using the fixed strategy', asyn
   );
 });
 
-// Scrolled document with overflow middleware. The forward conversion divides
-// the combined rect-plus-scroll value by the zoom, so the inverse used by
-// `detectOverflow()` must scale the rect without scaling the scroll
-// subtraction. These capture the viewport rather than the container, because
-// an element screenshot scrolls it into view and would undo the scroll.
-//
-// `size()` is only paired with `fixed`: under `absolute` the clipping boundary
-// is the document, so the granted height legitimately exceeds the viewport and
-// a viewport screenshot could never pin it. `absolute` uses `shift()` with a
-// floating element small enough to stay wholly in frame.
+// These capture the viewport rather than the container, because an element
+// screenshot scrolls it into view and would undo the scroll.
 [1.5, 2].forEach((zoom) => {
   test(`shift() and size() with zoom ${zoom} on body using the fixed strategy on a scrolled document`, async ({
     page,
@@ -99,6 +91,31 @@ test('anchored with zoom 2 on a mid-tree element using the fixed strategy', asyn
       `scrolled-${zoom}-fixed.png`,
     );
   });
+});
+
+// The forward conversion divides the combined rect-plus-scroll value by the
+// zoom. Its inverse must scale the rect without scaling the Window scroll,
+// whose values remain in viewport units. A screenshot alone can bless a
+// clipped element, so assert the rendered boundary directly.
+test('size() with zoom 2 on body using the absolute strategy on a scrolled document', async ({
+  page,
+}) => {
+  await setup(page, {
+    node: 'body',
+    zoom: 2,
+    strategy: 'absolute',
+    scroll: 250,
+    overflow: 'both',
+  });
+
+  const floatingRect = await page.locator('.floating').boundingBox();
+  const viewport = page.viewportSize();
+
+  expect(floatingRect).not.toBeNull();
+  expect(viewport).not.toBeNull();
+  expect(floatingRect!.y + floatingRect!.height).toBeLessThanOrEqual(
+    viewport!.height - 4,
+  );
 });
 
 test('shift() with zoom 2 on body using the absolute strategy on a scrolled document', async ({

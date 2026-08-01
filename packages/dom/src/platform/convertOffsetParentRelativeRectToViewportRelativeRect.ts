@@ -49,6 +49,8 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
     if (isOffsetParentAnElement) {
       const offsetRect = getBoundingClientRect(offsetParent);
       scale = getScale(offsetParent);
+      scroll.scrollLeft *= scale.x;
+      scroll.scrollTop *= scale.y;
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     }
@@ -67,8 +69,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x:
-      rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y,
+    x: rect.x * scale.x - scroll.scrollLeft + offsets.x + htmlOffset.x,
+    y: rect.y * scale.y - scroll.scrollTop + offsets.y + htmlOffset.y,
   };
 }

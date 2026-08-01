@@ -1,4 +1,4 @@
-import {computePosition} from '../src';
+import {computePosition, shift} from '../src';
 import type {Platform} from '../src/types';
 
 const reference = {};
@@ -71,4 +71,24 @@ test('middlewareData', async () => {
   });
 
   expect(middlewareData.test).toEqual({hello: true});
+});
+
+test('does not pass a non-element offset parent to getScale', async () => {
+  let getScaleCalled = false;
+
+  await computePosition(reference, floating, {
+    platform: {
+      ...platform,
+      getClippingRect: () => ({x: 0, y: 0, width: 100, height: 100}),
+      getOffsetParent: () => ({}),
+      isElement: () => false,
+      getScale: () => {
+        getScaleCalled = true;
+        throw new Error('getScale() received a non-element');
+      },
+    },
+    middleware: [shift()],
+  });
+
+  expect(getScaleCalled).toBe(false);
 });

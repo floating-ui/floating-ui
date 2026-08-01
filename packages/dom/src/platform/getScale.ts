@@ -5,18 +5,12 @@ import {isHTMLElement} from '@floating-ui/utils/dom';
 import type {VirtualElement} from '../types';
 import {getCssDimensions} from '../utils/getCssDimensions';
 import {unwrapElement} from '../utils/unwrapElement';
-import {getZoom} from '../utils/getZoom';
 
-export function getScale(
-  element: Element | VirtualElement | Window,
-  floating?: Element,
-): Coords {
-  const domElement = unwrapElement(element as Element | VirtualElement);
+export function getScale(element: Element | VirtualElement): Coords {
+  const domElement = unwrapElement(element);
 
   if (!isHTMLElement(domElement)) {
-    // A `Window` offsetParent still positions in the floating element's own
-    // CSS-zoom space, so overflow amounts must be divided by that zoom.
-    return createCoords(floating ? getZoom(floating) : 1);
+    return createCoords(1);
   }
 
   const rect = domElement.getBoundingClientRect();
