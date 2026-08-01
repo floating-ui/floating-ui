@@ -12,7 +12,6 @@ import {
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
 import {getHTMLOffset} from '../utils/getHTMLOffset';
-import {getZoom} from '../utils/getZoom';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   elements,
@@ -27,15 +26,18 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
 }): Rect {
   const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
-  const topLayer = elements ? isTopLayer(elements.floating) : false;
 
-  if (offsetParent === documentElement || (topLayer && isFixed)) {
+  if (
+    offsetParent === documentElement ||
+    (elements && isTopLayer(elements.floating) && isFixed)
+  ) {
     return rect;
   }
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
   let scale = createCoords(1);
-  const offsets = createCoords(0);
+  let offsetX = 0;
+  let offsetY = 0;
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
 
   if (isOffsetParentAnElement || !isFixed) {
@@ -49,27 +51,32 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
     if (isOffsetParentAnElement) {
       const offsetRect = getBoundingClientRect(offsetParent);
       scale = getScale(offsetParent);
-      scroll.scrollLeft *= scale.x;
-      scroll.scrollTop *= scale.y;
-      offsets.x = offsetRect.x + offsetParent.clientLeft;
-      offsets.y = offsetRect.y + offsetParent.clientTop;
+      offsetX = offsetRect.x + offsetParent.clientLeft;
+      offsetY = offsetRect.y + offsetParent.clientTop;
     }
   }
 
   const htmlOffset =
-    documentElement && !isOffsetParentAnElement && !isFixed
+    !isOffsetParentAnElement && !isFixed
       ? getHTMLOffset(documentElement, scroll)
       : createCoords(0);
 
   if (!isOffsetParentAnElement && elements) {
-    const zoom = getZoom(elements.floating as Element);
-    scale = {x: scale.x * zoom, y: scale.y * zoom};
+    scale = createCoords((elements.floating as any).currentCSSZoom || 1);
   }
 
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft + offsets.x + htmlOffset.x,
-    y: rect.y * scale.y - scroll.scrollTop + offsets.y + htmlOffset.y,
+    x:
+      rect.x * scale.x -
+      scroll.scrollLeft * (isOffsetParentAnElement ? scale.x : 1) +
+      offsetX +
+      htmlOffset.x,
+    y:
+      rect.y * scale.y -
+      scroll.scrollTop * (isOffsetParentAnElement ? scale.y : 1) +
+      offsetY +
+      htmlOffset.y,
   };
 }

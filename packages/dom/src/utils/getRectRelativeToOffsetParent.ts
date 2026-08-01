@@ -12,13 +12,12 @@ import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 import {getHTMLOffset} from './getHTMLOffset';
-import {getZoom} from './getZoom';
 
 export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
   offsetParent: Element | Window,
   strategy: Strategy,
-  floating?: Element,
+  floating: Element,
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
@@ -26,7 +25,8 @@ export function getRectRelativeToOffsetParent(
   const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
-  const offsets = createCoords(0);
+  let offsetX = 0;
+  let offsetY = 0;
 
   if (isOffsetParentAnElement || !isFixed) {
     if (
@@ -43,33 +43,30 @@ export function getRectRelativeToOffsetParent(
         isFixed,
         offsetParent,
       );
-      offsets.x = offsetRect.x + offsetParent.clientLeft;
-      offsets.y = offsetRect.y + offsetParent.clientTop;
+      offsetX = offsetRect.x + offsetParent.clientLeft;
+      offsetY = offsetRect.y + offsetParent.clientTop;
     }
   }
 
   // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
   // Firefox with layout.scrollbar.side = 3 in about:config to test this.
-  if (!isOffsetParentAnElement && documentElement) {
-    offsets.x = getWindowScrollBarX(documentElement);
+  if (!isOffsetParentAnElement) {
+    offsetX = getWindowScrollBarX(documentElement);
   }
 
   const htmlOffset =
-    documentElement && !isOffsetParentAnElement && !isFixed
+    !isOffsetParentAnElement && !isFixed
       ? getHTMLOffset(documentElement, scroll)
       : createCoords(0);
-
-  const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
-  const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
 
   // When the offsetParent is the Window, every term above is in viewport
   // pixels, but the coords are written as `left`/`top` on the floating element,
   // which resolves them in its own CSS-zoom space.
-  const zoom = isOffsetParentAnElement || !floating ? 1 : getZoom(floating);
+  const zoom = isOffsetParentAnElement || (floating as any).currentCSSZoom || 1;
 
   return {
-    x: x / zoom,
-    y: y / zoom,
+    x: (rect.left + scroll.scrollLeft - offsetX - htmlOffset.x) / zoom,
+    y: (rect.top + scroll.scrollTop - offsetY - htmlOffset.y) / zoom,
     width: rect.width / zoom,
     height: rect.height / zoom,
   };
