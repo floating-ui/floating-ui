@@ -28,6 +28,7 @@ export function Zoom() {
   const [strategy, setStrategy] = useState<Strategy>('absolute');
   const [scroll, setScroll] = useState(0);
   const [overflow, setOverflow] = useState<Overflow>('off');
+  const [topLayer, setTopLayer] = useState(false);
 
   const {x, y, refs, update} = useFloating({
     strategy,
@@ -53,7 +54,24 @@ export function Zoom() {
   });
 
   useLayoutEffect(() => {
+    // Set imperatively: React 18's types have no `popover` prop.
     const floating = refs.floating.current;
+    if (floating) {
+      const open = floating.matches(':popover-open');
+      if (topLayer) {
+        if (!floating.hasAttribute('popover')) {
+          floating.setAttribute('popover', 'manual');
+        }
+        if (!open) {
+          floating.showPopover();
+        }
+      } else {
+        if (open) {
+          floating.hidePopover();
+        }
+        floating.removeAttribute('popover');
+      }
+    }
     if (floating && overflow !== 'both') {
       Object.assign(floating.style, {maxWidth: '', maxHeight: ''});
     }
@@ -78,7 +96,7 @@ export function Zoom() {
         element.style.zoom = '';
       }
     };
-  }, [node, zoom, strategy, scroll, overflow, refs, update]);
+  }, [node, zoom, strategy, scroll, overflow, topLayer, refs, update]);
 
   return (
     <>
@@ -106,6 +124,9 @@ export function Zoom() {
           className="floating"
           style={{
             position: strategy,
+            margin: 0,
+            right: 'auto',
+            bottom: 'auto',
             top: y ?? '',
             left: x ?? '',
             ...FLOATING_SIZE[overflow],
@@ -173,6 +194,22 @@ export function Zoom() {
             style={{backgroundColor: scroll === localScroll ? 'black' : ''}}
           >
             {localScroll}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Top layer</h2>
+      <Controls>
+        {[false, true].map((localTopLayer) => (
+          <button
+            key={String(localTopLayer)}
+            data-testid={`zoom-toplayer-${localTopLayer}`}
+            onClick={() => setTopLayer(localTopLayer)}
+            style={{
+              backgroundColor: topLayer === localTopLayer ? 'black' : '',
+            }}
+          >
+            {String(localTopLayer)}
           </button>
         ))}
       </Controls>

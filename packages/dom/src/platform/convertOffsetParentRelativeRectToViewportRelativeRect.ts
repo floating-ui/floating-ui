@@ -6,7 +6,6 @@ import {
   getNodeScroll,
   isHTMLElement,
   isOverflowElement,
-  isTopLayer,
 } from '@floating-ui/utils/dom';
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
@@ -27,10 +26,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
 
-  if (
-    offsetParent === documentElement ||
-    (elements && isTopLayer(elements.floating) && isFixed)
-  ) {
+  if (offsetParent === documentElement) {
     return rect;
   }
 

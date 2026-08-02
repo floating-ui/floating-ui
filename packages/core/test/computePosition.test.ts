@@ -114,3 +114,42 @@ test('derives non-element scale without passing it to getScale', async () => {
   expect(getScaleCalled).toBe(false);
   expect(overflow).toEqual({top: -25, bottom: -15, left: -75, right: 25});
 });
+
+test('derives each axis of a non-uniform non-element scale independently', async () => {
+  let overflow: Awaited<ReturnType<typeof detectOverflow>> | undefined;
+
+  await computePosition(reference, floating, {
+    platform: {
+      ...platform,
+      getElementRects: () => ({
+        reference: {x: 25, y: 25, width: 50, height: 50},
+        floating: floatingRect,
+      }),
+      getClippingRect: () => ({x: 0, y: 0, width: 100, height: 100}),
+      getOffsetParent: () => ({}),
+      isElement: () => false,
+      // Only the horizontal mapping is scaled, as a custom (e.g. canvas)
+      // platform is free to do.
+      convertOffsetParentRelativeRectToViewportRelativeRect: ({rect}) => ({
+        x: rect.x * 2,
+        y: rect.y,
+        width: rect.width * 2,
+        height: rect.height,
+      }),
+    },
+    middleware: [
+      {
+        name: 'test',
+        async fn(state) {
+          overflow = await detectOverflow(state, {
+            elementContext: 'reference',
+          });
+          return {};
+        },
+      },
+    ],
+  });
+
+  // The y axis is unscaled, so its corrections must not inherit the x scale.
+  expect(overflow).toEqual({top: -25, bottom: -25, left: -25, right: 25});
+});

@@ -11,12 +11,14 @@ async function setup(
     strategy,
     scroll,
     overflow,
+    topLayer,
   }: {
     node: string;
     zoom?: number;
     strategy: string;
     scroll?: number;
     overflow?: 'shift' | 'both';
+    topLayer?: boolean;
   },
 ) {
   await page.goto('http://localhost:1234/zoom');
@@ -26,6 +28,9 @@ async function setup(
   }
   if (overflow) {
     await click(page, `[data-testid="zoom-overflow-${overflow}"]`);
+  }
+  if (topLayer) {
+    await click(page, '[data-testid="zoom-toplayer-true"]');
   }
   await click(page, `[data-testid="zoom-node-${node}"]`);
   if (scroll) {
@@ -131,4 +136,29 @@ test('shift() with zoom 2 on body using the absolute strategy on a scrolled docu
     overflow: 'shift',
   });
   expect(await page.screenshot()).toMatchSnapshot('scrolled-2-absolute.png');
+});
+
+// A `fixed` top-layer element takes the Window as its offsetParent but keeps
+// its ancestor's effective zoom, so the inverse conversion has to scale its
+// rect back to viewport pixels or overflow detection reads it at half size.
+test('size() with zoom 2 on a fixed top-layer element on a scrolled document', async ({
+  page,
+}) => {
+  await setup(page, {
+    node: 'body',
+    zoom: 2,
+    strategy: 'fixed',
+    scroll: 250,
+    overflow: 'both',
+    topLayer: true,
+  });
+
+  const floatingRect = await page.locator('.floating').boundingBox();
+  const viewport = page.viewportSize();
+
+  expect(floatingRect).not.toBeNull();
+  expect(viewport).not.toBeNull();
+  expect(floatingRect!.y + floatingRect!.height).toBeLessThanOrEqual(
+    viewport!.height - 2,
+  );
 });
