@@ -15,6 +15,7 @@ export const getElementRects: Platform['getElementRects'] = async function (
       data.reference,
       await getOffsetParentFn(data.floating),
       data.strategy,
+      data.floating as Element,
     ),
     floating: {
       x: 0,

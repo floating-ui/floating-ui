@@ -4,12 +4,13 @@ import {
   getDocumentElement,
   getNodeName,
   getNodeScroll,
+  isElement,
   isHTMLElement,
   isOverflowElement,
-  isTopLayer,
 } from '@floating-ui/utils/dom';
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
+import {getCurrentCSSZoom} from '../utils/getCurrentCSSZoom';
 import {getScale} from './getScale';
 import {getHTMLOffset} from '../utils/getHTMLOffset';
 
@@ -26,18 +27,18 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
 }): Rect {
   const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
-  const topLayer = elements ? isTopLayer(elements.floating) : false;
 
-  if (offsetParent === documentElement || (topLayer && isFixed)) {
+  if (offsetParent === documentElement) {
     return rect;
   }
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
   let scale = createCoords(1);
-  const offsets = createCoords(0);
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+  let offsetX = 0;
+  let offsetY = 0;
+  const isOffsetParentAnHTMLElement = isHTMLElement(offsetParent);
 
-  if (isOffsetParentAnElement || !isFixed) {
+  if (isOffsetParentAnHTMLElement || !isFixed) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)
@@ -45,24 +46,35 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
       scroll = getNodeScroll(offsetParent);
     }
 
-    if (isOffsetParentAnElement) {
+    if (isOffsetParentAnHTMLElement) {
       const offsetRect = getBoundingClientRect(offsetParent);
       scale = getScale(offsetParent);
-      offsets.x = offsetRect.x + offsetParent.clientLeft;
-      offsets.y = offsetRect.y + offsetParent.clientTop;
+      offsetX = offsetRect.x + offsetParent.clientLeft;
+      offsetY = offsetRect.y + offsetParent.clientTop;
     }
   }
 
   const htmlOffset =
-    documentElement && !isOffsetParentAnElement && !isFixed
+    !isOffsetParentAnHTMLElement && !isFixed
       ? getHTMLOffset(documentElement, scroll)
       : createCoords(0);
+
+  if (!isElement(offsetParent) && elements) {
+    scale = createCoords(getCurrentCSSZoom(elements.floating));
+  }
 
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
     x:
-      rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y,
+      rect.x * scale.x -
+      scroll.scrollLeft * (isOffsetParentAnHTMLElement ? scale.x : 1) +
+      offsetX +
+      htmlOffset.x,
+    y:
+      rect.y * scale.y -
+      scroll.scrollTop * (isOffsetParentAnHTMLElement ? scale.y : 1) +
+      offsetY +
+      htmlOffset.y,
   };
 }

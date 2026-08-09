@@ -3,6 +3,7 @@ import {createCoords} from '@floating-ui/utils';
 import {
   getNodeName,
   getNodeScroll,
+  isElement,
   isHTMLElement,
   isOverflowElement,
 } from '@floating-ui/utils/dom';
@@ -10,6 +11,7 @@ import {
 import type {VirtualElement} from '../types';
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
+import {getCurrentCSSZoom} from './getCurrentCSSZoom';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 import {getHTMLOffset} from './getHTMLOffset';
 
@@ -17,16 +19,18 @@ export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
   offsetParent: Element | Window,
   strategy: Strategy,
+  floating: Element,
 ): Rect {
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+  const isOffsetParentAnHTMLElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
   const isFixed = strategy === 'fixed';
   const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
-  const offsets = createCoords(0);
+  let offsetX = 0;
+  let offsetY = 0;
 
-  if (isOffsetParentAnElement || !isFixed) {
+  if (isOffsetParentAnHTMLElement || !isFixed) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)
@@ -34,36 +38,38 @@ export function getRectRelativeToOffsetParent(
       scroll = getNodeScroll(offsetParent);
     }
 
-    if (isOffsetParentAnElement) {
+    if (isOffsetParentAnHTMLElement) {
       const offsetRect = getBoundingClientRect(
         offsetParent,
         true,
         isFixed,
         offsetParent,
       );
-      offsets.x = offsetRect.x + offsetParent.clientLeft;
-      offsets.y = offsetRect.y + offsetParent.clientTop;
+      offsetX = offsetRect.x + offsetParent.clientLeft;
+      offsetY = offsetRect.y + offsetParent.clientTop;
     }
   }
 
   // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
   // Firefox with layout.scrollbar.side = 3 in about:config to test this.
-  if (!isOffsetParentAnElement && documentElement) {
-    offsets.x = getWindowScrollBarX(documentElement);
+  if (!isOffsetParentAnHTMLElement) {
+    offsetX = getWindowScrollBarX(documentElement);
   }
 
   const htmlOffset =
-    documentElement && !isOffsetParentAnElement && !isFixed
+    !isOffsetParentAnHTMLElement && !isFixed
       ? getHTMLOffset(documentElement, scroll)
       : createCoords(0);
 
-  const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
-  const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
+  // When the offsetParent is the Window, every term above is in viewport
+  // pixels, but the coords are written as `left`/`top` on the floating element,
+  // which resolves them in its own CSS-zoom space.
+  const zoom = isElement(offsetParent) ? 1 : getCurrentCSSZoom(floating);
 
   return {
-    x,
-    y,
-    width: rect.width,
-    height: rect.height,
+    x: (rect.left + scroll.scrollLeft - offsetX - htmlOffset.x) / zoom,
+    y: (rect.top + scroll.scrollTop - offsetY - htmlOffset.y) / zoom,
+    width: rect.width / zoom,
+    height: rect.height / zoom,
   };
 }

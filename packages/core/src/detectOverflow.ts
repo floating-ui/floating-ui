@@ -83,8 +83,6 @@ export async function detectOverflow(
       : rects.reference;
 
   const offsetParent = await platform.getOffsetParent?.(elements.floating);
-  const offsetScale = ((await platform.isElement?.(offsetParent)) &&
-    (await platform.getScale?.(offsetParent))) || {x: 1, y: 1};
 
   const elementClientRect = rectToClientRect(
     platform.convertOffsetParentRelativeRectToViewportRelativeRect
@@ -96,6 +94,16 @@ export async function detectOverflow(
         })
       : rect,
   );
+
+  // A zero-length axis carries no scale, so fall back to the other one: CSS
+  // zoom is uniform, and that is the only scaling a Window offsetParent has.
+  const scaleX = rect.width ? elementClientRect.width / rect.width : 0;
+  const scaleY = rect.height ? elementClientRect.height / rect.height : 0;
+  const offsetScale = ((await platform.isElement?.(offsetParent)) &&
+    (await platform.getScale?.(offsetParent))) || {
+    x: scaleX || scaleY || 1,
+    y: scaleY || scaleX || 1,
+  };
 
   return {
     top:
