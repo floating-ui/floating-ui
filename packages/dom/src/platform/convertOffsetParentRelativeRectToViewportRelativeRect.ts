@@ -10,6 +10,7 @@ import {
 } from '@floating-ui/utils/dom';
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
+import {getCurrentCSSZoom} from '../utils/getCurrentCSSZoom';
 import {getScale} from './getScale';
 import {getHTMLOffset} from '../utils/getHTMLOffset';
 
@@ -59,7 +60,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
       : createCoords(0);
 
   if (!isElement(offsetParent) && elements) {
-    scale = createCoords((elements.floating as any).currentCSSZoom || 1);
+    scale = createCoords(getCurrentCSSZoom(elements.floating));
   }
 
   return {

@@ -11,6 +11,7 @@ import {
 import type {VirtualElement} from '../types';
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
+import {getCurrentCSSZoom} from './getCurrentCSSZoom';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 import {getHTMLOffset} from './getHTMLOffset';
 
@@ -63,7 +64,7 @@ export function getRectRelativeToOffsetParent(
   // When the offsetParent is the Window, every term above is in viewport
   // pixels, but the coords are written as `left`/`top` on the floating element,
   // which resolves them in its own CSS-zoom space.
-  const zoom = isElement(offsetParent) || (floating as any).currentCSSZoom || 1;
+  const zoom = isElement(offsetParent) ? 1 : getCurrentCSSZoom(floating);
 
   return {
     x: (rect.left + scroll.scrollLeft - offsetX - htmlOffset.x) / zoom,
