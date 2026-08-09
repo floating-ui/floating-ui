@@ -4,6 +4,7 @@ import {
   getDocumentElement,
   getNodeName,
   getNodeScroll,
+  isElement,
   isHTMLElement,
   isOverflowElement,
 } from '@floating-ui/utils/dom';
@@ -34,9 +35,9 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   let scale = createCoords(1);
   let offsetX = 0;
   let offsetY = 0;
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+  const isOffsetParentAnHTMLElement = isHTMLElement(offsetParent);
 
-  if (isOffsetParentAnElement || !isFixed) {
+  if (isOffsetParentAnHTMLElement || !isFixed) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)
@@ -44,7 +45,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
       scroll = getNodeScroll(offsetParent);
     }
 
-    if (isOffsetParentAnElement) {
+    if (isOffsetParentAnHTMLElement) {
       const offsetRect = getBoundingClientRect(offsetParent);
       scale = getScale(offsetParent);
       offsetX = offsetRect.x + offsetParent.clientLeft;
@@ -53,11 +54,11 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   }
 
   const htmlOffset =
-    !isOffsetParentAnElement && !isFixed
+    !isOffsetParentAnHTMLElement && !isFixed
       ? getHTMLOffset(documentElement, scroll)
       : createCoords(0);
 
-  if (!isOffsetParentAnElement && elements) {
+  if (!isElement(offsetParent) && elements) {
     scale = createCoords((elements.floating as any).currentCSSZoom || 1);
   }
 
@@ -66,12 +67,12 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
     height: rect.height * scale.y,
     x:
       rect.x * scale.x -
-      scroll.scrollLeft * (isOffsetParentAnElement ? scale.x : 1) +
+      scroll.scrollLeft * (isOffsetParentAnHTMLElement ? scale.x : 1) +
       offsetX +
       htmlOffset.x,
     y:
       rect.y * scale.y -
-      scroll.scrollTop * (isOffsetParentAnElement ? scale.y : 1) +
+      scroll.scrollTop * (isOffsetParentAnHTMLElement ? scale.y : 1) +
       offsetY +
       htmlOffset.y,
   };

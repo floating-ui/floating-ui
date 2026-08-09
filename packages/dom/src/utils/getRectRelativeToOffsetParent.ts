@@ -3,6 +3,7 @@ import {createCoords} from '@floating-ui/utils';
 import {
   getNodeName,
   getNodeScroll,
+  isElement,
   isHTMLElement,
   isOverflowElement,
 } from '@floating-ui/utils/dom';
@@ -19,7 +20,7 @@ export function getRectRelativeToOffsetParent(
   strategy: Strategy,
   floating: Element,
 ): Rect {
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+  const isOffsetParentAnHTMLElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
   const isFixed = strategy === 'fixed';
   const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
@@ -28,7 +29,7 @@ export function getRectRelativeToOffsetParent(
   let offsetX = 0;
   let offsetY = 0;
 
-  if (isOffsetParentAnElement || !isFixed) {
+  if (isOffsetParentAnHTMLElement || !isFixed) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)
@@ -36,7 +37,7 @@ export function getRectRelativeToOffsetParent(
       scroll = getNodeScroll(offsetParent);
     }
 
-    if (isOffsetParentAnElement) {
+    if (isOffsetParentAnHTMLElement) {
       const offsetRect = getBoundingClientRect(
         offsetParent,
         true,
@@ -50,19 +51,19 @@ export function getRectRelativeToOffsetParent(
 
   // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
   // Firefox with layout.scrollbar.side = 3 in about:config to test this.
-  if (!isOffsetParentAnElement) {
+  if (!isOffsetParentAnHTMLElement) {
     offsetX = getWindowScrollBarX(documentElement);
   }
 
   const htmlOffset =
-    !isOffsetParentAnElement && !isFixed
+    !isOffsetParentAnHTMLElement && !isFixed
       ? getHTMLOffset(documentElement, scroll)
       : createCoords(0);
 
   // When the offsetParent is the Window, every term above is in viewport
   // pixels, but the coords are written as `left`/`top` on the floating element,
   // which resolves them in its own CSS-zoom space.
-  const zoom = isOffsetParentAnElement || (floating as any).currentCSSZoom || 1;
+  const zoom = isElement(offsetParent) || (floating as any).currentCSSZoom || 1;
 
   return {
     x: (rect.left + scroll.scrollLeft - offsetX - htmlOffset.x) / zoom,
