@@ -1,5 +1,5 @@
 import type {Rect, RootBoundary, Strategy} from '@floating-ui/core';
-import {getWindow, isWebKit} from '@floating-ui/utils/dom';
+import {getComputedStyle, getWindow, isWebKit} from '@floating-ui/utils/dom';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
@@ -52,32 +52,17 @@ export function getViewportRect(
   }
 
   const windowScrollbarX = getWindowScrollBarX(html);
+  const scrollbarGutter = getComputedStyle(html).scrollbarGutter;
   // `scrollbar-gutter: stable` on the <html> reserves gutter space that shrinks
-  // the visual width but isn't reflected in `html.clientWidth`, so subtract it.
-  // Only the inline-end (right) gutter can hold the scrollbar; `both-edges` also
-  // reserves an empty inline-start gutter that clips nothing, so exclude just
-  // the one scrollbar-side gutter — halve the measured (two-gutter) total. A
+  // the visual width but isn't reflected in `html.clientWidth`. The <html>
+  // border box does reflect it, so measure the reserved space from it. A
   // left-side scrollbar (`windowScrollbarX > 0`) is already handled by
   // `getHTMLOffset`/`visualViewport.width`; skip it here.
-  if (windowScrollbarX <= 0) {
-    const doc = html.ownerDocument;
-    const body = doc.body;
-    const bodyStyles = getComputedStyle(body);
-    const bodyMarginInline =
-      doc.compatMode === 'CSS1Compat'
-        ? parseFloat(bodyStyles.marginLeft) +
-            parseFloat(bodyStyles.marginRight) || 0
-        : 0;
-    const reservedWidth = Math.abs(
-      html.clientWidth - body.clientWidth - bodyMarginInline,
-    );
-    const gutter =
-      getComputedStyle(html).scrollbarGutter === 'stable both-edges'
-        ? reservedWidth / 2
-        : reservedWidth;
+  if (windowScrollbarX <= 0 && scrollbarGutter && scrollbarGutter !== 'auto') {
+    const reservedWidth = html.clientWidth - html.getBoundingClientRect().width;
 
-    if (gutter <= SCROLLBAR_MAX) {
-      width -= gutter;
+    if (reservedWidth > 0 && reservedWidth <= SCROLLBAR_MAX) {
+      width -= reservedWidth;
     }
   }
 
