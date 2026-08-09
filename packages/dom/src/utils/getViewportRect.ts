@@ -51,17 +51,28 @@ export function getViewportRect(
     }
   }
 
-  const windowScrollbarX = getWindowScrollBarX(html);
-  const scrollbarGutter = getComputedStyle(html).scrollbarGutter;
+  const htmlRect = html.getBoundingClientRect();
+  const windowScrollbarX = getWindowScrollBarX(html, htmlRect);
   // `scrollbar-gutter: stable` on the <html> reserves gutter space that shrinks
   // the visual width but isn't reflected in `html.clientWidth`. The <html>
   // border box does reflect it, so measure the reserved space from it. A
   // left-side scrollbar (`windowScrollbarX > 0`) is already handled by
-  // `getHTMLOffset`/`visualViewport.width`; skip it here.
-  if (windowScrollbarX <= 0 && scrollbarGutter && scrollbarGutter !== 'auto') {
-    const reservedWidth = html.clientWidth - html.getBoundingClientRect().width;
+  // `getHTMLOffset`/`visualViewport.width`; skip it here. `both-edges` also
+  // shifts the <html> origin by the inline-start gutter, so it fails that same
+  // check and stays uncorrected.
+  const reservedWidth = html.clientWidth - htmlRect.width;
 
-    if (reservedWidth > 0 && reservedWidth <= SCROLLBAR_MAX) {
+  if (
+    windowScrollbarX <= 0 &&
+    reservedWidth > 0 &&
+    reservedWidth <= SCROLLBAR_MAX
+  ) {
+    // Only a declared gutter reserves space; any other narrowing of the <html>
+    // box (a margin, a width, a transform) must not be treated as one. Read
+    // last so the style lookup stays off the common path.
+    const scrollbarGutter = getComputedStyle(html).scrollbarGutter;
+
+    if (scrollbarGutter && scrollbarGutter !== 'auto') {
       width -= reservedWidth;
     }
   }
