@@ -54,13 +54,16 @@ export function getViewportRect(
   const htmlRect = html.getBoundingClientRect();
   const windowScrollbarX = getWindowScrollBarX(html, htmlRect);
   // `scrollbar-gutter: stable` on the <html> reserves gutter space that shrinks
-  // the visual width but isn't reflected in `html.clientWidth`. The <html>
-  // border box does reflect it, so measure the reserved space from it. A
-  // left-side scrollbar (`windowScrollbarX > 0`) is already handled by
-  // `getHTMLOffset`/`visualViewport.width`; skip it here. `both-edges` also
-  // shifts the <html> origin by the inline-start gutter, so it fails that same
-  // check and stays uncorrected.
-  const reservedWidth = html.clientWidth - htmlRect.width;
+  // the visual width. In standards mode, only the border box reflects it. In
+  // quirks mode, `html.clientWidth` also shrinks, so compare it with the chosen
+  // viewport width instead. A left-side scrollbar (`windowScrollbarX > 0`) is
+  // already handled by `getHTMLOffset`/`visualViewport.width`; skip it here.
+  // `both-edges` also shifts the <html> origin by the inline-start gutter, so it
+  // fails that same check and stays uncorrected.
+  const reservedWidth =
+    win.document.compatMode === 'BackCompat'
+      ? width - html.clientWidth
+      : html.clientWidth - htmlRect.width;
 
   if (
     windowScrollbarX <= 0 &&

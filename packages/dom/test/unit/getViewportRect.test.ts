@@ -15,13 +15,14 @@ vi.mock('@floating-ui/utils/dom', async (importOriginal) => {
 const html = document.documentElement;
 
 interface Geometry {
+  compatMode?: Document['compatMode'];
   htmlClientWidth: number;
   htmlClientHeight: number;
   htmlBCRLeft: number;
   htmlScrollLeft: number;
-  // The <html> border box width. Equal to `htmlClientWidth` unless a
-  // `scrollbar-gutter` reserves space, which shrinks the border box while
-  // leaving `clientWidth` at the full viewport width.
+  // The <html> border box width. In standards mode, a reserved gutter shrinks
+  // this while leaving `clientWidth` at the full viewport width. In quirks
+  // mode, both shrink.
   htmlBCRWidth?: number;
   bodyClientWidth?: number;
   visualViewportWidth: number;
@@ -31,6 +32,7 @@ interface Geometry {
 }
 
 function mockViewport({
+  compatMode = 'CSS1Compat',
   htmlClientWidth,
   htmlClientHeight,
   htmlBCRLeft,
@@ -42,6 +44,7 @@ function mockViewport({
   visualViewportOffsetLeft = 0,
   visualViewportOffsetTop = 0,
 }: Geometry) {
+  vi.spyOn(document, 'compatMode', 'get').mockReturnValue(compatMode);
   vi.spyOn(html, 'clientWidth', 'get').mockReturnValue(htmlClientWidth);
   vi.spyOn(html, 'clientHeight', 'get').mockReturnValue(htmlClientHeight);
   vi.spyOn(html, 'scrollLeft', 'get').mockReturnValue(htmlScrollLeft);
@@ -95,6 +98,36 @@ test('subtracts a right-side reserved gutter from the width', () => {
   expect(rect.x).toBe(0);
   expect(rect.width).toBe(885);
 });
+
+// In quirks mode, the viewport `clientWidth` special case moves from <html> to
+// <body>. A stable gutter therefore shrinks both the <html> client width and
+// border box, while the body retains the full viewport width. The default
+// viewport still needs the gutter subtracted, but the layout viewport already
+// excludes it and must not be shrunk twice.
+test.each([
+  {boundary: 'viewport', rootBoundary: undefined},
+  {boundary: 'layout viewport', rootBoundary: 'layoutViewport'},
+] as const)(
+  'uses the right-side reserved gutter in quirks mode for the $boundary',
+  ({rootBoundary}) => {
+    mockViewport({
+      compatMode: 'BackCompat',
+      htmlClientWidth: 885,
+      htmlClientHeight: 600,
+      htmlBCRLeft: 0,
+      htmlBCRWidth: 885,
+      htmlScrollLeft: 0,
+      bodyClientWidth: 900,
+      visualViewportWidth: 900,
+    });
+    html.style.scrollbarGutter = 'stable';
+
+    const rect = getViewportRect(html, 'absolute', rootBoundary);
+
+    expect(rect.x).toBe(0);
+    expect(rect.width).toBe(885);
+  },
+);
 
 // A body narrower than the <html> content box is ordinary CSS — a border, an
 // explicit width, or padding on the <html> — not a reserved gutter. The <body>
