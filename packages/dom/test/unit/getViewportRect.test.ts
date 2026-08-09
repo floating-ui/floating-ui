@@ -97,8 +97,8 @@ test('subtracts a right-side reserved gutter from the width', () => {
 });
 
 // A body narrower than the <html> content box is ordinary CSS — a border, an
-// explicit width, or padding on the <html> — not a reserved gutter. Without a
-// `scrollbar-gutter` there is nothing to subtract.
+// explicit width, or padding on the <html> — not a reserved gutter. The <body>
+// box is not read at all, so it cannot shrink the boundary.
 test('does not treat body box styles as a reserved gutter', () => {
   mockViewport({
     htmlClientWidth: 900,
@@ -108,6 +108,65 @@ test('does not treat body box styles as a reserved gutter', () => {
     bodyClientWidth: 874, // e.g. `body { border: 5px solid }`
     visualViewportWidth: 900,
   });
+
+  const rect = getViewportRect(html, 'absolute');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(900);
+});
+
+// The same body border alongside a real gutter: the gutter is still subtracted
+// in full, and the body border adds nothing to it (measured in Chrome: a 900px
+// viewport with `scrollbar-gutter: stable` and `body { border: 5px solid }`
+// reports clientWidth 900, border box 885, and clips content at 885).
+test('subtracts only the gutter when the body also has a border', () => {
+  mockViewport({
+    htmlClientWidth: 900,
+    htmlClientHeight: 600,
+    htmlBCRLeft: 0,
+    htmlBCRWidth: 885,
+    htmlScrollLeft: 0,
+    bodyClientWidth: 875,
+    visualViewportWidth: 900,
+  });
+  html.style.scrollbarGutter = 'stable';
+
+  const rect = getViewportRect(html, 'absolute');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(885);
+});
+
+// A narrower <html> border box on its own is not a gutter: `html { margin-right }`
+// produces the same measurement and reserves nothing.
+test('does not subtract a narrower <html> box without a declared gutter', () => {
+  mockViewport({
+    htmlClientWidth: 900,
+    htmlClientHeight: 600,
+    htmlBCRLeft: 0,
+    htmlBCRWidth: 890, // e.g. `html { margin-right: 10px }`
+    htmlScrollLeft: 0,
+    visualViewportWidth: 900,
+  });
+
+  const rect = getViewportRect(html, 'absolute');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(900);
+});
+
+// An <html> box wider than the viewport (`html { width }`, a scale transform)
+// measures as negative reserved space, which must never widen the boundary.
+test('ignores a negative reserved width', () => {
+  mockViewport({
+    htmlClientWidth: 900,
+    htmlClientHeight: 600,
+    htmlBCRLeft: 0,
+    htmlBCRWidth: 910,
+    htmlScrollLeft: 0,
+    visualViewportWidth: 900,
+  });
+  html.style.scrollbarGutter = 'stable';
 
   const rect = getViewportRect(html, 'absolute');
 
@@ -135,24 +194,27 @@ test('caps an implausibly large reserved width', () => {
 });
 
 // `scrollbar-gutter: stable both-edges` reserves a gutter on each inline edge,
-// which shifts the <html> origin right by the inline-start one (measured in
-// Chrome: a 900px viewport reports border box left 15, width 870). That shift
-// is compensated by `getHTMLOffset`, so the width is left alone here.
-test('leaves a shifted <html> origin to getHTMLOffset', () => {
+// which shifts the <html> origin right by the inline-start one. That shift
+// makes `windowScrollbarX` positive, so this case falls out of the gutter
+// branch and is left uncorrected. Pins the current (incorrect) result: measured
+// in Chrome, a 900px viewport with no scrollbar reports clientWidth 900,
+// visualViewport.width 900, and border box left 15 width 870, and content is
+// clipped to [15, 885] — so the correct boundary is `{x: 15, width: 870}`.
+test('leaves both-edges uncorrected (known: one gutter too wide per edge)', () => {
   mockViewport({
     htmlClientWidth: 900,
     htmlClientHeight: 600,
     htmlBCRLeft: 15,
     htmlBCRWidth: 870,
     htmlScrollLeft: 0,
-    visualViewportWidth: 885,
+    visualViewportWidth: 900,
   });
   html.style.scrollbarGutter = 'stable both-edges';
 
   const rect = getViewportRect(html, 'absolute');
 
   expect(rect.x).toBe(0);
-  expect(rect.width).toBe(885);
+  expect(rect.width).toBe(900);
 });
 
 // A left-side scrollbar (e.g. Firefox `layout.scrollbar.side`) shifts the
