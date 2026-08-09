@@ -2,6 +2,7 @@ import type {Rect, RootBoundary, Strategy} from '@floating-ui/core';
 import {getComputedStyle, getWindow, isWebKit} from '@floating-ui/utils/dom';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
+import {getCurrentCSSZoom} from './getCurrentCSSZoom';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 
 // Safety check: ensure the scrollbar space is reasonable in case this
@@ -68,7 +69,8 @@ export function getViewportRect(
   if (
     windowScrollbarX <= 0 &&
     reservedWidth > 0 &&
-    reservedWidth <= SCROLLBAR_MAX
+    reservedWidth / getCurrentCSSZoom(html.ownerDocument.body || html) <=
+      SCROLLBAR_MAX
   ) {
     // Only a declared gutter reserves space; any other narrowing of the <html>
     // box (a margin, a width, a transform) must not be treated as one. Read

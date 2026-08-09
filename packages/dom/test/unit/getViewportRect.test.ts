@@ -73,6 +73,7 @@ function mockViewport({
 afterEach(() => {
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
+  delete (document.body as any).currentCSSZoom;
   html.style.scrollbarGutter = '';
   mocks.isWebKit = false;
 });
@@ -97,6 +98,29 @@ test('subtracts a right-side reserved gutter from the width', () => {
 
   expect(rect.x).toBe(0);
   expect(rect.width).toBe(885);
+});
+
+test('caps a zoomed reserved gutter in CSS pixels', () => {
+  mockViewport({
+    htmlClientWidth: 900,
+    htmlClientHeight: 600,
+    htmlBCRLeft: 0,
+    htmlBCRWidth: 870, // 15 CSS px painted at `zoom: 2`
+    htmlScrollLeft: 0,
+    visualViewportWidth: 900,
+  });
+  // The body's currentCSSZoom is cumulative, including both <html> and <body>
+  // zoom, and matches the scale Chrome applies to the root gutter.
+  Object.defineProperty(document.body, 'currentCSSZoom', {
+    configurable: true,
+    value: 2,
+  });
+  html.style.scrollbarGutter = 'stable';
+
+  const rect = getViewportRect(html, 'absolute');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(870);
 });
 
 // In quirks mode, the viewport `clientWidth` special case moves from <html> to
