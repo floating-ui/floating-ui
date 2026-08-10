@@ -1,7 +1,8 @@
 import type {Rect, RootBoundary, Strategy} from '@floating-ui/core';
-import {getWindow, isWebKit} from '@floating-ui/utils/dom';
+import {getComputedStyle, getWindow, isWebKit} from '@floating-ui/utils/dom';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
+import {getCurrentCSSZoom} from './getCurrentCSSZoom';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 
 // Safety check: ensure the scrollbar space is reasonable in case this
@@ -51,33 +52,33 @@ export function getViewportRect(
     }
   }
 
-  const windowScrollbarX = getWindowScrollBarX(html);
+  const htmlRect = html.getBoundingClientRect();
+  const windowScrollbarX = getWindowScrollBarX(html, htmlRect);
   // `scrollbar-gutter: stable` on the <html> reserves gutter space that shrinks
-  // the visual width but isn't reflected in `html.clientWidth`, so subtract it.
-  // Only the inline-end (right) gutter can hold the scrollbar; `both-edges` also
-  // reserves an empty inline-start gutter that clips nothing, so exclude just
-  // the one scrollbar-side gutter — halve the measured (two-gutter) total. A
-  // left-side scrollbar (`windowScrollbarX > 0`) is already handled by
-  // `getHTMLOffset`/`visualViewport.width`; skip it here.
-  if (windowScrollbarX <= 0) {
-    const doc = html.ownerDocument;
-    const body = doc.body;
-    const bodyStyles = getComputedStyle(body);
-    const bodyMarginInline =
-      doc.compatMode === 'CSS1Compat'
-        ? parseFloat(bodyStyles.marginLeft) +
-            parseFloat(bodyStyles.marginRight) || 0
-        : 0;
-    const reservedWidth = Math.abs(
-      html.clientWidth - body.clientWidth - bodyMarginInline,
-    );
-    const gutter =
-      getComputedStyle(html).scrollbarGutter === 'stable both-edges'
-        ? reservedWidth / 2
-        : reservedWidth;
+  // the visual width. In standards mode, only the border box reflects it. In
+  // quirks mode, `html.clientWidth` also shrinks, so compare it with the chosen
+  // viewport width instead. A left-side scrollbar (`windowScrollbarX > 0`) is
+  // already handled by `getHTMLOffset`/`visualViewport.width`; skip it here.
+  // `both-edges` also shifts the <html> origin by the inline-start gutter, so it
+  // fails that same check and stays uncorrected.
+  const reservedWidth =
+    win.document.compatMode === 'BackCompat'
+      ? width - html.clientWidth
+      : html.clientWidth - htmlRect.width;
 
-    if (gutter <= SCROLLBAR_MAX) {
-      width -= gutter;
+  if (
+    windowScrollbarX <= 0 &&
+    reservedWidth > 0 &&
+    reservedWidth / getCurrentCSSZoom(html.ownerDocument.body || html) <=
+      SCROLLBAR_MAX
+  ) {
+    // Only a declared gutter reserves space; any other narrowing of the <html>
+    // box (a margin, a width, a transform) must not be treated as one. Read
+    // last so the style lookup stays off the common path.
+    const scrollbarGutter = getComputedStyle(html).scrollbarGutter;
+
+    if (scrollbarGutter && scrollbarGutter !== 'auto') {
+      width -= reservedWidth;
     }
   }
 
