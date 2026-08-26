@@ -1,5 +1,13 @@
 # @floating-ui/dom
 
+## 1.8.1
+
+### Patch Changes
+
+- fix: support the CSS `zoom` property, correcting positioning and overflow detection when the floating element's `offsetParent` resolves to the `Window`
+- fix(getViewportRect): only subtract a scrollbar gutter when one is reserved
+- Update dependencies: `@floating-ui/core@1.8.1`
+
 ## 1.8.0
 
 ### Minor Changes
