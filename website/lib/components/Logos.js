@@ -6,10 +6,11 @@ import {
   TooltipTrigger,
 } from './Tooltip';
 import {MINI_SPONSORS} from '../../data';
+import {isSponsorActive} from '../utils/openCollective';
 
 export function Logos({items}) {
   const activeItems = MINI_SPONSORS.filter((item) =>
-    items.some((member) => member.MemberId === item.MemberId),
+    isSponsorActive(item, items),
   );
 
   return (

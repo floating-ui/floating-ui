@@ -1,8 +1,9 @@
 import {SPONSORS} from '../../data';
+import {isSponsorActive} from '../utils/openCollective';
 
 export function Cards({items}) {
   const activeItems = SPONSORS.filter((item) =>
-    items.some((member) => member.MemberId === item.MemberId),
+    isSponsorActive(item, items),
   );
 
   return (

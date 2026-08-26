@@ -231,4 +231,18 @@ export const MINI_SPONSORS = [
     url: 'https://discountagent.co.uk/',
     MemberId: 702065,
   },
+  {
+    logo: '/sponsors/noodlemag-uk.svg',
+    label: 'NoodleMagazine',
+    url: 'https://noodle-magazine.co.uk/',
+    MemberId: 873235,
+  },
+  {
+    // Sponsored below the Mini Sponsor tier amount, so it is listed manually
+    // until this date rather than matched against the Open Collective tier.
+    logo: '/sponsors/kea-home.svg',
+    label: 'KEA Home',
+    url: 'https://kea-home.com/',
+    expiresAt: '2026-09-26',
+  },
 ];

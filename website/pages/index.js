@@ -709,5 +709,8 @@ export async function getStaticProps() {
         mini: sponsors[1],
       },
     },
+    // Rebuild periodically so Open Collective changes and `expiresAt` dates on
+    // manual sponsors take effect without needing a deploy.
+    revalidate: 60 * 60 * 12,
   };
 }
