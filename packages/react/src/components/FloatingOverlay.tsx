@@ -65,7 +65,7 @@ function enableScrollLock() {
         left: '',
         right: '',
       });
-      window.scrollTo(scrollX, scrollY);
+      window.scrollTo({left: scrollX, top: scrollY, behavior: 'instant'});
     }
   };
 }
