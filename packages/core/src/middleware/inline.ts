@@ -28,12 +28,15 @@ export function getRectsByLine(rects: Array<ClientRectObject>) {
   const sortedRects = rects.slice().sort((a, b) => a.y - b.y);
   const groups = [];
   let prevRect: ClientRectObject | null = null;
+  let maxGroupHeight = 0;
   for (let i = 0; i < sortedRects.length; i++) {
     const rect = sortedRects[i];
-    if (!prevRect || rect.y - prevRect.y > prevRect.height / 2) {
+    if (!prevRect || rect.y - prevRect.y > maxGroupHeight / 2) {
       groups.push([rect]);
+      maxGroupHeight = rect.height;
     } else {
       groups[groups.length - 1].push(rect);
+      maxGroupHeight = Math.max(maxGroupHeight, rect.height);
     }
     prevRect = rect;
   }
