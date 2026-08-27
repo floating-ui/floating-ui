@@ -4,7 +4,7 @@ import {
   contains,
   getTarget,
   isMouseLikePointerType,
-  useModernLayoutEffect,
+  useClientLayoutEffect,
   useEffectEvent,
 } from '@floating-ui/react/utils';
 
@@ -242,7 +242,7 @@ export function useClientPoint(
     }
   }, [enabled, open]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (enabled && (x != null || y != null)) {
       initialRef.current = false;
       setReference(x, y);

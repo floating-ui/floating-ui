@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useClientLayoutEffect} from '@floating-ui/react/utils';
 
 function sortByDocumentPosition(a: Node, b: Node) {
   const position = a.compareDocumentPosition(b);
@@ -131,7 +131,7 @@ export function useListItem(props: UseListItemProps = {}): {
     [index, elementsRef, labelsRef, label],
   );
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     const node = componentRef.current;
     if (node) {
       register(node);
@@ -141,7 +141,7 @@ export function useListItem(props: UseListItemProps = {}): {
     }
   }, [register, unregister]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     const index = componentRef.current ? map.get(componentRef.current) : null;
     if (index != null) {
       setIndex(index);

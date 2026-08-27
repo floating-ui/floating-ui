@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useClientLayoutEffect} from '@floating-ui/react/utils';
 
 import {getDelay} from '../hooks/useHover';
 import type {FloatingRootContext, Delay} from '../types';
@@ -131,7 +131,7 @@ export function useNextDelayGroup(
 
   const [isInstantPhase, setIsInstantPhase] = React.useState(false);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     function unset() {
       setIsInstantPhase(false);
       currentContextRef.current?.setIsInstantPhase(false);
@@ -167,7 +167,7 @@ export function useNextDelayGroup(
     timeoutIdRef,
   ]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!enabled) return;
     if (!open) return;
 
@@ -203,7 +203,7 @@ export function useNextDelayGroup(
     timeoutIdRef,
   ]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     return () => {
       currentContextRef.current = null;
     };

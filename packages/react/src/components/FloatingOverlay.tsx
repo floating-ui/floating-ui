@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect, getPlatform} from '@floating-ui/react/utils';
+import {useClientLayoutEffect, getPlatform} from '@floating-ui/react/utils';
 
 let lockCount = 0;
 const scrollbarProperty = '--floating-ui-scrollbar-width';
@@ -84,7 +84,7 @@ export const FloatingOverlay = React.forwardRef(function FloatingOverlay(
 ) {
   const {lockScroll = false, ...rest} = props;
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!lockScroll) return;
 
     lockCount++;
