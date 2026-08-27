@@ -818,6 +818,7 @@ export function FloatingFocusManager(
               const els = getTabbableElements();
               enqueueFocus(
                 order[0] === 'reference' ? els[0] : els[els.length - 1],
+                {sync: true},
               );
             } else if (
               portalContext?.preserveTabOrder &&
@@ -847,7 +848,7 @@ export function FloatingFocusManager(
           ref={mergedAfterGuardRef}
           onFocus={(event) => {
             if (modal) {
-              enqueueFocus(getTabbableElements()[0]);
+              enqueueFocus(getTabbableElements()[0], {sync: true});
             } else if (
               portalContext?.preserveTabOrder &&
               portalContext.portalNode

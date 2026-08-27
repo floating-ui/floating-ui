@@ -9,7 +9,7 @@ import {
   within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {test} from 'vitest';
+import {test, vi} from 'vitest';
 import {cloneElement, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {Context as ResponsiveContext} from 'react-responsive';
@@ -527,6 +527,30 @@ describe('guards', () => {
     await userEvent.tab();
 
     expect(document.body).not.toHaveFocus();
+  });
+
+  test('redirect focus synchronously', async () => {
+    render(<App guards={true} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    const guards = document.querySelectorAll<HTMLElement>(
+      '[data-floating-ui-focus-guard]',
+    );
+
+    const requestAnimationFrame = vi.mocked(window.requestAnimationFrame);
+    const implementation = requestAnimationFrame.getMockImplementation()!;
+
+    requestAnimationFrame.mockImplementation(() => 1);
+    guards[1].focus();
+    requestAnimationFrame.mockImplementation(implementation);
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    requestAnimationFrame.mockImplementation(() => 1);
+    guards[0].focus();
+    requestAnimationFrame.mockImplementation(implementation);
+    expect(screen.getByTestId('three')).toHaveFocus();
   });
 
   test.skipIf(!isJSDOM())('false', async () => {
