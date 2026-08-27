@@ -251,13 +251,10 @@ test('caps an implausibly large reserved width', () => {
 });
 
 // `scrollbar-gutter: stable both-edges` reserves a gutter on each inline edge,
-// which shifts the <html> origin right by the inline-start one. That shift
-// makes `windowScrollbarX` positive, so this case falls out of the gutter
-// branch and is left uncorrected. Pins the current (incorrect) result: measured
-// in Chrome, a 900px viewport with no scrollbar reports clientWidth 900,
-// visualViewport.width 900, and border box left 15 width 870, and content is
-// clipped to [15, 885] — so the correct boundary is `{x: 15, width: 870}`.
-test('leaves both-edges uncorrected (known: one gutter too wide per edge)', () => {
+// which shifts the <html> origin right by the inline-start one. Floating
+// coordinates already inherit that shift. The complete reserved width must be
+// removed so the inline-end edge does not extend into its unpaintable gutter.
+test('accounts for the inline-end both-edges gutter', () => {
   mockViewport({
     htmlClientWidth: 900,
     htmlClientHeight: 600,
@@ -271,7 +268,24 @@ test('leaves both-edges uncorrected (known: one gutter too wide per edge)', () =
   const rect = getViewportRect(html, 'absolute');
 
   expect(rect.x).toBe(0);
-  expect(rect.width).toBe(900);
+  expect(rect.width).toBe(870);
+});
+
+test('subtracts the remaining both-edges gutter with a scrollbar', () => {
+  mockViewport({
+    htmlClientWidth: 885,
+    htmlClientHeight: 600,
+    htmlBCRLeft: 15,
+    htmlBCRWidth: 870,
+    htmlScrollLeft: 0,
+    visualViewportWidth: 885,
+  });
+  html.style.scrollbarGutter = 'stable both-edges';
+
+  const rect = getViewportRect(html, 'absolute');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(870);
 });
 
 // A left-side scrollbar (e.g. Firefox `layout.scrollbar.side`) shifts the
