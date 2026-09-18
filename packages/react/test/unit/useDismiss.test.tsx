@@ -170,6 +170,68 @@ describe('true', () => {
     thirdParty.remove();
   });
 
+  test('outsidePress ignores scrollbar presses within the floating subtree', () => {
+    function App() {
+      const [open, setOpen] = useState(true);
+
+      const {context, refs} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      const dismiss = useDismiss(context);
+      const {getReferenceProps, getFloatingProps} = useInteractions([dismiss]);
+
+      return (
+        <>
+          <button {...getReferenceProps({ref: refs.setReference})} />
+          {open && (
+            <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})}>
+              <div data-testid="scroll-container">
+                <div style={{height: 200}} />
+              </div>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    const scrollContainer = screen.getByTestId('scroll-container');
+
+    Object.defineProperties(scrollContainer, {
+      clientWidth: {value: 100, configurable: true},
+      clientHeight: {value: 80, configurable: true},
+      offsetWidth: {value: 115, configurable: true},
+      offsetHeight: {value: 80, configurable: true},
+      scrollWidth: {value: 100, configurable: true},
+      scrollHeight: {value: 200, configurable: true},
+    });
+
+    vi.spyOn(scrollContainer, 'getBoundingClientRect').mockReturnValue({
+      x: 0,
+      y: 0,
+      width: 115,
+      height: 80,
+      top: 0,
+      left: 0,
+      right: 115,
+      bottom: 80,
+      toJSON: () => '',
+    });
+
+    vi.spyOn(document, 'elementsFromPoint').mockReturnValue([
+      scrollContainer,
+      screen.getByRole('tooltip'),
+      document.body,
+    ]);
+
+    fireEvent.pointerDown(document.body, {clientX: 110, clientY: 40});
+
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+  });
+
   test('outsidePress not ignored for nested floating elements', async () => {
     function Popover({
       children,
