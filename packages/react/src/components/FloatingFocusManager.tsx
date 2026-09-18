@@ -15,7 +15,7 @@ import {
   getFloatingFocusElement,
   useLatestRef,
   useEffectEvent,
-  useModernLayoutEffect,
+  useClientLayoutEffect,
   getTabbableOptions,
   isOutsideEvent,
   getNextTabbable,
@@ -586,7 +586,7 @@ export function FloatingFocusManager(
     getInsideElements,
   ]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (disabled || !isHTMLElement(floatingFocusElement)) return;
 
     const doc = getDocument(floatingFocusElement);
@@ -620,7 +620,7 @@ export function FloatingFocusManager(
     initialFocusRef,
   ]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (disabled || !floatingFocusElement) return;
 
     const doc = getDocument(floatingFocusElement);
@@ -753,7 +753,7 @@ export function FloatingFocusManager(
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
   // It will decide whether or not it needs to render its own guards.
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (disabled) return;
     if (!portalContext) return;
 
@@ -778,7 +778,7 @@ export function FloatingFocusManager(
     domReference,
   ]);
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (disabled) return;
     if (!floatingFocusElement) return;
     handleTabIndex(floatingFocusElement, orderRef);

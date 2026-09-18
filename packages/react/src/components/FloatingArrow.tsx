@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {getComputedStyle} from '@floating-ui/utils/dom';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useClientLayoutEffect} from '@floating-ui/react/utils';
 
 import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';
@@ -83,7 +83,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const [isRTL, setIsRTL] = React.useState(false);
 
   // https://github.com/floating-ui/floating-ui/issues/2932
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!floating) return;
     const isRTL = getComputedStyle(floating).direction === 'rtl';
     if (isRTL) {

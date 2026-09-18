@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useModernLayoutEffect} from '@floating-ui/react/utils';
+import {useClientLayoutEffect} from '@floating-ui/react/utils';
 
 import {useId} from '../hooks/useId';
 import type {FloatingNodeType, FloatingTreeType, ReferenceType} from '../types';
@@ -33,7 +33,7 @@ export function useFloatingNodeId(customParentId?: string): string | undefined {
   const reactParentId = useFloatingParentNodeId();
   const parentId = customParentId || reactParentId;
 
-  useModernLayoutEffect(() => {
+  useClientLayoutEffect(() => {
     if (!id) return;
     const node = {id, parentId};
     tree?.addNode(node);
