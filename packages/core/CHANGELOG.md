@@ -1,5 +1,12 @@
 # @floating-ui/core
 
+## 1.8.1
+
+### Patch Changes
+
+- fix: support the CSS `zoom` property, correcting positioning and overflow detection when the floating element's `offsetParent` resolves to the `Window`
+- Update dependencies: `@floating-ui/utils@0.2.13`
+
 ## 1.8.0
 
 ### Minor Changes

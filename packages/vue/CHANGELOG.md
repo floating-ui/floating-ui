@@ -1,5 +1,11 @@
 # @floating-ui/vue
 
+## 2.0.2
+
+### Patch Changes
+
+- Update dependencies: `@floating-ui/utils@0.2.13`, `@floating-ui/dom@1.8.1`
+
 ## 2.0.1
 
 ### Patch Changes
