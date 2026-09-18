@@ -83,3 +83,20 @@ test('returns overflow ancestors in iframe parents', () => {
     window,
   ]);
 });
+
+test('handles documents without a body', () => {
+  const iframe = document.createElement('iframe');
+  document.body.append(iframe);
+
+  expect(iframe.contentDocument).not.toBeNull();
+  const contentDocument = iframe.contentDocument!;
+
+  contentDocument.body.remove();
+
+  const test = contentDocument.createElement('div');
+  contentDocument.documentElement.append(test);
+
+  expect(getOverflowAncestors(test)).toEqual([iframe.contentWindow, window]);
+
+  iframe.remove();
+});

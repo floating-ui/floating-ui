@@ -190,7 +190,10 @@ export function getNearestOverflowAncestor(node: Node): HTMLElement {
   const parentNode = getParentNode(node);
 
   if (isLastTraversableNode(parentNode)) {
-    return (node.ownerDocument || (node as Document)).body;
+    return (
+      (node.ownerDocument || (node as Document)).body ||
+      getDocumentElement(node)
+    );
   }
 
   if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
@@ -206,7 +209,9 @@ export function getOverflowAncestors(
   traverseIframes = true,
 ): OverflowAncestors {
   const scrollableAncestor = getNearestOverflowAncestor(node);
-  const isBody = scrollableAncestor === node.ownerDocument?.body;
+  const isBody =
+    scrollableAncestor === node.ownerDocument?.body ||
+    scrollableAncestor === getDocumentElement(node);
   const win = getWindow(scrollableAncestor);
 
   if (isBody) {
