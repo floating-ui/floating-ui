@@ -1,4 +1,4 @@
-import {act, cleanup, render, screen} from '@testing-library/react';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
 import {vi} from 'vitest';
@@ -12,7 +12,7 @@ vi.useFakeTimers({shouldAdvanceTime: true});
 const useImpl = ({
   addUseClick = false,
   ...props
-}: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange'> & {
+}: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange' | 'findMatch'> & {
   list?: Array<string>;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -33,6 +33,7 @@ const useImpl = ({
       props.onMatch?.(index);
     },
     onTypingChange: props.onTypingChange,
+    findMatch: props.findMatch,
   });
   const click = useClick(context, {
     enabled: addUseClick,
@@ -61,7 +62,7 @@ const useImpl = ({
 };
 
 function Combobox(
-  props: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange'> & {
+  props: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange' | 'findMatch'> & {
     list?: Array<string>;
   },
 ) {
@@ -334,4 +335,39 @@ test('typing spaces on <div> references does not open the menu', async () => {
   await act(async () => {});
 
   expect(screen.queryByRole('listbox')).toBeInTheDocument();
+});
+
+test('handles composed input correctly via compositionend and ignores composing keydowns', async () => {
+  const spy = vi.fn();
+  const findMatchSpy = vi.fn(
+    (list: Array<string | null>, typedString: string) => {
+      return list.find((item) => item?.startsWith(typedString));
+    },
+  );
+
+  render(
+    <Combobox
+      onMatch={spy}
+      list={['apple', 'banana', '가을', '겨울']}
+      findMatch={findMatchSpy}
+    />,
+  );
+
+  const input = screen.getByRole('combobox');
+  input.focus();
+
+  // Simulating composing keystroke (isComposing: true)
+  act(() => {
+    fireEvent.keyDown(input, {key: 'r', isComposing: true});
+  });
+  expect(spy).not.toHaveBeenCalled();
+
+  // Simulating compositionend event with composed character '가'
+  act(() => {
+    fireEvent.compositionEnd(input, {data: '가'});
+  });
+  expect(spy).toHaveBeenCalledWith(2);
+  expect(findMatchSpy).toHaveBeenCalledWith(expect.any(Array), '가');
+
+  cleanup();
 });
