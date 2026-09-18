@@ -6,6 +6,8 @@ import userEvent from '@testing-library/user-event';
 import {useClick, useFloating, useHover, useInteractions} from '../../src';
 import type {UseClickProps} from '../../src/hooks/useClick';
 
+import {hoverEnter} from './utils';
+
 function App({
   referenceElement = 'button',
   typeable = false,
@@ -176,7 +178,7 @@ describe('`stickIfOpen` prop', async () => {
 
     const button = screen.getByRole('button');
 
-    fireEvent.mouseEnter(button);
+    hoverEnter(button);
 
     fireEvent.click(button);
 
@@ -194,7 +196,7 @@ describe('`stickIfOpen` prop', async () => {
 
     const button = screen.getByRole('button');
 
-    fireEvent.mouseEnter(button);
+    hoverEnter(button);
 
     fireEvent.click(button);
 
