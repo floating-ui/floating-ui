@@ -1452,6 +1452,45 @@ describe('order', () => {
 });
 
 describe('non-modal + FloatingPortal', () => {
+  test('hides the aria-owns owner from the accessibility tree', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {refs, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <button
+            data-testid="reference"
+            ref={refs.setReference}
+            onClick={() => setOpen(true)}
+          />
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager context={context} modal={false}>
+                <div data-testid="floating" ref={refs.setFloating}>
+                  <span tabIndex={0} data-testid="inside" />
+                </div>
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    const portal = screen.getByTestId('floating').parentElement;
+    const owner = document.querySelector(`[aria-owns="${portal?.id}"]`);
+
+    expect(owner).toHaveAttribute('aria-hidden', 'true');
+  });
+
   test('focuses inside element, tabbing out focuses last document element', async () => {
     function App() {
       const [open, setOpen] = useState(false);
