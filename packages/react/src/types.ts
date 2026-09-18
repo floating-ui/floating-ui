@@ -136,9 +136,9 @@ export interface ExtendedRefs<RT> {
   reference: React.MutableRefObject<ReferenceType | null>;
   floating: React.MutableRefObject<HTMLElement | null>;
   domReference: React.MutableRefObject<NarrowedElement<RT> | null>;
-  setReference(node: RT | null): void;
-  setFloating(node: HTMLElement | null): void;
-  setPositionReference(node: ReferenceType | null): void;
+  setReference: BivariantCallback<(node: RT | null) => void>;
+  setFloating: BivariantCallback<(node: HTMLElement | null) => void>;
+  setPositionReference: BivariantCallback<(node: ReferenceType | null) => void>;
 }
 
 export interface ExtendedElements<RT> {
@@ -148,9 +148,9 @@ export interface ExtendedElements<RT> {
 }
 
 export interface FloatingEvents {
-  emit<T extends string>(event: T, data?: any): void;
-  on(event: string, handler: (data: any) => void): void;
-  off(event: string, handler: (data: any) => void): void;
+  emit: <T extends string>(event: T, data?: any) => void;
+  on: BivariantCallback<(event: string, handler: (data: any) => void) => void>;
+  off: BivariantCallback<(event: string, handler: (data: any) => void) => void>;
 }
 
 export interface ContextData {
@@ -177,7 +177,9 @@ export interface FloatingRootContext<RT extends ReferenceType = ReferenceType> {
   events: FloatingEvents;
   floatingId: string | undefined;
   refs: {
-    setPositionReference(node: ReferenceType | null): void;
+    setPositionReference: BivariantCallback<
+      (node: ReferenceType | null) => void
+    >;
   };
 }
 
@@ -186,7 +188,9 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
   'refs' | 'elements'
 > & {
   open: boolean;
-  onOpenChange(open: boolean, event?: Event, reason?: OpenChangeReason): void;
+  onOpenChange: BivariantCallback<
+    (open: boolean, event?: Event, reason?: OpenChangeReason) => void
+  >;
   events: FloatingEvents;
   dataRef: React.MutableRefObject<ContextData>;
   nodeId: string | undefined;
@@ -204,8 +208,8 @@ export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
 export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
   nodesRef: React.MutableRefObject<Array<FloatingNodeType<RT>>>;
   events: FloatingEvents;
-  addNode(node: FloatingNodeType): void;
-  removeNode(node: FloatingNodeType): void;
+  addNode: BivariantCallback<(node: FloatingNodeType) => void>;
+  removeNode: BivariantCallback<(node: FloatingNodeType) => void>;
 }
 
 export interface ElementProps {
