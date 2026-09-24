@@ -35,6 +35,98 @@ const captureHandlerKeys = {
   click: 'onClickCapture',
 };
 
+const OVERLAY_SCROLLBAR_THRESHOLD = 15;
+
+function isScrollbarPress(element: HTMLElement, event: MouseEvent) {
+  const lastTraversableNode = isLastTraversableNode(element);
+  const style = getComputedStyle(element);
+  const scrollRe = /auto|scroll/;
+  const isScrollableX = lastTraversableNode || scrollRe.test(style.overflowX);
+  const isScrollableY = lastTraversableNode || scrollRe.test(style.overflowY);
+
+  const canScrollX =
+    isScrollableX &&
+    element.clientWidth > 0 &&
+    element.scrollWidth > element.clientWidth;
+  const canScrollY =
+    isScrollableY &&
+    element.clientHeight > 0 &&
+    element.scrollHeight > element.clientHeight;
+
+  if (!canScrollX && !canScrollY) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
+  const scrollbarWidth = Math.max(element.offsetWidth - element.clientWidth, 0);
+  const scrollbarHeight = Math.max(
+    element.offsetHeight - element.clientHeight,
+    0,
+  );
+  const isRTL = style.direction === 'rtl';
+
+  const pressedVerticalScrollbar =
+    canScrollY &&
+    (scrollbarWidth > 0
+      ? isRTL
+        ? event.clientX >= rect.left &&
+          event.clientX <= rect.left + scrollbarWidth
+        : event.clientX >= rect.right - scrollbarWidth &&
+          event.clientX <= rect.right
+      : event.clientX >= rect.right - OVERLAY_SCROLLBAR_THRESHOLD &&
+        event.clientX <= rect.right);
+
+  const pressedHorizontalScrollbar =
+    canScrollX &&
+    (scrollbarHeight > 0
+      ? event.clientY >= rect.bottom - scrollbarHeight &&
+        event.clientY <= rect.bottom
+      : event.clientY >= rect.bottom - OVERLAY_SCROLLBAR_THRESHOLD &&
+        event.clientY <= rect.bottom);
+
+  return pressedVerticalScrollbar || pressedHorizontalScrollbar;
+}
+
+function isScrollbarPressWithinFloating(
+  target: EventTarget | null,
+  floating: Element | null,
+  event: MouseEvent,
+) {
+  if (!isHTMLElement(floating)) {
+    return false;
+  }
+
+  const candidates = new Set<HTMLElement>();
+  const addCandidate = (element: Element | null) => {
+    if (
+      isHTMLElement(element) &&
+      (element === floating || contains(floating, element))
+    ) {
+      candidates.add(element);
+    }
+  };
+
+  let currentNode: Element | null = isElement(target) ? target : null;
+  while (currentNode) {
+    addCandidate(currentNode);
+    if (currentNode === floating) {
+      break;
+    }
+
+    const nextParent = getParentNode(currentNode);
+    currentNode = isElement(nextParent) ? nextParent : null;
+  }
+
+  const doc = getDocument(floating);
+  if (typeof doc.elementsFromPoint === 'function') {
+    doc.elementsFromPoint(event.clientX, event.clientY).forEach(addCandidate);
+  }
+
+  return Array.from(candidates).some((element) =>
+    isScrollbarPress(element, event),
+  );
+}
+
 export const normalizeProp = (
   normalizable?:
     | boolean
@@ -279,44 +371,13 @@ export function useDismiss(
       return;
     }
 
-    // Check if the click occurred on the scrollbar
-    if (isHTMLElement(target) && floating) {
-      const lastTraversableNode = isLastTraversableNode(target);
-      const style = getComputedStyle(target);
-      const scrollRe = /auto|scroll/;
-      const isScrollableX =
-        lastTraversableNode || scrollRe.test(style.overflowX);
-      const isScrollableY =
-        lastTraversableNode || scrollRe.test(style.overflowY);
-
-      const canScrollX =
-        isScrollableX &&
-        target.clientWidth > 0 &&
-        target.scrollWidth > target.clientWidth;
-      const canScrollY =
-        isScrollableY &&
-        target.clientHeight > 0 &&
-        target.scrollHeight > target.clientHeight;
-
-      const isRTL = style.direction === 'rtl';
-
-      // Check click position relative to scrollbar.
-      // In some browsers it is possible to change the <body> (or window)
-      // scrollbar to the left side, but is very rare and is difficult to
-      // check for. Plus, for modal dialogs with backdrops, it is more
-      // important that the backdrop is checked but not so much the window.
-      const pressedVerticalScrollbar =
-        canScrollY &&
-        (isRTL
-          ? event.offsetX <= target.offsetWidth - target.clientWidth
-          : event.offsetX > target.clientWidth);
-
-      const pressedHorizontalScrollbar =
-        canScrollX && event.offsetY > target.clientHeight;
-
-      if (pressedVerticalScrollbar || pressedHorizontalScrollbar) {
-        return;
-      }
+    // Check if the click occurred on a document scrollbar or on a scrollbar
+    // within the floating subtree whose event target is reported elsewhere.
+    if (
+      (isHTMLElement(target) && isScrollbarPress(target, event)) ||
+      isScrollbarPressWithinFloating(target, elements.floating, event)
+    ) {
+      return;
     }
 
     const nodeId = dataRef.current.floatingContext?.nodeId;
