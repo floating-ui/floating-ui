@@ -709,10 +709,20 @@ export function FloatingFocusManager(
       queueMicrotask(() => {
         // This is `returnElement`, if it's tabbable, or its first tabbable child.
         const tabbableReturnElement = getFirstTabbableElement(returnElement);
+        const currentActiveEl = activeElement(doc);
+        // Focus may have moved after this cleanup ran, e.g. into another
+        // modal that mounted in the same commit and focused an element with
+        // `autoFocus`. Returning focus would steal it from that element:
+        // https://github.com/floating-ui/floating-ui/issues/3509
+        const focusMovedAfterCleanup =
+          !!currentActiveEl &&
+          currentActiveEl !== activeEl &&
+          currentActiveEl !== doc.body;
         if (
           // eslint-disable-next-line react-hooks/exhaustive-deps
           returnFocusRef.current &&
           !preventReturnFocusRef.current &&
+          !focusMovedAfterCleanup &&
           isHTMLElement(tabbableReturnElement) &&
           // If the focus moved somewhere else after mount, avoid returning focus
           // since it likely entered a different element which should be
