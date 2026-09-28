@@ -49,8 +49,8 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
     if (isOffsetParentAnHTMLElement) {
       const offsetRect = getBoundingClientRect(offsetParent);
       scale = getScale(offsetParent);
-      offsetX = offsetRect.x + offsetParent.clientLeft;
-      offsetY = offsetRect.y + offsetParent.clientTop;
+      offsetX = offsetRect.x + offsetParent.clientLeft * scale.x;
+      offsetY = offsetRect.y + offsetParent.clientTop * scale.y;
     }
   }
 
