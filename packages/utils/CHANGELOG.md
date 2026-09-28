@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.2.13
+
+### Patch Changes
+
+- fix(getOverflowAncestors): handle documents without a body
+
 ## 0.2.12
 
 ### Patch Changes
