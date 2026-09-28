@@ -244,6 +244,12 @@ export const MINI_SPONSORS = [
     MemberId: 882753,
   },
   {
+    logo: '/sponsors/fastsocial.svg',
+    label: 'FastSocial',
+    url: 'https://fastsocial.co/',
+    MemberId: 884648,
+  },
+  {
     // Sponsored below the Mini Sponsor tier amount, so it is listed manually
     // until this date rather than matched against the Open Collective tier.
     logo: '/sponsors/kea-home.svg',
