@@ -67,6 +67,21 @@ function getFirstTabbableElement(container: Element) {
   return tabbable(container, tabbableOptions)[0] || container;
 }
 
+function getContentEditableRoot(element: Element) {
+  let root: Element | null = null;
+  let current: Element | null = element;
+
+  while (current) {
+    const value = current.getAttribute('contenteditable')?.toLowerCase();
+    if (value === '' || value === 'true' || value === 'plaintext-only') {
+      root = current;
+    }
+    current = current.parentElement;
+  }
+
+  return root;
+}
+
 function handleTabIndex(
   floatingFocusElement: HTMLElement,
   orderRef: React.MutableRefObject<Array<'reference' | 'floating' | 'content'>>,
@@ -681,7 +696,9 @@ export function FloatingFocusManager(
     Object.assign(fallbackEl.style, HIDDEN_STYLES);
 
     if (isInsidePortal && domReference) {
-      domReference.insertAdjacentElement('afterend', fallbackEl);
+      const fallbackReference =
+        getContentEditableRoot(domReference) || domReference;
+      fallbackReference.insertAdjacentElement('afterend', fallbackEl);
     }
 
     function getReturnElement() {
