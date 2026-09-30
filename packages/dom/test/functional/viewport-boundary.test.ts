@@ -7,6 +7,31 @@ const floatingRightX = (page: any) =>
     .locator('[data-testid="floating-right"]')
     .evaluate((el: Element) => el.getBoundingClientRect().x);
 
+test('stays inside a stable both-edges gutter', async ({page}) => {
+  await page.goto('http://localhost:1234/viewport-boundary');
+
+  await click(page, '[data-testid="scroll-lock"]');
+  await click(page, '[data-testid="both-edges"]');
+
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const floating = document.querySelector(
+          '[data-testid="floating-left"]',
+        )!;
+        const floatingRect = floating.getBoundingClientRect();
+        const htmlRect = document.documentElement.getBoundingClientRect();
+        return [
+          floatingRect.left - htmlRect.left,
+          floatingRect.right - htmlRect.right,
+        ];
+      }),
+    )
+    .toEqual([0, 0]);
+
+  expect(await page.screenshot()).toMatchSnapshot('both-edges.png');
+});
+
 // The differentiating behavior of `layoutViewport`: pinch-zooming shrinks the
 // visual viewport (emulated via CDP `Emulation.setPageScaleFactor`) but
 // leaves the layout viewport unchanged, so a `viewport`-bound floating

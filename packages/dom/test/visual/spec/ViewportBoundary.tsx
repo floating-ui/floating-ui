@@ -1,5 +1,11 @@
 import type {RootBoundary, Strategy} from '@floating-ui/core';
-import {autoUpdate, platform, shift, useFloating} from '@floating-ui/react-dom';
+import {
+  autoUpdate,
+  platform,
+  shift,
+  size,
+  useFloating,
+} from '@floating-ui/react-dom';
 import {useEffect, useLayoutEffect, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
@@ -36,6 +42,7 @@ export function ViewportBoundary() {
   const [boundary, setBoundary] = useState<BoundaryOption>('viewport');
   const [strategy, setStrategy] = useState<Strategy>('absolute');
   const [gutter, setGutter] = useState(true);
+  const [bothEdges, setBothEdges] = useState(false);
   const [scrollLock, setScrollLock] = useState(false);
   const [rtl, setRtl] = useState(false);
 
@@ -44,7 +51,19 @@ export function ViewportBoundary() {
   const shared = {
     strategy,
     whileElementsMounted: autoUpdate,
-    middleware: [shift({crossAxis: true, rootBoundary})],
+    middleware: [
+      shift({crossAxis: true, rootBoundary}),
+      ...(bothEdges
+        ? [
+            size({
+              rootBoundary,
+              apply({availableWidth, elements}) {
+                elements.floating.style.maxWidth = `${availableWidth}px`;
+              },
+            }),
+          ]
+        : []),
+    ],
   };
 
   const left = useFloating({...shared, placement: 'bottom-start'});
@@ -57,7 +76,9 @@ export function ViewportBoundary() {
     // off the page keeps a real scrollbar, which a browser may place on the
     // left (e.g. Firefox `layout.scrollbar.side`, RTL).
     const html = document.documentElement;
-    html.style.scrollbarGutter = gutter ? 'stable' : '';
+    html.style.scrollbarGutter = gutter
+      ? `stable${bothEdges ? ' both-edges' : ''}`
+      : '';
     html.style.overflowY = scrollLock ? 'hidden' : '';
     // `rtl` moves the document scrollbar to the left in Firefox with classic
     // (non-overlay) scrollbars; Chromium keeps the root scrollbar on the
@@ -68,7 +89,7 @@ export function ViewportBoundary() {
       html.style.overflowY = '';
       html.dir = 'ltr';
     };
-  }, [gutter, scrollLock, rtl]);
+  }, [gutter, bothEdges, scrollLock, rtl]);
 
   const [box, setBox] = useState<Box | null>(null);
 
@@ -150,6 +171,13 @@ export function ViewportBoundary() {
           gutter {gutter ? 'on' : 'off'}
         </button>
         <button
+          data-testid="both-edges"
+          onClick={() => setBothEdges((value) => !value)}
+          style={{backgroundColor: bothEdges ? 'black' : ''}}
+        >
+          both-edges {bothEdges ? 'on' : 'off'}
+        </button>
+        <button
           data-testid="scroll-lock"
           onClick={() => setScrollLock((s) => !s)}
           style={{backgroundColor: scrollLock ? 'black' : ''}}
@@ -222,7 +250,7 @@ export function ViewportBoundary() {
           position: strategy,
           top: left.y ?? 0,
           left: left.x ?? 0,
-          width: 200,
+          width: bothEdges ? 2000 : 200,
           height: 44,
           boxSizing: 'border-box',
           border: '4px solid #facc15',
@@ -241,7 +269,11 @@ export function ViewportBoundary() {
       <div
         ref={right.refs.setReference}
         className="reference"
-        style={{position: 'fixed', right: 0, top: '45vh'}}
+        style={{
+          position: 'fixed',
+          right: 0,
+          top: bothEdges ? '60vh' : '45vh',
+        }}
       >
         R-ref
       </div>
