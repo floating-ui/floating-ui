@@ -76,6 +76,11 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
   const openRef = useLatestRef(open);
+  const configRef = useLatestRef({
+    placement,
+    strategy,
+    middleware: latestMiddleware,
+  });
 
   const update = React.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
@@ -83,9 +88,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     }
 
     const config: ComputePositionConfig = {
-      placement,
-      strategy,
-      middleware: latestMiddleware,
+      ...configRef.current,
     };
 
     if (platformRef.current) {
@@ -110,7 +113,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
         }
       },
     );
-  }, [latestMiddleware, placement, strategy, platformRef, openRef]);
+  }, [configRef, platformRef, openRef]);
 
   useModernLayoutEffect(() => {
     if (open === false && dataRef.current.isPositioned) {
@@ -144,6 +147,30 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     update,
     whileElementsMountedRef,
     hasWhileElementsMounted,
+  ]);
+
+  const previousConfigRef = React.useRef(configRef.current);
+  useModernLayoutEffect(() => {
+    const previousConfig = previousConfigRef.current;
+    previousConfigRef.current = configRef.current;
+
+    if (
+      referenceEl &&
+      floatingEl &&
+      (previousConfig.placement !== placement ||
+        previousConfig.strategy !== strategy ||
+        previousConfig.middleware !== latestMiddleware)
+    ) {
+      update();
+    }
+  }, [
+    referenceEl,
+    floatingEl,
+    placement,
+    strategy,
+    latestMiddleware,
+    update,
+    configRef,
   ]);
 
   const refs = React.useMemo(
