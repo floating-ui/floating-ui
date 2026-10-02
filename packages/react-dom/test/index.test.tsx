@@ -143,6 +143,78 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
 });
 
 describe('whileElementsMounted', () => {
+  test('keeps the subscription while positioning options change', async () => {
+    const cleanupSpy = vi.fn();
+    const mounted = vi.fn((_reference, _floating, update) => {
+      update();
+      return cleanupSpy;
+    });
+    let result: ReturnType<typeof useFloating>;
+
+    function App({
+      placement = 'bottom',
+      strategy = 'absolute',
+      distance = 0,
+      referenceKey = 'reference',
+    }: {
+      placement?: 'top' | 'bottom';
+      strategy?: 'absolute' | 'fixed';
+      distance?: number;
+      referenceKey?: string;
+    }) {
+      result = useFloating({
+        placement,
+        strategy,
+        middleware: [offset(distance)],
+        whileElementsMounted: mounted,
+      });
+      return (
+        <>
+          <button key={referenceKey} ref={result.refs.setReference} />
+          <div ref={result.refs.setFloating} />
+        </>
+      );
+    }
+
+    const {rerender, unmount} = render(<App />);
+    await act(async () => {});
+    const update = result!.update;
+    expect(mounted).toHaveBeenCalledTimes(1);
+
+    rerender(<App placement="top" />);
+    await act(async () => {});
+    expect(result!.placement).toBe('top');
+    expect(result!.update).toBe(update);
+    expect(mounted).toHaveBeenCalledTimes(1);
+    expect(cleanupSpy).not.toHaveBeenCalled();
+
+    rerender(<App placement="top" strategy="fixed" distance={10} />);
+    await act(async () => {});
+    expect(result!.strategy).toBe('fixed');
+    expect(result!.y).toBe(-10);
+    expect(mounted).toHaveBeenCalledTimes(1);
+    expect(cleanupSpy).not.toHaveBeenCalled();
+
+    await act(async () => update());
+    expect(result!.placement).toBe('top');
+    expect(result!.y).toBe(-10);
+
+    rerender(
+      <App
+        placement="top"
+        strategy="fixed"
+        distance={10}
+        referenceKey="replacement"
+      />,
+    );
+    await act(async () => {});
+    expect(mounted).toHaveBeenCalledTimes(2);
+    expect(cleanupSpy).toHaveBeenCalledTimes(1);
+
+    unmount();
+    expect(cleanupSpy).toHaveBeenCalledTimes(2);
+  });
+
   test('is called a single time when both elements mount', () => {
     const spy = vi.fn();
 
