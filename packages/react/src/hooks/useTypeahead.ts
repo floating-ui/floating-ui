@@ -98,6 +98,12 @@ export function useTypeahead(
   const findMatchRef = useLatestRef(findMatch);
   const ignoreKeysRef = useLatestRef(ignoreKeys);
 
+  React.useEffect(() => {
+    return () => {
+      clearTimeoutIfSet(timeoutIdRef);
+    };
+  }, []);
+
   useModernLayoutEffect(() => {
     if (open) {
       clearTimeoutIfSet(timeoutIdRef);
