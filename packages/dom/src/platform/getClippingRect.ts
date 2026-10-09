@@ -130,6 +130,16 @@ function getClippingElementAncestors(
       lastKeptComputedStyle = computedStyle;
     }
 
+    if (isTopLayer(currentNode)) {
+      // Descendants can be clipped within the top layer, but ancestors of
+      // the top-layer element cannot clip them.
+      const externalAncestors = getOverflowAncestors(currentNode, [], false);
+      result = result.filter(
+        (ancestor) => !externalAncestors.includes(ancestor),
+      );
+      break;
+    }
+
     currentNode = getParentNode(currentNode);
   }
 
