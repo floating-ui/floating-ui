@@ -254,7 +254,11 @@ export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
         />
       )}
       {shouldRenderGuards && portalNode && (
-        <span aria-owns={portalNode.id} style={HIDDEN_OWNER_STYLES} />
+        <span
+          aria-hidden="true"
+          aria-owns={portalNode.id}
+          style={HIDDEN_OWNER_STYLES}
+        />
       )}
       {portalNode && ReactDOM.createPortal(children, portalNode)}
       {shouldRenderGuards && portalNode && (
