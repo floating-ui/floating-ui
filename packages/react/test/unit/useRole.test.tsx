@@ -1,5 +1,6 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
+import {vi} from 'vitest';
 
 import {
   useClick,
@@ -102,10 +103,27 @@ describe('tooltip', () => {
 });
 
 describe('label', () => {
+  test('warns that the role is deprecated', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    render(<App role="label" />);
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy.mock.calls[0][0]).toContain('deprecated');
+    warnSpy.mockRestore();
+    cleanup();
+  });
+
   test('sets correct aria attributes based on the open state', () => {
     const {container} = render(<App role="label" initiallyOpen />);
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     expect(container.querySelector('[aria-labelledby]')).toBeInTheDocument();
+    cleanup();
+  });
+
+  test('does not set aria-labelledby until the floating element is shown', () => {
+    const {container} = render(<App role="label" />);
+    expect(
+      container.querySelector('[aria-labelledby]'),
+    ).not.toBeInTheDocument();
     cleanup();
   });
 });
