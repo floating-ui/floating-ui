@@ -8,7 +8,7 @@ import {getWindowScrollBarX} from './getWindowScrollBarX';
 // of the `<html>` and `<body>` rect bounds if horizontally scrollable.
 export function getDocumentRect(html: HTMLElement): Rect {
   const scroll = getNodeScroll(html);
-  const body = html.ownerDocument.body;
+  const body = html.ownerDocument.body || html;
 
   const width = max(
     html.scrollWidth,
