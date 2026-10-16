@@ -250,6 +250,12 @@ export const MINI_SPONSORS = [
     MemberId: 884648,
   },
   {
+    logo: '/sponsors/backupdrill.svg',
+    label: 'BackupDrill - Supabase Backups with Restore Drills',
+    url: 'https://backupdrill.com/',
+    MemberId: 893380,
+  },
+  {
     // Sponsored below the Mini Sponsor tier amount, so it is listed manually
     // until this date rather than matched against the Open Collective tier.
     logo: '/sponsors/kea-home.svg',
