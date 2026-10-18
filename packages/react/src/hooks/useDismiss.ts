@@ -109,7 +109,7 @@ function isScrollbarPressWithinFloating(
   let currentNode: Element | null = isElement(target) ? target : null;
   while (currentNode) {
     addCandidate(currentNode);
-    if (currentNode === floating) {
+    if (currentNode === floating || isLastTraversableNode(currentNode)) {
       break;
     }
 
