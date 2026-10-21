@@ -1,4 +1,4 @@
-import {act, cleanup, render, screen} from '@testing-library/react';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
 import {vi} from 'vitest';
@@ -8,6 +8,22 @@ import type {UseTypeaheadProps} from '../../src/hooks/useTypeahead';
 import {Main} from '../visual/components/Menu';
 
 vi.useFakeTimers({shouldAdvanceTime: true});
+
+test('clears the typing reset timer on unmount', () => {
+  const onTypingChange = vi.fn();
+  const {unmount} = render(<Combobox onTypingChange={onTypingChange} />);
+
+  fireEvent.keyDown(screen.getByRole('combobox'), {key: 'o'});
+  expect(onTypingChange).toHaveBeenCalledWith(true);
+
+  unmount();
+  onTypingChange.mockClear();
+  act(() => {
+    vi.advanceTimersByTime(750);
+  });
+
+  expect(onTypingChange).not.toHaveBeenCalled();
+});
 
 const useImpl = ({
   addUseClick = false,
