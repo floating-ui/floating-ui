@@ -4,7 +4,6 @@ import * as ReactDOM from 'react-dom';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {
-  ComputePositionConfig,
   ReferenceType,
   UseFloatingData,
   UseFloatingOptions,
@@ -74,43 +73,40 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
   const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
-  const platformRef = useLatestRef(platform);
-  const openRef = useLatestRef(open);
+  const configRef = useLatestRef({
+    placement,
+    strategy,
+    middleware: latestMiddleware,
+    ...(platform && {platform}),
+    open,
+  });
 
   const update = React.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
       return;
     }
 
-    const config: ComputePositionConfig = {
-      placement,
-      strategy,
-      middleware: latestMiddleware,
-    };
-
-    if (platformRef.current) {
-      config.platform = platformRef.current;
-    }
-
-    computePosition(referenceRef.current, floatingRef.current, config).then(
-      (data) => {
-        const fullData = {
-          ...data,
-          // The floating element's position may be recomputed while it's closed
-          // but still mounted (such as when transitioning out). To ensure
-          // `isPositioned` will be `false` initially on the next open, avoid
-          // setting it to `true` when `open === false` (must be specified).
-          isPositioned: openRef.current !== false,
-        };
-        if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
-          dataRef.current = fullData;
-          ReactDOM.flushSync(() => {
-            setData(fullData);
-          });
-        }
-      },
-    );
-  }, [latestMiddleware, placement, strategy, platformRef, openRef]);
+    computePosition(
+      referenceRef.current,
+      floatingRef.current,
+      configRef.current,
+    ).then((data) => {
+      const fullData = {
+        ...data,
+        // The floating element's position may be recomputed while it's closed
+        // but still mounted (such as when transitioning out). To ensure
+        // `isPositioned` will be `false` initially on the next open, avoid
+        // setting it to `true` when `open === false` (must be specified).
+        isPositioned: configRef.current.open !== false,
+      };
+      if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+        dataRef.current = fullData;
+        ReactDOM.flushSync(() => {
+          setData(fullData);
+        });
+      }
+    });
+  }, [configRef]);
 
   useModernLayoutEffect(() => {
     if (open === false && dataRef.current.isPositioned) {
@@ -127,9 +123,11 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     };
   }, []);
 
+  const hasElementsRef = React.useRef(false);
   useModernLayoutEffect(() => {
     if (referenceEl) referenceRef.current = referenceEl;
     if (floatingEl) floatingRef.current = floatingEl;
+    hasElementsRef.current = !!(referenceEl && floatingEl);
 
     if (referenceEl && floatingEl) {
       if (whileElementsMountedRef.current) {
@@ -145,6 +143,23 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     whileElementsMountedRef,
     hasWhileElementsMounted,
   ]);
+
+  // `update` reads the config from a ref so that changing it doesn't recreate
+  // `whileElementsMounted`. Recreating `autoUpdate` during a ResizeObserver
+  // delivery (e.g. a placement change after a flip) is reported as a loop.
+  // The effect above already computes on mount, and the refs keep the last
+  // elements after they're removed, so skip both cases.
+  const isInitialConfigRef = React.useRef(true);
+  useModernLayoutEffect(() => {
+    if (isInitialConfigRef.current) {
+      isInitialConfigRef.current = false;
+      return;
+    }
+
+    if (hasElementsRef.current) {
+      update();
+    }
+  }, [placement, strategy, latestMiddleware, update]);
 
   const refs = React.useMemo(
     () => ({

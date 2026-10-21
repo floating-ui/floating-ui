@@ -49,7 +49,11 @@ export function Hide() {
     ],
   });
 
-  const {scrollRef, indicator} = useScroll({refs, update});
+  const {scrollRef, indicator} = useScroll({
+    refs,
+    update,
+    recenterKey: [placement, isFixedStrategy, hierarchy === 'o'].join(),
+  });
 
   useLayoutEffect(update, [update, hierarchy]);
 
