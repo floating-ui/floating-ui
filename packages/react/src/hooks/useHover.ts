@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {isElement} from '@floating-ui/utils/dom';
+import {isElement, isShadowRoot} from '@floating-ui/utils/dom';
 import {
   contains,
   getDocument,
@@ -307,9 +307,31 @@ export function useHover(
 
         const handler = handlerRef.current;
 
-        doc.addEventListener('mousemove', handler);
+        const roots = new Set<Document | ShadowRoot>([doc]);
+        for (const element of [elements.domReference, elements.floating]) {
+          const root = element?.getRootNode();
+          if (isShadowRoot(root)) {
+            roots.add(root);
+          }
+        }
+
+        // Closed shadow roots hide the original target from document listeners.
+        // Handle the event in its innermost root, once, while still observing
+        // movement outside the roots to close the floating element.
+        const handledEvents = new WeakSet<Event>();
+        function onMouseMove(event: Event) {
+          if (handledEvents.has(event)) return;
+          handledEvents.add(event);
+          handler(event as MouseEvent);
+        }
+
+        roots.forEach((root) =>
+          root.addEventListener('mousemove', onMouseMove),
+        );
         unbindMouseMoveRef.current = () => {
-          doc.removeEventListener('mousemove', handler);
+          roots.forEach((root) =>
+            root.removeEventListener('mousemove', onMouseMove),
+          );
         };
 
         return;
