@@ -25,6 +25,7 @@ import {Main as ComplexGrid} from '../visual/components/ComplexGrid';
 import {Main as Grid} from '../visual/components/Grid';
 import {Main as EmojiPicker} from '../visual/components/EmojiPicker';
 import {Main as ListboxFocus} from '../visual/components/ListboxFocus';
+import {Main as SelectVirtual} from '../visual/components/SelectVirtual';
 import {Main as NestedMenu} from '../visual/components/Menu';
 import {HorizontalMenu} from '../visual/components/MenuOrientation';
 import {Menu, MenuItem} from '../visual/components/MenuVirtual';
@@ -1083,6 +1084,61 @@ test('scheduled list population', async () => {
   await act(async () => {});
 
   expect(screen.getAllByRole('option')[0]).toHaveFocus();
+});
+
+test('virtual active descendant matches the remounted selected option', async ({
+  onTestFinished,
+}) => {
+  // Allow FloatingList to register the remounted items before the next frame.
+  vi.mocked(window.requestAnimationFrame).mockRestore();
+  onTestFinished(() => {
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      callback(0);
+      return 0;
+    });
+  });
+  render(<SelectVirtual />);
+
+  const reference = screen.getByRole('combobox');
+  await userEvent.click(reference);
+  await userEvent.click(screen.getByRole('option', {name: 'Banana'}));
+  await userEvent.tab();
+  // Return to the trigger before reopening with the keyboard.
+  act(() => reference.focus());
+  expect(reference).toHaveFocus();
+  await userEvent.keyboard('{Enter}');
+
+  await waitFor(() => {
+    const banana = screen.getByRole('option', {name: 'Banana'});
+    expect(banana).toHaveAttribute('aria-selected', 'true');
+    expect(banana.id).not.toBe('');
+    expect(reference).toHaveAttribute('aria-activedescendant', banana.id);
+    expect(document.getElementById(banana.id)).toBe(banana);
+  });
+
+  await userEvent.keyboard('{ArrowUp}');
+  await waitFor(() => {
+    expect(reference).toHaveAttribute(
+      'aria-activedescendant',
+      screen.getByRole('option', {name: 'Watermelon'}).id,
+    );
+  });
+  await userEvent.keyboard('{ArrowDown}');
+  await waitFor(() => {
+    expect(reference).toHaveAttribute(
+      'aria-activedescendant',
+      screen.getByRole('option', {name: 'Banana'}).id,
+    );
+  });
+
+  await userEvent.keyboard('{Escape}');
+  await userEvent.click(reference);
+  await waitFor(() => {
+    expect(reference).toHaveAttribute(
+      'aria-activedescendant',
+      screen.getByRole('option', {name: 'Banana'}).id,
+    );
+  });
 });
 
 test('async selectedIndex', async () => {
