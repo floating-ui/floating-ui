@@ -198,16 +198,37 @@ export function autoUpdate(
 
   let reobserveFrame = -1;
   let resizeObserver: ResizeObserver | null = null;
+  let floatingWidth = -1;
+  let floatingHeight = -1;
 
   if (elementResize) {
-    resizeObserver = new ResizeObserver(([firstEntry]) => {
-      if (
-        firstEntry &&
-        firstEntry.target === referenceEl &&
-        resizeObserver &&
-        floating
-      ) {
-        // Prevent update loops when using the `size` middleware.
+    resizeObserver = new ResizeObserver((entries) => {
+      let changed = false;
+
+      entries.forEach(({target, contentRect: {width, height}}) => {
+        if (target !== floating) {
+          changed = true;
+          return;
+        }
+
+        // Observing the floating element again delivers its current size,
+        // which only needs an update if it changed in the meantime.
+        if (width !== floatingWidth || height !== floatingHeight) {
+          changed = true;
+        }
+
+        floatingWidth = width;
+        floatingHeight = height;
+      });
+
+      if (!changed) {
+        return;
+      }
+
+      if (resizeObserver && floating) {
+        // The update can resize the floating element (e.g. via the `size`
+        // middleware). A resize inside the delivery that caused it is reported
+        // as a "ResizeObserver loop", so stop observing it until the next frame.
         // https://github.com/floating-ui/floating-ui/issues/1740
         resizeObserver.unobserve(floating);
         cancelAnimationFrame(reobserveFrame);
@@ -215,6 +236,7 @@ export function autoUpdate(
           resizeObserver?.observe(floating);
         });
       }
+
       update();
     });
 
