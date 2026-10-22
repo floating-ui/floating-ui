@@ -27,6 +27,7 @@ import {Offset} from './spec/Offset';
 import {Perf} from './spec/Perf';
 import {Placement} from './spec/Placement';
 import {Relative} from './spec/Relative';
+import {ScaledRoot} from './spec/ScaledRoot';
 import {Scroll} from './spec/Scroll';
 import {Scrollbars} from './spec/Scrollbars';
 import {ShadowDOM} from './spec/ShadowDOM';
@@ -69,6 +70,7 @@ const ROUTES = [
   {path: 'layout-viewport', component: LayoutViewport},
   {path: 'viewport-boundary', component: ViewportBoundary},
   {path: 'zoom', component: Zoom},
+  {path: 'scaled-root', component: ScaledRoot},
 ];
 
 function App() {

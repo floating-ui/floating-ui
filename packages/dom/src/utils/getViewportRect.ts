@@ -60,11 +60,12 @@ export function getViewportRect(
   // viewport width instead. A left-side scrollbar (`windowScrollbarX > 0`) is
   // already handled by `getHTMLOffset`/`visualViewport.width`; skip it here.
   // `both-edges` also shifts the <html> origin by the inline-start gutter, so it
-  // fails that same check and stays uncorrected.
+  // fails that same check and stays uncorrected. The layout width is used
+  // rather than `htmlRect.width` so a root transform is not mistaken for one.
   const reservedWidth =
     win.document.compatMode === 'BackCompat'
       ? width - html.clientWidth
-      : html.clientWidth - htmlRect.width;
+      : html.clientWidth - html.offsetWidth * getCurrentCSSZoom(html);
 
   if (
     windowScrollbarX <= 0 &&
