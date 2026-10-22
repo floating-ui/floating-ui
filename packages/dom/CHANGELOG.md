@@ -1,5 +1,16 @@
 # @floating-ui/dom
 
+## 1.8.1
+
+### Patch Changes
+
+- fix(autoUpdate): avoid "ResizeObserver loop completed with undelivered notifications" errors when an update triggered by the floating element's own resize changes its size again (e.g. `flip` + `size`). The floating element is now unobserved until the next frame after every resize-triggered update, not only after reference resizes
+- fix(getDocumentRect): handle documents without a body
+- fix: support the CSS `zoom` property, correcting positioning and overflow detection when the floating element's `offsetParent` resolves to the `Window`
+- perf(dom): reduce bundle size in rect and scale utilities
+- fix(getViewportRect): only subtract a scrollbar gutter when one is reserved
+- Update dependencies: `@floating-ui/utils@0.2.13`, `@floating-ui/core@1.8.1`
+
 ## 1.8.0
 
 ### Minor Changes
