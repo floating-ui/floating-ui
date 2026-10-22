@@ -34,8 +34,7 @@ export interface VirtualElement {
 export const sides: Side[] = ['top', 'right', 'bottom', 'left'];
 export const alignments: Alignment[] = ['start', 'end'];
 export const placements: Placement[] = sides.reduce(
-  (acc: Placement[], side) =>
-    acc.concat(side, `${side}-${alignments[0]}`, `${side}-${alignments[1]}`),
+  (acc: Placement[], side) => acc.concat(side, `${side}-start`, `${side}-end`),
   [],
 );
 
@@ -130,23 +129,16 @@ export function getOppositeAlignmentPlacement<T extends string>(
     : (placement.replace('end', 'start') as T);
 }
 
-const lrPlacement: Placement[] = ['left', 'right'];
-const rlPlacement: Placement[] = ['right', 'left'];
-const tbPlacement: Placement[] = ['top', 'bottom'];
-const btPlacement: Placement[] = ['bottom', 'top'];
-
-function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
-  switch (side) {
-    case 'top':
-    case 'bottom':
-      if (rtl) return isStart ? rlPlacement : lrPlacement;
-      return isStart ? lrPlacement : rlPlacement;
-    case 'left':
-    case 'right':
-      return isStart ? tbPlacement : btPlacement;
-    default:
-      return [];
+function getSideList(
+  side: Placement,
+  isStart: boolean,
+  rtl?: boolean,
+): Placement[] {
+  if (getSideAxis(side) === 'y') {
+    return isStart !== !!rtl ? ['left', 'right'] : ['right', 'left'];
   }
+
+  return isStart ? ['top', 'bottom'] : ['bottom', 'top'];
 }
 
 export function getOppositeAxisPlacements(
@@ -156,7 +148,7 @@ export function getOppositeAxisPlacements(
   rtl?: boolean,
 ): Placement[] {
   const alignment = getAlignment(placement);
-  let list = getSideList(getSide(placement), direction === 'start', rtl);
+  let list = getSideList(placement, direction === 'start', rtl);
 
   if (alignment) {
     list = list.map((side) => `${side}-${alignment}` as Placement);
