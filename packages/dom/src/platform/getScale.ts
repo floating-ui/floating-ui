@@ -15,21 +15,12 @@ export function getScale(element: Element | VirtualElement): Coords {
 
   const rect = domElement.getBoundingClientRect();
   const {width, height, $} = getCssDimensions(domElement);
-  let x = ($ ? round(rect.width) : rect.width) / width;
-  let y = ($ ? round(rect.height) : rect.height) / height;
+  const x = ($ ? round(rect.width) : rect.width) / width;
+  const y = ($ ? round(rect.height) : rect.height) / height;
 
   // 0, NaN, or Infinity should always fallback to 1.
-
-  if (!x || !Number.isFinite(x)) {
-    x = 1;
-  }
-
-  if (!y || !Number.isFinite(y)) {
-    y = 1;
-  }
-
   return {
-    x,
-    y,
+    x: x && Number.isFinite(x) ? x : 1,
+    y: y && Number.isFinite(y) ? y : 1,
   };
 }

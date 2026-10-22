@@ -22,16 +22,10 @@ export function getBoundingClientRect(
   const clientRect = element.getBoundingClientRect();
   const domElement = unwrapElement(element);
 
-  let scale = createCoords(1);
-  if (includeScale) {
-    if (offsetParent) {
-      if (isElement(offsetParent)) {
-        scale = getScale(offsetParent);
-      }
-    } else {
-      scale = getScale(element);
-    }
-  }
+  // A Window `offsetParent` has no scale.
+  const scale = includeScale
+    ? getScale((offsetParent || element) as Element)
+    : createCoords(1);
 
   const visualOffsets = shouldAddVisualOffsets(
     domElement,
