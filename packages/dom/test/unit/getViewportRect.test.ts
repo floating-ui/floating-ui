@@ -24,6 +24,9 @@ interface Geometry {
   // this while leaving `clientWidth` at the full viewport width. In quirks
   // mode, both shrink.
   htmlBCRWidth?: number;
+  // The untransformed <html> layout width; equals `htmlBCRWidth` unless the
+  // <html> has a transform.
+  htmlOffsetWidth?: number;
   bodyClientWidth?: number;
   visualViewportWidth: number;
   visualViewportHeight?: number;
@@ -38,6 +41,7 @@ function mockViewport({
   htmlBCRLeft,
   htmlScrollLeft,
   htmlBCRWidth = htmlClientWidth,
+  htmlOffsetWidth = htmlBCRWidth,
   bodyClientWidth = htmlClientWidth,
   visualViewportWidth,
   visualViewportHeight = htmlClientHeight,
@@ -48,6 +52,7 @@ function mockViewport({
   vi.spyOn(html, 'clientWidth', 'get').mockReturnValue(htmlClientWidth);
   vi.spyOn(html, 'clientHeight', 'get').mockReturnValue(htmlClientHeight);
   vi.spyOn(html, 'scrollLeft', 'get').mockReturnValue(htmlScrollLeft);
+  vi.spyOn(html, 'offsetWidth', 'get').mockReturnValue(htmlOffsetWidth);
   vi.spyOn(html, 'getBoundingClientRect').mockReturnValue({
     left: htmlBCRLeft,
     top: 0,
@@ -220,6 +225,27 @@ test('ignores a negative reserved width', () => {
     htmlClientHeight: 600,
     htmlBCRLeft: 0,
     htmlBCRWidth: 910,
+    htmlScrollLeft: 0,
+    visualViewportWidth: 900,
+  });
+  html.style.scrollbarGutter = 'stable';
+
+  const rect = getViewportRect(html, 'absolute');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(900);
+});
+
+// A scale transform on the <html> shrinks its border box without reserving
+// anything: with overlay scrollbars, `html { scrollbar-gutter: stable;
+// transform: scale(0.99) }` on a 900px viewport measures 891px.
+test('does not treat an <html> transform as a reserved gutter', () => {
+  mockViewport({
+    htmlClientWidth: 900,
+    htmlClientHeight: 600,
+    htmlBCRLeft: 0,
+    htmlBCRWidth: 891,
+    htmlOffsetWidth: 900,
     htmlScrollLeft: 0,
     visualViewportWidth: 900,
   });
