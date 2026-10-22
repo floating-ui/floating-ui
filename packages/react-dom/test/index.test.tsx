@@ -3,6 +3,8 @@ import * as React from 'react';
 import {vi} from 'vitest';
 
 import {
+  type Middleware,
+  type Placement,
   arrow,
   flip,
   hide,
@@ -262,6 +264,131 @@ describe('whileElementsMounted', () => {
 
     cleanup();
   });
+
+  test('is not called again when the placement or middleware change', async () => {
+    const spy = vi.fn((_reference, _floating, update: () => void) => {
+      update();
+      return () => {};
+    });
+    const compute = vi.fn();
+    const counter: Middleware = {
+      name: 'counter',
+      fn: ({x, y}) => {
+        compute();
+        return {x, y};
+      },
+    };
+    const updates = new Set<() => void>();
+
+    function App({
+      placement,
+      offsetValue,
+    }: {
+      placement: Placement;
+      offsetValue: number;
+    }) {
+      const {
+        refs,
+        update,
+        placement: resolvedPlacement,
+      } = useFloating({
+        placement,
+        middleware: [offset(offsetValue), counter],
+        whileElementsMounted: spy,
+      });
+      updates.add(update);
+      return (
+        <>
+          <button ref={refs.setReference} />
+          <div
+            data-testid="floating"
+            data-placement={resolvedPlacement}
+            ref={refs.setFloating}
+          />
+        </>
+      );
+    }
+
+    const {rerender} = render(<App placement="bottom" offsetValue={0} />);
+    await act(async () => {});
+    expect(spy).toHaveBeenCalledTimes(1);
+    compute.mockClear();
+
+    rerender(<App placement="top" offsetValue={0} />);
+    await act(async () => {});
+
+    expect(screen.getByTestId('floating')).toHaveAttribute(
+      'data-placement',
+      'top',
+    );
+    expect(compute).toHaveBeenCalledTimes(1);
+
+    rerender(<App placement="top" offsetValue={5} />);
+    await act(async () => {});
+
+    expect(compute).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(updates.size).toBe(1);
+
+    cleanup();
+  });
+});
+
+test('does not recompute on a config change while an external element is removed', async () => {
+  const compute = vi.fn();
+  const counter: Middleware = {
+    name: 'counter',
+    fn: ({x, y}) => {
+      compute();
+      return {x, y};
+    },
+  };
+
+  function App({
+    showReference,
+    offsetValue,
+  }: {
+    showReference: boolean;
+    offsetValue: number;
+  }) {
+    const [referenceEl, setReferenceEl] = React.useState<HTMLElement | null>(
+      null,
+    );
+    const {refs} = useFloating({
+      elements: {reference: showReference ? referenceEl : null},
+      middleware: [offset(offsetValue), counter],
+    });
+    return (
+      <>
+        <button ref={setReferenceEl} />
+        <div ref={refs.setFloating} />
+      </>
+    );
+  }
+
+  const {rerender} = render(<App showReference offsetValue={0} />);
+  await act(async () => {});
+  expect(compute).toHaveBeenCalled();
+
+  rerender(<App showReference={false} offsetValue={0} />);
+  await act(async () => {});
+  compute.mockClear();
+
+  rerender(<App showReference={false} offsetValue={5} />);
+  await act(async () => {});
+
+  expect(compute).not.toHaveBeenCalled();
+
+  rerender(<App showReference offsetValue={5} />);
+  await act(async () => {});
+  compute.mockClear();
+
+  rerender(<App showReference offsetValue={10} />);
+  await act(async () => {});
+
+  expect(compute).toHaveBeenCalledTimes(1);
+
+  cleanup();
 });
 
 test('unstable callback refs', async () => {

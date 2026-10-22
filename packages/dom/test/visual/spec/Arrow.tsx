@@ -51,7 +51,11 @@ export function Arrow() {
 
   const staticSide = oppositeSidesMap[resultantPlacement.split('-')[0]];
 
-  const {scrollRef} = useScroll({refs, update});
+  const {scrollRef} = useScroll({
+    refs,
+    update,
+    recenterKey: [placement, padding, addOffset].join(),
+  });
 
   const ArrowTag = svg ? 'svg' : 'div';
 

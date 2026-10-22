@@ -1,6 +1,7 @@
-import {afterEach, beforeEach, expect, test, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, test, vi} from 'vitest';
 
 import {autoUpdate} from '../../src/autoUpdate';
+import {computePosition, flip, size, type Middleware} from '../../src';
 
 // `autoUpdate` depends on real `IntersectionObserver`/`ResizeObserver` and
 // layout, so these assertions only run in the browser test environment
@@ -64,3 +65,120 @@ test.runIf(inBrowser)(
     cleanup();
   },
 );
+
+describe.runIf(inBrowser)('elementResize', () => {
+  const loopErrors: string[] = [];
+
+  function onError(event: ErrorEvent) {
+    if (event.message.includes('ResizeObserver loop')) {
+      loopErrors.push(event.message);
+      // Keep the test runner from reporting it as an unhandled error; the
+      // assertions below check it instead.
+      event.preventDefault();
+    }
+  }
+
+  function nextFrames(count: number) {
+    return new Promise<void>((resolve) => {
+      function tick(remaining: number) {
+        if (remaining === 0) {
+          resolve();
+        } else {
+          requestAnimationFrame(() => tick(remaining - 1));
+        }
+      }
+      tick(count);
+    });
+  }
+
+  function computeWith(middleware: Middleware[]) {
+    return vi.fn(() => {
+      computePosition(reference, floating, {middleware}).then(({x, y}) => {
+        Object.assign(floating.style, {left: `${x}px`, top: `${y}px`});
+      });
+    });
+  }
+
+  beforeEach(() => {
+    loopErrors.length = 0;
+    window.addEventListener('error', onError);
+    floating.style.position = 'absolute';
+  });
+
+  afterEach(() => {
+    window.removeEventListener('error', onError);
+  });
+
+  test('does not report a loop when an update resizes the floating element after the reference resized', async () => {
+    const update = computeWith([
+      size({
+        apply({rects, elements}) {
+          elements.floating.style.width = `${rects.reference.width}px`;
+        },
+      }),
+    ]);
+    const cleanup = autoUpdate(reference, floating, update);
+    await nextFrames(3);
+    expect(floating.style.width).toBe('100px');
+
+    reference.style.width = '150px';
+    await nextFrames(3);
+
+    expect(floating.style.width).toBe('150px');
+    expect(loopErrors).toEqual([]);
+
+    cleanup();
+  });
+
+  test('does not report a loop when the floating element flips after it resized', async () => {
+    Object.assign(reference.style, {
+      position: 'absolute',
+      top: `${window.innerHeight - 200}px`,
+    });
+    const update = computeWith([
+      flip(),
+      size({
+        apply({placement, elements}) {
+          elements.floating.style.width =
+            placement === 'top' ? '120px' : '80px';
+        },
+      }),
+    ]);
+    const cleanup = autoUpdate(reference, floating, update);
+    await nextFrames(3);
+    expect(floating.style.width).toBe('80px');
+
+    // Taller than the space below the reference, so it flips to the top,
+    // where `size` applies a different width.
+    floating.style.height = '150px';
+    await nextFrames(3);
+
+    expect(floating.style.width).toBe('120px');
+    expect(loopErrors).toEqual([]);
+
+    cleanup();
+  });
+
+  test('does not update while neither element resizes', async () => {
+    const update = computeWith([
+      size({
+        apply({rects, elements}) {
+          elements.floating.style.width = `${rects.reference.width}px`;
+        },
+      }),
+    ]);
+    const cleanup = autoUpdate(reference, floating, update, {
+      ancestorScroll: false,
+      ancestorResize: false,
+      layoutShift: false,
+    });
+    await nextFrames(5);
+    update.mockClear();
+
+    await nextFrames(10);
+
+    expect(update).not.toHaveBeenCalled();
+
+    cleanup();
+  });
+});

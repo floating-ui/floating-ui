@@ -14,6 +14,7 @@ export const useScroll = ({
   refs,
   update,
   rtl = false,
+  recenterKey,
 }: {
   refs: {
     reference: MutableRefObject<Element | VirtualElement | null>;
@@ -21,6 +22,8 @@ export const useScroll = ({
   };
   update: () => void;
   rtl?: boolean;
+  /** Recenters the scroll container whenever this changes. */
+  recenterKey?: string;
 }) => {
   const {
     x,
@@ -88,7 +91,14 @@ export const useScroll = ({
         el.removeEventListener('scroll', localUpdate);
       });
     };
-  }, [refs.floating, refs.reference, update, indicatorUpdate, rtl]);
+  }, [
+    refs.floating,
+    refs.reference,
+    update,
+    indicatorUpdate,
+    rtl,
+    recenterKey,
+  ]);
 
   useLayoutEffect(() => {
     floatingRefs.setReference(refs.reference.current);
