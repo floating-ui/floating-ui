@@ -130,11 +130,11 @@ export function getOppositeAlignmentPlacement<T extends string>(
 }
 
 function getSideList(
-  side: Placement,
+  placement: Placement,
   isStart: boolean,
   rtl?: boolean,
 ): Placement[] {
-  if (getSideAxis(side) === 'y') {
+  if (getSideAxis(placement) === 'y') {
     return isStart !== !!rtl ? ['left', 'right'] : ['right', 'left'];
   }
 
