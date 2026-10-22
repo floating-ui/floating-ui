@@ -79,6 +79,7 @@ afterEach(() => {
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
   delete (document.body as any).currentCSSZoom;
+  delete (html as any).currentCSSZoom;
   html.style.scrollbarGutter = '';
   mocks.isWebKit = false;
 });
@@ -116,6 +117,35 @@ test('caps a zoomed reserved gutter in CSS pixels', () => {
   });
   // The body's currentCSSZoom is cumulative, including both <html> and <body>
   // zoom, and matches the scale Chrome applies to the root gutter.
+  Object.defineProperty(document.body, 'currentCSSZoom', {
+    configurable: true,
+    value: 2,
+  });
+  html.style.scrollbarGutter = 'stable';
+
+  const rect = getViewportRect(html, 'absolute');
+
+  expect(rect.x).toBe(0);
+  expect(rect.width).toBe(870);
+});
+
+// `offsetWidth` is in the <html>'s own unzoomed pixels, so it must be scaled by
+// its zoom: at `html { zoom: 2 }` a 15 CSS px gutter paints 30px, leaving a
+// 435px layout width that the border box reports as 870px.
+test('scales the <html> layout width by its zoom', () => {
+  mockViewport({
+    htmlClientWidth: 900,
+    htmlClientHeight: 600,
+    htmlBCRLeft: 0,
+    htmlBCRWidth: 870,
+    htmlOffsetWidth: 435,
+    htmlScrollLeft: 0,
+    visualViewportWidth: 900,
+  });
+  Object.defineProperty(html, 'currentCSSZoom', {
+    configurable: true,
+    value: 2,
+  });
   Object.defineProperty(document.body, 'currentCSSZoom', {
     configurable: true,
     value: 2,

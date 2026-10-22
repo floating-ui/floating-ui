@@ -8,7 +8,14 @@ test('shifts flush to the viewport edge with a scaled <html>', async ({
 }) => {
   await page.goto('http://localhost:1234/scaled-root');
 
-  await expect(page.getByTestId('floating')).toBeVisible();
+  // The popup opens at (0, 0) and moves once its position is computed.
+  await expect
+    .poll(() =>
+      page
+        .getByTestId('floating')
+        .evaluate((el) => el.getBoundingClientRect().x),
+    )
+    .toBeGreaterThan(0);
 
   expect(await page.screenshot()).toMatchSnapshot('scaled-root.png');
 });
