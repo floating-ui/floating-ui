@@ -11,17 +11,27 @@ import {
 
 import type {Derivable, Middleware} from '../types';
 
+function getClientRect(
+  left: number,
+  top: number,
+  right: number,
+  bottom: number,
+) {
+  return rectToClientRect({
+    x: left,
+    y: top,
+    width: right - left,
+    height: bottom - top,
+  });
+}
+
 function getBoundingRect(rects: Array<ClientRectObject>) {
-  const minX = min(...rects.map((rect) => rect.left));
-  const minY = min(...rects.map((rect) => rect.top));
-  const maxX = max(...rects.map((rect) => rect.right));
-  const maxY = max(...rects.map((rect) => rect.bottom));
-  return {
-    x: minX,
-    y: minY,
-    width: maxX - minX,
-    height: maxY - minY,
-  };
+  return getClientRect(
+    min(...rects.map((rect) => rect.left)),
+    min(...rects.map((rect) => rect.top)),
+    max(...rects.map((rect) => rect.right)),
+    max(...rects.map((rect) => rect.bottom)),
+  );
 }
 
 export function getRectsByLine(rects: Array<ClientRectObject>) {
@@ -37,7 +47,7 @@ export function getRectsByLine(rects: Array<ClientRectObject>) {
     }
     prevRect = rect;
   }
-  return groups.map((rect) => rectToClientRect(getBoundingRect(rect)));
+  return groups.map(getBoundingRect);
 }
 
 export interface InlineOptions {
@@ -87,7 +97,7 @@ export const inline = (
     }
 
     const clientRects = getRectsByLine(nativeClientRects);
-    const fallback = rectToClientRect(getBoundingRect(nativeClientRects));
+    const fallback = getBoundingRect(nativeClientRects);
     const paddingObject = getPaddingObject(padding);
 
     function getBoundingClientRect() {
@@ -116,19 +126,10 @@ export const inline = (
         if (getSideAxis(placement) === 'y') {
           const firstRect = clientRects[0];
           const lastRect = clientRects[clientRects.length - 1];
-          const isTop = getSide(placement) === 'top';
+          const {left, right} =
+            getSide(placement) === 'top' ? firstRect : lastRect;
 
-          const top = firstRect.top;
-          const bottom = lastRect.bottom;
-          const left = isTop ? firstRect.left : lastRect.left;
-          const right = isTop ? firstRect.right : lastRect.right;
-
-          return rectToClientRect({
-            x: left,
-            y: top,
-            width: right - left,
-            height: bottom - top,
-          });
+          return getClientRect(left, firstRect.top, right, lastRect.bottom);
         }
 
         const isLeftSide = getSide(placement) === 'left';
@@ -138,15 +139,12 @@ export const inline = (
           isLeftSide ? rect.left === minLeft : rect.right === maxRight,
         );
 
-        const top = measureRects[0].top;
-        const bottom = measureRects[measureRects.length - 1].bottom;
-
-        return rectToClientRect({
-          x: minLeft,
-          y: top,
-          width: maxRight - minLeft,
-          height: bottom - top,
-        });
+        return getClientRect(
+          minLeft,
+          measureRects[0].top,
+          maxRight,
+          measureRects[measureRects.length - 1].bottom,
+        );
       }
 
       return fallback;

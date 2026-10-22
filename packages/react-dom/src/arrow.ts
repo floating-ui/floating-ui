@@ -16,6 +16,10 @@ export interface ArrowOptions {
   padding?: Padding | undefined;
 }
 
+function isRef(value: unknown): value is React.MutableRefObject<unknown> {
+  return {}.hasOwnProperty.call(value, 'current');
+}
+
 /**
  * Provides data to position an inner element of the floating element so that it
  * appears centered to the reference element.
@@ -24,31 +28,14 @@ export interface ArrowOptions {
  */
 export const arrow = (
   options: ArrowOptions | Derivable<ArrowOptions>,
-): Middleware => {
-  function isRef(value: unknown): value is React.MutableRefObject<unknown> {
-    return {}.hasOwnProperty.call(value, 'current');
-  }
+): Middleware => ({
+  name: 'arrow',
+  options,
+  fn(state) {
+    const {element, padding} =
+      typeof options === 'function' ? options(state) : options;
+    const el = element && isRef(element) ? element.current : element;
 
-  return {
-    name: 'arrow',
-    options,
-    fn(state) {
-      const {element, padding} =
-        typeof options === 'function' ? options(state) : options;
-
-      if (element && isRef(element)) {
-        if (element.current != null) {
-          return arrowCore({element: element.current, padding}).fn(state);
-        }
-
-        return {};
-      }
-
-      if (element) {
-        return arrowCore({element, padding}).fn(state);
-      }
-
-      return {};
-    },
-  };
-};
+    return el ? arrowCore({element: el, padding}).fn(state) : {};
+  },
+});

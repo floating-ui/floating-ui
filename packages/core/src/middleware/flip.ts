@@ -178,40 +178,31 @@ export const flip = (
 
       // Otherwise fallback.
       if (!resetPlacement) {
-        switch (fallbackStrategy) {
-          case 'bestFit': {
-            const placement = overflowsData
-              .filter((d) => {
-                if (hasFallbackAxisSideDirection) {
-                  const currentSideAxis = getSideAxis(d.placement);
-                  return (
-                    currentSideAxis === initialSideAxis ||
-                    // Create a bias to the `y` side axis due to horizontal
-                    // reading directions favoring greater width.
-                    currentSideAxis === 'y'
-                  );
-                }
-                return true;
-              })
-              .map(
-                (d) =>
-                  [
-                    d.placement,
-                    d.overflows
-                      .filter((overflow) => overflow > 0)
-                      .reduce((acc, overflow) => acc + overflow, 0),
-                  ] as const,
-              )
-              .sort((a, b) => a[1] - b[1])[0]?.[0];
-            if (placement) {
-              resetPlacement = placement;
-            }
-            break;
-          }
-          case 'initialPlacement':
-            resetPlacement = initialPlacement;
-            break;
-          default:
+        if (fallbackStrategy === 'bestFit') {
+          resetPlacement = overflowsData
+            .filter((d) => {
+              const currentSideAxis = getSideAxis(d.placement);
+              return (
+                !hasFallbackAxisSideDirection ||
+                currentSideAxis === initialSideAxis ||
+                // Create a bias to the `y` side axis due to horizontal
+                // reading directions favoring greater width.
+                currentSideAxis === 'y'
+              );
+            })
+            .map(
+              (d) =>
+                [
+                  d.placement,
+                  d.overflows.reduce(
+                    (acc, overflow) => acc + (overflow > 0 ? overflow : 0),
+                    0,
+                  ),
+                ] as const,
+            )
+            .sort((a, b) => a[1] - b[1])[0]?.[0];
+        } else if (fallbackStrategy === 'initialPlacement') {
+          resetPlacement = initialPlacement;
         }
       }
 

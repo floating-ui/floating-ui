@@ -68,15 +68,15 @@ export const size = (
     let heightSide: 'top' | 'bottom';
     let widthSide: 'left' | 'right';
 
-    if (side === 'top' || side === 'bottom') {
-      heightSide = side;
+    if (isYAxis) {
+      heightSide = side as 'top' | 'bottom';
       widthSide =
         alignment ===
         ((await platform.isRTL?.(elements.floating)) ? 'start' : 'end')
           ? 'left'
           : 'right';
     } else {
-      widthSide = side;
+      widthSide = side as 'left' | 'right';
       heightSide = alignment === 'end' ? 'top' : 'bottom';
     }
 

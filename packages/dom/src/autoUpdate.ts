@@ -1,9 +1,11 @@
-import {floor, max, min} from '@floating-ui/utils';
+import {clamp, floor} from '@floating-ui/utils';
 import {
   getDocumentElement,
   getOverflowAncestors,
   getWindow,
 } from '@floating-ui/utils/dom';
+
+import type {ClientRectObject} from '@floating-ui/core';
 
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
@@ -81,7 +83,7 @@ function observeMove(
 
     const options = {
       rootMargin,
-      threshold: max(0, min(1, threshold)) || 1,
+      threshold: clamp(0, threshold, 1) || 1,
     };
 
     let isFirstUpdate = true;
@@ -250,7 +252,7 @@ export function autoUpdate(
   }
 
   let frameId: number;
-  let prevRefRect = animationFrame ? getBoundingClientRect(reference) : null;
+  let prevRefRect: ClientRectObject | null = null;
 
   if (animationFrame) {
     frameLoop();

@@ -26,6 +26,23 @@ afterEach(() => {
   floating.remove();
 });
 
+test('cleans up when animation frames and observers are unavailable', () => {
+  vi.stubGlobal('cancelAnimationFrame', undefined);
+  const update = vi.fn();
+
+  try {
+    const cleanup = autoUpdate(reference, floating, update, {
+      elementResize: false,
+      layoutShift: false,
+    });
+
+    expect(update).toHaveBeenCalledTimes(1);
+    expect(cleanup).not.toThrow();
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+
 test.runIf(inBrowser)(
   'runs the update callback once per window resize with default options',
   () => {

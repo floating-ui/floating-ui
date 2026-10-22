@@ -23,6 +23,14 @@ import {
 } from '@floating-ui/dom';
 import {arrow as baseArrow, type ArrowOptions} from './arrow';
 
+// Stores `deps` in `options` so that `useFloating` can compare them.
+const reactive =
+  <O, R extends object>(base: (options: O) => R) =>
+  (options: O, deps?: React.DependencyList): R => ({
+    ...base(options),
+    options: [options, deps],
+  });
+
 /**
  * Modifies the placement by translating the floating element along the
  * specified axes.
@@ -30,51 +38,31 @@ import {arrow as baseArrow, type ArrowOptions} from './arrow';
  * object may be passed.
  * @see https://floating-ui.com/docs/offset
  */
-export const offset = (
+export const offset: (
   options?: OffsetOptions,
   deps?: React.DependencyList,
-): Middleware => {
-  const result = baseOffset(options);
-  return {
-    name: result.name,
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+) => Middleware = /* #__PURE__ */ reactive(baseOffset);
 
 /**
  * Optimizes the visibility of the floating element by shifting it in order to
  * keep it in view when it will overflow the clipping boundary.
  * @see https://floating-ui.com/docs/shift
  */
-export const shift = (
+export const shift: (
   options?: ShiftOptions | Derivable<ShiftOptions>,
   deps?: React.DependencyList,
-): Middleware => {
-  const result = baseShift(options);
-  return {
-    name: result.name,
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+) => Middleware = /* #__PURE__ */ reactive(baseShift);
 
 /**
  * Built-in `limiter` that will stop `shift()` at a certain point.
  */
-export const limitShift = (
+export const limitShift: (
   options?: LimitShiftOptions | Derivable<LimitShiftOptions>,
   deps?: React.DependencyList,
-): {
+) => {
   fn: (state: MiddlewareState) => Coords;
   options: any;
-} => {
-  const result = baseLimitShift(options);
-  return {
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+} = /* #__PURE__ */ reactive(baseLimitShift);
 
 /**
  * Optimizes the visibility of the floating element by flipping the `placement`
@@ -82,17 +70,10 @@ export const limitShift = (
  * clipping boundary. Alternative to `autoPlacement`.
  * @see https://floating-ui.com/docs/flip
  */
-export const flip = (
+export const flip: (
   options?: FlipOptions | Derivable<FlipOptions>,
   deps?: React.DependencyList,
-): Middleware => {
-  const result = baseFlip(options);
-  return {
-    name: result.name,
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+) => Middleware = /* #__PURE__ */ reactive(baseFlip);
 
 /**
  * Provides data that allows you to change the size of the floating element —
@@ -100,17 +81,10 @@ export const flip = (
  * width of the reference element.
  * @see https://floating-ui.com/docs/size
  */
-export const size = (
+export const size: (
   options?: SizeOptions | Derivable<SizeOptions>,
   deps?: React.DependencyList,
-): Middleware => {
-  const result = baseSize(options);
-  return {
-    name: result.name,
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+) => Middleware = /* #__PURE__ */ reactive(baseSize);
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement
@@ -118,51 +92,30 @@ export const size = (
  * preferred placement. Alternative to `flip`.
  * @see https://floating-ui.com/docs/autoPlacement
  */
-export const autoPlacement = (
+export const autoPlacement: (
   options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>,
   deps?: React.DependencyList,
-): Middleware => {
-  const result = baseAutoPlacement(options);
-  return {
-    name: result.name,
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+) => Middleware = /* #__PURE__ */ reactive(baseAutoPlacement);
 
 /**
  * Provides data to hide the floating element in applicable situations, such as
  * when it is not in the same clipping context as the reference element.
  * @see https://floating-ui.com/docs/hide
  */
-export const hide = (
+export const hide: (
   options?: HideOptions | Derivable<HideOptions>,
   deps?: React.DependencyList,
-): Middleware => {
-  const result = baseHide(options);
-  return {
-    name: result.name,
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+) => Middleware = /* #__PURE__ */ reactive(baseHide);
 
 /**
  * Provides improved positioning for inline reference elements that can span
  * over multiple lines, such as hyperlinks or range selections.
  * @see https://floating-ui.com/docs/inline
  */
-export const inline = (
+export const inline: (
   options?: InlineOptions | Derivable<InlineOptions>,
   deps?: React.DependencyList,
-): Middleware => {
-  const result = baseInline(options);
-  return {
-    name: result.name,
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+) => Middleware = /* #__PURE__ */ reactive(baseInline);
 
 /**
  * Provides data to position an inner element of the floating element so that it
@@ -170,14 +123,7 @@ export const inline = (
  * This wraps the core `arrow` middleware to allow React refs as the element.
  * @see https://floating-ui.com/docs/arrow
  */
-export const arrow = (
+export const arrow: (
   options: ArrowOptions | Derivable<ArrowOptions>,
   deps?: React.DependencyList,
-): Middleware => {
-  const result = baseArrow(options);
-  return {
-    name: result.name,
-    fn: result.fn,
-    options: [options, deps],
-  };
-};
+) => Middleware = /* #__PURE__ */ reactive(baseArrow);

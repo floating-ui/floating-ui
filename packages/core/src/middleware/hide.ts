@@ -42,36 +42,21 @@ export const hide = (
       state,
     );
 
-    switch (strategy) {
-      case 'referenceHidden': {
-        const overflow = await platform.detectOverflow(state, {
-          ...detectOverflowOptions,
-          elementContext: 'reference',
-        });
-        const offsets = getSideOffsets(overflow, rects.reference);
-        return {
-          data: {
-            referenceHiddenOffsets: offsets,
-            referenceHidden: isAnySideFullyClipped(offsets),
-          },
-        };
-      }
-      case 'escaped': {
-        const overflow = await platform.detectOverflow(state, {
-          ...detectOverflowOptions,
-          altBoundary: true,
-        });
-        const offsets = getSideOffsets(overflow, rects.floating);
-        return {
-          data: {
-            escapedOffsets: offsets,
-            escaped: isAnySideFullyClipped(offsets),
-          },
-        };
-      }
-      default: {
-        return {};
-      }
-    }
+    const escaped = strategy === 'escaped';
+    const overflow = await platform.detectOverflow(state, {
+      ...detectOverflowOptions,
+      ...(escaped ? {altBoundary: true} : {elementContext: 'reference'}),
+    });
+    const offsets = getSideOffsets(
+      overflow,
+      escaped ? rects.floating : rects.reference,
+    );
+
+    return {
+      data: {
+        [`${strategy}Offsets`]: offsets,
+        [strategy]: isAnySideFullyClipped(offsets),
+      },
+    };
   },
 });
