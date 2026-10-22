@@ -209,7 +209,10 @@ export function getOverflowAncestors(
   traverseIframes = true,
 ): OverflowAncestors {
   const scrollableAncestor = getNearestOverflowAncestor(node);
-  const isBody = isLastTraversableNode(scrollableAncestor);
+  // A Document node lists its <body> before the Window.
+  const isBody =
+    isLastTraversableNode(scrollableAncestor) &&
+    scrollableAncestor !== (node as Document).body;
   const win = getWindow(scrollableAncestor);
 
   if (isBody) {
