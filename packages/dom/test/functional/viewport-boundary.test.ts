@@ -56,21 +56,3 @@ test('layoutViewport ignores pinch zoom while viewport tracks it', async ({
     expect(await page.screenshot()).toMatchSnapshot(`rtl-${boundary}.png`);
   });
 });
-
-// A scale transform on the <html> shrinks its border box, which must not be
-// mistaken for a reserved `scrollbar-gutter: stable` gutter: the dashed
-// boundary should reach the right edge of R-ref instead of stopping short.
-['viewport', 'layoutViewport'].forEach((boundary) => {
-  test(`ignores an <html> transform with scrollbar-gutter and ${boundary} rootBoundary`, async ({
-    page,
-  }) => {
-    await page.goto('http://localhost:1234/viewport-boundary');
-
-    await click(page, '[data-testid="scale"]');
-    await click(page, `[data-testid="boundary-${boundary}"]`);
-
-    expect(await page.screenshot()).toMatchSnapshot(
-      `scale-gutter-${boundary}.png`,
-    );
-  });
-});

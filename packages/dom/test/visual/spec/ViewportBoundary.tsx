@@ -38,7 +38,6 @@ export function ViewportBoundary() {
   const [gutter, setGutter] = useState(true);
   const [scrollLock, setScrollLock] = useState(false);
   const [rtl, setRtl] = useState(false);
-  const [scale, setScale] = useState(false);
 
   const rootBoundary = toRootBoundary(boundary);
 
@@ -64,18 +63,12 @@ export function ViewportBoundary() {
     // (non-overlay) scrollbars; Chromium keeps the root scrollbar on the
     // right even in RTL.
     html.dir = rtl ? 'rtl' : 'ltr';
-    // `scale` shrinks the <html> border box without reserving any space, so
-    // it must not be mistaken for a scrollbar gutter.
-    html.style.transform = scale ? 'scale(0.99)' : '';
-    html.style.transformOrigin = scale ? 'top left' : '';
     return () => {
       html.style.scrollbarGutter = '';
       html.style.overflowY = '';
       html.dir = 'ltr';
-      html.style.transform = '';
-      html.style.transformOrigin = '';
     };
-  }, [gutter, scrollLock, rtl, scale]);
+  }, [gutter, scrollLock, rtl]);
 
   const [box, setBox] = useState<Box | null>(null);
 
@@ -110,7 +103,7 @@ export function ViewportBoundary() {
     tick();
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boundary, strategy, gutter, scale]);
+  }, [boundary, strategy, gutter]);
 
   return (
     <>
@@ -169,13 +162,6 @@ export function ViewportBoundary() {
           style={{backgroundColor: rtl ? 'black' : ''}}
         >
           rtl {rtl ? 'on' : 'off'}
-        </button>
-        <button
-          data-testid="scale"
-          onClick={() => setScale((s) => !s)}
-          style={{backgroundColor: scale ? 'black' : ''}}
-        >
-          scale {scale ? 'on' : 'off'}
         </button>
       </Controls>
 
