@@ -1,5 +1,12 @@
 # @floating-ui/utils
 
+## 0.2.13
+
+### Patch Changes
+
+- fix(getOverflowAncestors): handle documents without a body
+- perf(utils): reduce bundle size in placement helpers
+
 ## 0.2.12
 
 ### Patch Changes
