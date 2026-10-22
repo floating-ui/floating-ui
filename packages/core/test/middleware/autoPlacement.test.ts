@@ -1,4 +1,28 @@
+import {computePosition, autoPlacement} from '../../src';
 import {getPlacementList} from '../../src/middleware/autoPlacement';
+
+test('checks remaining placements after consecutive duplicates', async () => {
+  const {placement} = await computePosition(
+    {},
+    {},
+    {
+      placement: 'top',
+      middleware: [
+        autoPlacement({allowedPlacements: ['top', 'top', 'bottom']}),
+      ],
+      platform: {
+        getElementRects: () => ({
+          reference: {x: 0, y: 0, width: 10, height: 10},
+          floating: {x: 0, y: 0, width: 5, height: 5},
+        }),
+        getClippingRect: () => ({x: 0, y: 0, width: 100, height: 100}),
+        getDimensions: () => ({width: 5, height: 5}),
+      },
+    },
+  );
+
+  expect(placement).toBe('bottom');
+});
 
 test('base placement', () => {
   expect(

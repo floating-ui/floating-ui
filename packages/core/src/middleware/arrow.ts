@@ -36,7 +36,7 @@ export const arrow = (
   name: 'arrow',
   options,
   async fn(state) {
-    const {x, y, placement, rects, platform, elements, middlewareData} = state;
+    const {placement, rects, platform, elements, middlewareData} = state;
     // Since `element` is required, we don't Partial<> the type.
     const {element, padding = 0} = evaluate(options, state) || {};
 
@@ -45,7 +45,6 @@ export const arrow = (
     }
 
     const paddingObject = getPaddingObject(padding);
-    const coords = {x, y};
     const axis = getAlignmentAxis(placement);
     const length = getAxisLength(axis);
     const arrowDimensions = await platform.getDimensions(element);
@@ -57,9 +56,9 @@ export const arrow = (
     const endDiff =
       rects.reference[length] +
       rects.reference[axis] -
-      coords[axis] -
+      state[axis] -
       rects.floating[length];
-    const startDiff = coords[axis] - rects.reference[axis];
+    const startDiff = state[axis] - rects.reference[axis];
 
     const arrowOffsetParent = await platform.getOffsetParent?.(element);
     let clientSize = arrowOffsetParent ? arrowOffsetParent[clientProp] : 0;
@@ -104,7 +103,7 @@ export const arrow = (
       : 0;
 
     return {
-      [axis]: coords[axis] + alignmentOffset,
+      [axis]: state[axis] + alignmentOffset,
       data: {
         [axis]: offset,
         centerOffset: center - offset - alignmentOffset,

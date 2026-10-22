@@ -14,39 +14,25 @@ export function computeCoordsFromPlacement(
 ): Coords {
   const sideAxis = getSideAxis(placement);
   const alignmentAxis = getAlignmentAxis(placement);
+  const sideLength = getAxisLength(sideAxis);
   const alignLength = getAxisLength(alignmentAxis);
   const side = getSide(placement);
-  const isVertical = sideAxis === 'y';
-
-  const commonX = reference.x + reference.width / 2 - floating.width / 2;
-  const commonY = reference.y + reference.height / 2 - floating.height / 2;
+  const alignment = getAlignment(placement);
   const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
 
-  let coords: Coords;
-  switch (side) {
-    case 'top':
-      coords = {x: commonX, y: reference.y - floating.height};
-      break;
-    case 'bottom':
-      coords = {x: commonX, y: reference.y + reference.height};
-      break;
-    case 'right':
-      coords = {x: reference.x + reference.width, y: commonY};
-      break;
-    case 'left':
-      coords = {x: reference.x - floating.width, y: commonY};
-      break;
-    default:
-      coords = {x: reference.x, y: reference.y};
-  }
-
-  const alignment = getAlignment(placement);
-  if (alignment) {
-    coords[alignmentAxis] +=
-      commonAlign *
-      (alignment === 'end' ? 1 : -1) *
-      (rtl && isVertical ? -1 : 1);
-  }
-
-  return coords;
+  return {
+    [sideAxis]:
+      side === 'top' || side === 'left'
+        ? reference[sideAxis] - floating[sideLength]
+        : reference[sideAxis] + reference[sideLength],
+    [alignmentAxis]:
+      reference[alignmentAxis] +
+      reference[alignLength] / 2 -
+      floating[alignLength] / 2 +
+      (alignment
+        ? commonAlign *
+          (alignment === 'end' ? 1 : -1) *
+          (rtl && sideAxis === 'y' ? -1 : 1)
+        : 0),
+  } as Coords;
 }

@@ -16,29 +16,20 @@ export function getPlacementList(
   autoAlignment: boolean,
   allowedPlacements: Array<Placement>,
 ) {
-  const allowedPlacementsSortedByAlignment = alignment
+  return alignment
     ? [
         ...allowedPlacements.filter(
           (placement) => getAlignment(placement) === alignment,
         ),
-        ...allowedPlacements.filter(
-          (placement) => getAlignment(placement) !== alignment,
-        ),
+        ...(autoAlignment
+          ? allowedPlacements.filter(
+              (placement) =>
+                getAlignment(placement) ===
+                getOppositeAlignmentPlacement(alignment),
+            )
+          : []),
       ]
     : allowedPlacements.filter((placement) => getSide(placement) === placement);
-
-  return allowedPlacementsSortedByAlignment.filter((placement) => {
-    if (alignment) {
-      return (
-        getAlignment(placement) === alignment ||
-        (autoAlignment
-          ? getOppositeAlignmentPlacement(placement) !== placement
-          : false)
-      );
-    }
-
-    return true;
-  });
 }
 
 export interface AutoPlacementOptions extends DetectOverflowOptions {
@@ -133,51 +124,34 @@ export const autoPlacement = (
     ];
 
     const nextPlacement = placements[currentIndex + 1];
+    let resetPlacement = nextPlacement;
 
-    // There are more placements to check.
-    if (nextPlacement) {
-      return {
-        data: {
-          index: currentIndex + 1,
-          overflows: allOverflows,
-        },
-        reset: {
-          placement: nextPlacement,
-        },
-      };
-    }
+    if (!nextPlacement) {
+      // Check along the mainAxis and main crossAxis side, or only the mainAxis.
+      const getSpace = ({
+        placement,
+        overflows,
+      }: (typeof allOverflows)[number]) =>
+        getAlignment(placement) && crossAxis
+          ? overflows[0] + overflows[1]
+          : overflows[0];
 
-    const placementsSortedByMostSpace = allOverflows
-      .map((d) => {
-        const alignment = getAlignment(d.placement);
-        return [
-          d.placement,
-          alignment && crossAxis
-            ? // Check along the mainAxis and main crossAxis side.
-              d.overflows.slice(0, 2).reduce((acc, v) => acc + v, 0)
-            : // Check only the mainAxis.
-              d.overflows[0],
-          d.overflows,
-        ] as const;
-      })
-      .sort((a, b) => a[1] - b[1]);
+      const placementsSortedByMostSpace = [...allOverflows].sort(
+        (a, b) => getSpace(a) - getSpace(b),
+      );
 
-    const placementsThatFitOnEachSide = placementsSortedByMostSpace.filter(
-      (d) =>
-        d[2]
-          .slice(
-            0,
+      resetPlacement = (
+        placementsSortedByMostSpace.find((d) =>
+          d.overflows
             // Aligned placements should not check their opposite crossAxis
             // side.
-            getAlignment(d[0]) ? 2 : 3,
-          )
-          .every((v) => v <= 0),
-    );
+            .slice(0, getAlignment(d.placement) ? 2 : 3)
+            .every((v) => v <= 0),
+        ) || placementsSortedByMostSpace[0]
+      ).placement;
+    }
 
-    const resetPlacement =
-      placementsThatFitOnEachSide[0]?.[0] || placementsSortedByMostSpace[0][0];
-
-    if (resetPlacement !== placement) {
+    if (nextPlacement || resetPlacement !== placement) {
       return {
         data: {
           index: currentIndex + 1,

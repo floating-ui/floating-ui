@@ -56,15 +56,17 @@ async function convertValueToCoords(
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = evaluate(options, state);
 
-  // eslint-disable-next-line prefer-const
-  let {mainAxis, crossAxis, alignmentAxis} =
-    typeof rawValue === 'number'
-      ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}
-      : {
-          mainAxis: rawValue.mainAxis || 0,
-          crossAxis: rawValue.crossAxis || 0,
-          alignmentAxis: rawValue.alignmentAxis,
-        };
+  let mainAxis: number;
+  let crossAxis = 0;
+  let alignmentAxis: number | null | undefined;
+
+  if (typeof rawValue === 'number') {
+    mainAxis = rawValue;
+  } else {
+    mainAxis = rawValue.mainAxis || 0;
+    crossAxis = rawValue.crossAxis || 0;
+    alignmentAxis = rawValue.alignmentAxis;
+  }
 
   if (alignment && typeof alignmentAxis === 'number') {
     crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;
