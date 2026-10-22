@@ -2554,3 +2554,44 @@ describe('closeOnFocusOut', () => {
     });
   });
 });
+
+test('does not insert the return-focus fallback inside a contenteditable root', async () => {
+  function App() {
+    const {refs, context} = useFloating({open: true});
+
+    return (
+      <>
+        <div contentEditable data-testid="editor">
+          <button data-testid="reference" ref={refs.setReference} />
+        </div>
+        <FloatingPortal>
+          <FloatingFocusManager
+            context={context}
+            returnFocus={false}
+            initialFocus={-1}
+            modal={false}
+            guards={false}
+          >
+            <div ref={refs.setFloating} data-testid="floating" />
+          </FloatingFocusManager>
+        </FloatingPortal>
+      </>
+    );
+  }
+
+  render(<App />);
+  await act(async () => {});
+
+  const editor = screen.getByTestId('editor');
+  const fallback = document.querySelector(
+    'span[tabindex="-1"][aria-hidden="true"]',
+  );
+
+  expect(fallback).not.toBeNull();
+  // The fallback must not become part of the editable document...
+  expect(editor.contains(fallback)).toBe(false);
+  // ...it is placed right after the editable root instead.
+  expect(editor.nextElementSibling).toBe(fallback);
+
+  cleanup();
+});
