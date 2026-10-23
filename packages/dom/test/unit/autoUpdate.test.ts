@@ -83,6 +83,125 @@ test.runIf(inBrowser)(
   },
 );
 
+describe.runIf(inBrowser)('content-visibility', () => {
+  test.each([true, false])(
+    'retains clipped-element retries with checkVisibility available: %s',
+    async (hasCheckVisibility) => {
+      const parent = document.createElement('div');
+      parent.style.cssText = 'width: 100px; height: 100px; overflow: hidden;';
+      reference.style.marginLeft = '200px';
+      parent.append(reference);
+      document.body.append(parent);
+      if (!hasCheckVisibility) {
+        Object.defineProperty(reference, 'checkVisibility', {value: undefined});
+      }
+      const update = vi.fn();
+      const cleanup = autoUpdate(reference, floating, update, {
+        ancestorScroll: false,
+        ancestorResize: false,
+        elementResize: false,
+      });
+
+      try {
+        await vi.waitFor(() => expect(update).toHaveBeenCalledTimes(2), {
+          timeout: 1500,
+        });
+      } finally {
+        cleanup();
+        parent.remove();
+      }
+    },
+  );
+
+  test.each([true, false])(
+    'does not repeatedly measure a hidden subtree and resumes after it moves (initially hidden: %s)',
+    async (initiallyHidden) => {
+      const parent = document.createElement('div');
+      parent.style.position = 'relative';
+      document.body.append(parent);
+      parent.append(reference);
+      if (initiallyHidden) {
+        parent.style.contentVisibility = 'hidden';
+      }
+
+      const update = vi.fn();
+      const getRect = vi.spyOn(reference, 'getBoundingClientRect');
+      const cleanup = autoUpdate(reference, floating, update, {
+        ancestorScroll: false,
+        ancestorResize: false,
+        elementResize: false,
+      });
+
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        parent.style.contentVisibility = 'hidden';
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        update.mockClear();
+        getRect.mockClear();
+
+        await new Promise((resolve) => setTimeout(resolve, 1250));
+        expect(update).not.toHaveBeenCalled();
+        expect(getRect).not.toHaveBeenCalled();
+
+        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event('resize'));
+        expect(update).not.toHaveBeenCalled();
+        expect(getRect).not.toHaveBeenCalled();
+
+        parent.style.display = 'none';
+        window.dispatchEvent(new Event('resize'));
+        expect(update).not.toHaveBeenCalled();
+        expect(getRect).not.toHaveBeenCalled();
+
+        parent.style.left = '400px';
+        parent.style.display = 'block';
+        parent.style.contentVisibility = 'visible';
+        await vi.waitFor(() => expect(update).toHaveBeenCalled(), {
+          timeout: 1500,
+        });
+
+        update.mockClear();
+        parent.style.left = '600px';
+        await vi.waitFor(() => expect(update).toHaveBeenCalled());
+      } finally {
+        cleanup();
+        getRect.mockRestore();
+        parent.remove();
+      }
+    },
+  );
+
+  test('cleans up a pending hidden-subtree retry', async () => {
+    const parent = document.createElement('div');
+    parent.style.contentVisibility = 'hidden';
+    document.body.append(parent);
+    parent.append(reference);
+    const update = vi.fn();
+    const getRect = vi.spyOn(reference, 'getBoundingClientRect');
+    const cleanup = autoUpdate(reference, floating, update, {
+      ancestorScroll: false,
+      ancestorResize: false,
+      elementResize: false,
+    });
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1250));
+      cleanup();
+      update.mockClear();
+      getRect.mockClear();
+      parent.style.contentVisibility = 'visible';
+
+      await new Promise((resolve) => setTimeout(resolve, 1250));
+      expect(update).not.toHaveBeenCalled();
+      expect(getRect).not.toHaveBeenCalled();
+    } finally {
+      cleanup();
+      getRect.mockRestore();
+      parent.remove();
+    }
+  });
+});
+
 describe.runIf(inBrowser)('elementResize', () => {
   const loopErrors: string[] = [];
 
