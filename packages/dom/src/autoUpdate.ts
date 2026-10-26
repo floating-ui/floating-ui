@@ -202,15 +202,26 @@ export function autoUpdate(
   let resizeObserver: ResizeObserver | null = null;
   let floatingWidth = -1;
   let floatingHeight = -1;
+  let reobserveAfterReferenceResize = false;
 
   if (elementResize) {
     resizeObserver = new ResizeObserver((entries) => {
       let changed = false;
+      let referenceResized = false;
 
       entries.forEach(({target, contentRect: {width, height}}) => {
         if (target !== floating) {
           changed = true;
+          referenceResized = true;
           return;
+        }
+
+        // Keep one extra pass after the reference resizes (including the
+        // initial observation): styles applied after positioning, such as
+        // placement-dependent padding or transitions, can depend on it.
+        if (reobserveAfterReferenceResize) {
+          reobserveAfterReferenceResize = false;
+          changed = true;
         }
 
         // Observing the floating element again delivers its current size,
@@ -237,6 +248,7 @@ export function autoUpdate(
         reobserveFrame = requestAnimationFrame(() => {
           resizeObserver?.observe(floating);
         });
+        reobserveAfterReferenceResize = referenceResized;
       }
 
       update();

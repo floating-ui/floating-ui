@@ -176,6 +176,40 @@ describe.runIf(inBrowser)('elementResize', () => {
     cleanup();
   });
 
+  test('updates once more after the reference resized, even if the floating element kept its size', async () => {
+    Object.assign(reference.style, {
+      position: 'absolute',
+      top: '200px',
+      height: '20px',
+    });
+    floating.style.height = '80px';
+    const update = vi.fn(() => {
+      computePosition(reference, floating, {middleware: [flip()]}).then(
+        ({x, y, placement}) => {
+          // Changes the border box but not the observed content box.
+          floating.style.paddingBottom = placement === 'top' ? '20px' : '0px';
+          Object.assign(floating.style, {left: `${x}px`, top: `${y}px`});
+        },
+      );
+    });
+    const cleanup = autoUpdate(reference, floating, update, {
+      layoutShift: false,
+    });
+    await nextFrames(3);
+
+    // Too tall to leave room below, so it flips to the top, where the padding
+    // makes the floating element taller than the update measured.
+    reference.style.height = `${window.innerHeight - 220}px`;
+    await nextFrames(5);
+
+    expect(floating.getBoundingClientRect().bottom).toBe(
+      reference.getBoundingClientRect().top,
+    );
+    expect(loopErrors).toEqual([]);
+
+    cleanup();
+  });
+
   test('does not update while neither element resizes', async () => {
     const update = computeWith([
       size({
