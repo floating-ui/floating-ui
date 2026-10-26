@@ -74,20 +74,21 @@ export function isTableElement(element: Element): boolean {
   return /^(table|td|th)$/.test(getNodeName(element));
 }
 
+const topLayerSelectors = [':popover-open', ':modal'];
+
 export function isTopLayer(element: Element): boolean {
-  try {
-    if (element.matches(':popover-open')) {
-      return true;
+  for (let i = 0; i < topLayerSelectors.length; ) {
+    try {
+      if (element.matches(topLayerSelectors[i])) {
+        return true;
+      }
+      i++;
+    } catch (_e) {
+      topLayerSelectors.splice(i, 1);
     }
-  } catch (_e) {
-    // no-op
   }
 
-  try {
-    return element.matches(':modal');
-  } catch (_e) {
-    return false;
-  }
+  return false;
 }
 
 const willChangeRe = /transform|translate|scale|rotate|perspective|filter/;
