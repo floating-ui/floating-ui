@@ -136,9 +136,13 @@ export interface ExtendedRefs<RT> {
   reference: React.MutableRefObject<ReferenceType | null>;
   floating: React.MutableRefObject<HTMLElement | null>;
   domReference: React.MutableRefObject<NarrowedElement<RT> | null>;
-  setReference(node: RT | null): void;
-  setFloating(node: HTMLElement | null): void;
-  setPositionReference(node: ReferenceType | null): void;
+  // Property syntax (rather than method syntax) signals that these setters are
+  // safe to pass around unbound, e.g. `ref={refs.setFloating}`, so
+  // `@typescript-eslint/unbound-method` doesn't flag them.
+  // `BivariantCallback` keeps the parameter bivariance method syntax had.
+  setReference: BivariantCallback<(node: RT | null) => void>;
+  setFloating: BivariantCallback<(node: HTMLElement | null) => void>;
+  setPositionReference: BivariantCallback<(node: ReferenceType | null) => void>;
 }
 
 export interface ExtendedElements<RT> {
@@ -177,7 +181,9 @@ export interface FloatingRootContext<RT extends ReferenceType = ReferenceType> {
   events: FloatingEvents;
   floatingId: string | undefined;
   refs: {
-    setPositionReference(node: ReferenceType | null): void;
+    setPositionReference: BivariantCallback<
+      (node: ReferenceType | null) => void
+    >;
   };
 }
 
