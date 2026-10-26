@@ -13,6 +13,7 @@
     "dist"
   ],
   "scripts": {
+    "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --ignore-path ../../.gitignore --write .",
     "clean": "rimraf dist out-tsc",
