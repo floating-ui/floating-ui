@@ -74,20 +74,29 @@ export function isTableElement(element: Element): boolean {
   return /^(table|td|th)$/.test(getNodeName(element));
 }
 
-export function isTopLayer(element: Element): boolean {
-  try {
-    if (element.matches(':popover-open')) {
-      return true;
-    }
-  } catch (_e) {
-    // no-op
-  }
+// Selectors the browser doesn't support throw, so they're removed after the
+// first failure rather than throwing on every call.
+const topLayerSelectors = [':popover-open', ':modal'];
 
-  try {
-    return element.matches(':modal');
-  } catch (_e) {
+export function isTopLayer(element: Element): boolean {
+  // A form control named `matches` shadows the method on its <form>. Bail
+  // before it throws, which would otherwise remove a supported selector.
+  if (typeof element.matches !== 'function') {
     return false;
   }
+
+  for (let i = 0; i < topLayerSelectors.length; ) {
+    try {
+      if (element.matches(topLayerSelectors[i])) {
+        return true;
+      }
+      i++;
+    } catch (_e) {
+      topLayerSelectors.splice(i, 1);
+    }
+  }
+
+  return false;
 }
 
 const willChangeRe = /transform|translate|scale|rotate|perspective|filter/;
