@@ -80,3 +80,43 @@ for (const modal of [false, true]) {
     );
   }
 }
+
+browserTest(
+  'a form control named `matches` does not disable top-layer detection',
+  async () => {
+    const form = document.createElement('form');
+    const control = document.createElement('input');
+    control.name = 'matches';
+    const formReference = document.createElement('div');
+    form.append(control, formReference);
+
+    const outer = document.createElement('div');
+    outer.style.cssText =
+      'position:absolute;left:0;top:0;width:10px;height:10px;overflow:hidden;transform:translateZ(0)';
+    const layer = document.createElement('div');
+    layer.setAttribute('popover', 'manual');
+    layer.style.cssText =
+      'position:fixed;inset:auto;left:200px;top:200px;margin:0;padding:0;border:0;width:300px;height:200px';
+    const reference = document.createElement('div');
+    reference.style.cssText = 'height:20px;width:80px';
+    const floating = document.createElement('div');
+    floating.style.cssText = 'position:absolute;width:80px;height:40px';
+    layer.append(reference, floating);
+    outer.append(layer);
+    document.body.append(form, outer);
+
+    try {
+      layer.showPopover();
+      // Reaches `isTopLayer(form)`, whose `matches` is the input.
+      await computePosition(formReference, floating, {middleware: [hide()]});
+
+      expect(
+        (await computePosition(reference, floating, {middleware: [hide()]}))
+          .middlewareData.hide?.referenceHidden,
+      ).toBe(false);
+    } finally {
+      form.remove();
+      outer.remove();
+    }
+  },
+);

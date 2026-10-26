@@ -74,9 +74,17 @@ export function isTableElement(element: Element): boolean {
   return /^(table|td|th)$/.test(getNodeName(element));
 }
 
+// Selectors the browser doesn't support throw, so they're removed after the
+// first failure rather than throwing on every call.
 const topLayerSelectors = [':popover-open', ':modal'];
 
 export function isTopLayer(element: Element): boolean {
+  // A form control named `matches` shadows the method on its <form>. Bail
+  // before it throws, which would otherwise remove a supported selector.
+  if (typeof element.matches !== 'function') {
+    return false;
+  }
+
   for (let i = 0; i < topLayerSelectors.length; ) {
     try {
       if (element.matches(topLayerSelectors[i])) {
