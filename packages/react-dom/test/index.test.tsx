@@ -391,6 +391,41 @@ test('does not recompute on a config change while an external element is removed
   cleanup();
 });
 
+test('a child calling `update` in a layout effect uses the latest config', async () => {
+  function Child({update, step}: {update: () => void; step: number}) {
+    React.useLayoutEffect(() => {
+      update();
+    }, [update, step]);
+    return null;
+  }
+
+  // Toggling `flip` and `shift` off makes the fresh computation resolve in
+  // fewer microtasks than a stale one started before it.
+  function App({avoid, step}: {avoid: boolean; step: number}) {
+    const {refs, update, y} = useFloating({
+      middleware: [offset(avoid ? 10 : 20), avoid && flip(), avoid && shift()],
+    });
+    return (
+      <>
+        <button ref={refs.setReference} />
+        <div data-testid="floating" data-y={y} ref={refs.setFloating} />
+        <Child update={update} step={step} />
+      </>
+    );
+  }
+
+  const {rerender} = render(<App avoid step={0} />);
+  await act(async () => {});
+  expect(screen.getByTestId('floating')).toHaveAttribute('data-y', '10');
+
+  rerender(<App avoid={false} step={1} />);
+  await act(async () => {});
+
+  expect(screen.getByTestId('floating')).toHaveAttribute('data-y', '20');
+
+  cleanup();
+});
+
 test('unstable callback refs', async () => {
   function App() {
     const {refs} = useFloating();
