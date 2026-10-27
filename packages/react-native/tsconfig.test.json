@@ -5,8 +5,10 @@
     "outDir": "out-tsc",
     "composite": true,
     "jsx": "react-jsx",
-    "types": []
+    "types": [],
+    "skipLibCheck": true
   },
   "files": ["index.test-d.tsx"],
+  "include": ["test"],
   "references": [{"path": "./tsconfig.lib.json"}]
 }
