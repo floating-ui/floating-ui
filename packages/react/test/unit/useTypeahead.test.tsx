@@ -174,6 +174,23 @@ test('starts from the current activeIndex and correctly loops', async () => {
   cleanup();
 });
 
+test('matches the first item after a key with no match times out', async () => {
+  const spy = vi.fn();
+  render(<Combobox onMatch={spy} list={['apple', 'apricot', 'banana']} />);
+
+  await userEvent.click(screen.getByRole('combobox'));
+
+  await userEvent.keyboard('z');
+  expect(spy).not.toHaveBeenCalled();
+
+  vi.advanceTimersByTime(750);
+
+  await userEvent.keyboard('a');
+  expect(spy).toHaveBeenLastCalledWith(0);
+
+  cleanup();
+});
+
 test('capslock characters continue to match', async () => {
   const spy = vi.fn();
   render(<Combobox onMatch={spy} />);
