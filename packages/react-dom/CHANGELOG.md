@@ -1,5 +1,13 @@
 # @floating-ui/react-dom
 
+## 2.1.10
+
+### Patch Changes
+
+- perf(react-dom): reduce bundle size of middleware wrappers
+- fix(useFloating): make `update` stable. Changing `placement`, `strategy` or `middleware` now recomputes the position without recreating `whileElementsMounted`, which caused "ResizeObserver loop completed with undelivered notifications" errors when it happened during a resize-triggered update
+- Update dependencies: `@floating-ui/dom@1.8.1`
+
 ## 2.1.9
 
 ### Patch Changes
