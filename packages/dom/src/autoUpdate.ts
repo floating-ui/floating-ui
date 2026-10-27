@@ -209,7 +209,7 @@ export function autoUpdate(
       let changed = false;
       let referenceResized = false;
 
-      entries.forEach(({target, contentRect: {width, height}}) => {
+      entries.forEach(({target, contentRect}) => {
         if (target !== floating) {
           changed = true;
           referenceResized = true;
@@ -225,7 +225,9 @@ export function autoUpdate(
         }
 
         // Observing the floating element again delivers its current size,
-        // which only needs an update if it changed in the meantime.
+        // which only needs an update if it changed in the meantime. Read it
+        // only for this entry: test mocks often omit `contentRect` on others.
+        const {width, height} = contentRect;
         if (width !== floatingWidth || height !== floatingHeight) {
           changed = true;
         }

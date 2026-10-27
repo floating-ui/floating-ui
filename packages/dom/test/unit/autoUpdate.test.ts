@@ -43,6 +43,36 @@ test('cleans up when animation frames and observers are unavailable', () => {
   }
 });
 
+test('tolerates ResizeObserver mocks whose entries lack `contentRect`', () => {
+  // Shaped like the mock in Radix's test setup: it calls back synchronously
+  // on `observe` with an entry that has neither `target` nor `contentRect`.
+  class MockResizeObserver {
+    constructor(private callback: ResizeObserverCallback) {}
+    observe() {
+      this.callback(
+        [{borderBoxSize: [{inlineSize: 0, blockSize: 0}]}] as any,
+        this as any,
+      );
+    }
+    unobserve() {}
+    disconnect() {}
+  }
+  vi.stubGlobal('ResizeObserver', MockResizeObserver);
+  const update = vi.fn();
+
+  try {
+    const cleanup = autoUpdate(reference, floating, update, {
+      layoutShift: false,
+    });
+
+    // The setup update plus one per observed element.
+    expect(update).toHaveBeenCalledTimes(3);
+    cleanup();
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+
 test.runIf(inBrowser)(
   'runs the update callback once per window resize with default options',
   () => {
