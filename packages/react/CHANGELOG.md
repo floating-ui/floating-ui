@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.27.21
+
+### Patch Changes
+
+- Prevent iOS scroll restoration from visibly animating when the document uses smooth scrolling.
+- fix(types): type `refs` setters as properties so `@typescript-eslint/unbound-method` doesn't flag `ref={refs.setFloating}`
+- Update dependencies: `@floating-ui/utils@0.2.13`, `@floating-ui/react-dom@2.1.10`
+
 ## 0.27.20
 
 ### Patch Changes

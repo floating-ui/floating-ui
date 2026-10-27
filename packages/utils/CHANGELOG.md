@@ -1,5 +1,13 @@
 # @floating-ui/utils
 
+## 0.2.13
+
+### Patch Changes
+
+- fix(getOverflowAncestors): handle documents without a body
+- perf(utils): reduce bundle size in placement helpers
+- perf(isTopLayer): stop retrying top-layer selectors the browser doesn't support, so they throw at most once instead of on every call
+
 ## 0.2.12
 
 ### Patch Changes
