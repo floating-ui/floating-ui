@@ -29,7 +29,22 @@ export function isNode(value: unknown): value is Node {
     return false;
   }
 
-  return value instanceof Node || value instanceof getWindow(value).Node;
+  if (value instanceof Node || value instanceof getWindow(value).Node) {
+    return true;
+  }
+
+  // Adopted nodes retain their original window's prototypes, but their
+  // ownerDocument points to the destination. Use a native method to distinguish
+  // them from node-like mocks without relying on either window's constructor.
+  if (value && typeof (value as Node).nodeType === 'number') {
+    try {
+      return Node.prototype.isSameNode.call(value, value as Node);
+    } catch (_e) {
+      // Not a native Node.
+    }
+  }
+
+  return false;
 }
 
 export function isElement(value: unknown): value is Element {
@@ -37,7 +52,11 @@ export function isElement(value: unknown): value is Element {
     return false;
   }
 
-  return value instanceof Element || value instanceof getWindow(value).Element;
+  return (
+    value instanceof Element ||
+    value instanceof getWindow(value).Element ||
+    (isNode(value) && value.nodeType === 1)
+  );
 }
 
 export function isHTMLElement(value: unknown): value is HTMLElement {
@@ -47,7 +66,8 @@ export function isHTMLElement(value: unknown): value is HTMLElement {
 
   return (
     value instanceof HTMLElement ||
-    value instanceof getWindow(value).HTMLElement
+    value instanceof getWindow(value).HTMLElement ||
+    (isElement(value) && value.namespaceURI === 'http://www.w3.org/1999/xhtml')
   );
 }
 
@@ -56,9 +76,25 @@ export function isShadowRoot(value: unknown): value is ShadowRoot {
     return false;
   }
 
-  return (
-    value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot
-  );
+  if (
+    value instanceof ShadowRoot ||
+    value instanceof getWindow(value).ShadowRoot
+  ) {
+    return true;
+  }
+
+  if (isNode(value) && value.nodeType === 11) {
+    try {
+      return !!Object.getOwnPropertyDescriptor(
+        ShadowRoot.prototype,
+        'host',
+      )?.get?.call(value);
+    } catch (_e) {
+      // A DocumentFragment is not a ShadowRoot, even if it has a host property.
+    }
+  }
+
+  return false;
 }
 
 export function isOverflowElement(element: Element): boolean {
