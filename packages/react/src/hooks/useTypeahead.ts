@@ -157,6 +157,8 @@ export function useTypeahead(
     }
 
     if (
+      event.nativeEvent.isComposing ||
+      event.key === 'Process' ||
       listContent == null ||
       ignoreKeysRef.current.includes(event.key) ||
       // Character key.
@@ -217,21 +219,76 @@ export function useTypeahead(
     }
   });
 
+  const onCompositionEnd = useEffectEvent((event: React.CompositionEvent) => {
+    const listContent = listRef.current;
+    if (listContent == null || !event.data) {
+      return;
+    }
+
+    function getMatchingIndex(
+      list: Array<string | null>,
+      orderedList: Array<string | null>,
+      string: string,
+    ) {
+      const str = findMatchRef.current
+        ? findMatchRef.current(orderedList, string)
+        : orderedList.find(
+            (text) =>
+              text?.toLocaleLowerCase().indexOf(string.toLocaleLowerCase()) ===
+              0,
+          );
+
+      return str ? list.indexOf(str) : -1;
+    }
+
+    if (open) {
+      setTypingChange(true);
+    }
+
+    stringRef.current += event.data;
+    clearTimeoutIfSet(timeoutIdRef);
+    timeoutIdRef.current = window.setTimeout(() => {
+      stringRef.current = '';
+      prevIndexRef.current = matchIndexRef.current;
+      setTypingChange(false);
+    }, resetMs);
+
+    const prevIndex = prevIndexRef.current;
+
+    const index = getMatchingIndex(
+      listContent,
+      [
+        ...listContent.slice((prevIndex || 0) + 1),
+        ...listContent.slice(0, (prevIndex || 0) + 1),
+      ],
+      stringRef.current,
+    );
+
+    if (index !== -1) {
+      onMatch(index);
+      matchIndexRef.current = index;
+    } else {
+      stringRef.current = '';
+      setTypingChange(false);
+    }
+  });
+
   const reference: ElementProps['reference'] = React.useMemo(
-    () => ({onKeyDown}),
-    [onKeyDown],
+    () => ({onKeyDown, onCompositionEnd}),
+    [onKeyDown, onCompositionEnd],
   );
 
   const floating: ElementProps['floating'] = React.useMemo(() => {
     return {
       onKeyDown,
+      onCompositionEnd,
       onKeyUp(event) {
         if (event.key === ' ') {
           setTypingChange(false);
         }
       },
     };
-  }, [onKeyDown, setTypingChange]);
+  }, [onKeyDown, onCompositionEnd, setTypingChange]);
 
   return React.useMemo(
     () => (enabled ? {reference, floating} : {}),
