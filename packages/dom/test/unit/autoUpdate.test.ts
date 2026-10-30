@@ -5,7 +5,8 @@ import {computePosition, flip, size, type Middleware} from '../../src';
 
 // `autoUpdate` depends on real `IntersectionObserver`/`ResizeObserver` and
 // layout, so these assertions only run in the browser test environment
-// (`pnpm test:browser`). Under jsdom they are skipped rather than mocked.
+// (`pnpm test:browser`). Under warpdom (`pnpm test`) they are skipped rather
+// than mocked.
 const inBrowser = typeof IntersectionObserver === 'function';
 
 let reference: HTMLElement;
