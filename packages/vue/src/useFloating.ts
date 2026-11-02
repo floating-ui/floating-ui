@@ -84,6 +84,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     };
   });
 
+  let disposed = false;
+  let attachment = 0;
   let whileElementsMountedCleanup: (() => void) | undefined;
 
   function update() {
@@ -114,14 +116,18 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   }
 
   function cleanup() {
-    if (typeof whileElementsMountedCleanup === 'function') {
-      whileElementsMountedCleanup();
-      whileElementsMountedCleanup = undefined;
-    }
+    const cleanup = whileElementsMountedCleanup;
+    whileElementsMountedCleanup = undefined;
+    cleanup?.();
   }
 
   function attach() {
+    const currentAttachment = ++attachment;
     cleanup();
+
+    if (disposed || currentAttachment !== attachment) {
+      return;
+    }
 
     if (whileElementsMountedOption === undefined) {
       update();
@@ -129,11 +135,18 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     }
 
     if (referenceElement.value != null && floatingElement.value != null) {
-      whileElementsMountedCleanup = whileElementsMountedOption(
+      const cleanup = whileElementsMountedOption(
         referenceElement.value,
         floatingElement.value,
         update,
       );
+      // The callback may dispose the owner or synchronously attach another pair
+      // before returning its cleanup.
+      if (disposed || currentAttachment !== attachment) {
+        cleanup();
+      } else {
+        whileElementsMountedCleanup = cleanup;
+      }
       return;
     }
   }
@@ -144,6 +157,14 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     }
   }
 
+  if (getCurrentScope()) {
+    onScopeDispose(() => {
+      disposed = true;
+      cleanup();
+    });
+  }
+
+  watch(openOption, reset, {flush: 'sync'});
   watch(
     [middlewareOption, placementOption, strategyOption, openOption],
     update,
@@ -155,11 +176,6 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     flush: 'sync',
     immediate: true,
   });
-  watch(openOption, reset, {flush: 'sync'});
-
-  if (getCurrentScope()) {
-    onScopeDispose(cleanup);
-  }
 
   return {
     x: shallowReadonly(x),
