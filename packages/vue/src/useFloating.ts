@@ -85,9 +85,17 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   });
 
   let whileElementsMountedCleanup: (() => void) | undefined;
+  let updateId = 0;
+  let isDisposed = false;
 
   function update() {
-    if (referenceElement.value == null || floatingElement.value == null) {
+    const id = ++updateId;
+
+    if (
+      isDisposed ||
+      referenceElement.value == null ||
+      floatingElement.value == null
+    ) {
       return;
     }
 
@@ -98,6 +106,11 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       placement: placementOption.value,
       strategy: strategyOption.value,
     }).then((position) => {
+      // Async middleware may finish after a newer update or element cleanup.
+      if (id !== updateId || isDisposed) {
+        return;
+      }
+
       x.value = position.x;
       y.value = position.y;
       strategy.value = position.strategy;
@@ -114,6 +127,8 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   }
 
   function cleanup() {
+    updateId++;
+
     if (typeof whileElementsMountedCleanup === 'function') {
       whileElementsMountedCleanup();
       whileElementsMountedCleanup = undefined;
@@ -155,7 +170,10 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   watch(openOption, reset, {flush: 'sync'});
 
   if (getCurrentScope()) {
-    onScopeDispose(cleanup);
+    onScopeDispose(() => {
+      isDisposed = true;
+      cleanup();
+    });
   }
 
   return {
