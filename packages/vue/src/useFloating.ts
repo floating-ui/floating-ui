@@ -151,7 +151,10 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       flush: 'sync',
     },
   );
-  watch([referenceElement, floatingElement], attach, {flush: 'sync'});
+  watch([referenceElement, floatingElement], attach, {
+    flush: 'sync',
+    immediate: true,
+  });
   watch(openOption, reset, {flush: 'sync'});
 
   if (getCurrentScope()) {
