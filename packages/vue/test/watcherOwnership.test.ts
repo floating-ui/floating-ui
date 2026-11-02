@@ -1,4 +1,5 @@
 import {expect, test, vi} from 'vitest';
+import type * as Vue from 'vue';
 import {effectScope, shallowRef, watch} from 'vue';
 
 import {useFloating} from '../src';
@@ -7,7 +8,7 @@ import {useFloating} from '../src';
 // Vue 3.4, a watcher created after scope.stop() can read a stopped computed ref
 // without reacting later, so reactive output alone cannot detect that watcher.
 vi.mock('vue', async (importOriginal) => {
-  const vue = await importOriginal<typeof import('vue')>();
+  const vue = await importOriginal<typeof Vue>();
   return {...vue, watch: vi.fn(vue.watch)};
 });
 
