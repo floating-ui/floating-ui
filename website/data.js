@@ -256,6 +256,12 @@ export const MINI_SPONSORS = [
     MemberId: 893380,
   },
   {
+    logo: '/sponsors/coinpop.svg',
+    label: 'CoinPop',
+    url: 'https://coinpopbit.com/',
+    MemberId: 903545,
+  },
+  {
     // Sponsored below the Mini Sponsor tier amount, so it is listed manually
     // until this date rather than matched against the Open Collective tier.
     logo: '/sponsors/kea-home.svg',
