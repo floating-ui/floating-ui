@@ -6,6 +6,27 @@ const ORIGIN = {x: 0, y: 0};
 
 const isAndroid = RNPlatform.OS === 'android';
 
+function shouldAdjustYCoordOnAndroid(): boolean {
+  if (!isAndroid) {
+    return false;
+  }
+
+  const rnVersion = (
+    RNPlatform.constants as
+      | {reactNativeVersion?: {major: number; minor: number}}
+      | undefined
+  )?.reactNativeVersion;
+
+  // React Native 0.86+ (facebook/react-native#56056) includes the status bar
+  // height in measureInWindow under edge-to-edge, so adding StatusBar.currentHeight
+  // double-counts it.
+  if (rnVersion && (rnVersion.major > 0 || rnVersion.minor >= 86)) {
+    return false;
+  }
+
+  return true;
+}
+
 function isView(reference: View | VirtualElement): reference is View {
   return 'measure' in reference;
 }
@@ -40,7 +61,9 @@ export const createPlatform = ({
               reference[method](
                 (x: number, y: number, width: number, height: number) => {
                   y =
-                    isAndroid && !sameScrollView && StatusBar.currentHeight
+                    shouldAdjustYCoordOnAndroid() &&
+                    !sameScrollView &&
+                    StatusBar.currentHeight
                       ? y + StatusBar.currentHeight
                       : y;
                   const referenceRect = {
