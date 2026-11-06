@@ -46,11 +46,11 @@ function createVirtualElement(
       let x = domRect.x;
       let y = domRect.y;
 
-      if (offsetX == null && data.x && isXAxis) {
+      if (offsetX == null && data.x != null && isXAxis) {
         offsetX = domRect.x - data.x;
       }
 
-      if (offsetY == null && data.y && isYAxis) {
+      if (offsetY == null && data.y != null && isYAxis) {
         offsetY = domRect.y - data.y;
       }
 
