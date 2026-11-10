@@ -582,6 +582,71 @@ describe('focusOnHover', () => {
     cleanup();
   });
 
+  test('true - does not steal focus on pointer leave when focus moved outside the floating element', () => {
+    render(
+      <>
+        <App />
+        <input data-testid="outside" />
+      </>,
+    );
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.mouseMove(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+    act(() => screen.getByTestId('outside').focus());
+    fireEvent.pointerLeave(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('outside')).toHaveFocus();
+    cleanup();
+  });
+
+  test('true - does not move focus on pointer leave when closed', () => {
+    function KeepMounted() {
+      const [open, setOpen] = useState(false);
+      const listRef = useRef<Array<HTMLDivElement | null>>([]);
+      const [activeIndex, setActiveIndex] = useState<null | number>(null);
+      const {refs, context} = useFloating({open, onOpenChange: setOpen});
+      const {getReferenceProps, getFloatingProps, getItemProps} =
+        useInteractions([
+          useClick(context),
+          useListNavigation(context, {
+            listRef,
+            activeIndex,
+            onNavigate: setActiveIndex,
+          }),
+        ]);
+
+      return (
+        <>
+          <button {...getReferenceProps({ref: refs.setReference})} />
+          <div role="menu" {...getFloatingProps({ref: refs.setFloating})}>
+            {['one', 'two'].map((string, index) => (
+              <div
+                key={string}
+                data-testid={`item-${index}`}
+                tabIndex={-1}
+                {...getItemProps({
+                  ref(node: HTMLDivElement) {
+                    listRef.current[index] = node;
+                  },
+                })}
+              >
+                {string}
+              </div>
+            ))}
+          </div>
+        </>
+      );
+    }
+
+    render(<KeepMounted />);
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.mouseMove(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.pointerLeave(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+    cleanup();
+  });
+
   test('false - does not focus item on hover and does not sync the active index', async () => {
     const spy = vi.fn();
     render(

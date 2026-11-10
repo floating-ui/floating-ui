@@ -572,7 +572,11 @@ export function useListNavigation(
         }
       },
       onPointerLeave({pointerType}) {
-        if (!isPointerModalityRef.current || pointerType === 'touch') {
+        if (
+          !latestOpenRef.current ||
+          !isPointerModalityRef.current ||
+          pointerType === 'touch'
+        ) {
           return;
         }
 
@@ -586,7 +590,11 @@ export function useListNavigation(
         onNavigate();
 
         if (!virtual) {
-          floatingFocusElementRef.current?.focus({preventScroll: true});
+          const floatingFocusEl = floatingFocusElementRef.current;
+          const activeEl = activeElement(getDocument(floatingFocusEl));
+          if (floatingFocusEl && contains(floatingFocusEl, activeEl)) {
+            floatingFocusEl.focus({preventScroll: true});
+          }
         }
       },
     };
