@@ -513,6 +513,66 @@ describe('returnFocus', () => {
 
     HTMLElement.prototype.focus = originalFocus;
   });
+
+  describe('does not steal focus from a modal that replaces another in the same render', () => {
+    function Modal({
+      reference,
+      children,
+    }: {
+      reference?: Element | null;
+      children: React.ReactNode;
+    }) {
+      const {refs, context} = useFloating({
+        open: true,
+        elements: {reference},
+      });
+
+      return (
+        <FloatingFocusManager context={context}>
+          <div role="dialog" ref={refs.setFloating}>
+            {children}
+          </div>
+        </FloatingFocusManager>
+      );
+    }
+
+    function App({autoFocus}: {autoFocus: boolean}) {
+      const [step, setStep] = useState<'idle' | 'a' | 'b'>('idle');
+      const [reference, setReference] = useState<Element | null>(null);
+
+      return (
+        <>
+          <button ref={setReference} onClick={() => setStep('a')}>
+            open
+          </button>
+          {step === 'a' && (
+            <Modal reference={reference}>
+              <button onClick={() => setStep('b')}>continue</button>
+            </Modal>
+          )}
+          {step === 'b' && (
+            <Modal>
+              <input autoFocus={autoFocus} data-testid="modal-b-input" />
+            </Modal>
+          )}
+        </>
+      );
+    }
+
+    test.each([true, false])('autoFocus: %s', async (autoFocus) => {
+      render(<App autoFocus={autoFocus} />);
+
+      await userEvent.click(screen.getByText('open'));
+      await act(async () => {});
+
+      expect(screen.getByText('continue')).toHaveFocus();
+
+      await userEvent.click(screen.getByText('continue'));
+      await act(async () => {});
+
+      expect(screen.getByTestId('modal-b-input')).toHaveFocus();
+    });
+  });
 });
 
 describe('guards', () => {
