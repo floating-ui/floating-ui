@@ -8,7 +8,7 @@ export default defineViteConfig({
   root: './test/visual',
   plugins: [vue()],
   test: {
-    environment: 'jsdom',
+    environment: 'warpdom',
     root: './test',
     setupFiles: ['./setupTests.ts'],
   },

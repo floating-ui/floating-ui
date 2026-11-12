@@ -6,7 +6,7 @@ export default defineViteConfig({
   },
   root: './test',
   test: {
-    environment: 'jsdom',
+    environment: 'warpdom',
     root: './test',
     setupFiles: ['./setupTests.ts'],
   },
