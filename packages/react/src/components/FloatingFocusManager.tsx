@@ -628,8 +628,7 @@ export function FloatingFocusManager(
 
     addPreviouslyFocusedElement(previouslyFocusedElement);
 
-    // Dismissing via outside press should always ignore `returnFocus` to
-    // prevent unwanted scrolling.
+    // Physical outside presses should not scroll or reopen a combobox.
     function onOpenChange({
       reason,
       event,
@@ -656,6 +655,9 @@ export function FloatingFocusManager(
         isVirtualPointerEvent(event as PointerEvent)
       ) {
         preventReturnFocusRef.current = false;
+      } else if (isUntrappedTypeableCombobox) {
+        // Returning focus can reopen a combobox that opens on focus.
+        preventReturnFocusRef.current = true;
       } else {
         let isPreventScrollSupported = false;
         document.createElement('div').focus({
@@ -736,6 +738,7 @@ export function FloatingFocusManager(
     events,
     tree,
     isInsidePortal,
+    isUntrappedTypeableCombobox,
     domReference,
     getNodeId,
   ]);
