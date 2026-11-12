@@ -103,6 +103,16 @@ describe('true', () => {
     cleanup();
   });
 
+  test.each(['body', 'html'] as const)(
+    'dismisses with a pointer press on the %s element',
+    (tagName) => {
+      render(<App />);
+      fireEvent.pointerDown(document.querySelector(tagName)!);
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+      cleanup();
+    },
+  );
+
   test('dismisses with reference press', async () => {
     render(<App referencePress />);
     await userEvent.click(screen.getByRole('button'));
@@ -168,6 +178,88 @@ describe('true', () => {
     await userEvent.click(thirdParty);
     expect(screen.queryByRole('dialog')).toBeInTheDocument();
     thirdParty.remove();
+  });
+
+  test('outsidePress ignores scrollbar presses within the floating subtree', async () => {
+    function App() {
+      const [open, setOpen] = useState(true);
+
+      const {context, refs} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      const dismiss = useDismiss(context);
+      const {getReferenceProps, getFloatingProps} = useInteractions([dismiss]);
+
+      return (
+        <>
+          <button {...getReferenceProps({ref: refs.setReference})} />
+          {open && (
+            <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})}>
+              <div data-testid="scroll-container" style={{overflowY: 'auto'}}>
+                <div style={{height: 200}} />
+              </div>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    const scrollContainer = screen.getByTestId('scroll-container');
+
+    await act(async () => {});
+
+    Object.defineProperties(scrollContainer, {
+      clientWidth: {value: 100, configurable: true},
+      clientHeight: {value: 80, configurable: true},
+      offsetWidth: {value: 115, configurable: true},
+      offsetHeight: {value: 80, configurable: true},
+      scrollWidth: {value: 100, configurable: true},
+      scrollHeight: {value: 200, configurable: true},
+    });
+
+    vi.spyOn(scrollContainer, 'getBoundingClientRect').mockReturnValue({
+      x: 0,
+      y: 0,
+      width: 115,
+      height: 80,
+      top: 0,
+      left: 0,
+      right: 115,
+      bottom: 80,
+      toJSON: () => '',
+    });
+
+    const elementsFromPointDescriptor = Object.getOwnPropertyDescriptor(
+      document,
+      'elementsFromPoint',
+    );
+    Object.defineProperty(document, 'elementsFromPoint', {
+      configurable: true,
+      value: vi.fn(() => [
+        scrollContainer,
+        screen.getByRole('tooltip'),
+        document.body,
+      ]),
+    });
+
+    try {
+      fireEvent.pointerDown(document.body, {clientX: 110, clientY: 40});
+      expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+    } finally {
+      if (elementsFromPointDescriptor) {
+        Object.defineProperty(
+          document,
+          'elementsFromPoint',
+          elementsFromPointDescriptor,
+        );
+      } else {
+        Reflect.deleteProperty(document, 'elementsFromPoint');
+      }
+    }
   });
 
   test('outsidePress not ignored for nested floating elements', async () => {
