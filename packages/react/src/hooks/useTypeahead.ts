@@ -202,8 +202,8 @@ export function useTypeahead(
     const index = getMatchingIndex(
       listContent,
       [
-        ...listContent.slice((prevIndex || 0) + 1),
-        ...listContent.slice(0, (prevIndex || 0) + 1),
+        ...listContent.slice((prevIndex ?? -1) + 1),
+        ...listContent.slice(0, (prevIndex ?? -1) + 1),
       ],
       stringRef.current,
     );
