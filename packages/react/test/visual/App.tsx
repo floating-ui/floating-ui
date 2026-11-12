@@ -24,6 +24,7 @@ import {New} from './components/New';
 import {Main as Omnibox} from './components/Omnibox';
 import {Main as Popover} from './components/Popover';
 import {Main as Select} from './components/Select';
+import {Main as SelectVirtual} from './components/SelectVirtual';
 import {Main as Tooltip} from './components/Tooltip';
 
 const ROUTES = [
@@ -32,6 +33,7 @@ const ROUTES = [
   {path: 'menu', component: Menu},
   {path: 'menu-orientation', component: MenuOrientation},
   {path: 'select', component: Select},
+  {path: 'select-virtual', component: SelectVirtual},
   {path: 'mac-select', component: MacSelect},
   {path: 'emoji-picker', component: EmojiPicker},
   {path: 'autocomplete', component: Autocomplete},
