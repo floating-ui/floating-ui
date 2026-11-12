@@ -116,6 +116,15 @@ export function getGridNavigatedIndex(
         } else {
           nextIndex = maxCol > col ? offset : offset - cols;
         }
+
+        if (isListIndexDisabled(listRef, nextIndex, disabledIndices)) {
+          nextIndex = findNonDisabledListIndex(listRef, {
+            startingIndex: nextIndex,
+            amount: cols,
+            decrement: true,
+            disabledIndices,
+          });
+        }
       }
     }
 
@@ -136,7 +145,7 @@ export function getGridNavigatedIndex(
         disabledIndices,
       });
 
-      if (loop && prevIndex + cols > maxIndex) {
+      if (loop && (prevIndex + cols > maxIndex || nextIndex > maxIndex)) {
         nextIndex = findNonDisabledListIndex(listRef, {
           startingIndex: (prevIndex % cols) - cols,
           amount: cols,

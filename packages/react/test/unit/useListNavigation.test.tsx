@@ -724,6 +724,36 @@ describe('grid navigation', () => {
     cleanup();
   });
 
+  test('skips disabled items when looping on the same column with ArrowUp', () => {
+    render(<Grid loop />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+    fireEvent.click(screen.getByRole('button'));
+
+    act(() => screen.getAllByRole('option')[20].focus());
+
+    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+    expect(screen.getAllByRole('option')[40]).toHaveFocus();
+    expect(screen.getAllByRole('option')[45]).toHaveAttribute(
+      'aria-selected',
+      'false',
+    );
+
+    cleanup();
+  });
+
+  test('skips disabled items when looping on the same column with ArrowDown', () => {
+    render(<Grid loop />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+    fireEvent.click(screen.getByRole('button'));
+
+    act(() => screen.getAllByRole('option')[40].focus());
+
+    fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+    expect(screen.getAllByRole('option')[20]).toHaveFocus();
+
+    cleanup();
+  });
+
   test('does not leave row with "both" orientation while looping', () => {
     render(<Grid orientation="both" loop />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
@@ -938,6 +968,21 @@ describe('grid navigation when items have different sizes', () => {
       fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
 
       expect(screen.getAllByRole('option')[8]).toHaveFocus();
+
+      cleanup();
+    });
+
+    test('skips disabled items when looping over column', () => {
+      render(<ComplexGrid rtl={rtl} loop />);
+      fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
+      fireEvent.click(screen.getByRole('button'));
+
+      act(() => screen.getAllByRole('option')[12].focus());
+
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowUp'});
+      expect(screen.getAllByRole('option')[30]).toHaveFocus();
+      fireEvent.keyDown(screen.getByTestId('floating'), {key: 'ArrowDown'});
+      expect(screen.getAllByRole('option')[12]).toHaveFocus();
 
       cleanup();
     });
