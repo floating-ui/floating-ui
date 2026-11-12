@@ -67,6 +67,52 @@ function getFirstTabbableElement(container: Element) {
   return tabbable(container, tabbableOptions)[0] || container;
 }
 
+function isEditableElement(element: Element): boolean {
+  let node: Element | null = element;
+
+  while (node) {
+    if (isHTMLElement(node)) {
+      const contentEditable = node.getAttribute('contenteditable');
+      // An empty or invalid value maps to the inherit state, so only the
+      // explicit keywords decide here; otherwise the ancestor's state wins.
+      if (
+        contentEditable === '' ||
+        contentEditable === 'true' ||
+        contentEditable === 'plaintext-only'
+      ) {
+        return true;
+      }
+
+      if (contentEditable === 'false') {
+        return false;
+      }
+    }
+
+    node = node.parentElement;
+  }
+
+  return false;
+}
+
+// Returns the outermost ancestor (or self) that roots an editable document,
+// so the fallback element can be inserted after it instead of inside the
+// editable content. Returns `null` when the element is not editable.
+function getEditableRoot(element: Element): Element | null {
+  if (!isEditableElement(element)) {
+    return null;
+  }
+
+  let root: Element = element;
+  let node = element.parentElement;
+
+  while (node && isEditableElement(node)) {
+    root = node;
+    node = node.parentElement;
+  }
+
+  return root;
+}
+
 function handleTabIndex(
   floatingFocusElement: HTMLElement,
   orderRef: React.MutableRefObject<Array<'reference' | 'floating' | 'content'>>,
@@ -681,7 +727,15 @@ export function FloatingFocusManager(
     Object.assign(fallbackEl.style, HIDDEN_STYLES);
 
     if (isInsidePortal && domReference) {
-      domReference.insertAdjacentElement('afterend', fallbackEl);
+      // Inserting the fallback after the reference would place it inside the
+      // editable document when the reference is a descendant of a
+      // `contenteditable` root. Insert it after the editable root instead so
+      // it stays out of the editable content.
+      const editableRoot = getEditableRoot(domReference);
+      (editableRoot || domReference).insertAdjacentElement(
+        'afterend',
+        fallbackEl,
+      );
     }
 
     function getReturnElement() {
