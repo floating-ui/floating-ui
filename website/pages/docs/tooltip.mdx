@@ -23,8 +23,9 @@ An accessible tooltip component has the following qualities:
   avoiding collisions.
 - **Events**: When the mouse hovers over the reference element,
   or when the reference element receives keyboard focus, the
-  tooltip opens. When the mouse leaves, or the reference is
-  blurred, the tooltip closes.
+  tooltip opens. It remains open when the mouse moves onto the
+  tooltip so its content can be read. When the mouse leaves both
+  elements, or the reference is blurred, the tooltip closes.
 - **Dismissal**: When the user presses the `esc` key while the
   tooltip is open, it closes.
 - **Role**: The elements are given relevant role and ARIA
@@ -113,6 +114,7 @@ call the interaction Hooks:
 import {
   // ...
   useHover,
+  safePolygon,
   useFocus,
   useDismiss,
   useRole,
@@ -129,7 +131,10 @@ function Tooltip() {
     whileElementsMounted: autoUpdate,
   });
 
-  const hover = useHover(context, {move: false});
+  const hover = useHover(context, {
+    move: false,
+    handleClose: safePolygon(),
+  });
   const focus = useFocus(context);
   const dismiss = useDismiss(context);
   const role = useRole(context, {
@@ -153,7 +158,11 @@ function Tooltip() {
 - `useHover(){:js}` adds the ability to toggle the tooltip open
   or closed when the reference element is hovered over. The
   `move{:.key}` option is set to false so that
-  `mousemove{:.string}` events are ignored.
+  `mousemove{:.string}` events do not open the tooltip.
+  `handleClose: safePolygon(){:js}` lets the mouse move across
+  the gap to the tooltip without closing it, and keeps it open
+  while the tooltip is hovered. See
+  [`safePolygon`](/docs/useHover#safepolygon) for details.
 - `useFocus(){:js}` adds the ability to toggle the tooltip open
   or closed when the reference element is focused.
 - `useDismiss(){:js}` adds the ability to dismiss the tooltip
@@ -163,6 +172,12 @@ function Tooltip() {
 
 Finally, `useInteractions(){:js}` merges all of their props into
 prop getters which can be used for rendering.
+
+Alternatively, a short [`delay.close`](/docs/useHover#delay),
+such as `delay: {close: 200}{:js}`, can give the mouse time to
+reach the tooltip. Use this instead of `handleClose` when a timed
+delay is more appropriate. In either case, keep pointer events
+enabled on the tooltip so it can receive hover events.
 
 ### Rendering
 
