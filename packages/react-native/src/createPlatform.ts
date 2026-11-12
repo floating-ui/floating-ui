@@ -13,7 +13,6 @@ function isView(reference: View | VirtualElement): reference is View {
 export const createPlatform = ({
   offsetParent,
   sameScrollView = true,
-  scrollOffsets = ORIGIN,
 }: {
   offsetParent: View;
   sameScrollView: boolean;
@@ -81,10 +80,10 @@ export const createPlatform = ({
     return Promise.resolve({
       width,
       height,
-      ...(sameScrollView ? scrollOffsets : ORIGIN),
+      ...ORIGIN,
     });
   },
-  convertOffsetParentRelativeRectToViewportRelativeRect({rect}) {
+  convertOffsetParentRelativeRectToViewportRelativeRect({rect, elements}) {
     return new Promise((resolve) => {
       const onMeasure = (offsetX = 0, offsetY = 0) => {
         resolve({...rect, x: rect.x + offsetX, y: rect.y + offsetY});
@@ -92,6 +91,12 @@ export const createPlatform = ({
 
       if (offsetParent) {
         offsetParent.measure(onMeasure);
+      } else if (sameScrollView && elements && isView(elements.reference)) {
+        elements.reference.measure(
+          (localX, localY, _width, _height, pageX, pageY) => {
+            onMeasure(pageX - localX, pageY - localY);
+          },
+        );
       } else {
         onMeasure();
       }
