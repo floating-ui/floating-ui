@@ -171,10 +171,13 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
         />
       )}
       {/* In Firefox, for left/right placements there's a ~0.5px gap where the
-      border can show through. Adding a stroke on the fill removes it. */}
+      border can show through. Adding a stroke on the fill removes it.
+      paintOrder ensures the stroke renders beneath the fill to prevent
+      a visible double-edge artifact with semi-transparent fill colors. */}
       <path
         stroke={computedStrokeWidth && !d ? rest.fill : 'none'}
         d={dValue}
+        paintOrder="stroke fill"
       />
       {/* Assumes the border-width of the floating element matches the 
       stroke. */}
