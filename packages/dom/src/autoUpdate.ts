@@ -61,7 +61,21 @@ function observeMove(
     io = null;
   }
 
+  function refreshWhenVisible() {
+    clearTimeout(timeoutId);
+    if (element.checkVisibility?.() === false) {
+      timeoutId = setTimeout(refreshWhenVisible, 1000);
+    } else {
+      refresh();
+    }
+  }
+
   function refresh(skip = false, threshold = 1) {
+    if (io && element.checkVisibility?.() === false) {
+      refreshWhenVisible();
+      return;
+    }
+
     cleanup();
 
     const elementRectForRootMargin = element.getBoundingClientRect();
@@ -90,6 +104,13 @@ function observeMove(
 
     function handleObserve(entries: IntersectionObserverEntry[]) {
       const ratio = entries[0].intersectionRatio;
+
+      if (element.checkVisibility?.() === false) {
+        // Avoid forcing layout in a hidden subtree, but retain recovery if
+        // it becomes visible outside the observer's original bounds.
+        refreshWhenVisible();
+        return;
+      }
 
       // The entry is a snapshot, so the reference may have moved since the
       // intersection was computed (under performance constraints, or between
