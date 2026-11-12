@@ -11,10 +11,14 @@ type Duration =
 // Converts a JS style key like `backgroundColor` to a CSS transition-property
 // like `background-color`.
 const camelCaseToKebabCase = (str: string): string =>
-  str.replace(
-    /[A-Z]+(?![a-z])|[A-Z]/g,
-    ($, ofs) => (ofs ? '-' : '') + $.toLowerCase(),
-  );
+  str.startsWith('--')
+    ? str
+    : str
+        .replace(
+          /[A-Z]+(?![a-z])|[A-Z]/g,
+          ($, ofs) => (ofs ? '-' : '') + $.toLowerCase(),
+        )
+        .replace(/^(webkit|moz|ms|o)-/, '-$1-');
 
 function execWithArgsOrReturn<Value extends object | undefined, SidePlacement>(
   valueOrFn: Value | ((args: SidePlacement) => Value),
