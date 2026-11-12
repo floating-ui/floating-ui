@@ -1,5 +1,6 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
+import {vi} from 'vitest';
 
 import {
   useClick,
@@ -102,6 +103,29 @@ describe('tooltip', () => {
 });
 
 describe('label', () => {
+  // These two warning tests must run before any other test in this file
+  // triggers `role: 'label'` — `warn()`'s dedup is keyed on message text for
+  // the lifetime of the test file's module instance (vitest isolates module
+  // state per file, not per test), so a "warned exactly once" assertion only
+  // holds if this is the first `role: 'label'` render in the file.
+  test('warns once that the role is deprecated', () => {
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const {rerender} = render(<App role="label" />);
+    rerender(<App role="label" />);
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
+    cleanup();
+  });
+
+  test('does not warn for other roles', () => {
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    render(<App role="dialog" />);
+    render(<App role="tooltip" />);
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+    cleanup();
+  });
+
   test('sets correct aria attributes based on the open state', () => {
     const {container} = render(<App role="label" initiallyOpen />);
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
