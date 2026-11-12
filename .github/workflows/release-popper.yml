@@ -11,7 +11,7 @@ jobs:
           ref: v2.x
       - uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: 20.x
       - uses: CultureHQ/actions-yarn@master
         with:
           args: install
