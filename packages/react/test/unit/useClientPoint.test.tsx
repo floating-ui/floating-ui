@@ -78,6 +78,59 @@ test('renders at explicit client point and can be updated', async () => {
   expectLocation({x: 1000, y: 1000});
 });
 
+test('stays at an explicit 0 client point on later measurements', async () => {
+  let virtualReference: {getBoundingClientRect(): DOMRect} | null = null;
+
+  function ZeroPointApp({point}: {point: Coords}) {
+    const [isOpen, setIsOpen] = useState(false);
+    const {refs, elements, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+    const clientPoint = useClientPoint(context, point);
+    const {getReferenceProps} = useInteractions([clientPoint]);
+
+    virtualReference = elements.reference as typeof virtualReference;
+
+    return (
+      <button
+        ref={(node) => {
+          if (node) {
+            node.getBoundingClientRect = () =>
+              ({x: 100, y: 200, width: 10, height: 10}) as DOMRect;
+          }
+          refs.setReference(node);
+        }}
+        {...getReferenceProps({onClick: () => setIsOpen((v) => !v)})}
+      />
+    );
+  }
+
+  // A context menu sets a new point each time it opens, after the reference
+  // element is mounted. A non-zero point is included for comparison.
+  for (const point of [
+    {x: 30, y: 50},
+    {x: 0, y: 50},
+    {x: 50, y: 0},
+  ]) {
+    const {rerender, unmount} = render(<ZeroPointApp point={{x: 10, y: 10}} />);
+    fireEvent.click(screen.getByRole('button'));
+    await act(async () => {});
+
+    rerender(<ZeroPointApp point={point} />);
+    await act(async () => {});
+
+    // The first measurement, then a later one such as from `autoUpdate` on
+    // scroll, which keeps the point anchored to the reference.
+    const first = virtualReference!.getBoundingClientRect();
+    const later = virtualReference!.getBoundingClientRect();
+    expect({x: first.x, y: first.y}).toEqual(point);
+    expect({x: later.x, y: later.y}).toEqual(point);
+
+    unmount();
+  }
+});
+
 test('renders at mouse event coords', async () => {
   render(<App />);
 
