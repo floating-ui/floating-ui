@@ -3,6 +3,7 @@ import {getFloatingFocusElement} from '@floating-ui/react/utils';
 
 import {useFloatingParentNodeId} from '../components/FloatingTree';
 import type {ElementProps, FloatingRootContext} from '../types';
+import {warn} from '../utils/log';
 import {useId} from './useId';
 import type {ExtendedUserProps} from './useInteractions';
 
@@ -14,7 +15,15 @@ type AriaRole =
   | 'listbox'
   | 'grid'
   | 'tree';
-type ComponentRole = 'select' | 'label' | 'combobox';
+type ComponentRole =
+  | 'select'
+  | 'combobox'
+  /**
+   * @deprecated The `'label'` role is deprecated and will be removed in a
+   * future version. Place an `aria-label` on the reference element instead;
+   * tooltips should be visual-only and have no presence to screen readers.
+   */
+  | 'label';
 
 export interface UseRoleProps {
   /**
@@ -50,6 +59,17 @@ export function useRole(
 ): ElementProps {
   const {open, elements, floatingId: defaultFloatingId} = context;
   const {enabled = true, role = 'dialog'} = props;
+
+  if (__DEV__) {
+    if (role === 'label') {
+      warn(
+        'The `role: "label"` option is deprecated and will be removed in a',
+        'future version. Place an `aria-label` on the reference element',
+        'instead; tooltips should be visual-only and have no presence to',
+        'screen readers.',
+      );
+    }
+  }
 
   const defaultReferenceId = useId();
   const referenceId = elements.domReference?.id || defaultReferenceId;
