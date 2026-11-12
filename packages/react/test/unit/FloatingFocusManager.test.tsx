@@ -79,6 +79,49 @@ function App(
   );
 }
 
+function ContentEditableApp({
+  contentEditable = 'true',
+}: {
+  contentEditable?: 'true' | 'plaintext-only';
+}) {
+  const [open, setOpen] = useState(false);
+  const {refs, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+
+  return (
+    <>
+      <div
+        contentEditable={contentEditable}
+        data-testid="editor"
+        suppressContentEditableWarning
+      >
+        <div contentEditable={false}>
+          <button
+            ref={refs.setReference}
+            data-testid="reference"
+            onClick={() => setOpen(true)}
+          />
+        </div>
+      </div>
+      {open && (
+        <FloatingPortal preserveTabOrder={false}>
+          <FloatingFocusManager
+            context={context}
+            initialFocus={-1}
+            modal={false}
+            guards={false}
+            returnFocus={false}
+          >
+            <div ref={refs.setFloating} data-testid="floating" />
+          </FloatingFocusManager>
+        </FloatingPortal>
+      )}
+    </>
+  );
+}
+
 interface DialogProps {
   open?: boolean;
   render: (props: {close: () => void}) => React.ReactNode;
@@ -211,6 +254,36 @@ describe('returnFocus', () => {
     fireEvent.click(screen.getByTestId('three'));
     await act(async () => {});
     expect(screen.getByTestId('focus-target')).toHaveFocus();
+  });
+
+  test.each(['true', 'plaintext-only'] as const)(
+    'does not insert the fallback inside contenteditable="%s"',
+    async (contentEditable) => {
+      render(<ContentEditableApp contentEditable={contentEditable} />);
+      fireEvent.click(screen.getByTestId('reference'));
+      await act(async () => {});
+
+      const editor = screen.getByTestId('editor');
+      expect(
+        editor.querySelector('[aria-hidden="true"][tabindex="-1"]'),
+      ).toBeNull();
+      expect(editor.nextElementSibling).toHaveAttribute('tabindex', '-1');
+    },
+  );
+
+  test('does not insert the fallback inside contenteditable=""', async () => {
+    const {container} = render(<ContentEditableApp />);
+    const editor = screen.getByTestId('editor');
+    editor.setAttribute('contenteditable', '');
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    expect(
+      editor.querySelector('[aria-hidden="true"][tabindex="-1"]'),
+    ).toBeNull();
+    expect(editor.nextElementSibling).toHaveAttribute('tabindex', '-1');
+    expect(container.querySelector('[contenteditable=""]')).toBe(editor);
   });
 
   test('always returns to the reference for nested elements', async () => {
