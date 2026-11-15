@@ -190,16 +190,28 @@ export const flip = (
                 currentSideAxis === 'y'
               );
             })
-            .map(
-              (d) =>
-                [
-                  d.placement,
-                  d.overflows.reduce(
-                    (acc, overflow) => acc + (overflow > 0 ? overflow : 0),
-                    0,
-                  ),
-                ] as const,
-            )
+            .map((d) => {
+              const totalOverflow = d.overflows.reduce(
+                (acc, overflow) => acc + (overflow > 0 ? overflow : 0),
+                0,
+              );
+              // Overflow past the start edge of the document (top, or left
+              // in LTR / right in RTL) cannot be scrolled into view, while
+              // overflow toward the end edge can. Count start-side overflow
+              // twice so `bestFit` prefers a placement that overflows toward
+              // the scrollable end, unless the end-side overflow is much
+              // larger. See https://github.com/floating-ui/floating-ui/issues/3014
+              const side = getSide(d.placement);
+              const isStartSide =
+                side === 'top' ||
+                (side === 'left' && !rtl) ||
+                (side === 'right' && rtl);
+              const startOverflow =
+                checkMainAxis && isStartSide && d.overflows[0] > 0
+                  ? d.overflows[0]
+                  : 0;
+              return [d.placement, totalOverflow + startOverflow] as const;
+            })
             .sort((a, b) => a[1] - b[1])[0]?.[0];
         } else if (fallbackStrategy === 'initialPlacement') {
           resetPlacement = initialPlacement;
