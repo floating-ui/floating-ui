@@ -107,8 +107,8 @@ export function useTypeahead(
   }, [open]);
 
   useModernLayoutEffect(() => {
-    // Sync arrow key navigation but not typeahead navigation.
-    if (open && stringRef.current === '') {
+    // Sync navigation and controlled selection, but preserve active typing.
+    if (stringRef.current === '') {
       prevIndexRef.current = selectedIndex ?? activeIndex ?? -1;
     }
   }, [open, selectedIndex, activeIndex]);
