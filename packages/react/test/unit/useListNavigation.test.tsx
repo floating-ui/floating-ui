@@ -444,6 +444,105 @@ describe('focusItemOnOpen', () => {
 });
 
 describe('selectedIndex', () => {
+  test('scrolls to an initially active item after FloatingList registers it', async ({
+    onTestFinished,
+  }) => {
+    const callbacks: FrameRequestCallback[] = [];
+    const requestAnimationFrame = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation((callback) => {
+        callbacks.push(callback);
+        return callbacks.length;
+      });
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    const scrollIntoView = vi.fn(function (
+      this: HTMLElement,
+      options?: ScrollIntoViewOptions | boolean,
+    ) {
+      originalScrollIntoView?.call(this, options);
+    });
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+    onTestFinished(() => {
+      requestAnimationFrame.mockImplementation((callback) => {
+        callback(0);
+        return 0;
+      });
+      HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+    });
+
+    function Option({label}: {label: string}) {
+      const {ref} = useListItem();
+      return (
+        <button
+          ref={ref}
+          role="option"
+          tabIndex={-1}
+          style={{display: 'block', height: 30}}
+        >
+          {label}
+        </button>
+      );
+    }
+
+    function Select() {
+      const [open, setOpen] = useState(false);
+      const [activeIndex, setActiveIndex] = useState<number | null>(2);
+      const listRef = useRef<Array<HTMLElement | null>>([]);
+      const {refs, context} = useFloating({open, onOpenChange: setOpen});
+      const {getReferenceProps, getFloatingProps} = useInteractions([
+        useClick(context),
+        useListNavigation(context, {
+          listRef,
+          activeIndex,
+          selectedIndex: 2,
+          onNavigate: setActiveIndex,
+        }),
+      ]);
+
+      return (
+        <>
+          <button ref={refs.setReference} {...getReferenceProps()}>
+            Open
+          </button>
+          {open && (
+            <div
+              ref={refs.setFloating}
+              style={{height: 30, overflow: 'auto'}}
+              {...getFloatingProps()}
+            >
+              <FloatingList elementsRef={listRef}>
+                {['one', 'two', 'three'].map((label) => (
+                  <Option key={label} label={label} />
+                ))}
+              </FloatingList>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    render(<Select />);
+    fireEvent.click(screen.getByRole('button', {name: 'Open'}));
+    await act(async () => {});
+
+    act(() => {
+      while (callbacks.length) {
+        callbacks.splice(0).forEach((callback) => callback(0));
+      }
+    });
+
+    expect(scrollIntoView).toHaveBeenCalled();
+    expect(scrollIntoView.mock.contexts).toContain(
+      screen.getByRole('option', {name: 'three'}),
+    );
+    expect(screen.getByRole('option', {name: 'three'})).toHaveFocus();
+    if (!isJSDOM()) {
+      expect(
+        screen.getByRole('option', {name: 'three'}).parentElement!.scrollTop,
+      ).toBeGreaterThan(0);
+    }
+  });
+
   test('scrollIntoView on open', ({onTestFinished}) => {
     const requestAnimationFrame = vi
       .spyOn(window, 'requestAnimationFrame')
