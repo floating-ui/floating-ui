@@ -25,7 +25,7 @@ jobs:
 
   functional-tests:
     name: Functional tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -33,7 +33,7 @@ jobs:
 
   browser-tests:
     name: Browser tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
