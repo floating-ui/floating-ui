@@ -466,7 +466,12 @@ export function useListNavigation(
 
         waitForListPopulated();
       }
-    } else if (!isIndexOutOfListBounds(listRef, activeIndex)) {
+    } else if (
+      !isIndexOutOfListBounds(listRef, activeIndex) ||
+      (listRef.current.length === 0 && activeIndex >= 0)
+    ) {
+      // The list may not have registered its items yet. `focusItem` waits for
+      // them before focusing and scrolling the active item into view.
       indexRef.current = activeIndex;
       focusItem();
       forceScrollIntoViewRef.current = false;
