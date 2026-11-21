@@ -156,6 +156,14 @@ function observeMove(
   };
 }
 
+// `ResizeObserver` reports content-box changes unless told otherwise, but
+// `computePosition` measures with `getBoundingClientRect`, which is the border
+// box. Padding or border changing without touching the content box moves the
+// elements apart, so the observer has to watch the same box the measurement
+// uses. Browsers that predate the `box` option ignore it and keep the old
+// content-box behaviour.
+const OBSERVE_BOX: ResizeObserverOptions = {box: 'border-box'};
+
 /**
  * Automatically updates the position of the floating element when necessary.
  * Should only be called when the floating element is mounted on the DOM or
@@ -248,7 +256,7 @@ export function autoUpdate(
         resizeObserver.unobserve(floating);
         cancelAnimationFrame(reobserveFrame);
         reobserveFrame = requestAnimationFrame(() => {
-          resizeObserver?.observe(floating);
+          resizeObserver?.observe(floating, OBSERVE_BOX);
         });
         reobserveAfterReferenceResize = referenceResized;
       }
@@ -257,11 +265,11 @@ export function autoUpdate(
     });
 
     if (referenceEl && !animationFrame) {
-      resizeObserver.observe(referenceEl);
+      resizeObserver.observe(referenceEl, OBSERVE_BOX);
     }
 
     if (floating) {
-      resizeObserver.observe(floating);
+      resizeObserver.observe(floating, OBSERVE_BOX);
     }
   }
 
