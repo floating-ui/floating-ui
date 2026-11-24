@@ -69,8 +69,14 @@
     "react-dom"
   ],
   "peerDependencies": {
+    "@types/react": ">=17.0.0",
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@floating-ui/react-dom": "workspace:^",
