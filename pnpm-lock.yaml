@@ -321,9 +321,6 @@ importers:
       resize-observer-polyfill:
         specifier: ^1.5.1
         version: 1.5.1
-      use-isomorphic-layout-effect:
-        specifier: ^1.2.1
-        version: 1.2.1(@types/react@18.3.19)(react@18.2.0)
       vitest-browser-react:
         specifier: ^2.2.0
         version: 2.2.0(@types/react-dom@18.3.1)(@types/react@18.3.19)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(vitest@4.1.9(@types/node@20.10.6)(@vitest/browser-playwright@4.1.9)(jsdom@26.0.0)(msw@2.7.3(@types/node@20.10.6)(typescript@5.6.3))(vite@6.4.3(@types/node@20.10.6)(jiti@1.21.0)(terser@5.48.0)))
