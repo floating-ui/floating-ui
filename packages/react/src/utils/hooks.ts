@@ -1,8 +1,10 @@
 import * as React from 'react';
-import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 import {SafeReact} from './safeReact';
 
-export {useModernLayoutEffect};
+const noop = () => {};
+
+export const useModernLayoutEffect: typeof React.useLayoutEffect =
+  typeof document !== 'undefined' ? React.useLayoutEffect : noop;
 
 export function useLatestRef<T>(value: T) {
   const ref = React.useRef<T>(value);
