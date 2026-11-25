@@ -112,6 +112,27 @@ test('rapidly focuses list items when they start with the same letter', async ()
   cleanup();
 });
 
+test('rapidly focuses list items with duplicate labels', async () => {
+  const spy = vi.fn();
+  render(<Combobox onMatch={spy} list={['apple', 'avocado', 'apple']} />);
+
+  await userEvent.click(screen.getByRole('combobox'));
+
+  await userEvent.keyboard('a');
+  expect(spy).toHaveBeenLastCalledWith(0);
+
+  await userEvent.keyboard('a');
+  expect(spy).toHaveBeenLastCalledWith(1);
+
+  await userEvent.keyboard('a');
+  expect(spy).toHaveBeenLastCalledWith(2);
+
+  await userEvent.keyboard('a');
+  expect(spy).toHaveBeenLastCalledWith(0);
+
+  cleanup();
+});
+
 test('bails out of rapid focus of first letter if the list contains a string that starts with two of the same letter', async () => {
   const spy = vi.fn();
   render(<Combobox onMatch={spy} list={['apple', 'aaron', 'apricot']} />);

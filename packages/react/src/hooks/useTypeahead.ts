@@ -132,6 +132,7 @@ export function useTypeahead(
       list: Array<string | null>,
       orderedList: Array<string | null>,
       string: string,
+      startIndex = 0,
     ) {
       const str = findMatchRef.current
         ? findMatchRef.current(orderedList, string)
@@ -140,8 +141,11 @@ export function useTypeahead(
               text?.toLocaleLowerCase().indexOf(string.toLocaleLowerCase()) ===
               0,
           );
+      const orderedIndex = str ? orderedList.indexOf(str) : -1;
 
-      return str ? list.indexOf(str) : -1;
+      return orderedIndex === -1
+        ? -1
+        : (startIndex + orderedIndex) % list.length;
     }
 
     const listContent = listRef.current;
@@ -206,6 +210,7 @@ export function useTypeahead(
         ...listContent.slice(0, (prevIndex || 0) + 1),
       ],
       stringRef.current,
+      (prevIndex || 0) + 1,
     );
 
     if (index !== -1) {
