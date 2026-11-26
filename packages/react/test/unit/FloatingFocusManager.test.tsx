@@ -1733,8 +1733,16 @@ describe('Drawer', () => {
 });
 
 describe('restoreFocus', () => {
-  function App({restoreFocus = true}: {restoreFocus?: boolean}) {
-    const [isOpen, setIsOpen] = useState(false);
+  function App({
+    hasReference = true,
+    restoreFocus = true,
+    modal = true,
+  }: {
+    hasReference?: boolean;
+    restoreFocus?: boolean;
+    modal?: boolean;
+  }) {
+    const [isOpen, setIsOpen] = useState(!hasReference);
     const [removed, setRemoved] = useState(false);
 
     const {refs, context} = useFloating({
@@ -1748,14 +1756,17 @@ describe('restoreFocus', () => {
     return (
       <>
         <button onClick={() => setRemoved(true)}>remove</button>
-        <button
-          ref={refs.setReference}
-          {...getReferenceProps()}
-          data-testid="reference"
-        />
+        {hasReference && (
+          <button
+            ref={refs.setReference}
+            {...getReferenceProps()}
+            data-testid="reference"
+          />
+        )}
         {isOpen && (
           <FloatingFocusManager
             context={context}
+            modal={modal}
             restoreFocus={restoreFocus}
             initialFocus={1}
           >
@@ -1793,6 +1804,37 @@ describe('restoreFocus', () => {
       await waitFor(() => {
         expect(three).toHaveFocus();
       });
+    },
+  );
+
+  test.skipIf(isJSDOM())(
+    'restores focus without a reference element',
+    async () => {
+      render(<App hasReference={false} />);
+
+      const two = screen.getByRole('button', {name: 'two'});
+      const three = screen.getByRole('button', {name: 'three'});
+      await waitFor(() => expect(two).toHaveFocus());
+
+      fireEvent.click(screen.getByText('remove'));
+
+      await waitFor(() => expect(three).toHaveFocus());
+    },
+  );
+
+  test.skipIf(isJSDOM())(
+    'preserves ordinary focus moves outside without a reference element',
+    async () => {
+      render(<App hasReference={false} modal={false} />);
+
+      const two = screen.getByRole('button', {name: 'two'});
+      const outside = screen.getByText('remove');
+      await waitFor(() => expect(two).toHaveFocus());
+
+      await act(async () => outside.focus());
+
+      expect(outside).toHaveFocus();
+      expect(screen.getByTestId('floating')).toBeInTheDocument();
     },
   );
 
