@@ -380,6 +380,8 @@ export function FloatingFocusManager(
     if (disabled) return;
     if (!closeOnFocusOut) return;
 
+    const hasDOMReference = isHTMLElement(domReference);
+
     // In Safari, buttons lose focus when pressing them.
     function handlePointerDown() {
       isPointerDownRef.current = true;
@@ -448,6 +450,9 @@ export function FloatingFocusManager(
           }
         }
 
+        // Focus-out dismissal still depends on the DOM reference.
+        if (!hasDOMReference) return;
+
         // https://github.com/floating-ui/floating-ui/issues/3060
         if (dataRef.current.insideReactTree) {
           dataRef.current.insideReactTree = false;
@@ -470,7 +475,9 @@ export function FloatingFocusManager(
       });
     }
 
-    const shouldHandleBlurCapture = Boolean(!tree && portalContext);
+    const shouldHandleBlurCapture = Boolean(
+      hasDOMReference && !tree && portalContext,
+    );
 
     function markInsideReactTree() {
       clearTimeoutIfSet(blurTimeoutRef);
@@ -480,9 +487,11 @@ export function FloatingFocusManager(
       });
     }
 
-    if (floating && isHTMLElement(domReference)) {
-      domReference.addEventListener('focusout', handleFocusOutside);
-      domReference.addEventListener('pointerdown', handlePointerDown);
+    if (floating && (hasDOMReference || restoreFocus)) {
+      if (hasDOMReference) {
+        domReference.addEventListener('focusout', handleFocusOutside);
+        domReference.addEventListener('pointerdown', handlePointerDown);
+      }
       floating.addEventListener('focusout', handleFocusOutside);
 
       if (shouldHandleBlurCapture) {
@@ -490,8 +499,10 @@ export function FloatingFocusManager(
       }
 
       return () => {
-        domReference.removeEventListener('focusout', handleFocusOutside);
-        domReference.removeEventListener('pointerdown', handlePointerDown);
+        if (hasDOMReference) {
+          domReference.removeEventListener('focusout', handleFocusOutside);
+          domReference.removeEventListener('pointerdown', handlePointerDown);
+        }
         floating.removeEventListener('focusout', handleFocusOutside);
 
         if (shouldHandleBlurCapture) {
