@@ -2,7 +2,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {useLatestRef, useModernLayoutEffect} from '@floating-ui/react/utils';
 
-import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
+import type {
+  FloatingContext,
+  FloatingRootContext,
+  Placement,
+  ReferenceType,
+  Side,
+} from '../types';
 
 type Duration =
   | number
@@ -56,7 +62,7 @@ type TransitionStatus = 'unmounted' | 'initial' | 'open' | 'close';
  * @see https://floating-ui.com/docs/useTransition#usetransitionstatus
  */
 export function useTransitionStatus(
-  context: FloatingContext,
+  context: FloatingRootContext,
   props: UseTransitionStatusProps = {},
 ): {
   isMounted: boolean;
