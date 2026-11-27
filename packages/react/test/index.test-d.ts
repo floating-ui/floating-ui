@@ -1,4 +1,10 @@
-import type {CompositeProps, UseFloatingOptions} from '../src';
+import type {
+  CompositeProps,
+  FloatingContext,
+  FloatingRootContext,
+  UseFloatingOptions,
+  useTransitionStatus,
+} from '../src';
 
 // Callbacks with a narrower parameter type stay assignable, matching the
 // behavior before these optional callbacks gained an explicit `| undefined`
@@ -17,3 +23,10 @@ export const onOpenChange: UseFloatingOptions['onOpenChange'] = (
 export const onNavigate: CompositeProps['onNavigate'] = (index: 0 | 1) => {
   void index;
 };
+
+// `useTransitionStatus` accepts the root context as well as the full context.
+declare const rootContext: FloatingRootContext;
+declare const fullContext: FloatingContext;
+export const transitionStatusContexts: Array<
+  Parameters<typeof useTransitionStatus>[0]
+> = [rootContext, fullContext];
