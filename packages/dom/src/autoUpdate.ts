@@ -156,6 +156,14 @@ function observeMove(
   };
 }
 
+// `ResizeObserver` reports content-box changes unless told otherwise, but
+// `computePosition` measures with `getBoundingClientRect`, which is the border
+// box. Padding or border changing without touching the content box moves the
+// elements apart, so the observer has to watch the same box the measurement
+// uses. Browsers that predate the `box` option ignore it and keep the old
+// content-box behaviour.
+const OBSERVE_BOX: ResizeObserverOptions = {box: 'border-box'};
+
 /**
  * Automatically updates the position of the floating element when necessary.
  * Should only be called when the floating element is mounted on the DOM or
@@ -209,7 +217,7 @@ export function autoUpdate(
       let changed = false;
       let referenceResized = false;
 
-      entries.forEach(({target, contentRect}) => {
+      entries.forEach(({target, contentRect, borderBoxSize}) => {
         if (target !== floating) {
           changed = true;
           referenceResized = true;
@@ -227,13 +235,16 @@ export function autoUpdate(
         // Observing the floating element again delivers its current size,
         // which only needs an update if it changed in the meantime. Read it
         // only for this entry: test mocks often omit `contentRect` on others.
-        const {width, height} = contentRect;
-        if (width !== floatingWidth || height !== floatingHeight) {
+        // `contentRect` is always the content box, whatever the observed box,
+        // so padding or border changing alone would go unnoticed.
+        const inlineSize = borderBoxSize?.[0]?.inlineSize ?? contentRect.width;
+        const blockSize = borderBoxSize?.[0]?.blockSize ?? contentRect.height;
+        if (inlineSize !== floatingWidth || blockSize !== floatingHeight) {
           changed = true;
         }
 
-        floatingWidth = width;
-        floatingHeight = height;
+        floatingWidth = inlineSize;
+        floatingHeight = blockSize;
       });
 
       if (!changed) {
@@ -248,7 +259,7 @@ export function autoUpdate(
         resizeObserver.unobserve(floating);
         cancelAnimationFrame(reobserveFrame);
         reobserveFrame = requestAnimationFrame(() => {
-          resizeObserver?.observe(floating);
+          resizeObserver?.observe(floating, OBSERVE_BOX);
         });
         reobserveAfterReferenceResize = referenceResized;
       }
@@ -257,11 +268,11 @@ export function autoUpdate(
     });
 
     if (referenceEl && !animationFrame) {
-      resizeObserver.observe(referenceEl);
+      resizeObserver.observe(referenceEl, OBSERVE_BOX);
     }
 
     if (floating) {
-      resizeObserver.observe(floating);
+      resizeObserver.observe(floating, OBSERVE_BOX);
     }
   }
 
