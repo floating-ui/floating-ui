@@ -217,7 +217,7 @@ export function autoUpdate(
       let changed = false;
       let referenceResized = false;
 
-      entries.forEach(({target, contentRect}) => {
+      entries.forEach(({target, contentRect, borderBoxSize}) => {
         if (target !== floating) {
           changed = true;
           referenceResized = true;
@@ -235,13 +235,16 @@ export function autoUpdate(
         // Observing the floating element again delivers its current size,
         // which only needs an update if it changed in the meantime. Read it
         // only for this entry: test mocks often omit `contentRect` on others.
-        const {width, height} = contentRect;
-        if (width !== floatingWidth || height !== floatingHeight) {
+        // `contentRect` is always the content box, whatever the observed box,
+        // so padding or border changing alone would go unnoticed.
+        const inlineSize = borderBoxSize?.[0]?.inlineSize ?? contentRect.width;
+        const blockSize = borderBoxSize?.[0]?.blockSize ?? contentRect.height;
+        if (inlineSize !== floatingWidth || blockSize !== floatingHeight) {
           changed = true;
         }
 
-        floatingWidth = width;
-        floatingHeight = height;
+        floatingWidth = inlineSize;
+        floatingHeight = blockSize;
       });
 
       if (!changed) {

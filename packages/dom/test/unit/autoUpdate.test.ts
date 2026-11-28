@@ -266,6 +266,31 @@ describe.runIf(inBrowser)('elementResize', () => {
     cleanup();
   });
 
+  test('updates when only the floating padding changes', async () => {
+    const update = computeWith([
+      size({
+        apply({rects, elements}) {
+          elements.floating.style.width = `${rects.reference.width}px`;
+        },
+      }),
+    ]);
+    const cleanup = autoUpdate(reference, floating, update, {
+      ancestorScroll: false,
+      ancestorResize: false,
+      layoutShift: false,
+    });
+    await nextFrames(5);
+    const before = update.mock.calls.length;
+    floating.style.padding = '20px';
+    await nextFrames(5);
+    // The content box stays 100px wide; the border box grows to 140px, which is
+    // what `computePosition` measures. Only a border-box reading sees the change.
+    expect(floating.getBoundingClientRect().width).toBe(140);
+    expect(update.mock.calls.length).toBeGreaterThan(before);
+
+    cleanup();
+  });
+
   test('does not update while neither element resizes', async () => {
     const update = computeWith([
       size({
